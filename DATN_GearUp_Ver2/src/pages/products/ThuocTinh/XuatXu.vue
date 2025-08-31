@@ -179,26 +179,32 @@
   </table>
 
   <!-- Pagination -->
-  <div v-if="totalPages > 1" class="pagination-wrapper">
+  <div class="pagination-wrapper">
     <div class="pagination-info">
       Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của {{ totalItems }} xuất
       xứ
     </div>
     <div class="pagination">
       <button
+        class="pagination-btn"
         @click="goToPreviousPage"
         :disabled="currentPage === 1"
-        class="btn btn-outline btn-sm"
       >
-        ❮ Trước
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Trước
       </button>
       <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
       <button
+        class="pagination-btn"
         @click="goToNextPage"
         :disabled="currentPage === totalPages"
-        class="btn btn-outline btn-sm"
       >
-        Sau ❯
+        Sau
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
       </button>
     </div>
   </div>

@@ -1,6 +1,7 @@
 const API = "http://localhost:8080/api/anh-san-pham-management";
 
 export const fetchAllAnhSanPham = async () => {
+    console.log("🔄 Calling API:", `${API}/playlist`);
     const res = await fetch(`${API}/playlist`);
 
     if (!res.ok) {
@@ -10,17 +11,22 @@ export const fetchAllAnhSanPham = async () => {
     }
 
     const responseData = await res.json();
+    console.log("📦 API Response:", responseData);
+
     // Backend trả về format: { data: [...], message: "..." }
     if (responseData && responseData.data !== undefined) {
+        console.log("✅ Returning responseData.data:", responseData.data);
         return responseData.data;
     }
 
     // Nếu response trực tiếp là array
     if (Array.isArray(responseData)) {
+        console.log("✅ Returning responseData as array:", responseData);
         return responseData;
     }
 
     // Fallback
+    console.warn("⚠️ Unexpected response format, returning as is:", responseData);
     return responseData;
 }
 

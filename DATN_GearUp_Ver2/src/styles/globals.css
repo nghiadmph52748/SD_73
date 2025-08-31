@@ -7,7 +7,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid #e5e7eb;
-  background: #f9fafb;
+  background: #f8fafc;
   color: #374151;
   border-radius: 12px;
   font-weight: 600;
@@ -55,7 +55,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid #e5e7eb;
-  background: #f9fafb;
+  background: #f8fafc;
   color: #374151;
   border-radius: 12px;
   font-weight: 600;
@@ -213,7 +213,7 @@
 }
 
 .navbar-link.active {
-  background: #d1d5db;
+  background: #d0d5dc;
   font-weight: 600;
 }
 
@@ -249,7 +249,7 @@
 }
 
 .navbar-dropdown-item:hover {
-  background: #f3f4f6;
+  background: #f2f5f7;
   color: #22c55e;
 }
 
@@ -309,7 +309,7 @@
   }
 
   .navbar-link:hover {
-    background: #f9fafb;
+    background: #f8fafc;
     color: #22c55e;
   }
 
@@ -734,7 +734,7 @@
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: #f3f4f6;
+  background: #f2f5f7;
   border-radius: 3px;
 }
 
@@ -759,7 +759,7 @@
 }
 
 .sidebar-toggle {
-  background: #e5e7eb !important;
+  background: #e4e7ec !important;
   border: none !important;
   padding: 0.5rem;
   border-radius: 8px;
@@ -833,7 +833,7 @@
 }
 
 .menu-item:hover {
-  background: #f3f4f6 !important;
+  background: #f2f5f7 !important;
   /* Light gray background on hover */
   color: #000000 !important;
   /* Black text on hover */
@@ -841,7 +841,7 @@
 }
 
 .menu-item.active {
-  background: #e5e7eb !important;
+  background: #e4e7ec !important;
   /* Solid gray background when active */
   color: #000000 !important;
   /* Black text when active */
@@ -919,14 +919,14 @@
 }
 
 .submenu-item:hover {
-  background: #f3f4f6 !important;
+  background: #f2f5f7 !important;
   /* Lighter background on hover */
   color: #000000 !important;
   /* Black text on hover */
 }
 
 .submenu-item.active {
-  background: #e5e7eb !important;
+  background: #e4e7ec !important;
   /* Solid background when active */
   color: #000000 !important;
   /* Black text when active */
@@ -973,13 +973,13 @@
 }
 
 .sub-submenu-item:hover {
-  background: #f3f4f6 !important;
+  background: #f2f5f7 !important;
   color: #000000 !important;
   /* Black text on hover */
 }
 
 .sub-submenu-item.active {
-  background: #e5e7eb !important;
+  background: #e4e7ec !important;
   color: #000000 !important;
   /* Black text when active */
   box-shadow: none !important;
@@ -1044,28 +1044,28 @@
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
-  color: white !important;
+  color: #374151 !important;
   padding-top: 1rem;
   padding-bottom: 0.5rem;
   border: none !important;
 }
 
 .menu-parent:hover {
-  background: #f3f4f6 !important;
-  color: #374151 !important;
-  /* Dark gray text on hover */
+  background: #f2f5f7 !important;
+  color: #111827 !important;
+  /* Dark text on hover */
 }
 
 .menu-parent.active {
-  background: #e5e7eb !important;
-  color: #374151 !important;
-  /* Dark gray text when active */
+  background: #e4e7ec !important;
+  color: #111827 !important;
+  /* Dark text when active */
 }
 
 .menu-parent.expanded {
-  background: #f3f4f6 !important;
-  color: #374151 !important;
-  /* Dark gray text when expanded */
+  background: #f2f5f7 !important;
+  color: #111827 !important;
+  /* Dark text when expanded */
 }
 
 /* Submenu arrow styles */
@@ -1145,7 +1145,7 @@
 }
 
 .user-profile:hover {
-  background: #f3f4f6;
+  background: #f2f5f7;
 }
 
 .user-info {
@@ -1188,7 +1188,7 @@
 }
 
 .notifications-toggle:hover {
-  background: #f3f4f6;
+  background: #f2f5f7;
   color: #374151;
 }
 

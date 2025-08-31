@@ -27,6 +27,13 @@
         />
       </div>
       <div class="action-group">
+        <button
+          @click="fetchAll"
+          class="btn-refresh"
+          style="margin-right: 10px"
+        >
+          <i class="fas fa-sync-alt"></i> Làm mới
+        </button>
         <button @click="showAddForm = true" class="btn-export">
           <i class="fas fa-plus"></i> Thêm Hình Ảnh Mới
         </button>
@@ -230,13 +237,15 @@
           </label>
         </div>
       </div>
-      <button type="submit" :disabled="uploading" class="btn btn-success">
-        <i class="fas fa-save"></i>
-        {{ uploading ? "Đang cập nhật..." : "Cập Nhật" }}
-      </button>
-      <button type="button" @click="closeEditForm" class="btn btn-secondary">
-        <i class="fas fa-times"></i> Đóng
-      </button>
+      <div class="edit-popup-actions">
+        <button type="submit" :disabled="uploading" class="btn btn-success">
+          <i class="fas fa-save"></i>
+          {{ uploading ? "Đang cập nhật..." : "Cập Nhật" }}
+        </button>
+        <button type="button" @click="closeEditForm" class="btn btn-secondary">
+          <i class="fas fa-times"></i> Đóng
+        </button>
+      </div>
       <p v-if="editErrorMessage" style="color: red">{{ editErrorMessage }}</p>
       <p v-if="editSuccessMessage" style="color: green">
         {{ editSuccessMessage }}
@@ -255,6 +264,19 @@
       </tr>
     </thead>
     <tbody>
+      <!-- Hiển thị message khi không có dữ liệu -->
+      <tr v-if="paginatedAnhSanPhams.length === 0">
+        <td colspan="5" style="text-align: center; padding: 40px; color: #666">
+          <i
+            class="fas fa-info-circle"
+            style="font-size: 24px; margin-bottom: 10px"
+          ></i>
+          <br />
+          <strong>Không có dữ liệu</strong>
+          <br />
+          <small>Chưa có ảnh sản phẩm nào được tải lên</small>
+        </td>
+      </tr>
       <tr v-for="(value, i) in paginatedAnhSanPhams" :key="value.id">
         <td>{{ startIndex + i + 1 }}</td>
         <td>
@@ -269,47 +291,65 @@
         <td>{{ value.moTa }}</td>
         <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
         <td>
-          <button
-            v-on:click="fetchDetail(value)"
-            class="btn btn-detail btn-icon btn-sm"
-            title="Xem chi tiết"
-          >
-            <i class="fas fa-eye"></i>
-          </button>
-          <button
-            v-on:click="fetchDelete(value.id)"
-            class="btn btn-delete btn-icon btn-sm"
-            :disabled="uploading"
-            title="Xóa"
-          >
-            <i class="fas fa-trash"></i>
-          </button>
+          <div class="table-actions">
+            <button
+              v-on:click="fetchDetail(value)"
+              class="btn btn-detail btn-icon btn-sm"
+              title="Xem chi tiết"
+            >
+              <i class="fas fa-eye"></i>
+            </button>
+            <button
+              v-on:click="fetchDelete(value.id)"
+              class="btn btn-delete btn-icon btn-sm"
+              :disabled="uploading"
+              title="Xóa"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
 
   <!-- Pagination -->
-  <div v-if="totalPages > 1" class="pagination-wrapper">
+  <div class="pagination-wrapper">
     <div class="pagination-info">
       Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của {{ totalItems }} ảnh
       sản phẩm
     </div>
     <div class="pagination">
       <button
+        class="pagination-btn"
         @click="goToPreviousPage"
         :disabled="currentPage === 1"
-        class="btn btn-outline btn-sm"
       >
-        ❮ Trước
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+        Trước
       </button>
       <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
       <button
+        class="pagination-btn"
         @click="goToNextPage"
         :disabled="currentPage === totalPages"
-        class="btn btn-outline btn-sm"
       >
-        Sau ❯
+        Sau
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          ></path>
+        </svg>
       </button>
     </div>
   </div>
@@ -514,7 +554,9 @@ const editFileInput = ref(null);
 
 // Computed properties cho tìm kiếm, lọc và phân trang
 const filteredAnhSanPhams = computed(() => {
-  let filtered = [...AnhSanPhams.value];
+  // Đảm bảo AnhSanPhams.value là array trước khi spread
+  let filtered = Array.isArray(AnhSanPhams.value) ? [...AnhSanPhams.value] : [];
+  console.log("Filtered AnhSanPhams:", filtered.length, "items");
 
   // Tìm kiếm theo loại ảnh hoặc mô tả
   if (searchQuery.value.trim()) {
@@ -524,6 +566,7 @@ const filteredAnhSanPhams = computed(() => {
         item.loaiAnh?.toLowerCase().includes(query) ||
         item.moTa?.toLowerCase().includes(query)
     );
+    console.log("After search filter:", filtered.length, "items");
   }
 
   // Lọc theo trạng thái
@@ -541,7 +584,20 @@ const totalPages = computed(() => Math.ceil(totalItems.value / pageSize.value));
 const startIndex = computed(() => (currentPage.value - 1) * pageSize.value);
 const endIndex = computed(() => startIndex.value + pageSize.value);
 const paginatedAnhSanPhams = computed(() => {
-  return filteredAnhSanPhams.value.slice(startIndex.value, endIndex.value);
+  const result = filteredAnhSanPhams.value.slice(
+    startIndex.value,
+    endIndex.value
+  );
+  console.log(
+    "Paginated AnhSanPhams:",
+    result.length,
+    "items (page",
+    currentPage.value,
+    "of",
+    totalPages.value,
+    ")"
+  );
+  return result;
 });
 
 const handleFileChange = (event) => {
@@ -582,9 +638,13 @@ const handleEditFileChange = (event) => {
 const fetchAll = async () => {
   try {
     const response = await fetchAllAnhSanPham();
-    AnhSanPhams.value = response.data;
+    // Service đã return data trực tiếp, không cần .data
+    AnhSanPhams.value = Array.isArray(response) ? response : [];
+    console.log("Loaded AnhSanPhams:", AnhSanPhams.value); // Debug log
   } catch (error) {
-    console.error("Error fetching:", error);
+    console.error("Error fetching AnhSanPham:", error);
+    // Đặt lại array rỗng khi có lỗi
+    AnhSanPhams.value = [];
   }
 };
 
@@ -754,9 +814,11 @@ const fetchDelete = async (id) => {
   deleteItemId.value = id;
 
   // Lấy tên ảnh để hiển thị trong thông báo
-  const item = AnhSanPhams.value.find((item) => item.id === id);
-  if (item) {
-    deleteItemName.value = item.loaiAnh || "Ảnh sản phẩm";
+  if (Array.isArray(AnhSanPhams.value)) {
+    const item = AnhSanPhams.value.find((item) => item.id === id);
+    if (item) {
+      deleteItemName.value = item.loaiAnh || "Ảnh sản phẩm";
+    }
   }
 };
 
