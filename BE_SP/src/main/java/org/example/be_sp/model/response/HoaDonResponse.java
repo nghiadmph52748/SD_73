@@ -47,16 +47,29 @@ public class HoaDonResponse {
 
     public HoaDonResponse(HoaDon hd) {
         this.id = hd.getId();
-        this.maKhachHang = hd.getIdKhachHang().getMaKhachHang();
-        this.tenKhachHang = hd.getIdKhachHang().getTenKhachHang();
-        this.email = hd.getIdKhachHang().getEmail();
-        this.soDienThoai = hd.getIdKhachHang().getSoDienThoai();
-        this.maPhieuGiamGia = hd.getIdPhieuGiamGia().getMaPhieuGiamGia();
-        this.tenPhieuGiamGia = hd.getIdPhieuGiamGia().getTenPhieuGiamGia();
-        this.loaiPhieuGiamGia = hd.getIdPhieuGiamGia().getLoaiPhieuGiamGia();
-        this.giaTriGiamGia = hd.getIdPhieuGiamGia().getGiaTriGiamGia();
-        this.soTienToiDa = hd.getIdPhieuGiamGia().getSoTienToiDa();
-        this.tenNhanVien = hd.getIdNhanVien().getTenNhanVien();
+
+        // Khách hàng
+        if (hd.getIdKhachHang() != null) {
+            this.maKhachHang = hd.getIdKhachHang().getMaKhachHang();
+            this.tenKhachHang = hd.getIdKhachHang().getTenKhachHang();
+            this.email = hd.getIdKhachHang().getEmail();
+            this.soDienThoai = hd.getIdKhachHang().getSoDienThoai();
+        }
+
+        // Phiếu giảm giá
+        if (hd.getIdPhieuGiamGia() != null) {
+            this.maPhieuGiamGia = hd.getIdPhieuGiamGia().getMaPhieuGiamGia();
+            this.tenPhieuGiamGia = hd.getIdPhieuGiamGia().getTenPhieuGiamGia();
+            this.loaiPhieuGiamGia = hd.getIdPhieuGiamGia().getLoaiPhieuGiamGia();
+            this.giaTriGiamGia = hd.getIdPhieuGiamGia().getGiaTriGiamGia();
+            this.soTienToiDa = hd.getIdPhieuGiamGia().getSoTienToiDa();
+        }
+
+        // Nhân viên
+        if (hd.getIdNhanVien() != null) {
+            this.tenNhanVien = hd.getIdNhanVien().getTenNhanVien();
+        }
+
         this.tenHoaDon = hd.getTenHoaDon();
         this.loaiDon = hd.getLoaiDon();
         this.phiVanChuyen = hd.getPhiVanChuyen();
@@ -76,4 +89,5 @@ public class HoaDonResponse {
         this.updateAt = hd.getUpdateAt();
         this.updateBy = hd.getUpdateBy();
     }
+
 }
