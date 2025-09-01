@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/chat-lieu-management")
-@CrossOrigin(origins = "*")
 public class ChatLieuController {
     @Autowired
     private ChatLieuService chatLieuService;

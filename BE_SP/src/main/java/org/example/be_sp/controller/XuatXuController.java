@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/xuat-xu-management")
-@CrossOrigin(origins = "*")
 public class XuatXuController {
     @Autowired
     XuatXuService xuatXuService;

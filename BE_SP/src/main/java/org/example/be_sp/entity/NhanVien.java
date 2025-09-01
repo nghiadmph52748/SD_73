@@ -1,6 +1,7 @@
 package org.example.be_sp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -94,6 +95,7 @@ public class NhanVien {
     private Integer updateBy;
 
     @OneToMany(mappedBy = "idNhanVien")
+    @JsonManagedReference
     private Set<HoaDon> hoaDons = new LinkedHashSet<>();
 
 }

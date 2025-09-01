@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/mau-sac-management")
-@CrossOrigin(origins = "*")
 public class MauSacController {
     @Autowired
     MauSacService mauSacService;

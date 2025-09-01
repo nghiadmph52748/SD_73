@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/kich-thuoc-management")
-@CrossOrigin(origins = "*")
 public class KichThuocController {
     @Autowired
     KichThuocService kichThuocService;

@@ -1,5 +1,6 @@
 package org.example.be_sp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class DiaChiKhachHang {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_khach_hang", nullable = false)
+    @JsonBackReference
     private KhachHang idKhachHang;
 
     @ColumnDefault("'DC'+right('00000'+CONVERT([varchar](5), [ID]), 5)")

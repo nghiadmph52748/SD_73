@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/do-ben-management")
-@CrossOrigin(origins = "*")
 public class DoBenController{
     @Autowired
     private DoBenService doBenService;

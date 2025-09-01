@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/dem-giay-management")
-@CrossOrigin(origins = "*")
 public class DemGiayController {
     @Autowired
     DemGiayService demGiayService;

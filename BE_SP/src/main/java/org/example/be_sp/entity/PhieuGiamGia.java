@@ -1,5 +1,6 @@
 package org.example.be_sp.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,9 +65,11 @@ public class PhieuGiamGia {
     private Boolean deleted;
 
     @OneToMany(mappedBy = "idPhieuGiamGia")
+    @JsonManagedReference
     private Set<HoaDon> hoaDons = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idPhieuGiamGia")
+    @JsonManagedReference
     private Set<PhieuGiamGiaCaNhan> phieuGiamGiaCaNhans = new LinkedHashSet<>();
 
 }

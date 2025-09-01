@@ -1,0 +1,239 @@
+/* Discount Components Unified Styles */
+
+/* CSS Variables for consistent theming */
+:root {
+  --discount-primary-color: #4ade80;
+  --discount-secondary-color: #22c55e;
+  --discount-success-color: #10b981;
+  --discount-danger-color: #ef4444;
+  --discount-warning-color: #f59e0b;
+  --discount-info-color: #3b82f6;
+  
+  --discount-text-primary: #374151;
+  --discount-text-secondary: #6b7280;
+  --discount-text-light: #9ca3af;
+  
+  --discount-border-color: #e5e7eb;
+  --discount-border-light: #f3f4f6;
+  --discount-bg-light: #f9fafb;
+  
+  --discount-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --discount-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --discount-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  --discount-border-radius: 12px;
+  --discount-border-radius-sm: 8px;
+  --discount-border-radius-lg: 16px;
+}
+
+/* Common Button Styles */
+.btn-refresh {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--discount-primary-color) 0%, var(--discount-secondary-color) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--discount-border-radius-sm);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-refresh:hover {
+  background: linear-gradient(135deg, var(--discount-secondary-color) 0%, #16a34a 100%);
+  transform: translateY(-1px);
+  box-shadow: var(--discount-shadow-md);
+}
+
+.btn-icon {
+  font-size: 1rem;
+}
+
+/* Common Card Styles */
+.card {
+  background: white;
+  border-radius: var(--discount-border-radius);
+  box-shadow: var(--discount-shadow-md);
+  border: 1px solid var(--discount-border-color);
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Common Table Styles - Only for general tables, not specific components */
+.table:not(.coupons-table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.table:not(.coupons-table) th,
+.table:not(.coupons-table) td {
+  border: 1px solid var(--discount-border-color);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table:not(.coupons-table) th {
+  background: linear-gradient(135deg, var(--discount-primary-color) 0%, var(--discount-secondary-color) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: center;
+}
+
+.table:not(.coupons-table) td {
+  padding: 0.875rem;
+  text-align: center;
+}
+
+.table:not(.coupons-table) tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.table:not(.coupons-table) tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Badge Styles - Only for general badges, not specific component badges */
+.badge:not(.status-badge) {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.badge-success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badge-danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-info {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* Form Styles */
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--discount-border-color);
+  border-radius: var(--discount-border-radius-sm);
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: var(--discount-text-primary);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--discount-primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--discount-text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Common utility classes */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-success {
+  color: var(--discount-success-color);
+}
+
+.text-danger {
+  color: var(--discount-danger-color);
+}
+
+.text-warning {
+  color: var(--discount-warning-color);
+}
+
+.text-info {
+  color: var(--discount-info-color);
+}
+
+.text-primary {
+  color: var(--discount-primary-color);
+}
+
+.text-secondary {
+  color: var(--discount-text-secondary);
+}
+
+/* Loading state */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .header-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  
+  .header-actions .btn-refresh {
+    flex: 1;
+    justify-content: center;
+  }
+}

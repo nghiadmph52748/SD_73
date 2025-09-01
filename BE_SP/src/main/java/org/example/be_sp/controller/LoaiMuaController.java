@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/loai-mua-management")
-@CrossOrigin(origins = "*")
 public class LoaiMuaController {
     @Autowired
     private LoaiMuaService loaiMuaService;
