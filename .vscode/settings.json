@@ -80,5 +80,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"
-  }
+  },
+  "java.compile.nullAnalysis.mode": "automatic"
 }
