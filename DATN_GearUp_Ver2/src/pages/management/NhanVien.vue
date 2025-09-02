@@ -705,7 +705,6 @@ const fetchAll = async () => {
     const res = await fetchAllNhanVien();
     nhanViens.value = res.data;
   } catch (res) {
-    console.log(res.message);
   }
 };
 const fetchQuyenHan = async () => {
@@ -713,7 +712,6 @@ const fetchQuyenHan = async () => {
     const res = await fetchAllQuyenHan();
     quyenHans.value = res.data;
   } catch (res) {
-    console.log(res.message);
   }
 };
 // Computed
@@ -829,7 +827,6 @@ const saveEmployee = async () => {
     await fetchAll();
     resetForm();
   } catch (res) {
-    console.log(res.message);
     alert(res.message);
   }
 };
@@ -907,7 +904,6 @@ const exportToExcel = () => {
       trangThai: item.trangThai || "N/A",
     }));
 
-    console.log("Exporting employees to Excel:", filteredData);
     alert("✅ Xuất file Excel thành công!");
   } catch (error) {
     console.error("Error exporting to Excel:", error);

@@ -762,7 +762,6 @@ const exportVouchersToExcel = () => {
 // Initialize
 const refreshData = () => {
   // Simulate data refresh
-  console.log('Refreshing user vouchers data...')
 }
 
 onMounted(() => {

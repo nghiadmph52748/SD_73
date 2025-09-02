@@ -1634,10 +1634,12 @@ const getNhaSanXuatId = async (tenNhaSanXuat) => {
       updateBy: 1,
     };
 
-    const createdNhaSanXuat = await fetchCreateNhaSanXuat(newNhaSanXuat);
+    await fetchCreateNhaSanXuat(newNhaSanXuat);
     await fetchNhaSanXuat(); // Refresh danh sách
 
-    return createdNhaSanXuat.id;
+    return nhaSanXuats.value.find(
+      (item) => item.tenNhaSanXuat.toLowerCase() === tenNhaSanXuat.toLowerCase()
+    ).id;
   } catch (error) {
     console.error("Error creating nha san xuat:", error);
     return null;
@@ -1668,10 +1670,11 @@ const getXuatXuId = async (tenXuatXu) => {
       updateBy: 1,
     };
 
-    const createdXuatXu = await fetchCreateXuatXu(newXuatXu);
+    await fetchCreateXuatXu(newXuatXu);
     await fetchXuatXu(); // Refresh danh sách
-
-    return createdXuatXu.id;
+    return xuatXus.value.find(
+      (item) => item.tenXuatXu.toLowerCase() === tenXuatXu.toLowerCase()
+    ).id;
   } catch (error) {
     console.error("Error creating xuat xu:", error);
     return null;
@@ -1702,10 +1705,12 @@ const getChatLieuId = async (tenChatLieu) => {
       updateBy: 1,
     };
 
-    const createdChatLieu = await fetchCreateChatLieu(newChatLieu);
+    await fetchCreateChatLieu(newChatLieu);
     await fetchChatLieu(); // Refresh danh sách
 
-    return createdChatLieu?.id || createdChatLieu?.data?.id;
+    return chatLieus.value.find(
+      (item) => item.tenChatLieu.toLowerCase() === tenChatLieu.toLowerCase()
+    ).id;
   } catch (error) {
     console.error("Error creating chat lieu:", error);
     return null;
@@ -1736,10 +1741,12 @@ const getDeGiayId = async (tenDeGiay) => {
       updateBy: 1,
     };
 
-    const createdDeGiay = await fetchCreateDeGiay(newDeGiay);
+    await fetchCreateDeGiay(newDeGiay);
     await fetchDeGiay(); // Refresh danh sách
 
-    return createdDeGiay?.id || createdDeGiay?.data?.id;
+    return deGiays.value.find(
+      (item) => item.tenDeGiay.toLowerCase() === tenDeGiay.toLowerCase()
+    ).id;
   } catch (error) {
     console.error("Error creating de giay:", error);
     return null;
@@ -1777,15 +1784,9 @@ const getTrongLuongId = async (trongLuong) => {
     await fetchTrongLuong();
 
     // Tìm lại trọng lượng vừa tạo trong danh sách đã refresh
-    const newlyCreatedTrongLuong = trongLuongs.value.find(
+    return trongLuongs.value.find(
       (item) => item.tenTrongLuong.toLowerCase() === trongLuong.toLowerCase()
-    );
-
-    if (newlyCreatedTrongLuong) {
-      return newlyCreatedTrongLuong.id;
-    } else {
-      throw new Error(`Không thể tìm thấy trọng lượng vừa tạo: ${trongLuong}`);
-    }
+    ).id;
   } catch (error) {
     console.error("Error creating trong luong:", error);
     throw new Error(
@@ -1954,12 +1955,6 @@ const saveProduct = async () => {
       );
     }
 
-    // Backend trả về data: null khi tạo thành công, cần lấy ID từ request
-    // Vì backend không trả về ID, ta sẽ sử dụng ID từ request hoặc tìm sản phẩm vừa tạo
-    console.error(
-      "Backend tạo sản phẩm thành công, nhưng không trả về ID. Cần tìm sản phẩm vừa tạo..."
-    );
-
     // Tìm sản phẩm vừa tạo bằng tên và các thuộc tính khác
     const allSanPhams = await fetchAllSanPham();
     const newlyCreatedSanPham = allSanPhams.data?.find(
@@ -1982,11 +1977,7 @@ const saveProduct = async () => {
       for (let j = 0; j < selectedKichThuocs.value.length; j++) {
         const variant = productVariants.value[i][j];
 
-        // Lấy ID của TrongLuong (có thể cần tạo mới)
         const trongLuongId = await getTrongLuongId(variant.trongLuong);
-        // getTrongLuongId sẽ throw error nếu không thể tạo hoặc tìm trọng lượng
-
-        // Tạo dữ liệu biến thể
         const idDeGiay = await getDeGiayId(productForm.value.tenDeGiay);
         const idChatLieu = await getChatLieuId(productForm.value.tenChatLieu);
 

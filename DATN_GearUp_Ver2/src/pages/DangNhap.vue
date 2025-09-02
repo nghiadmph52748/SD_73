@@ -74,7 +74,6 @@ const handleLogin = async ({ username, password, remember, setLoading, setError,
 
 const handleForgotPassword = () => {
   // Handle forgot password - can navigate to forgot password page
-  console.log('Forgot password clicked')
   // router.push('/forgot-password')
 }
 </script>

@@ -1152,9 +1152,7 @@ const validateInactiveCampaigns = async () => {
   }
 
   if (inactiveCampaigns.length > 0) {
-    console.log(
-      `Validated and updated ${inactiveCampaigns.length} inactive campaigns`
-    );
+    console.log(`Validated and updated ${inactiveCampaigns.length} inactive campaigns`);
     // Refresh campaign details after updates
     await fetchChiTietDGG();
   }
@@ -1362,7 +1360,6 @@ const clearFilters = () => {
 
 const applyFilters = () => {
   // Filters are already applied through computed property
-  console.log("Filters applied");
 };
 
 const exportData = () => {
@@ -1415,7 +1412,6 @@ const exportToExcel = () => {
     }));
 
     // In a real application, you would use a library like xlsx
-    console.log("Export data:", filteredData);
     alert("Xuất Excel thành công! (Chức năng đang được phát triển)");
     return;
 

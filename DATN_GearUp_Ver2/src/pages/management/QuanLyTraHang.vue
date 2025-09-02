@@ -363,7 +363,6 @@ const resetForm = () => {
 
 const refreshData = () => {
   // Simulate data refresh
-  console.log('Refreshing returns data...')
 }
 
 const exportReturnsToExcel = () => {

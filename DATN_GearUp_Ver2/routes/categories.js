@@ -212,9 +212,9 @@ router.post('/brands', async (req, res) => {
       VALUES (@ten_nha_san_xuat)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo nhà sản xuất thành công' 
+      message: 'Tạo nhà sản xuất thành công'
     })
 
   } catch (error) {
@@ -240,9 +240,9 @@ router.post('/origins', async (req, res) => {
       VALUES (@ten_xuat_xu)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo xuất xứ thành công' 
+      message: 'Tạo xuất xứ thành công'
     })
 
   } catch (error) {
@@ -268,9 +268,9 @@ router.post('/colors', async (req, res) => {
       VALUES (@ten_mau_sac)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo màu sắc thành công' 
+      message: 'Tạo màu sắc thành công'
     })
 
   } catch (error) {
@@ -296,9 +296,9 @@ router.post('/sizes', async (req, res) => {
       VALUES (@ten_kich_thuoc)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo kích thước thành công' 
+      message: 'Tạo kích thước thành công'
     })
 
   } catch (error) {

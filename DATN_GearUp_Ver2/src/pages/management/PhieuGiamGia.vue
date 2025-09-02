@@ -1489,18 +1489,6 @@ const editCoupon = (coupon) => {
   }
 
   searchCustomerQuery.value = "";
-
-  // Debug logging
-  console.log("Edit Coupon Debug:", {
-    originalCoupon: coupon,
-    couponIdKhachHang: coupon.idKhachHang,
-    formType: couponForm.value.idKhachHang,
-    selectedCustomers: selectedCustomers.value,
-    customersData: customers.value.filter((c) =>
-      selectedCustomers.value.includes(c.id)
-    ),
-  });
-
   showEditModal.value = true;
 };
 
@@ -1589,9 +1577,7 @@ const fetchCreatePGG = async () => {
       couponData.idKhachHang = [];
     }
 
-    console.log("Creating coupon with data:", couponData);
     await fetchCreatePhieuGiamGia(couponData);
-    console.log("Create successful");
   } catch (error) {
     console.error("Error creating phieu giam gia: ", error);
     throw error; // Re-throw to handle in saveCoupon
@@ -1616,9 +1602,7 @@ const fetchUpdatePGG = async (id) => {
       couponData.idKhachHang = [];
     }
 
-    console.log("Updating coupon with data:", couponData);
     await fetchUpdatePhieuGiamGia(id, couponData);
-    console.log("Update successful");
   } catch (error) {
     console.error("Error updating phieu giam gia: ", error);
     throw error; // Re-throw to handle in saveCoupon
@@ -1982,7 +1966,6 @@ const clearFilters = () => {
  */
 const applyFilters = () => {
   // Filters are already applied through computed property
-  console.log("Filters applied");
 };
 
 /**
@@ -1990,7 +1973,6 @@ const applyFilters = () => {
  */
 const refreshData = () => {
   // Simulate data refresh
-  console.log("Refreshing discount coupons data...");
 };
 
 /**

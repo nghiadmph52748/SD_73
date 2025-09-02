@@ -750,10 +750,6 @@ const orders = ref([]);
 // Computed
 const filteredOrders = computed(() => {
   let filtered = orders.value;
-  console.log("Total orders:", orders.value.length);
-  console.log("Selected status:", selectedStatus.value);
-  console.log("From date:", fromDate.value);
-  console.log("To date:", toDate.value);
 
   if (searchQuery.value) {
     filtered = filtered.filter(
@@ -801,8 +797,6 @@ const filteredOrders = computed(() => {
     );
   }
 
-  console.log("Filtered orders count:", filtered.length);
-  console.log("Start index:", startIndex.value, "End index:", endIndex.value);
 
   return filtered.slice(startIndex.value, endIndex.value);
 });
@@ -953,7 +947,6 @@ const createOrder = () => {
 };
 
 const scanQRCode = () => {
-  console.log("Open QR code scanner");
 };
 
 const exportOrdersToExcel = () => {
@@ -1038,11 +1031,9 @@ const formatTime = (dateString) => {
 };
 
 const editOrder = (order) => {
-  console.log("Edit order:", order);
 };
 
 const printOrder = (order) => {
-  console.log("Print order:", order);
 };
 
 const goToPage = (page) => {
@@ -1083,7 +1074,6 @@ const getPageNumbers = () => {
 
 const refreshData = () => {
   // Simulate data refresh
-  console.log("Refreshing orders data...");
 };
 
 const exportData = () => {

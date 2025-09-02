@@ -21,7 +21,7 @@ export const fetchCreateHoaDon = async (data) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-    })  
+    })
 }
 export const fetchUpdateHoaDon = async (id, data) => {
     await fetch(`${API}/update/${id}`, {

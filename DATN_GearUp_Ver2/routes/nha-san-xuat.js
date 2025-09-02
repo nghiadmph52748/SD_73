@@ -94,7 +94,7 @@ router.get('/detail/:id', async (req, res) => {
 router.post('/add', async (req, res) => {
   try {
     const { ten_nha_san_xuat } = req.body;
-    
+
     if (!ten_nha_san_xuat) {
       return res.status(400).json({
         success: false,
@@ -112,7 +112,7 @@ router.post('/add', async (req, res) => {
 
     const request = pool.request();
     request.input('ten_nha_san_xuat', sql.NVarChar, ten_nha_san_xuat);
-    
+
     const result = await request.query(`
       INSERT INTO nha_san_xuat (ten_nha_san_xuat)
       OUTPUT INSERTED.id
@@ -141,7 +141,7 @@ router.put('/update/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { ten_nha_san_xuat } = req.body;
-    
+
     if (!ten_nha_san_xuat) {
       return res.status(400).json({
         success: false,
@@ -160,7 +160,7 @@ router.put('/update/:id', async (req, res) => {
     const request = pool.request();
     request.input('id', sql.Int, id);
     request.input('ten_nha_san_xuat', sql.NVarChar, ten_nha_san_xuat);
-    
+
     const result = await request.query(`
       UPDATE nha_san_xuat
       SET ten_nha_san_xuat = @ten_nha_san_xuat
@@ -194,7 +194,7 @@ router.put('/update/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const pool = getPool();
     if (!pool) {
       return res.status(500).json({
@@ -205,7 +205,7 @@ router.delete('/delete/:id', async (req, res) => {
 
     const request = pool.request();
     request.input('id', sql.Int, id);
-    
+
     const result = await request.query(`
       UPDATE nha_san_xuat
       SET deleted = 1

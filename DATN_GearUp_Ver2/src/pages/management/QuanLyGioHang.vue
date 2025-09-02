@@ -584,7 +584,6 @@ const refreshData = async () => {
       loadCarts(),
       loadStats()
     ])
-    console.log('Cart data refreshed successfully')
   } catch (error) {
     console.error('Error refreshing cart data:', error)
   } finally {

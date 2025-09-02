@@ -31,14 +31,12 @@ public class SanPhamController {
 
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody SanPhamRequest request) {
-        sanPhamService.add(request);
-        return new ResponseObject<>(true, "Them moi thanh cong", null);
+        return new ResponseObject<>(true, sanPhamService.add(request), "Them moi thanh cong");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@PathVariable Integer id, @RequestBody SanPhamRequest request) {
-        sanPhamService.update(request, id);
-        return new ResponseObject<>(null, "Cap nhat thanh cong");
+        return new ResponseObject<>(sanPhamService.update(request, id), "Cap nhat thanh cong");
     }
 
     @PutMapping("/update/status/{id}")

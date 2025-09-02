@@ -686,7 +686,6 @@ const refreshData = async () => {
       loadContacts(),
       loadStats()
     ])
-    console.log('Data refreshed successfully')
   } catch (error) {
     console.error('Error refreshing data:', error)
   } finally {

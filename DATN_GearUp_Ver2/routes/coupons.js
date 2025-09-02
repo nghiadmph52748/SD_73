@@ -75,7 +75,7 @@ router.get('/', async (req, res) => {
 router.get('/active', async (req, res) => {
   try {
     const request = pool.request()
-    
+
     const query = `
       SELECT * FROM phieu_giam_gia 
       WHERE deleted = 0 
@@ -142,7 +142,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { 
+    const {
       ten_phieu_giam_gia,
       loai_phieu_giam_gia,
       gia_tri_giam_gia,
@@ -183,9 +183,9 @@ router.post('/', async (req, res) => {
        @hoa_don_toi_thieu, @so_luong_dung, @ngay_bat_dau, @ngay_ket_thuc, @mo_ta)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo phiếu giảm giá thành công' 
+      message: 'Tạo phiếu giảm giá thành công'
     })
 
   } catch (error) {
@@ -197,7 +197,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const { 
+    const {
       ten_phieu_giam_gia,
       loai_phieu_giam_gia,
       gia_tri_giam_gia,
@@ -330,8 +330,8 @@ router.post('/validate', async (req, res) => {
     const coupon = couponResult.recordset[0]
 
     if (tong_tien < coupon.hoa_don_toi_thieu) {
-      return res.status(400).json({ 
-        message: `Đơn hàng tối thiểu ${coupon.hoa_don_toi_thieu.toLocaleString()}đ để sử dụng mã này` 
+      return res.status(400).json({
+        message: `Đơn hàng tối thiểu ${coupon.hoa_don_toi_thieu.toLocaleString()}đ để sử dụng mã này`
       })
     }
 

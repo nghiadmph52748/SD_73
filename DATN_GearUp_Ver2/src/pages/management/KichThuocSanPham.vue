@@ -371,7 +371,6 @@ const closeModals = () => {
 
 const refreshData = () => {
   // Simulate data refresh
-  console.log('Refreshing product sizes data...')
 }
 
 const exportData = () => {

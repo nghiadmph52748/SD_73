@@ -35,7 +35,6 @@ let pool
 const connectDB = async () => {
   try {
     pool = await sql.connect(config)
-    console.log('Connected to SQL Server')
   } catch (err) {
     console.error('Database connection failed:', err)
     process.exit(1)
@@ -80,7 +79,6 @@ app.use((err, req, res, next) => {
 })
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`)
 })
 
 module.exports = { pool }

@@ -184,11 +184,11 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { 
-      id_nha_san_xuat, 
-      id_xuat_xu, 
-      ten_san_pham, 
-      create_by 
+    const {
+      id_nha_san_xuat,
+      id_xuat_xu,
+      ten_san_pham,
+      create_by
     } = req.body
 
     if (!id_nha_san_xuat || !id_xuat_xu || !ten_san_pham) {
@@ -210,9 +210,9 @@ router.post('/', async (req, res) => {
       (@id_nha_san_xuat, @id_xuat_xu, @ten_san_pham, @create_by, @create_at)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo sản phẩm thành công' 
+      message: 'Tạo sản phẩm thành công'
     })
 
   } catch (error) {
@@ -224,11 +224,11 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const { 
-      id_nha_san_xuat, 
-      id_xuat_xu, 
-      ten_san_pham, 
-      update_by 
+    const {
+      id_nha_san_xuat,
+      id_xuat_xu,
+      ten_san_pham,
+      update_by
     } = req.body
 
     const request = pool.request()
@@ -323,7 +323,7 @@ router.get('/:id/variants', async (req, res) => {
 router.post('/:id/variants', async (req, res) => {
   try {
     const { id } = req.params
-    const { 
+    const {
       id_mau_sac,
       id_kich_thuoc,
       id_de_giay,
@@ -370,9 +370,9 @@ router.post('/:id/variants', async (req, res) => {
        @id_chong_nuoc, @so_luong, @gia_ban, @ghi_chu, @create_by, @create_at)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo biến thể sản phẩm thành công' 
+      message: 'Tạo biến thể sản phẩm thành công'
     })
 
   } catch (error) {

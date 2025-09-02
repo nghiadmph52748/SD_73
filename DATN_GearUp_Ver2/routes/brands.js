@@ -118,9 +118,9 @@ router.post('/', async (req, res) => {
       VALUES (@ten_nha_san_xuat)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo nhà sản xuất thành công' 
+      message: 'Tạo nhà sản xuất thành công'
     })
 
   } catch (error) {
@@ -176,7 +176,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
-    
+
     const checkProductsRequest = pool.request()
     checkProductsRequest.input('id', sql.Int, id)
 
@@ -186,8 +186,8 @@ router.delete('/:id', async (req, res) => {
     `)
 
     if (productsResult.recordset[0].count > 0) {
-      return res.status(400).json({ 
-        message: 'Không thể xóa nhà sản xuất vì đang có sản phẩm sử dụng' 
+      return res.status(400).json({
+        message: 'Không thể xóa nhà sản xuất vì đang có sản phẩm sử dụng'
       })
     }
 

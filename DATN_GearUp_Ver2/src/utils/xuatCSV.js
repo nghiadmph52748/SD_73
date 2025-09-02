@@ -9,7 +9,6 @@
  */
 export const exportToCSV = (data, fileName) => {
   try {
-    console.log('exportToCSV called with:', { data, fileName })
     
     if (!data || !Array.isArray(data) || data.length === 0) {
       alert('❌ Không có dữ liệu để xuất')

@@ -689,7 +689,6 @@ const fetchAll = async () => {
     const response = await fetchAllKhachHang();
     customers.value = response.data;
   } catch (res) {
-    console.log(res.message);
   }
 };
 // Computed
@@ -817,7 +816,6 @@ const saveCustomer = async () => {
     await fetchAll();
     resetForm();
   } catch (res) {
-    console.log(res.message);
     alert("Có lỗi xảy ra khi lưu thông tin khách hàng");
   }
 };
@@ -827,7 +825,6 @@ const deleteCustomer = async (id) => {
     await fetchUpdateStatusKhachHang(id);
     await fetchAll();
   } catch (res) {
-    console.log(res.message);
   }
 };
 
@@ -913,7 +910,6 @@ const exportToExcel = () => {
       totalSpent: formatCurrency(item.totalSpent || 0),
     }));
 
-    console.log("Exporting customers to Excel:", filteredData);
     alert("✅ Xuất file Excel thành công!");
   } catch (error) {
     console.error("Error exporting to Excel:", error);

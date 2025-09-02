@@ -10,11 +10,11 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const folder = req.body.folder || 'uploads'
     const uploadPath = path.join('public', folder)
-    
+
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true })
     }
-    
+
     cb(null, uploadPath)
   },
   filename: (req, file, cb) => {
@@ -85,7 +85,7 @@ router.post('/single', upload.single('file'), async (req, res) => {
 
 router.post('/multiple', upload.array('files', 10), async (req, res) => {
   const uploadedFiles = []
-  
+
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Không có file được tải lên' })
@@ -178,7 +178,7 @@ router.put('/images/:id', async (req, res) => {
   try {
     const { id } = req.params
     const { duong_dan_anh, loai_anh, mo_ta } = req.body
-    
+
     const request = pool.request()
     request.input('id', sql.Int, id)
     request.input('duong_dan_anh', sql.NVarChar, duong_dan_anh)
@@ -269,7 +269,7 @@ router.get('/images', async (req, res) => {
 
 router.post('/product/:productId/variant/:variantId', upload.array('images', 5), async (req, res) => {
   const transaction = new sql.Transaction(pool)
-  
+
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Không có file được tải lên' })
@@ -283,7 +283,7 @@ router.post('/product/:productId/variant/:variantId', upload.array('images', 5),
 
     for (const file of req.files) {
       const filePath = `/${folder}/${file.filename}`
-      
+
       const imageRequest = new sql.Request(transaction)
       imageRequest.input('duong_dan_anh', sql.VarChar, filePath)
       imageRequest.input('loai_anh', sql.VarChar, 'Product')
@@ -326,7 +326,7 @@ router.post('/product/:productId/variant/:variantId', upload.array('images', 5),
 
   } catch (error) {
     await transaction.rollback()
-    
+
     if (req.files) {
       req.files.forEach(file => {
         if (fs.existsSync(file.path)) {
@@ -334,7 +334,7 @@ router.post('/product/:productId/variant/:variantId', upload.array('images', 5),
         }
       })
     }
-    
+
     console.error('Upload product images error:', error)
     res.status(500).json({ message: error.message || 'Lỗi server' })
   }

@@ -694,7 +694,6 @@ const exportNotificationsToExcel = () => {
 // Initialize
 const refreshData = () => {
   // Simulate data refresh  
-  console.log('Refreshing notifications data...')
 }
 
 onMounted(() => {

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SanPhamService {
@@ -25,20 +26,22 @@ public class SanPhamService {
     @Autowired
     private XuatXuRepository xxService;
 
-    public void add(SanPhamRequest sanPhamRequest) {
+    public SanPhamResponse add(SanPhamRequest sanPhamRequest) {
         SanPham sp = MapperUtils.map(sanPhamRequest, SanPham.class);
         sp.setIdXuatXu(xxService.findXuatXuById(sanPhamRequest.getIdXuatXu()));
         sp.setIdNhaSanXuat(nsxService.findNhaSanXuatById(sanPhamRequest.getIdNhaSanXuat()));
-        repository.save(sp);
+        Optional<SanPham> s = Optional.of(repository.save(sp));
+        return s.map(SanPhamResponse::new).orElse(null);
     }
 
-    public void update(SanPhamRequest sanPhamRequest, Integer id) {
+    public SanPhamResponse update(SanPhamRequest sanPhamRequest, Integer id) {
         SanPham existing = repository.findById(id).orElseThrow(() -> new ApiException("SanPham not found", "404"));
         MapperUtils.mapToExisting(sanPhamRequest, existing);
         existing.setId(id);
         existing.setIdXuatXu(xxService.findXuatXuById(sanPhamRequest.getIdXuatXu()));
         existing.setIdNhaSanXuat(nsxService.findNhaSanXuatById(sanPhamRequest.getIdNhaSanXuat()));
-        repository.save(existing);
+        Optional<SanPham> s = Optional.of(repository.save(existing));
+        return s.map(SanPhamResponse::new).orElse(null);
     }
     
     public List<SanPhamResponse> getAll() {
