@@ -2,6 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "BeSpApplication",
+      "request": "launch",
+      "mainClass": "org.example.be_sp.BeSpApplication",
+      "projectName": "BE_SP"
+    },
+    {
       "name": "Launch Chrome",
       "type": "chrome",
       "request": "launch",
