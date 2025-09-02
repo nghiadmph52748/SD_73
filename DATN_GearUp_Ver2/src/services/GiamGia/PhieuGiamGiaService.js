@@ -1,4 +1,4 @@
-import api from '../response/api.js'
+import api from '../response/api.js';
 
 const API = "/phieu-giam-gia-management";
 

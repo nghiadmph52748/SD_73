@@ -70,6 +70,28 @@ public class KhachHangService {
         }
     }
 
+    public void quickAdd(KhachHangRequest request){
+        KhachHang khachHang = MapperUtils.map(request, KhachHang.class);
+        khachHang.setSoDienThoai(request.getSoDienThoai());
+        khachHang.setEmail(request.getEmail());
+        KhachHang saved = khachHangRepository.save(khachHang);
+        List<DiaChi> listDiaChi = request.getListDiaChi();
+        if (listDiaChi != null) {
+            for (DiaChi data : listDiaChi) {
+                if (data == null) continue;
+                // Skip creating address if all fields are empty/blank as per requirement
+                if (isEmptyAddress(data)) continue;
+                DiaChiKhachHang diaChi = new DiaChiKhachHang();
+                diaChi.setThanhPho(data.getThanhPho());
+                diaChi.setQuan(data.getQuan());
+                diaChi.setPhuong(data.getPhuong());
+                diaChi.setDiaChiCuThe(data.getDiaChiCuThe());
+                diaChi.setIdKhachHang(saved);
+                repository.save(diaChi);
+            }
+        }
+    }
+
     public void update(Integer id, KhachHangRequest request) {
         // Load existing customer to handle password correctly
         KhachHang existing = khachHangRepository.findById(id)

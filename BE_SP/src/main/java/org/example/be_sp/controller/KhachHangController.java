@@ -29,6 +29,12 @@ public class KhachHangController {
         return new ResponseObject<>(khachHangService.findById(id));
     }
 
+    @PostMapping("/add/quick")
+    public ResponseObject<?> quickAdd(@RequestBody KhachHangRequest request) {
+        khachHangService.quickAdd(request);
+        return new ResponseObject<>(null, "Thêm khách hàng thành công!");
+    }
+
     @PostMapping("/add")
     public ResponseObject<?> create(@RequestBody KhachHangRequest request) {
         khachHangService.save(request);

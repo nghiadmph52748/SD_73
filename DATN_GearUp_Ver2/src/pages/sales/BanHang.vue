@@ -400,15 +400,21 @@
                   <div
                     v-for="customer in customerSuggestions"
                     :key="customer.id"
-                    class="customer-suggestion-item"
+                    :class="[
+                      'customer-suggestion-item',
+                      { 'create-new-customer': customer.isCreateNew },
+                    ]"
                     @click="selectCustomerFromSuggestions(customer)"
                   >
                     <div class="customer-info">
                       <strong>{{ customer.tenKhachHang }}</strong>
-                      <small
+                      <small v-if="!customer.isCreateNew"
                         >{{ customer.email }} |
                         {{ customer.soDienThoai }}</small
                       >
+                      <small v-else class="create-new-hint">
+                        📝 Nhấn để tạo khách hàng mới
+                      </small>
                     </div>
                   </div>
                 </div>
@@ -1623,13 +1629,18 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { fetchCreateHoaDon } from "../../services/BanHang/HoaDonService";
 import {
   fetchActivePhieuGiamGiaForCustomer,
   fetchAllPhieuGiamGia,
 } from "../../services/GiamGia/PhieuGiamGiaService";
-import { fetchAllKhachHang } from "../../services/KhachHang/KhachHangService";
+import {
+  fetchAllKhachHang,
+  fetchCreateKhachHang,
+  fetchQuickAddKhachHang,
+  fetchUpdateKhachHang,
+} from "../../services/KhachHang/KhachHangService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { fetchAllChatLieu } from "../../services/ThuocTinh/ChatLieuService";
 import { fetchAllDeGiay } from "../../services/ThuocTinh/DeGiayService";
@@ -1734,6 +1745,48 @@ const isAddressComplete = computed(() => {
     deliveryAddress.value.diaChiCuThe.trim()
   );
 });
+
+// Computed: Get current order
+const currentOrder = computed(() => {
+  return tempOrder.value.find(
+    (tempOrder) => tempOrder.id === currentOrderId.value
+  );
+});
+
+const selectedService = computed(() => {
+  if (!currentOrder.value?.ghiChu) return null;
+  return deliveryServices.value.find(
+    (service) => service.code === currentOrder.value.ghiChu.split(" - ")[0]
+  );
+});
+
+// Watcher: Sync selectedCoupons with currentOrder.selectedCoupons
+watch(
+  selectedCoupons,
+  (newCoupons) => {
+    if (currentOrder.value) {
+      currentOrder.value.selectedCoupons = newCoupons;
+    }
+  },
+  { deep: true }
+);
+
+// Watcher: Sync currentOrder changes to selectedCoupons
+watch(
+  currentOrder,
+  (newOrder) => {
+    if (newOrder && newOrder.selectedCoupons) {
+      // Only update if different to avoid infinite loop
+      if (
+        JSON.stringify(selectedCoupons.value) !==
+        JSON.stringify(newOrder.selectedCoupons)
+      ) {
+        selectedCoupons.value = [...newOrder.selectedCoupons];
+      }
+    }
+  },
+  { deep: true }
+);
 
 // Computed: Calculate discount amount for a coupon
 const calculateCouponDiscount = (coupon) => {
@@ -1900,7 +1953,10 @@ const fetchKhachHang = async () => {
 const fetchPhieuGiamGia = async () => {
   try {
     const response = await fetchAllPhieuGiamGia();
-    PhieuGiamGias.value = response.data;
+    // API trả về {data: {data: [...], message: "...", success: true}}
+    const couponArray =
+      response.data && response.data.data ? response.data.data : [];
+    PhieuGiamGias.value = Array.isArray(couponArray) ? couponArray : [];
   } catch (error) {
     console.error("Error fetching phieu giam gia:", error);
   }
@@ -1973,16 +2029,12 @@ const fetchCreateOrder = async () => {
       ghiChu: order.selectedService
         ? `${order.ghiChu} - ${order.selectedService.name} (${order.selectedService.deliveryTime})`
         : order.ghiChu,
-      tenNguoiNhan: KhachHangs.value.find(
-        (khachHang) => khachHang.id === order.idKhachHang
-      ).tenKhachHang,
-      diaChiNhanHang: null,
-      soDienThoaiNguoiNhan: KhachHangs.value.find(
-        (khachHang) => khachHang.id === order.idKhachHang
-      ).soDienThoai,
-      emailNguoiNhan: KhachHangs.value.find(
-        (khachHang) => khachHang.id === order.idKhachHang
-      ).email,
+      tenNguoiNhan:
+        tenNguoiNhan || order.tenNguoiNhan || customerDisplayName.value,
+      diaChiNhanHang: diaChiNhanHang || order.diaChiNhanHang || "",
+      soDienThoaiNguoiNhan:
+        soDienThoaiNguoiNhan || order.soDienThoaiNguoiNhan || "",
+      emailNguoiNhan: emailNguoiNhan || order.emailNguoiNhan || "",
       ngayTao: order.ngayTao ? order.ngayTao.toISOString().split("T")[0] : null,
       ngayThanhToan: order.ngayThanhToan
         ? order.ngayThanhToan.toISOString().split("T")[0]
@@ -1994,8 +2046,8 @@ const fetchCreateOrder = async () => {
     };
 
     // Chỉ thêm idPhieuGiamGia nếu có giá trị
-    if (order.selectedCoupons && order.selectedCoupons.length > 0) {
-      payload.idPhieuGiamGia = order.selectedCoupons[0].id;
+    if (selectedCoupons.value && selectedCoupons.value.length > 0) {
+      payload.idPhieuGiamGia = selectedCoupons.value[0].id;
     }
 
     // Validation cơ bản
@@ -2016,18 +2068,6 @@ const fetchCreateOrder = async () => {
   }
 };
 // Computed
-const currentOrder = computed(() => {
-  return tempOrder.value.find(
-    (tempOrder) => tempOrder.id === currentOrderId.value
-  );
-});
-
-const selectedService = computed(() => {
-  if (!currentOrder.value?.ghiChu) return null;
-  return deliveryServices.value.find(
-    (service) => service.code === currentOrder.value.ghiChu.split(" - ")[0]
-  );
-});
 
 const filteredSearchProducts = computed(() => {
   let filtered = ChiTietSanPhams.value;
@@ -2085,6 +2125,7 @@ const createNewOrder = () => {
     tongTien: 0,
     tongTienSauGiam: 0,
     ghiChu: "pickup", // Default to pickup at store
+    selectedCoupons: [], // Danh sách phiếu giảm giá đã chọn
     tenNguoiNhan: "",
     diaChiNhanHang: "",
     soDienThoaiNguoiNhan: "",
@@ -2261,8 +2302,8 @@ const updateOrderTotals = () => {
 
   // Tính giảm giá từ các phiếu đã chọn (áp dụng lên tổng tiền sau giảm sản phẩm)
   let totalDiscount = 0;
-  if (order.selectedCoupons && order.selectedCoupons.length > 0) {
-    order.selectedCoupons.forEach((coupon) => {
+  if (selectedCoupons.value && selectedCoupons.value.length > 0) {
+    selectedCoupons.value.forEach((coupon) => {
       if (coupon.loaiPhieuGiamGia === false) {
         // loaiPhieuGiamGia = false: Giảm theo phần trăm trên tổng tiền đã giảm sản phẩm
         const discountAmount = (order.tongTien * coupon.giaTriGiamGia) / 100;
@@ -2295,8 +2336,12 @@ const autoApplyBestCoupon = () => {
     return;
   }
 
+  // Đảm bảo availableCoupons.value là mảng trước khi lọc
+  const couponsArray = Array.isArray(availableCoupons.value)
+    ? availableCoupons.value
+    : [];
   // Lọc các phiếu giảm giá hợp lệ
-  const validCoupons = availableCoupons.value.filter((coupon) => {
+  const validCoupons = couponsArray.filter((coupon) => {
     // Kiểm tra trạng thái active
     if (coupon.trangThai !== true) return false;
 
@@ -2348,7 +2393,7 @@ const autoApplyBestCoupon = () => {
 
   if (bestCoupon) {
     // Áp dụng phiếu giảm giá tốt nhất
-    order.selectedCoupons = [bestCoupon];
+    selectedCoupons.value = [bestCoupon];
     autoAppliedCoupon.value = bestCoupon; // Đánh dấu phiếu được áp dụng tự động
     console.log(
       `🎫 Tự động áp dụng phiếu giảm giá tốt nhất: ${
@@ -2374,8 +2419,18 @@ const applyCoupon = (voucher) => {
 // Load all coupons from API
 const loadAllCoupons = async () => {
   try {
+    console.log("Đang load phiếu giảm giá...");
     const coupons = await fetchAllPhieuGiamGia();
-    availableCoupons.value = coupons.data || [];
+    console.log("Dữ liệu phiếu giảm giá nhận được:", coupons);
+    // Đảm bảo luôn là mảng - API trả về {data: {data: [...], message: "...", success: true}}
+    const couponArray =
+      coupons.data && coupons.data.data ? coupons.data.data : [];
+    availableCoupons.value = Array.isArray(couponArray) ? couponArray : [];
+    console.log(
+      "Đã load được",
+      availableCoupons.value.length,
+      "phiếu giảm giá"
+    );
   } catch (error) {
     console.error("Error loading all coupons:", error);
     availableCoupons.value = [];
@@ -2387,7 +2442,10 @@ const loadAvailableCoupons = async (customerId) => {
   try {
     if (customerId && customerId > 0) {
       // Filter coupons that are active and available for this customer
-      const customerCoupons = availableCoupons.value.filter((coupon) => {
+      const couponsArray = Array.isArray(availableCoupons.value)
+        ? availableCoupons.value
+        : [];
+      const customerCoupons = couponsArray.filter((coupon) => {
         // You can add more filtering logic here based on customer eligibility
         return coupon.trangThai === true; // Assuming 'trangThai' indicates active status
       });
@@ -2404,10 +2462,20 @@ const loadAvailableCoupons = async (customerId) => {
 
 const selectCustomer = async (customer) => {
   if (currentOrder.value) {
+    // Check if this is a "create new customer" option
+    if (customer.isCreateNew) {
+      await createNewCustomer(
+        customer.tenKhachHang
+          .replace('➕ Tạo khách hàng mới: "', "")
+          .replace('"', "")
+      );
+      return;
+    }
+
     currentOrder.value.idKhachHang = customer.id;
     customerDisplayName.value = customer.tenKhachHang;
 
-    // Populate delivery address from customer if they have address
+    // Populate delivery address and order info from customer
     if (customer.listDiaChi && customer.listDiaChi.length > 0) {
       const customerAddress = customer.listDiaChi[0]; // Use first address
       deliveryAddress.value = {
@@ -2419,6 +2487,12 @@ const selectCustomer = async (customer) => {
         quan: customerAddress.quan || "",
         phuong: customerAddress.phuong || "",
       };
+
+      // Also update order with customer info
+      currentOrder.value.tenNguoiNhan = customer.tenKhachHang;
+      currentOrder.value.soDienThoaiNguoiNhan = customer.soDienThoai || "";
+      currentOrder.value.emailNguoiNhan = customer.email || "";
+      currentOrder.value.diaChiNhanHang = customerAddress.diaChiCuThe || "";
     } else {
       // Clear address if customer doesn't have one
       deliveryAddress.value = {
@@ -2430,6 +2504,54 @@ const selectCustomer = async (customer) => {
         quan: "",
         phuong: "",
       };
+
+      // Update order with basic customer info
+      currentOrder.value.tenNguoiNhan = customer.tenKhachHang;
+      currentOrder.value.soDienThoaiNguoiNhan = customer.soDienThoai || "";
+      currentOrder.value.emailNguoiNhan = customer.email || "";
+      currentOrder.value.diaChiNhanHang = "";
+    }
+
+    // If customer doesn't have address but delivery address is provided, update customer with address
+    if (
+      (!customer.listDiaChi || customer.listDiaChi.length === 0) &&
+      deliveryAddress.value.diaChiCuThe &&
+      deliveryAddress.value.diaChiCuThe.trim() !== ""
+    ) {
+      try {
+        console.log(
+          `Cập nhật địa chỉ cho khách hàng: ${customer.tenKhachHang}`
+        );
+
+        const updatedCustomerData = {
+          ...customer,
+          email: deliveryAddress.value.emailNguoiNhan || customer.email || "",
+          soDienThoai:
+            deliveryAddress.value.soDienThoaiNguoiNhan ||
+            customer.soDienThoai ||
+            "",
+          listDiaChi: [
+            {
+              diaChiCuThe: deliveryAddress.value.diaChiCuThe,
+              thanhPho: deliveryAddress.value.thanhPho,
+              quan: deliveryAddress.value.quan,
+              phuong: deliveryAddress.value.phuong,
+            },
+          ],
+        };
+
+        await fetchUpdateKhachHang(customer.id, updatedCustomerData);
+
+        // Reload customer list to get updated data
+        await fetchKhachHang();
+
+        console.log(
+          `Đã cập nhật địa chỉ cho khách hàng: ${customer.tenKhachHang}`
+        );
+      } catch (error) {
+        console.error("Error updating customer address:", error);
+        // Continue with order creation even if address update fails
+      }
     }
 
     await fetchCreateOrderDetail(customer.id);
@@ -2439,6 +2561,76 @@ const selectCustomer = async (customer) => {
   showCustomerSearch.value = false;
   showCustomerDropdown.value = false;
   customerSuggestions.value = [];
+};
+
+// Create new customer
+const createNewCustomer = async (customerName) => {
+  try {
+    // Show loading state
+    console.log(`Đang tạo khách hàng mới: ${customerName}`);
+
+    // Prepare customer data with delivery address info if available
+    const newCustomerData = {
+      tenKhachHang: customerName,
+      email: deliveryAddress.value.emailNguoiNhan || "",
+      soDienThoai: deliveryAddress.value.soDienThoaiNguoiNhan || "",
+      gioiTinh: true, // Default to male
+      ngaySinh: null,
+      diaChi: deliveryAddress.value.diaChiCuThe || "",
+      trangThai: true,
+      deleted: false,
+      // Include address details if available
+      listDiaChi: deliveryAddress.value.diaChiCuThe
+        ? [
+            {
+              diaChiCuThe: deliveryAddress.value.diaChiCuThe,
+              thanhPho: deliveryAddress.value.thanhPho,
+              quan: deliveryAddress.value.quan,
+              phuong: deliveryAddress.value.phuong,
+            },
+          ]
+        : [],
+    };
+
+    // Call API to create customer
+    await fetchQuickAddKhachHang(newCustomerData);
+
+    // Reload customer list
+    await fetchKhachHang();
+
+    // Find the newly created customer (assume it's the last one or by name)
+    const newCustomer = KhachHangs.value.find(
+      (c) => c.tenKhachHang === customerName
+    );
+
+    if (newCustomer) {
+      console.log(
+        `Đã tạo khách hàng mới thành công: ${newCustomer.tenKhachHang}`
+      );
+      // Update current order with new customer info
+      currentOrder.value.tenNguoiNhan = newCustomer.tenKhachHang;
+      currentOrder.value.soDienThoaiNguoiNhan = newCustomer.soDienThoai || "";
+      currentOrder.value.emailNguoiNhan = newCustomer.email || "";
+      currentOrder.value.diaChiNhanHang = newCustomer.diaChi || "";
+      // Auto-select the new customer
+      await selectCustomer(newCustomer);
+    } else {
+      console.error("Không tìm thấy khách hàng vừa tạo");
+      // Fallback: update with delivery address info if available
+      currentOrder.value.tenNguoiNhan = customerName;
+      currentOrder.value.soDienThoaiNguoiNhan =
+        deliveryAddress.value.soDienThoaiNguoiNhan || "";
+      currentOrder.value.emailNguoiNhan =
+        deliveryAddress.value.emailNguoiNhan || "";
+      currentOrder.value.diaChiNhanHang =
+        deliveryAddress.value.diaChiCuThe || "";
+      customerDisplayName.value = customerName;
+      alert("Đã tạo khách hàng mới thành công! Thông tin địa chỉ đã được lưu.");
+    }
+  } catch (error) {
+    console.error("Error creating new customer:", error);
+    alert("Có lỗi xảy ra khi tạo khách hàng mới. Vui lòng thử lại.");
+  }
 };
 
 // Select customer from input suggestions
@@ -2465,8 +2657,8 @@ const toggleCouponSelection = (coupon) => {
     autoAppliedCoupon.value = null;
   }
 
-  // Update current order's selected coupons
-  currentOrder.value.selectedCoupons = selectedCoupons.value;
+  // Update current order's selected coupons (deprecated - using selectedCoupons.value directly)
+  // currentOrder.value.selectedCoupons = selectedCoupons.value;
 
   // Recalculate totals
   updateOrderTotals();
@@ -2505,7 +2697,7 @@ const removeSelectedCoupon = (couponId) => {
   const index = selectedCoupons.value.findIndex((c) => c.id === couponId);
   if (index > -1) {
     selectedCoupons.value.splice(index, 1);
-    currentOrder.value.selectedCoupons = selectedCoupons.value;
+    // currentOrder.value.selectedCoupons = selectedCoupons.value; // deprecated
 
     // Reset auto applied coupon nếu xóa phiếu tự động
     if (autoAppliedCoupon.value && autoAppliedCoupon.value.id === couponId) {
@@ -2528,7 +2720,7 @@ const isCouponSelected = (couponId) => {
 const clearAllSelectedCoupons = () => {
   selectedCoupons.value = [];
   if (currentOrder.value) {
-    currentOrder.value.selectedCoupons = [];
+    // currentOrder.value.selectedCoupons = []; // deprecated
     updateOrderTotals();
   }
 };
@@ -2547,7 +2739,7 @@ const closeCouponModal = () => {
 const confirmCouponSelection = () => {
   // Update current order with selected coupons
   if (currentOrder.value) {
-    currentOrder.value.selectedCoupons = selectedCoupons.value;
+    // currentOrder.value.selectedCoupons = selectedCoupons.value; // deprecated
     updateOrderTotals();
   }
   showCouponModal.value = false;
@@ -2585,10 +2777,33 @@ const searchCustomers = () => {
         return nameMatch || emailMatch || phoneMatch;
       });
 
-      customerSuggestions.value = filteredCustomers.slice(0, 5); // Limit to 5 suggestions
+      // Always show dropdown when there is a query
+      showCustomerDropdown.value = query.length > 0;
 
-      // Show dropdown if there are suggestions, hide if no results
-      showCustomerDropdown.value = filteredCustomers.length > 0;
+      if (filteredCustomers.length > 0) {
+        // Show existing customers (limit to 4 to leave space for "create new")
+        customerSuggestions.value = filteredCustomers.slice(0, 4);
+        // Add "Create new customer" option if not already in suggestions
+        const createNewOption = {
+          id: "create_new",
+          tenKhachHang: `➕ Tạo khách hàng mới: "${query}"`,
+          email: "",
+          soDienThoai: "",
+          isCreateNew: true,
+        };
+        customerSuggestions.value.push(createNewOption);
+      } else {
+        // No existing customers found, show only "create new" option
+        customerSuggestions.value = [
+          {
+            id: "create_new",
+            tenKhachHang: `➕ Tạo khách hàng mới: "${query}"`,
+            email: "",
+            soDienThoai: "",
+            isCreateNew: true,
+          },
+        ];
+      }
     } catch (error) {
       console.error("Error searching customers:", error);
       customerSuggestions.value = [];
@@ -2705,7 +2920,7 @@ const confirmOrder = async () => {
   if (order) {
     order.danhSachSanPham = [];
     order.idKhachHang = null;
-    order.selectedCoupons = []; // Reset selected coupons
+    // order.selectedCoupons = []; // Reset selected coupons - deprecated
     order.idNhanVien = 1;
     order.idPhuongThucThanhToan = 0;
     order.phuongThucThanhToan = null;
@@ -2749,9 +2964,6 @@ const confirmOrder = async () => {
     searchTimeout = null;
   }
 };
-
-// Watch for order changes
-const { computed: watch } = computed;
 
 // Close customer dropdown when clicking outside
 const closeCustomerDropdown = () => {
@@ -5245,6 +5457,20 @@ const handleImageError = (event) => {
 
 .customer-suggestion-item:hover {
   background-color: rgba(74, 222, 128, 0.05);
+}
+
+.create-new-customer {
+  background-color: rgba(59, 130, 246, 0.05);
+  border-left: 3px solid #3b82f6;
+}
+
+.create-new-customer:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.create-new-hint {
+  color: #3b82f6;
+  font-weight: 500;
 }
 
 .customer-info strong {

@@ -55,6 +55,7 @@ public class HoaDonService {
         hd.setIdKhachHang(khachHangRepository.findKhachHangById(request.getIdKhachHang()));
         hd.setIdPhieuGiamGia(phieuGiamGiaService.getById(request.getIdPhieuGiamGia()));
         hd.setIdNhanVien(nhanVienRepository.getById(request.getIdNhanVien()));
+        hd.setDiaChiNguoiNhan(request.getDiaChiNhanHang());
         hd.setLoaiDon(true); // bán tại quầy
         HoaDon saved = hoaDonRepository.save(hd);
         for (Integer idSanPham : request.getDanhSachSanPham().keySet()) {
