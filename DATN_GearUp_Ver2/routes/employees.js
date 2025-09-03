@@ -120,13 +120,13 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { 
+    const {
       id_quyen_han,
-      ten_nhan_vien, 
-      ten_tai_khoan, 
-      mat_khau, 
-      email, 
-      so_dien_thoai, 
+      ten_nhan_vien,
+      ten_tai_khoan,
+      mat_khau,
+      email,
+      so_dien_thoai,
       anh_nha_vien,
       ngay_sinh,
       ghi_chu,
@@ -135,7 +135,7 @@ router.post('/', async (req, res) => {
       phuong,
       dia_chi_cu_the,
       cccd,
-      create_by 
+      create_by
     } = req.body
 
     if (!id_quyen_han || !ten_nhan_vien || !ten_tai_khoan || !mat_khau || !email) {
@@ -187,9 +187,9 @@ router.post('/', async (req, res) => {
        @cccd, @create_by, @create_at)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo nhân viên thành công' 
+      message: 'Tạo nhân viên thành công'
     })
 
   } catch (error) {
@@ -201,11 +201,11 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const { 
+    const {
       id_quyen_han,
-      ten_nhan_vien, 
-      email, 
-      so_dien_thoai, 
+      ten_nhan_vien,
+      email,
+      so_dien_thoai,
       anh_nha_vien,
       ngay_sinh,
       ghi_chu,
@@ -214,7 +214,7 @@ router.put('/:id', async (req, res) => {
       phuong,
       dia_chi_cu_the,
       cccd,
-      update_by 
+      update_by
     } = req.body
 
     const checkEmailRequest = pool.request()
@@ -382,9 +382,9 @@ router.post('/roles', async (req, res) => {
       VALUES (@ten_quyen_han)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo quyền hạn thành công' 
+      message: 'Tạo quyền hạn thành công'
     })
 
   } catch (error) {

@@ -273,12 +273,8 @@ const filterCounts = computed(() => {
 
 // Notification functions
 const toggleNotifications = () => {
-  console.log(
-    "Toggle notifications clicked, current state:",
-    showNotifications.value
-  );
+  console.log("Toggle notifications clicked, current state:", showNotifications.value);
   showNotifications.value = !showNotifications.value;
-  console.log("New state:", showNotifications.value);
 };
 
 const markAsRead = async (notificationId) => {

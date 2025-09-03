@@ -5,7 +5,9 @@
       <div class="header-content">
         <div class="header-text">
           <h1 class="page-title">Nhật ký hoạt động</h1>
-          <p class="page-subtitle">Theo dõi và quản lý nhật ký hoạt động hệ thống</p>
+          <p class="page-subtitle">
+            Theo dõi và quản lý nhật ký hoạt động hệ thống
+          </p>
         </div>
         <div class="header-actions">
           <button class="btn-refresh" @click="refreshData">
@@ -30,7 +32,9 @@
       <div class="filter-header">
         <div class="filter-title">
           <h3>Bộ lọc tìm kiếm</h3>
-          <span class="filter-subtitle">{{ filteredLogs.length }} log được tìm thấy</span>
+          <span class="filter-subtitle"
+            >{{ filteredLogs.length }} log được tìm thấy</span
+          >
         </div>
         <div class="filter-actions">
           <button @click="resetFilters" class="filter-reset-btn">
@@ -47,20 +51,23 @@
         <div class="filter-row-layout">
           <!-- Search Section -->
           <div class="search-section">
-            <input 
-              type="text" 
-              placeholder="Tìm kiếm..." 
+            <input
+              type="text"
+              placeholder="Tìm kiếm..."
               v-model="searchQuery"
               class="search-input"
-            >
+            />
           </div>
 
           <!-- Quick Time Filters -->
           <div class="time-filters">
-            <button 
-              v-for="timeFilter in timeFilters" 
+            <button
+              v-for="timeFilter in timeFilters"
               :key="timeFilter.value"
-              :class="['time-chip', { active: selectedTimeFilter === timeFilter.value }]"
+              :class="[
+                'time-chip',
+                { active: selectedTimeFilter === timeFilter.value },
+              ]"
               @click="applyTimeFilter(timeFilter.value)"
             >
               {{ timeFilter.label }}
@@ -86,14 +93,18 @@
 
             <select v-model="selectedUser" class="filter-select">
               <option value="">Tất cả người dùng</option>
-              <option v-for="user in availableUsers" :key="user.id" :value="user.id">
+              <option
+                v-for="user in availableUsers"
+                :key="user.id"
+                :value="user.id"
+              >
                 {{ user.ho_ten }} ({{ user.vai_tro }})
               </option>
             </select>
 
             <div class="date-range-compact">
-              <input type="date" v-model="fromDate" class="date-input">
-              <input type="date" v-model="toDate" class="date-input">
+              <input type="date" v-model="fromDate" class="date-input" />
+              <input type="date" v-model="toDate" class="date-input" />
             </div>
           </div>
         </div>
@@ -116,7 +127,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(log, index) in filteredLogs" :key="log.id" :class="{ 'danger-row': log.hanh_dong === 'login_failed' }">
+            <tr
+              v-for="(log, index) in filteredLogs"
+              :key="log.id"
+              :class="{ 'danger-row': log.hanh_dong === 'login_failed' }"
+            >
               <td>{{ index + 1 }}</td>
               <td>
                 <div class="time-info">
@@ -138,9 +153,9 @@
               <td>
                 <div class="description">
                   <p>{{ log.mo_ta }}</p>
-                  <button 
-                    v-if="log.mo_ta.length > 100" 
-                    class="btn-link" 
+                  <button
+                    v-if="log.mo_ta.length > 100"
+                    class="btn-link"
                     @click="viewFullLog(log)"
                   >
                     Xem thêm
@@ -158,24 +173,25 @@
             </tr>
           </tbody>
         </table>
-        
+
         <!-- Pagination -->
         <div class="pagination-wrapper">
           <div class="pagination-info">
-            Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của {{ totalLogs }} log
+            Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của
+            {{ totalLogs }} log
           </div>
           <div class="pagination">
-            <button 
-              class="btn-export" 
-              @click="previousPage" 
+            <button
+              class="btn-export"
+              @click="previousPage"
               :disabled="currentPage === 1"
             >
               ❮ Trước
             </button>
             <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-            <button 
-              class="btn-export" 
-              @click="nextPage" 
+            <button
+              class="btn-export"
+              @click="nextPage"
               :disabled="currentPage === totalPages"
             >
               Sau ❯
@@ -186,13 +202,19 @@
     </div>
 
     <!-- Log Detail Modal -->
-    <div v-if="showDetailModal" class="modal-overlay" @click="showDetailModal = false">
+    <div
+      v-if="showDetailModal"
+      class="modal-overlay"
+      @click="showDetailModal = false"
+    >
       <div class="modal-content" @click.stop>
         <div class="modal-header">
           <h3>Chi tiết hoạt động</h3>
-          <button class="modal-close" @click="showDetailModal = false">✕</button>
+          <button class="modal-close" @click="showDetailModal = false">
+            ✕
+          </button>
         </div>
-        
+
         <div class="modal-body" v-if="selectedLog">
           <div class="log-detail">
             <div class="detail-section">
@@ -216,7 +238,12 @@
                 </div>
                 <div class="info-item">
                   <label>Hành động:</label>
-                  <span :class="['action-badge', getActionClass(selectedLog.hanh_dong)]">
+                  <span
+                    :class="[
+                      'action-badge',
+                      getActionClass(selectedLog.hanh_dong),
+                    ]"
+                  >
                     {{ getActionText(selectedLog.hanh_dong) }}
                   </span>
                 </div>
@@ -248,28 +275,35 @@
     </div>
 
     <!-- Clear Logs Confirmation Modal -->
-    <div v-if="showClearModal" class="modal-overlay" @click="showClearModal = false">
+    <div
+      v-if="showClearModal"
+      class="modal-overlay"
+      @click="showClearModal = false"
+    >
       <div class="modal-content small" @click.stop>
         <div class="modal-header">
           <h3>Xác nhận xóa log cũ</h3>
           <button class="modal-close" @click="showClearModal = false">✕</button>
         </div>
-        
+
         <div class="modal-body">
-          <p>Bạn có muốn xóa các log cũ hơn <strong>{{ clearDays }} ngày</strong>?</p>
+          <p>
+            Bạn có muốn xóa các log cũ hơn
+            <strong>{{ clearDays }} ngày</strong>?
+          </p>
           <div class="form-group">
             <label for="clearDays">Số ngày giữ lại:</label>
-            <input 
-              type="number" 
+            <input
+              type="number"
               id="clearDays"
               v-model="clearDays"
               class="form-control"
               min="7"
               max="365"
-            >
+            />
           </div>
           <p class="text-warning">⚠️ Hành động này không thể hoàn tác!</p>
-          
+
           <div class="modal-actions">
             <button class="btn-export" @click="showClearModal = false">
               <span class="btn-icon">❌</span>
@@ -322,7 +356,7 @@ const filteredLogs = computed(() => {
   let filtered = activityLogs.value
 
   if (searchQuery.value) {
-    filtered = filtered.filter(log => 
+    filtered = filtered.filter(log =>
       log.nguoi_dung.ho_ten.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       log.hanh_dong.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       log.mo_ta.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -338,13 +372,13 @@ const filteredLogs = computed(() => {
   }
 
   if (fromDate.value) {
-    filtered = filtered.filter(log => 
+    filtered = filtered.filter(log =>
       new Date(log.thoi_gian) >= new Date(fromDate.value)
     )
   }
 
   if (toDate.value) {
-    filtered = filtered.filter(log => 
+    filtered = filtered.filter(log =>
       new Date(log.thoi_gian) <= new Date(toDate.value + 'T23:59:59')
     )
   }
@@ -359,7 +393,7 @@ const totalLogs = computed(() => {
   let filtered = activityLogs.value
 
   if (searchQuery.value) {
-    filtered = filtered.filter(log => 
+    filtered = filtered.filter(log =>
       log.nguoi_dung.ho_ten.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       log.hanh_dong.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       log.mo_ta.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -375,13 +409,13 @@ const totalLogs = computed(() => {
   }
 
   if (fromDate.value) {
-    filtered = filtered.filter(log => 
+    filtered = filtered.filter(log =>
       new Date(log.thoi_gian) >= new Date(fromDate.value)
     )
   }
 
   if (toDate.value) {
-    filtered = filtered.filter(log => 
+    filtered = filtered.filter(log =>
       new Date(log.thoi_gian) <= new Date(toDate.value + 'T23:59:59')
     )
   }
@@ -395,8 +429,8 @@ const endIndex = computed(() => Math.min(startIndex.value + itemsPerPage.value, 
 
 // Methods
 const formatTime = (dateString) => {
-  return new Date(dateString).toLocaleTimeString('vi-VN', { 
-    hour: '2-digit', 
+  return new Date(dateString).toLocaleTimeString('vi-VN', {
+    hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'
   })
@@ -469,7 +503,7 @@ const getStatusText = (log) => {
 const applyTimeFilter = (timeFilter) => {
   selectedTimeFilter.value = timeFilter
   const today = new Date()
-  
+
   switch (timeFilter) {
     case 'today':
       fromDate.value = today.toISOString().split('T')[0]
@@ -497,15 +531,7 @@ const applyTimeFilter = (timeFilter) => {
 
 const applyFilters = () => {
   // Apply all current filter settings
-  // This method already applies filters through computed properties
-  console.log('Filters applied:', {
-    searchQuery: searchQuery.value,
-    selectedAction: selectedAction.value,
-    selectedUser: selectedUser.value,
-    fromDate: fromDate.value,
-    toDate: toDate.value,
-    selectedTimeFilter: selectedTimeFilter.value
-  })
+  // This method already applies filters through computed properties  
 }
 
 const resetFilters = () => {
@@ -552,12 +578,12 @@ const exportLogsToExcel = () => {
       ip_address: 'IP Address',
       trang_thai: 'Trạng thái'
     }
-    
+
     // Get all filtered logs, not just paginated ones
     let allFilteredLogs = activityLogs.value
 
     if (searchQuery.value) {
-      allFilteredLogs = allFilteredLogs.filter(log => 
+      allFilteredLogs = allFilteredLogs.filter(log =>
         log.nguoi_dung.ho_ten.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         log.hanh_dong.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         log.mo_ta.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -573,20 +599,20 @@ const exportLogsToExcel = () => {
     }
 
     if (fromDate.value) {
-      allFilteredLogs = allFilteredLogs.filter(log => 
+      allFilteredLogs = allFilteredLogs.filter(log =>
         new Date(log.thoi_gian) >= new Date(fromDate.value)
       )
     }
 
     if (toDate.value) {
-      allFilteredLogs = allFilteredLogs.filter(log => 
+      allFilteredLogs = allFilteredLogs.filter(log =>
         new Date(log.thoi_gian) <= new Date(toDate.value + 'T23:59:59')
       )
     }
 
     // Sort by time descending (newest first)
     allFilteredLogs = allFilteredLogs.sort((a, b) => new Date(b.thoi_gian) - new Date(a.thoi_gian))
-    
+
     const dataToExport = allFilteredLogs.map(item => ({
       thoi_gian: formatDateTime(item.thoi_gian),
       nguoi_dung: item.nguoi_dung.ho_ten,
@@ -596,16 +622,16 @@ const exportLogsToExcel = () => {
       ip_address: item.ip_address,
       trang_thai: getStatusText(item)
     }))
-    
+
     const formattedData = formatDataForExcel(dataToExport, headerMapping)
-    
+
     const result = exportToExcel(
       formattedData,
       'Nhat_ky_hoat_dong',
       'Nhật ký hoạt động',
       { skipHeader: false }
     )
-    
+
     if (result.success) {
       alert(`✅ ${result.message}`)
     } else {
@@ -621,7 +647,6 @@ const refreshData = async () => {
   loading.value = true
   try {
     await loadActivityLogs()
-    console.log('Activity logs data refreshed successfully')
   } catch (error) {
     console.error('Error refreshing activity logs data:', error)
   } finally {
@@ -642,15 +667,15 @@ const getActiveFilterCount = () => {
 const confirmClearLogs = () => {
   const cutoffDate = new Date()
   cutoffDate.setDate(cutoffDate.getDate() - clearDays.value)
-  
+
   const initialCount = activityLogs.value.length
-  activityLogs.value = activityLogs.value.filter(log => 
+  activityLogs.value = activityLogs.value.filter(log =>
     new Date(log.thoi_gian) >= cutoffDate
   )
-  
+
   const deletedCount = initialCount - activityLogs.value.length
   alert(`Đã xóa ${deletedCount} log cũ hơn ${clearDays.value} ngày`)
-  
+
   showClearModal.value = false
 }
 
@@ -909,7 +934,7 @@ onMounted(() => {
   .modern-filter-section {
     padding: 0.75rem;
   }
-  
+
   .filter-header {
     flex-direction: column;
     gap: 0.75rem;
@@ -925,7 +950,7 @@ onMounted(() => {
     justify-content: center;
     gap: 0.5rem;
   }
-  
+
   .filter-row-layout {
     flex-direction: column;
     align-items: stretch;
@@ -960,7 +985,6 @@ onMounted(() => {
     width: 100%;
   }
 }
-
 
 /* Table Styles */
 .table th {
@@ -1016,13 +1040,34 @@ onMounted(() => {
   font-weight: 500;
 }
 
-.action-primary { background-color: #007bff; color: white; }
-.action-success { background-color: #28a745; color: white; }
-.action-warning { background-color: #ffc107; color: #212529; }
-.action-danger { background-color: #dc3545; color: white; }
-.action-info { background-color: #17a2b8; color: white; }
-.action-secondary { background-color: #6c757d; color: white; }
-.action-default { background-color: #e9ecef; color: #495057; }
+.action-primary {
+  background-color: #007bff;
+  color: white;
+}
+.action-success {
+  background-color: #28a745;
+  color: white;
+}
+.action-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+.action-danger {
+  background-color: #dc3545;
+  color: white;
+}
+.action-info {
+  background-color: #17a2b8;
+  color: white;
+}
+.action-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+.action-default {
+  background-color: #e9ecef;
+  color: #495057;
+}
 
 .description {
   text-align: left;
@@ -1223,19 +1268,19 @@ onMounted(() => {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .filter-group {
     flex-direction: column;
   }
-  
+
   .date-filters {
     flex-direction: column;
   }
-  
+
   .time-filters {
     justify-content: center;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }
@@ -1243,37 +1288,37 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   /* page-header responsive styles are handled in globals.css */
-  
+
   .header-actions {
     flex-direction: column;
   }
-  
+
   .table {
     font-size: 0.875rem;
   }
-  
+
   .table th,
   .table td {
     padding: 0.5rem;
   }
-  
+
   .description {
     max-width: 200px;
   }
-  
+
   .pagination-wrapper {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .modal-overlay {
     padding: 1rem;
   }
-  
+
   .modal-actions {
     flex-direction: column;
   }
-  
+
   .time-filters {
     flex-direction: column;
   }

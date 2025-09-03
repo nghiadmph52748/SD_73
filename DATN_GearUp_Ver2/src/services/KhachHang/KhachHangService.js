@@ -14,6 +14,16 @@ export const fetchGetKhachHangById = async (id) => {
     }
     return response.json();
 }
+
+export const fetchQuickAddKhachHang = async (data) => {
+    await fetch(`${API}/add/quick`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+}
 export const fetchCreateKhachHang = async (data) => {
     const res = await fetch(`${API}/add`, {
         method: "POST",

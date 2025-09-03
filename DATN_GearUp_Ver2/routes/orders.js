@@ -5,16 +5,16 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
   try {
-    const { 
-      page = 1, 
-      limit = 10, 
-      search = '', 
-      status, 
+    const {
+      page = 1,
+      limit = 10,
+      search = '',
+      status,
       customer_id,
       date_from,
-      date_to 
+      date_to
     } = req.query
-    
+
     const offset = (page - 1) * limit
 
     let whereConditions = ['hd.deleted = 0']
@@ -188,7 +188,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const transaction = new sql.Transaction(pool)
-  
+
   try {
     await transaction.begin()
 
@@ -222,7 +222,7 @@ router.post('/', async (req, res) => {
     if (id_phieu_giam_gia) {
       const couponRequest = new sql.Request(transaction)
       couponRequest.input('id', sql.Int, id_phieu_giam_gia)
-      
+
       const couponResult = await couponRequest.query(`
         SELECT * FROM phieu_giam_gia 
         WHERE id = @id AND deleted = 0 AND trang_thai = 1
@@ -318,9 +318,9 @@ router.post('/', async (req, res) => {
 
     await transaction.commit()
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: orderId,
-      message: 'Tạo hóa đơn thành công' 
+      message: 'Tạo hóa đơn thành công'
     })
 
   } catch (error) {

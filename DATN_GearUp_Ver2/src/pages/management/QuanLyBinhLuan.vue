@@ -734,8 +734,6 @@ const exportComments = () => {
 
 const exportCommentsToExcel = () => {
   try {
-    console.log('exportCommentsToExcel function called')
-    console.log('filteredComments:', filteredComments.value)
     
     // Simple test data first
     const testData = [
@@ -743,7 +741,6 @@ const exportCommentsToExcel = () => {
       { 'ID': 2, 'Tên': 'Test 2', 'Trạng thái': 'Không hoạt động' }
     ]
     
-    console.log('Test data:', testData)
     
     // Test with simple data first
     const result = exportToExcel(
@@ -752,7 +749,6 @@ const exportCommentsToExcel = () => {
       'Test Sheet'
     )
     
-    console.log('Export result:', result)
     
     if (result.success) {
       alert(`✅ ${result.message}`)
@@ -783,7 +779,6 @@ const goToPage = (page) => {
 
 const refreshData = () => {
   // Simulate data refresh
-  console.log('Refreshing comments data...')
 }
 
 onMounted(() => {

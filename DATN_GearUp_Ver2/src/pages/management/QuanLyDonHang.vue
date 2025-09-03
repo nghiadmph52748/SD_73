@@ -1,76 +1,5 @@
 <template>
   <div class="order-management">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="header-content">
-        <div class="header-text">
-          <h1 class="page-title">Quản lý đơn hàng</h1>
-          <p class="page-subtitle">Theo dõi và xử lý đơn hàng</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn-refresh" @click="refreshData">
-            <span class="btn-icon">🔄</span>
-            Làm mới
-          </button>
-          <button class="btn-export" @click="exportData">
-            <span class="btn-icon">📊</span>
-            Xuất báo cáo
-          </button>
-          <button class="btn-export" @click="exportOrdersToExcel">
-            <span class="btn-icon">📗</span>
-            Xuất Excel
-          </button>
-          <button class="btn-export" @click="createOrder">
-            <span class="btn-icon">➕</span>
-            Tạo đơn hàng
-          </button>
-          <button class="btn-export" @click="scanQRCode">
-            <span class="btn-icon">📱</span>
-            Quét mã QR
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Stats -->
-    <div class="stats-overview">
-      <div class="stat-card total">
-        <div class="stat-icon">📦</div>
-        <div class="stat-content">
-          <div class="stat-number">{{ totalOrders }}</div>
-          <div class="stat-label">Tổng đơn hàng</div>
-        </div>
-        <div class="stat-trend positive">+12%</div>
-      </div>
-
-      <div class="stat-card pending">
-        <div class="stat-icon">⏳</div>
-        <div class="stat-content">
-          <div class="stat-number">{{ pendingOrdersCount }}</div>
-          <div class="stat-label">Chờ xử lý</div>
-        </div>
-        <div class="stat-trend">{{ pendingOrdersCount }} đơn</div>
-      </div>
-
-      <div class="stat-card processing">
-        <div class="stat-icon">🔄</div>
-        <div class="stat-content">
-          <div class="stat-number">{{ processingOrdersCount }}</div>
-          <div class="stat-label">Đang xử lý</div>
-        </div>
-        <div class="stat-trend">{{ processingOrdersCount }} đơn</div>
-      </div>
-
-      <div class="stat-card completed">
-        <div class="stat-icon">✅</div>
-        <div class="stat-content">
-          <div class="stat-number">{{ completedOrdersCount }}</div>
-          <div class="stat-label">Hoàn thành</div>
-        </div>
-        <div class="stat-trend positive">+8%</div>
-      </div>
-    </div>
-
     <!-- Advanced Filters -->
     <div class="filters-panel">
       <div class="filters-header">
@@ -85,7 +14,7 @@
         <!-- Search Bar -->
         <div class="search-section">
           <div class="search-input-group">
-            <div class="search-icon">🔍</div>
+            <div class="search-icon"></div>
             <input
               type="text"
               placeholder="Tìm theo mã đơn hàng, tên khách hàng, SĐT..."
@@ -198,6 +127,33 @@
         </button>
       </div>
     </div>
+       <!-- Header Actions bên góc phải -->
+<div class="header-actions">
+  <button class="btn-action" @click="refreshData">
+    <i class="lucide lucide-refresh-ccw"></i>
+    <span> 🔄Làm mới</span>
+  </button>
+
+  <button class="btn-action" @click="exportData">
+    <i class="lucide lucide-bar-chart-2"></i>
+    <span>  📊 Xuất báo cáo</span>
+  </button>
+
+  <button class="btn-action" @click="exportOrdersToExcel">
+    <i class="lucide lucide-file-spreadsheet"></i>
+    <span> 📗 Xuất Excel</span>
+  </button>
+
+  <button class="btn-action primary" @click="createOrder">
+    <i class="lucide lucide-plus-circle"></i>
+    <span>➕ Tạo đơn hàng</span>
+  </button>
+
+  <button class="btn-action" @click="scanQRCode">
+    <i class="lucide lucide-smartphone"></i>
+    <span>📱Quét mã QR</span>
+  </button>
+</div>
 
     <!-- Orders Display -->
     <div class="orders-container">
@@ -226,9 +182,9 @@
                 </th>
                 <th>Loại</th>
                 <th>Trạng thái</th>
-                <th class="sortable" @click="sortBy('createdAt')">
+                <th class="sortable" @click="sortBy('ngayTao')">
                   <span>Ngày tạo</span>
-                  <span class="sort-icon">{{ getSortIcon("createdAt") }}</span>
+                  <span class="sort-icon">{{ getSortIcon("ngayTao") }}</span>
                 </th>
                 <th class="text-center">Hành động</th>
               </tr>
@@ -241,16 +197,16 @@
               >
                 <td class="order-code">
                   <div class="code-cell">
-                    <span class="code-text">{{ order.code }}</span>
+                    <span class="code-text">{{ order.id }}</span>
                     <span class="code-id">#{{ order.id }}</span>
                   </div>
                 </td>
                 <td class="customer-cell">
                   <div class="customer-info">
                     <div class="customer-name">
-                      {{ order.customerName || "Khách lẻ" }}
+                      {{ order.tenKhachHang || "Khách lẻ" }}
                     </div>
-                    <div class="customer-phone">{{ order.phone || "N/A" }}</div>
+                    <div class="customer-phone">{{ order.soDienThoai || "N/A" }}</div>
                   </div>
                 </td>
                 <td class="items-cell">
@@ -263,32 +219,32 @@
                 <td class="amount-cell text-right">
                   <div class="amount-info">
                     <span class="amount-value">{{
-                      formatCurrency(order.totalAmount)
+                      formatCurrency(order.tongTienSauGiam)
                     }}</span>
                   </div>
                 </td>
                 <td class="type-cell">
-                  <span :class="['type-badge', order.type]">
+                  <span :class="['type-badge', order.loaiDon]">
                     <span class="type-icon">{{
-                      order.type === "online" ? "🌐" : "🏪"
+                      order.loaiDon === "online" ? "🌐" : "🏪"
                     }}</span>
                     <span class="type-text">{{
-                      order.type === "online" ? "Online" : "Tại quầy"
+                      order.loaiDon === "online" ? "Online" : "Tại quầy"
                     }}</span>
                   </span>
                 </td>
                 <td class="status-cell">
-                  <span :class="['status-badge', getStatusClass(order.status)]">
-                    {{ getStatusText(order.status) }}
+                  <span :class="['status-badge', getStatusClass(order.trangThai)]">
+                    {{ getStatusText(order.trangThai) }}
                   </span>
                 </td>
                 <td class="date-cell">
                   <div class="date-info">
                     <span class="date-value">{{
-                      formatDate(order.createdAt)
+                      formatDate(order.ngayTao)
                     }}</span>
                     <span class="time-value">{{
-                      formatTime(order.createdAt)
+                      formatTime(order.ngayTao)
                     }}</span>
                   </div>
                 </td>
@@ -333,7 +289,7 @@
           >
             <div class="card-header">
               <div class="order-meta">
-                <span class="order-code">{{ order.code }}</span>
+                <span class="order-code">{{ order.id }}</span>
                 <span :class="['type-badge', order.type]">
                   {{ order.type === "online" ? "🌐 Online" : "🏪 Tại quầy" }}
                 </span>
@@ -346,7 +302,7 @@
             <div class="card-body">
               <div class="customer-section">
                 <div class="customer-name">
-                  {{ order.customerName || "Khách lẻ" }}
+                  {{ order.tenKhachHang  || "Khách lẻ" }}
                 </div>
                 <div class="customer-phone">{{ order.phone || "N/A" }}</div>
               </div>
@@ -359,12 +315,12 @@
                 <div class="detail-item">
                   <span class="label">Tổng tiền:</span>
                   <span class="value amount">{{
-                    formatCurrency(order.totalAmount)
+                    formatCurrency(order.tongTienSauGiam)
                   }}</span>
                 </div>
                 <div class="detail-item">
                   <span class="label">Ngày tạo:</span>
-                  <span class="value">{{ formatDate(order.createdAt) }}</span>
+                  <span class="value">{{ formatDate(order.ngayTao) }}</span>
                 </div>
               </div>
             </div>
@@ -448,8 +404,9 @@
           </button>
           <button
             class="pagination-btn last"
-            @click="goToPage(totalPages)"
-            :disabled="currentPage === totalPages"
+            :disabled="currentPage === backendTotalPages"
+            @click="goToPage(backendTotalPages)"
+
             title="Trang cuối"
           >
             ⏭️
@@ -457,6 +414,7 @@
         </div>
       </div>
     </div>
+ 
 
     <!-- Order Detail Modal -->
     <div
@@ -486,11 +444,11 @@
               <div class="info-grid">
                 <div class="info-item">
                   <label>Mã:</label>
-                  <span>{{ selectedOrder.code }}</span>
+                  <span>{{ selectedOrder.id }}</span>
                 </div>
                 <div class="info-item">
                   <label>Tên khách hàng:</label>
-                  <span>{{ selectedOrder.customerName || "Khách lẻ" }}</span>
+                  <span>{{ selectedOrder.tenKhachHang || "Khách lẻ" }}</span>
                 </div>
                 <div class="info-item">
                   <label>Trạng thái:</label>
@@ -502,7 +460,7 @@
                 </div>
                 <div class="info-item">
                   <label>Số người nhận:</label>
-                  <span>{{ selectedOrder.phone || "N/A" }}</span>
+                  <span>{{ selectedOrder.soDienThoai || "N/A" }}</span>
                 </div>
                 <div class="info-item">
                   <label>Loại:</label>
@@ -549,7 +507,7 @@
                     :key="payment.id"
                   >
                     <td class="amount">{{ formatCurrency(payment.amount) }}</td>
-                    <td>{{ formatDateTime(payment.createdAt) }}</td>
+                    <td>{{ formatDateTime(payment.ngayTao) }}</td>
                     <td>
                       <span
                         :class="[
@@ -697,7 +655,7 @@
                 <div class="summary-row total">
                   <span>Tổng tiền:</span>
                   <span class="total-amount">{{
-                    formatCurrency(selectedOrder.totalAmount)
+                    formatCurrency(selectedOrder.tongTienSauGiam)
                   }}</span>
                 </div>
               </div>
@@ -710,27 +668,79 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel.js";
+
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js'
+import axios from "axios"
+
 
 const router = useRouter();
 
 // Data
-const searchQuery = ref("");
-const fromDate = ref("");
-const toDate = ref("");
-const selectedType = ref("");
-const selectedStatus = ref("TAT_CA");
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
-const viewMode = ref("table"); // 'table' or 'grid'
-const minAmount = ref("");
-const maxAmount = ref("");
-const sortField = ref("");
-const sortDirection = ref("asc"); // 'asc' or 'desc'
-const showDetailModal = ref(false);
-const selectedOrder = ref(null);
+
+const searchQuery = ref('')
+const fromDate = ref('')
+const toDate = ref('')
+const selectedType = ref('')
+const selectedStatus = ref('TAT_CA')
+const currentPage = ref(1)
+const itemsPerPage = ref(10) 
+const viewMode = ref('table') // 'table' or 'grid'
+const minAmount = ref('')
+const maxAmount = ref('')
+const sortField = ref('')
+const sortDirection = ref('asc') // 'asc' or 'desc'
+const showDetailModal = ref(false)
+const selectedOrder = ref(null)
+const orders = ref([])
+const backendTotalOrders = ref(0)
+const backendTotalPages = ref(0)
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value)
+const endIndex = computed(() => startIndex.value + itemsPerPage.value)
+
+const loading = ref(false)
+const error = ref(null)
+
+
+const fetchOrders = async () => {
+  loading.value = true;
+  try {
+    const res = await axios.get("http://localhost:8080/api/hoa-don-management/paging", {
+      params: {
+        page: currentPage.value - 1, // backend phân trang từ 0
+        size: itemsPerPage.value
+      }
+    });
+
+    // Lấy object chính
+    const response = res.data.data;
+
+    // Trường hợp backend trả: { data: [...], totalPages, currentPage, pageSize }
+    if (response && Array.isArray(response.data)) {
+      orders.value = response.data;                      // danh sách hóa đơn
+      backendTotalOrders.value = response.data.length;   // tổng số phần tử
+      backendTotalPages.value = response.totalPages || 1;
+    } else {
+      console.error("❌ API format không khớp:", response);
+      orders.value = [];
+      backendTotalOrders.value = 0;
+      backendTotalPages.value = 0;
+    }
+
+    console.log("Fetched orders:", orders.value);
+  } catch (err) {
+    console.error("❌ Lỗi khi gọi API:", err);
+    error.value = "Không thể tải dữ liệu từ server";
+  } finally {
+    loading.value = false;
+  }
+};
+
+
+
+
+
 
 const statusTabs = [
   { value: "TAT_CA", label: "TẤT CẢ", icon: "📋" },
@@ -745,66 +755,49 @@ const statusTabs = [
 ];
 
 // Mock data
-const orders = ref([]);
+
 
 // Computed
 const filteredOrders = computed(() => {
   let filtered = orders.value;
-  console.log("Total orders:", orders.value.length);
-  console.log("Selected status:", selectedStatus.value);
-  console.log("From date:", fromDate.value);
-  console.log("To date:", toDate.value);
 
   if (searchQuery.value) {
-    filtered = filtered.filter(
-      (order) =>
-        order.code.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        (order.customerName &&
-          order.customerName
-            .toLowerCase()
-            .includes(searchQuery.value.toLowerCase()))
-    );
-  }
+  filtered = filtered.filter(
+    (order) =>
+      order.maHoaDon?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      (order.tenNguoiNhan &&
+        order.tenNguoiNhan.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  )
+}
 
-  if (selectedType.value) {
-    filtered = filtered.filter((order) => order.type === selectedType.value);
-  }
+if (fromDate.value) {
+  filtered = filtered.filter(
+    (order) => new Date(order.ngayTao) >= new Date(fromDate.value)
+  )
+}
 
-  if (selectedStatus.value && selectedStatus.value !== "TAT_CA") {
-    filtered = filtered.filter(
-      (order) => order.status === selectedStatus.value
-    );
-  }
+if (toDate.value) {
+  filtered = filtered.filter(
+    (order) => new Date(order.ngayTao) <= new Date(toDate.value + "T23:59:59")
+  )
+}
 
-  if (fromDate.value) {
-    filtered = filtered.filter(
-      (order) => new Date(order.createdAt) >= new Date(fromDate.value)
-    );
-  }
+if (minAmount.value) {
+  filtered = filtered.filter(
+    (order) => order.tongTien >= parseInt(minAmount.value)
+  )
+}
 
-  if (toDate.value) {
-    filtered = filtered.filter(
-      (order) =>
-        new Date(order.createdAt) <= new Date(toDate.value + "T23:59:59")
-    );
-  }
+if (maxAmount.value) {
+  filtered = filtered.filter(
+    (order) => order.tongTien <= parseInt(maxAmount.value)
+  )
+}
 
-  if (minAmount.value) {
-    filtered = filtered.filter(
-      (order) => order.totalAmount >= parseInt(minAmount.value)
-    );
-  }
 
-  if (maxAmount.value) {
-    filtered = filtered.filter(
-      (order) => order.totalAmount <= parseInt(maxAmount.value)
-    );
-  }
-
-  console.log("Filtered orders count:", filtered.length);
-  console.log("Start index:", startIndex.value, "End index:", endIndex.value);
 
   return filtered.slice(startIndex.value, endIndex.value);
+
 });
 
 const totalOrders = computed(() => {
@@ -813,59 +806,47 @@ const totalOrders = computed(() => {
   if (searchQuery.value) {
     filtered = filtered.filter(
       (order) =>
-        order.code.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        (order.customerName &&
-          order.customerName
-            .toLowerCase()
-            .includes(searchQuery.value.toLowerCase()))
+        order.maHoaDon?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        (order.tenNguoiNhan &&
+          order.tenNguoiNhan.toLowerCase().includes(searchQuery.value.toLowerCase()))
     );
   }
 
   if (selectedType.value) {
-    filtered = filtered.filter((order) => order.type === selectedType.value);
+    filtered = filtered.filter((order) => order.loaiDonHang === selectedType.value);
   }
 
   if (selectedStatus.value && selectedStatus.value !== "TAT_CA") {
-    filtered = filtered.filter(
-      (order) => order.status === selectedStatus.value
-    );
+    filtered = filtered.filter((order) => order.trangThai === selectedStatus.value);
   }
 
   if (fromDate.value) {
     filtered = filtered.filter(
-      (order) => new Date(order.createdAt) >= new Date(fromDate.value)
+      (order) => new Date(order.ngayTao) >= new Date(fromDate.value)
     );
   }
 
   if (toDate.value) {
     filtered = filtered.filter(
-      (order) =>
-        new Date(order.createdAt) <= new Date(toDate.value + "T23:59:59")
+      (order) => new Date(order.ngayTao) <= new Date(toDate.value + "T23:59:59")
     );
   }
 
   if (minAmount.value) {
     filtered = filtered.filter(
-      (order) => order.totalAmount >= parseInt(minAmount.value)
+      (order) => order.tongTien >= parseInt(minAmount.value)
     );
   }
 
   if (maxAmount.value) {
     filtered = filtered.filter(
-      (order) => order.totalAmount <= parseInt(maxAmount.value)
+      (order) => order.tongTien <= parseInt(maxAmount.value)
     );
   }
 
   return filtered.length;
 });
 
-const totalPages = computed(() =>
-  Math.ceil(totalOrders.value / itemsPerPage.value)
-);
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
-const endIndex = computed(() =>
-  Math.min(startIndex.value + itemsPerPage.value, totalOrders.value)
-);
 
 // Statistics computed
 const pendingOrdersCount = computed(
@@ -917,6 +898,10 @@ const getStatusClass = (status) => {
 };
 
 const getStatusText = (status) => {
+  if (typeof status === "boolean") {
+    return status ? "Hoàn thành" : "Chờ xác nhận";
+  }
+  // fallback khi backend trả string
   const statusTexts = {
     HOAN_THANH: "Hoàn thành",
     CHO_XAC_NHAN: "Chờ xác nhận",
@@ -930,15 +915,18 @@ const getStatusText = (status) => {
   return statusTexts[status] || "Không xác định";
 };
 
+
 const previousPage = () => {
   if (currentPage.value > 1) {
-    currentPage.value--;
+    currentPage.value--
+    fetchOrders()
   }
 };
 
 const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
+  if (currentPage.value < backendTotalPages.value) {
+    currentPage.value++
+    fetchOrders()
   }
 };
 
@@ -953,7 +941,6 @@ const createOrder = () => {
 };
 
 const scanQRCode = () => {
-  console.log("Open QR code scanner");
 };
 
 const exportOrdersToExcel = () => {
@@ -969,16 +956,15 @@ const exportOrdersToExcel = () => {
       createdAt: "Ngày tạo",
     };
 
-    const dataToExport = filteredOrders.value.map((order) => ({
-      code: order.code,
-      customerName: order.customerName || "Khách lẻ",
-      phone: order.phone || "N/A",
-      totalItems: order.totalItems,
-      totalAmount: order.totalAmount,
-      type: order.type === "online" ? "Trực tuyến" : "Tại quầy",
-      status: getStatusText(order.status),
-      createdAt: order.createdAt,
-    }));
+   const dataToExport = orders.value.map((order) => ({
+  code: order.maHoaDon,
+  customerName: order.tenNguoiNhan || "Khách lẻ",
+  phone: order.soDienThoaiNguoiNhan || "N/A",
+  totalAmount: order.tongTienSauGiam || order.tongTien,
+  createdAt: order.ngayTao,
+  status: getStatusText(order.trangThai ? "HOAN_THANH" : "CHO_XAC_NHAN")
+}));
+
 
     const formattedData = formatDataForExcel(dataToExport, headerMapping);
 
@@ -1027,7 +1013,7 @@ const getSortIcon = (field) => {
 
 const getStatusCount = (status) => {
   if (status === "TAT_CA") return orders.value.length;
-  return orders.value.filter((order) => order.status === status).length;
+  return orders.value.filter((order) => order.trangThai === status).length;
 };
 
 const formatTime = (dateString) => {
@@ -1038,22 +1024,21 @@ const formatTime = (dateString) => {
 };
 
 const editOrder = (order) => {
-  console.log("Edit order:", order);
 };
 
 const printOrder = (order) => {
-  console.log("Print order:", order);
 };
 
 const goToPage = (page) => {
-  if (page !== "..." && page >= 1 && page <= totalPages.value) {
+  if (page !== "..." && page >= 1 && page <= backendTotalPages.value) {
     currentPage.value = page;
+    fetchOrders();
   }
 };
 
 const getPageNumbers = () => {
-  const pages = [];
-  const total = totalPages.value;
+   const pages = [];
+  const total = backendTotalPages.value;
   const current = currentPage.value;
 
   if (total <= 7) {
@@ -1083,24 +1068,70 @@ const getPageNumbers = () => {
 
 const refreshData = () => {
   // Simulate data refresh
-  console.log("Refreshing orders data...");
 };
 
-const exportData = () => {
+const exportData = () => {  
   alert("Chức năng xuất báo cáo đang được phát triển");
 };
-
 onMounted(() => {
+  fetchOrders();
+
+  const today = new Date();
+  toDate.value = today.toISOString().split("T")[0];
+  fromDate.value = "2025-01-01"; 
+});
+
+
+
   // Set default dates to show all data
   const today = new Date();
   const oneMonthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   toDate.value = today.toISOString().split("T")[0];
   fromDate.value = "2025-01-01"; // Set to beginning of 2025 to show all example data
-});
 </script>
 
 <style scoped>
+.header-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #f5f6f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.btn-action i {
+  font-size: 16px;
+}
+
+.btn-action:hover {
+  background: #e8ebee;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.btn-action.primary {
+  background: #7588af;
+  color: white;
+  border: none;
+}
+
+.btn-action.primary:hover {
+  background: #8b95af;
+}
+
 .order-management {
   max-width: 1600px;
   margin: 0 auto;
@@ -1216,7 +1247,7 @@ onMounted(() => {
   align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #e5e9f0; /* nền panel */
 }
 
 .filters-header h3 {
@@ -2110,8 +2141,43 @@ onMounted(() => {
   /* page-header responsive styles are handled in globals.css */
 
   .header-actions {
-    flex-direction: column;
+    display: flex;
+    justify-content: flex-end; /* canh phải */
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem; /* tạo khoảng cách với bảng */
   }
+  .btn-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-action:hover {
+  background: #e9ecef;
+  border-color: #ccc;
+}
+
+.btn-action.primary {
+  background: #4ade80;
+  border-color: #4ade80;
+  color: white;
+  font-weight: 500;
+}
+
+.btn-action.primary:hover {
+  background: #45a049;
+}
+
+.btn-icon {
+  font-size: 16px;
+}
 
   .status-tabs {
     flex-wrap: wrap;
@@ -2158,4 +2224,69 @@ onMounted(() => {
     gap: 0.25rem;
   }
 }
+.btn-export {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #2ab37f; /* xanh lá */
+  border-radius: 8px;
+  background: #0fbc43;       /* nền xanh luôn */
+  color: #fff;               /* chữ trắng sáng */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-export .btn-icon {
+  font-size: 16px;
+}
+
+.btn-export:hover {
+  background: #16a34a; /* xanh đậm hơn khi hover */
+}
+  /* Chỉ chỉnh phần radio Loại đơn hàng */
+.radio-group {
+  display: flex;
+  gap: 20px; /* khoảng cách giữa các lựa chọn */
+  align-items: center;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.radio-option input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #22c55e; /* màu xanh đồng bộ */
+  cursor: pointer;
+}
+
+.radio-text {
+  user-select: none;
+}
+.radio-group {
+  display: flex;
+  align-items: center; /* Căn giữa dọc */
+  gap: 15px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center; /* Căn giữa input radio và text */
+  gap: 5px;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0; /* bỏ margin mặc định của radio */
+  vertical-align: middle;
+}
+
 </style>

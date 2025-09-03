@@ -724,13 +724,11 @@ const formatCurrency = (amount) => {
 }
 
 const refreshData = async () => {
-  console.log('Refreshing dashboard data...')
   await loadAllData()
 }
 
 const exportData = () => {
   try {
-    console.log('exportData function called - starting dashboard export')
     
     // Create dashboard summary data
     const dashboardData = [
@@ -778,10 +776,8 @@ const exportData = () => {
       }
     ]
     
-    console.log('Dashboard data prepared:', dashboardData)
     
     // Try Excel export first, with CSV fallback
-    console.log('Attempting Excel export...')
     let result
     
     try {
@@ -790,14 +786,11 @@ const exportData = () => {
         'Dashboard_Summary',
         'Tổng quan Dashboard'
       )
-      console.log('Excel export result:', result)
     } catch (xlsxError) {
       console.warn('Excel export failed, trying CSV fallback:', xlsxError)
       result = exportToCSV(dashboardData, 'Dashboard_Summary')
-      console.log('CSV export result:', result)
     }
     
-    console.log('Export result:', result)
     
     if (result && result.success) {
       alert(`✅ ${result.message}`)
@@ -811,31 +804,22 @@ const exportData = () => {
 }
 
 const changeChartType = () => {
-  console.log('Changing chart type...')
 }
 
 const updateChart = () => {
-  console.log('updateChart called, checking chart instance...')
   
   if (!chartInstance.value) {
-    console.log('Chart instance is null/undefined')
     return
   }
   
-  console.log('Chart instance exists:', !!chartInstance.value)
-  console.log('Chart data exists:', !!chartInstance.value.data)
-  console.log('Chart datasets exists:', !!chartInstance.value.data?.datasets)
-  console.log('First dataset exists:', !!chartInstance.value.data?.datasets?.[0])
 
   if (!chartInstance.value.data || 
       !chartInstance.value.data.datasets || 
       chartInstance.value.data.datasets.length === 0) {
-    console.log('Chart data structure is incomplete')
     return
   }
 
   const newData = currentChartData.value
-  console.log('New data to apply:', newData)
   
   try {
     // Update chart data
@@ -845,34 +829,19 @@ const updateChart = () => {
     // Update chart with smooth animation
     chartInstance.value.update('active')
     
-    console.log('Chart successfully updated for period:', selectedPeriod.value)
   } catch (error) {
-    console.error('Error updating chart:', error)
-    console.log('Chart instance details:', {
-      hasData: !!chartInstance.value.data,
-      hasDatasets: !!chartInstance.value.data?.datasets,
-      datasetsLength: chartInstance.value.data?.datasets?.length,
-      hasFirstDataset: !!chartInstance.value.data?.datasets?.[0],
-      updateMethod: typeof chartInstance.value.update
-    })
+    console.error('Error updating chart: ', error.message)
   }
 }
 
 // Watch for period changes and update chart automatically
 watch(selectedPeriod, (newPeriod) => {
-  console.log('Period changed to:', newPeriod)
   setTimeout(() => {
     updateChart()
   }, 50)
 })
 
 const applyFilters = async () => {
-  console.log('Applying filters...', {
-    period: selectedPeriod.value,
-    fromDate: fromDate.value,
-    toDate: toDate.value
-  })
-  
   // Load new chart data based on filters
   await loadChartData(selectedPeriod.value, fromDate.value, toDate.value)
   
@@ -911,7 +880,6 @@ onMounted(async () => {
         gradient.addColorStop(1, 'rgba(74, 222, 128, 0)')
 
         const initialData = currentChartData.value
-        console.log('Initializing chart with data:', initialData)
 
         chartInstance.value = new Chart(salesChart.value, {
           type: 'line',
@@ -969,7 +937,6 @@ onMounted(async () => {
           }
         })
         
-        console.log('Sales chart initialized successfully')
       } catch (error) {
         console.error('Error initializing sales chart:', error)
       }
@@ -1059,7 +1026,6 @@ onMounted(async () => {
           }
         })
         
-        console.log('Status chart initialized successfully')
       } catch (error) {
         console.error('Error initializing status chart:', error)
       }

@@ -37,12 +37,12 @@ public class GenericCrudService<E, ID, response,request> {
         return MapperUtils.map(repository.findById(id).orElseThrow(() -> new ApiException("Entity with id " + id + " does not exist", "404")), responseClass);
     }
 
-    public void add(request request) {
+    public E add(request request) {
         E entity = MapperUtils.map(request, this.entity);
-        repository.save(entity);
+        return repository.save(entity);
     }
 
-    public void update(ID id, request request) {
+    public E update(ID id, request request) {
         E entity = MapperUtils.map(request, this.entity);
         if (!repository.existsById(id)) {
             throw new ApiException("Entity with id " + id + " does not exist", "404");
@@ -52,6 +52,6 @@ public class GenericCrudService<E, ID, response,request> {
         } catch (Exception e) {
             throw new ApiException("Error setting ID for entity: " + this.entity, "500");
         }
-        repository.save(entity);
+        return repository.save(entity);
     }
 }

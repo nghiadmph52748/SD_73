@@ -18,6 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChiTietSanPhamFullResponse {
     private Integer id;
+    private String tenSanPham;
     private List<String> anhSanPham;
     private String tenNhaSanXuat;
     private String tenXuatXu;
@@ -35,6 +36,11 @@ public class ChiTietSanPhamFullResponse {
 
     public ChiTietSanPhamFullResponse(ChiTietSanPham s) {
         this.id = s.getId();
+        if (s.getIdSanPham() != null) {
+            this.tenSanPham = s.getIdSanPham().getTenSanPham();
+        } else {
+            this.tenSanPham = null;
+        }
         if (s.getChiTietSanPhamAnhs() != null) {
             this.anhSanPham = s.getChiTietSanPhamAnhs().stream()
                     .filter(anh -> anh != null && anh.getIdAnhSanPham() != null && anh.getTrangThai() == true && anh.getDeleted() == false)

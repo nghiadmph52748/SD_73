@@ -467,7 +467,6 @@ const confirmDelete = () => {
 
 const refreshData = () => {
   // Simulate data refresh
-  console.log('Refreshing reviews data...')
 }
 
 const exportReviews = () => {
@@ -494,7 +493,6 @@ const exportToExcel = () => {
       status: item.trang_thai ? 'Hiển thị' : 'Ẩn'
     }))
     
-    console.log('Exporting reviews to Excel:', filteredData)
     alert('✅ Xuất file Excel thành công!')
   } catch (error) {
     console.error('Error exporting to Excel:', error)

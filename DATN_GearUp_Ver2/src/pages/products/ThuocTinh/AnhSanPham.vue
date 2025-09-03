@@ -556,7 +556,6 @@ const editFileInput = ref(null);
 const filteredAnhSanPhams = computed(() => {
   // Đảm bảo AnhSanPhams.value là array trước khi spread
   let filtered = Array.isArray(AnhSanPhams.value) ? [...AnhSanPhams.value] : [];
-  console.log("Filtered AnhSanPhams:", filtered.length, "items");
 
   // Tìm kiếm theo loại ảnh hoặc mô tả
   if (searchQuery.value.trim()) {
@@ -566,7 +565,6 @@ const filteredAnhSanPhams = computed(() => {
         item.loaiAnh?.toLowerCase().includes(query) ||
         item.moTa?.toLowerCase().includes(query)
     );
-    console.log("After search filter:", filtered.length, "items");
   }
 
   // Lọc theo trạng thái
@@ -587,15 +585,6 @@ const paginatedAnhSanPhams = computed(() => {
   const result = filteredAnhSanPhams.value.slice(
     startIndex.value,
     endIndex.value
-  );
-  console.log(
-    "Paginated AnhSanPhams:",
-    result.length,
-    "items (page",
-    currentPage.value,
-    "of",
-    totalPages.value,
-    ")"
   );
   return result;
 });
@@ -640,7 +629,6 @@ const fetchAll = async () => {
     const response = await fetchAllAnhSanPham();
     // Service đã return data trực tiếp, không cần .data
     AnhSanPhams.value = Array.isArray(response) ? response : [];
-    console.log("Loaded AnhSanPhams:", AnhSanPhams.value); // Debug log
   } catch (error) {
     console.error("Error fetching AnhSanPham:", error);
     // Đặt lại array rỗng khi có lỗi

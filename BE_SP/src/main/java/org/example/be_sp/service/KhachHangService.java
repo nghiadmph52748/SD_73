@@ -1,5 +1,10 @@
 package org.example.be_sp.service;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.be_sp.entity.DiaChiKhachHang;
 import org.example.be_sp.entity.KhachHang;
 import org.example.be_sp.exception.ApiException;
@@ -13,11 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class KhachHangService {
+
     @Autowired
     private DiaChiKhachHangRepository repository;
     @Autowired
@@ -43,6 +52,28 @@ public class KhachHangService {
         }
         KhachHang khachHang = MapperUtils.map(request, KhachHang.class);
         khachHang.setMatKhau(passwordEncoder.encode(request.getMatKhau()));
+        KhachHang saved = khachHangRepository.save(khachHang);
+        List<DiaChi> listDiaChi = request.getListDiaChi();
+        if (listDiaChi != null) {
+            for (DiaChi data : listDiaChi) {
+                if (data == null) continue;
+                // Skip creating address if all fields are empty/blank as per requirement
+                if (isEmptyAddress(data)) continue;
+                DiaChiKhachHang diaChi = new DiaChiKhachHang();
+                diaChi.setThanhPho(data.getThanhPho());
+                diaChi.setQuan(data.getQuan());
+                diaChi.setPhuong(data.getPhuong());
+                diaChi.setDiaChiCuThe(data.getDiaChiCuThe());
+                diaChi.setIdKhachHang(saved);
+                repository.save(diaChi);
+            }
+        }
+    }
+
+    public void quickAdd(KhachHangRequest request){
+        KhachHang khachHang = MapperUtils.map(request, KhachHang.class);
+        khachHang.setSoDienThoai(request.getSoDienThoai());
+        khachHang.setEmail(request.getEmail());
         KhachHang saved = khachHangRepository.save(khachHang);
         List<DiaChi> listDiaChi = request.getListDiaChi();
         if (listDiaChi != null) {
@@ -129,5 +160,35 @@ public class KhachHangService {
                 && isNullOrBlank(d.getPhuong())
                 && isNullOrBlank(d.getDiaChiCuThe()));
     }
-}
+    public ByteArrayInputStream exportKhachHangToExcel() throws IOException {
+        String[] columns = {"ID", "Mã KH", "Tên KH", "Email", "SĐT", "Giới tính"};
 
+        List<KhachHang> khachHangs = khachHangRepository.findAll();
+
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("KhachHang");
+
+            // Header
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < columns.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columns[i]);
+            }
+
+            // Data
+            int rowIdx = 1;
+            for (KhachHang kh : khachHangs) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(kh.getId());
+                row.createCell(1).setCellValue(kh.getMaKhachHang());
+                row.createCell(2).setCellValue(kh.getTenKhachHang());
+                row.createCell(3).setCellValue(kh.getEmail());
+                row.createCell(4).setCellValue(kh.getSoDienThoai());
+                row.createCell(5).setCellValue(kh.getGioiTinh() != null && kh.getGioiTinh() ? "Nam" : "Nữ");
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
+}

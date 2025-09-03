@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
 
     const request = pool.request()
     request.input('tai_khoan', sql.VarChar, tai_khoan)
-    
+
     const employeeResult = await request.query(`
       SELECT nv.*, qh.ten_quyen_han 
       FROM nhan_vien nv 
@@ -28,7 +28,7 @@ router.post('/login', async (req, res) => {
     if (employeeResult.recordset.length === 0) {
       const customerRequest = pool.request()
       customerRequest.input('tai_khoan', sql.VarChar, tai_khoan)
-      
+
       const customerResult = await customerRequest.query(`
         SELECT * FROM khach_hang 
         WHERE ten_tai_khoan = @tai_khoan AND deleted = 0
@@ -46,8 +46,8 @@ router.post('/login', async (req, res) => {
       }
 
       const token = jwt.sign(
-        { 
-          id: customer.id, 
+        {
+          id: customer.id,
           tai_khoan: customer.ten_tai_khoan,
           loai_nguoi_dung: 'khach_hang'
         },
@@ -75,8 +75,8 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      { 
-        id: employee.id, 
+      {
+        id: employee.id,
         tai_khoan: employee.ten_tai_khoan,
         loai_nguoi_dung: 'nhan_vien',
         quyen_han: employee.ten_quyen_han
@@ -105,14 +105,14 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
   try {
-    const { 
-      ten_tai_khoan, 
-      mat_khau, 
-      ten_khach_hang, 
-      email, 
-      so_dien_thoai, 
-      gioi_tinh, 
-      ngay_sinh 
+    const {
+      ten_tai_khoan,
+      mat_khau,
+      ten_khach_hang,
+      email,
+      so_dien_thoai,
+      gioi_tinh,
+      ngay_sinh
     } = req.body
 
     if (!ten_tai_khoan || !mat_khau || !ten_khach_hang || !email) {
@@ -162,17 +162,17 @@ router.post('/register', async (req, res) => {
 router.get('/me', async (req, res) => {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '')
-    
+
     if (!token) {
       return res.status(401).json({ message: 'Token không tồn tại' })
     }
 
     const decoded = jwt.verify(token, JWT_SECRET)
-    
+
     if (decoded.loai_nguoi_dung === 'khach_hang') {
       const request = pool.request()
       request.input('id', sql.Int, decoded.id)
-      
+
       const result = await request.query(`
         SELECT id, ten_tai_khoan, ten_khach_hang, email, so_dien_thoai, gioi_tinh, ngay_sinh
         FROM khach_hang 
@@ -197,7 +197,7 @@ router.get('/me', async (req, res) => {
     } else {
       const request = pool.request()
       request.input('id', sql.Int, decoded.id)
-      
+
       const result = await request.query(`
         SELECT nv.*, qh.ten_quyen_han 
         FROM nhan_vien nv 

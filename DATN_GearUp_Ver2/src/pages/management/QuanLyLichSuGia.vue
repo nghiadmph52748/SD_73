@@ -572,7 +572,6 @@ const refreshData = async () => {
       loadPriceHistory(),
       loadStatistics()
     ])
-    console.log('Data refreshed successfully')
   } catch (error) {
     console.error('Error refreshing data:', error)
   } finally {
@@ -593,12 +592,10 @@ const clearFilters = () => {
 const applyFilters = () => {
   // Filters are already applied through computed properties
   currentPage.value = 1
-  console.log('Filters applied')
 }
 
 const exportToExcel = () => {
   // Export to Excel functionality
-  console.log('Exporting to Excel...')
   const exportData = filteredHistory.value.map(item => ({
     'ID': item.id,
     'Tên sản phẩm': item.san_pham.ten_san_pham,

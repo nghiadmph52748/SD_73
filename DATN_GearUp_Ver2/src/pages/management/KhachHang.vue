@@ -1,33 +1,5 @@
 <template>
   <div class="customer-management">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="header-content">
-        <div class="header-text">
-          <h1 class="page-title">Quản lý khách hàng</h1>
-          <p class="page-subtitle">Quản lý thông tin và hoạt động khách hàng</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn-refresh" @click="refreshData">
-            <span class="btn-icon">🔄</span>
-            Làm mới
-          </button>
-          <button class="btn-export" @click="exportData">
-            <span class="btn-icon">📊</span>
-            Xuất báo cáo
-          </button>
-          <button class="btn-export" @click="exportToExcel">
-            <span class="btn-icon">📗</span>
-            Xuất Excel
-          </button>
-          <button class="btn-export" @click="addCustomer">
-            <span class="btn-icon">➕</span>
-            Thêm khách hàng
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- Search and Filter Section -->
     <div class="filter-section">
       <div class="search-controls">
@@ -38,7 +10,6 @@
             v-model="searchQuery"
             class="form-control"
           />
-          <button class="btn-export">🔍</button>
         </div>
 
         <div class="filter-controls">
@@ -58,6 +29,36 @@
     </div>
 
     <!-- Customers Table -->
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      "
+    >
+      <div
+        style="
+          font-weight: bold;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        "
+      >
+        📋 Danh sách Khách Hàng
+      </div>
+    </div>
+    <hr style="margin-top: 0; margin-bottom: 15px" />
+
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px">
+      <button class="custom-button" @click="showAddModal = true">
+        <i class="fas fa-plus-circle"></i> Thêm nhân viên
+      </button>
+      <button class="custom-button" @click="exportToExcel">
+        <i class="fas fa-download"></i> Download template
+      </button>
+    </div>
     <div class="card">
       <div class="card-body">
         <table class="table">
@@ -119,6 +120,7 @@
                     variant="info"
                     size="sm"
                     tooltip="Xem chi tiết"
+                    class="action-button-info"
                     @click="viewCustomer(customer)"
                   />
                   <ActionButton
@@ -126,6 +128,7 @@
                     variant="warning"
                     size="sm"
                     tooltip="Chỉnh sửa thông tin"
+                    class="action-button-warning"
                     @click="editCustomer(customer)"
                   />
                   <ActionButton
@@ -133,6 +136,7 @@
                     variant="danger"
                     size="sm"
                     tooltip="Xóa khách hàng"
+                    class="action-button-danger"
                     @click="deleteCustomer(customer.id)"
                   />
                 </ButtonGroup>
@@ -187,27 +191,27 @@
             <div class="customer-info">
               <h4>{{ selectedCustomer.tenKhachHang }}</h4>
               <div class="info-grid">
-                <div class="info-item">
+                <div class="info-box">
                   <label>Email:</label>
                   <span>{{ selectedCustomer.email }}</span>
                 </div>
-                <div class="info-item">
+                <div class="info-box">
                   <label>Số điện thoại:</label>
                   <span>{{ selectedCustomer.soDienThoai }}</span>
                 </div>
-                <div class="info-item">
+                <div class="info-box">
                   <label>Ngày sinh:</label>
                   <span>{{ selectedCustomer.ngaySinh }}</span>
                 </div>
-                <div class="info-item">
+                <div class="info-box">
                   <label>Giới tính:</label>
                   <span>{{ selectedCustomer.gioiTinh ? "Nam" : "Nữ" }}</span>
                 </div>
-                <div class="info-item">
+                <div class="info-box">
                   <label>Tài khoản:</label>
                   <span>{{ selectedCustomer.tenTaiKhoan }}</span>
                 </div>
-                <div class="info-item">
+                <div class="info-box">
                   <label>Mật khẩu:</label>
                   <span>{{ selectedCustomer.matKhau }}</span>
                 </div>
@@ -438,17 +442,17 @@
           </div>
         </div>
         <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          @click="showAddModal = false"
-        >
-          Hủy
-        </button>
-        <button type="submit" class="btn btn-primary" @click="saveCustomer">
-          Thêm khách hàng
-        </button>
-      </div>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="showAddModal = false"
+          >
+            Hủy
+          </button>
+          <button type="submit" class="btn btn-primary" @click="saveCustomer">
+            Thêm khách hàng
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -622,25 +626,28 @@
         </div>
       </div>
       <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        @click="showEditModal = false"
-      >
-        Hủy
-      </button>
-      <button type="submit" class="btn btn-primary" @click="saveCustomer">
-        Cập nhật khách hàng
-      </button>
-    </div>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="showEditModal = false"
+        >
+          Hủy
+        </button>
+        <button type="submit" class="btn btn-primary" @click="saveCustomer">
+          Cập nhật khách hàng
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import ActionButton from "@/components/ui/NutHanhDong.vue";
 import ButtonGroup from "@/components/ui/NhomNut.vue";
+import ActionButton from "@/components/ui/NutHanhDong.vue";
+import { saveAs } from "file-saver";
+import { computed, onMounted, ref } from "vue";
+import * as XLSX from "xlsx";
+
 import {
   fetchAllKhachHang,
   fetchCreateKhachHang,
@@ -683,15 +690,13 @@ const customerForm = ref({
 
 // Mock data
 const customers = ref([]);
-
 const fetchAll = async () => {
   try {
     const response = await fetchAllKhachHang();
-    customers.value = response.data;
-  } catch (res) {
-    console.log(res.message);
-  }
+    customers.value = response.data; // giữ nguyên tất cả, lọc ở computed
+  } catch (res) {}
 };
+
 // Computed
 const filteredCustomers = computed(() => {
   let filtered = customers.value;
@@ -817,17 +822,23 @@ const saveCustomer = async () => {
     await fetchAll();
     resetForm();
   } catch (res) {
-    console.log(res.message);
     alert("Có lỗi xảy ra khi lưu thông tin khách hàng");
   }
 };
 
 const deleteCustomer = async (id) => {
+  const confirmDelete = window.confirm(
+    "Bạn có chắc chắn muốn xoá khách hàng này không?"
+  );
+  if (!confirmDelete) return;
+
   try {
-    await fetchUpdateStatusKhachHang(id);
-    await fetchAll();
-  } catch (res) {
-    console.log(res.message);
+    await fetchUpdateStatusKhachHang(id); // cập nhật deleted = true
+    customers.value = customers.value.filter((c) => c.id !== id); // ẩn ngay khỏi bảng
+    alert("✅ Đã xoá khách hàng khỏi danh sách hiển thị.");
+  } catch (error) {
+    console.error("❌ Lỗi khi xoá khách hàng:", error.message);
+    alert("❌ Có lỗi xảy ra khi xoá khách hàng.");
   }
 };
 
@@ -883,43 +894,48 @@ const nextPage = () => {
   }
 };
 
-const exportData = () => {
-  alert("Chức năng xuất báo cáo đang được phát triển");
-};
-
 const exportToExcel = () => {
   try {
     const headerMapping = {
-      name: "Họ tên",
+      tenKhachHang: "Họ tên",
       email: "Email",
-      phone: "Số điện thoại",
-      birthDate: "Ngày sinh",
-      gender: "Giới tính",
-      status: "Trạng thái",
-      address: "Địa chỉ",
-      totalOrders: "Tổng đơn hàng",
-      totalSpent: "Tổng chi tiêu",
+      soDienThoai: "Số điện thoại",
+      ngaySinh: "Ngày sinh",
+      gioiTinh: "Giới tính",
+      deleted: "Trạng thái",
     };
 
     const filteredData = filteredCustomers.value.map((item) => ({
-      name: item.name || "N/A",
-      email: item.email || "N/A",
-      phone: item.phone || "N/A",
-      birthDate: item.birthDate || "N/A",
-      gender: item.gender || "N/A",
-      status: item.status === "active" ? "Hoạt động" : "Ngừng hoạt động",
-      address: item.address || "N/A",
-      totalOrders: item.totalOrders || 0,
-      totalSpent: formatCurrency(item.totalSpent || 0),
+      [headerMapping.tenKhachHang]: item.tenKhachHang || "N/A",
+      [headerMapping.email]: item.email || "N/A",
+      [headerMapping.soDienThoai]: item.soDienThoai || "N/A",
+      [headerMapping.ngaySinh]: item.ngaySinh
+        ? formatDate(item.ngaySinh)
+        : "N/A",
+      [headerMapping.gioiTinh]: item.gioiTinh ? "Nam" : "Nữ",
+      [headerMapping.deleted]: item.deleted ? "Ngừng hoạt động" : "Hoạt động",
     }));
 
-    console.log("Exporting customers to Excel:", filteredData);
+    // Tạo worksheet & workbook
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "KhachHang");
+
+    // Xuất file
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(data, "DanhSachKhachHang.xlsx");
+
     alert("✅ Xuất file Excel thành công!");
   } catch (error) {
     console.error("Error exporting to Excel:", error);
     alert("❌ Có lỗi xảy ra khi xuất file Excel");
   }
 };
+
 onMounted(fetchAll);
 </script>
 
@@ -953,20 +969,40 @@ onMounted(fetchAll);
   flex: 1;
   min-width: 300px;
 }
-
 .filter-controls {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .filter-controls select {
   min-width: 150px;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f8fff9;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.filter-controls select:focus {
+  outline: none;
+  border-color: #5ebe81;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+  transform: translateY(-1px);
+}
+
+.filter-controls select:hover {
+  border-color: #d1d5db;
+  background-color: #f9fafb;
 }
 
 /* Table Styles */
 .table th {
-  background-color: #4ade80;
+  background-color: #9baea2;
   color: white;
   font-weight: 600;
   padding: 1rem;
@@ -996,20 +1032,33 @@ onMounted(fetchAll);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  margin-top: 1rem;
 }
 
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.pagination .btn {
+  border: none;
+  background-color: #8d98a4;
+  color: #fff;
+  font-weight: 500;
+}
+
+.pagination .btn:hover:not(:disabled) {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .page-info {
+  margin: 0 0.75rem;
+  padding: 0.25rem 0.75rem;
+  background-color: #e9f3ff; /* xanh nhạt */
+  color: #0056b3; /* xanh đậm */
+  border-radius: 6px;
   font-weight: 600;
-  color: var(--secondary-color);
 }
 
 /* Modal Styles */
@@ -1028,21 +1077,31 @@ onMounted(fetchAll);
 }
 
 .modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  flex-direction: column;
+  max-height: 90vh; /* modal không vượt màn hình */
+  width: 800px; /* hoặc tùy bạn */
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden; /* tránh tràn */
+}
+/* .modal-content {
+  width: 80vw;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px;
+  font-size: 16px;
+  box-sizing: border-box;
+} */
+.modal-header {
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
 }
 
 .modal-header h3 {
@@ -1069,7 +1128,9 @@ onMounted(fetchAll);
 }
 
 .modal-body {
-  padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
 }
 
 /* Customer Detail */
@@ -1119,11 +1180,16 @@ onMounted(fetchAll);
 
 /* Modal Footer */
 .modal-footer {
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 10;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #ddd;
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  padding: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  gap: 0.5rem;
 }
 
 /* Form Sections */
@@ -1236,7 +1302,7 @@ onMounted(fetchAll);
 }
 
 .btn-remove-address:hover {
-  background-color: #dc2626;
+  background-color: #b27171;
 }
 
 .btn-remove-address .btn-icon {
@@ -1314,12 +1380,6 @@ onMounted(fetchAll);
     flex-direction: column;
   }
 
-  .pagination-wrapper {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
   .modal-overlay {
     padding: 1rem;
   }
@@ -1377,5 +1437,222 @@ onMounted(fetchAll);
     margin: 0 -0.5rem;
     border-radius: 0;
   }
+}
+.action-buttons-section .btn {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #1f3e72;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #0f0d24;
+  color: white;
+}
+
+.custom-button {
+  background-color: #1e2d50; /* Màu xanh đậm */
+  color: #ffffff;
+  border: 1px solid #1e2d50;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-button:hover {
+  background-color: #24365e; /* Hover sáng hơn nhẹ */
+  border-color: #24365e;
+  transform: translateY(-1px);
+}
+
+.custom-button i {
+  font-size: 16px;
+}
+::v-deep label.form-label {
+  color: #000000;
+  font-weight: 600;
+}
+::v-deep input.form-control,
+::v-deep select.form-control,
+::v-deep textarea.form-control {
+  color: #000000;
+  font-weight: 500;
+}
+::v-deep input::placeholder,
+::v-deep textarea::placeholder {
+  color: #555555;
+  opacity: 1;
+}
+/* Ví dụ style nút "Xem chi tiết" */
+
+/* Nút xem chi tiết */
+/* Nút Xem chi tiết */
+.action-button-info {
+  background-color: #5f768e; /* xanh đậm */
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.action-button-info:hover {
+  background-color: #e0e0e0; /* nền xám nhạt khi hover */
+  color: #333; /* chữ/icon màu đậm cho dễ nhìn */
+  border: 1px solid #5f768e; /* giữ viền xanh đậm */
+  cursor: pointer;
+}
+/* Nút Chỉnh sửa */
+.action-button-warning {
+  background-color: #f59e0b; /* cam */
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.action-button-warning:hover {
+  background-color: #d97706; /* cam đậm hơn */
+  color: #222; /* chữ/icon tối để dễ nhìn */
+  cursor: pointer;
+}
+
+/* Nút Xóa */
+.action-button-danger {
+  background-color: #ef4444; /* đỏ */
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+.action-button-danger:hover {
+  background-color: #b91c1c; /* đỏ đậm hơn */
+  color: #ffd700; /* chữ/icon vàng */
+  cursor: pointer;
+}
+/* các nút kích thước bằng nhau */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+  background-color: #f9f9f9;
+}
+
+.info-box {
+  background-color: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+}
+
+.info-box label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #555;
+}
+.info-box span {
+  color: #333;
+  word-break: break-word;
+}
+
+.customer-name {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.address-label {
+  font-weight: bold;
+}
+
+.address-value {
+  display: block;
+  margin-left: 8px;
+}
+
+.info-box strong {
+  color: #444;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.badge {
+  display: inline-block; /* <-- quan trọng */
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 13px;
+  background-color: #28a745; /* xanh */
+  color: white;
+  width: auto; /* Đảm bảo không chiếm full dòng */
+  max-width: fit-content;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.modal-content h3,
+.modal-content h4 {
+  font-weight: 700; /* Tiêu đề đậm hơn */
+  color: #111;
+}
+
+.modal-content label {
+  font-weight: 700; /* Các nhãn (label) đậm */
+  color: #333;
+  display: inline-block;
+  width: 120px; /* Giữ khoảng cách đều */
+}
+
+.modal-content span {
+  font-weight: 600; /* Nội dung đậm vừa phải */
+  color: #444;
+}
+
+.address-label {
+  font-weight: 700;
+  color: #333;
+}
+
+.badge-success {
+  background-color: #4caf50;
+  color: white;
+  font-weight: 700;
+  padding: 4px 20px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.badge-danger {
+  background-color: #f44336;
+  color: white;
+  font-weight: 700;
+  padding: 4px 4px;
+  border-radius: 15px;
+  text-transform: uppercase;
 }
 </style>

@@ -500,7 +500,7 @@ a:hover {
   padding: var(--spacing-md);
   min-height: 40px;
   line-height: 1.4;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid var(--border-color);
   border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
   background: var(--surface);

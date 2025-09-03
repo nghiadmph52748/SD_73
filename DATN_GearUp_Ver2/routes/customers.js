@@ -114,15 +114,15 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { 
-      ten_khach_hang, 
-      ten_tai_khoan, 
-      mat_khau, 
-      email, 
-      so_dien_thoai, 
-      gioi_tinh, 
+    const {
+      ten_khach_hang,
+      ten_tai_khoan,
+      mat_khau,
+      email,
+      so_dien_thoai,
+      gioi_tinh,
       ngay_sinh,
-      create_by 
+      create_by
     } = req.body
 
     if (!ten_khach_hang || !ten_tai_khoan || !mat_khau || !email) {
@@ -165,9 +165,9 @@ router.post('/', async (req, res) => {
        @gioi_tinh, @ngay_sinh, @create_by, @create_at)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Tạo khách hàng thành công' 
+      message: 'Tạo khách hàng thành công'
     })
 
   } catch (error) {
@@ -179,13 +179,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const { 
-      ten_khach_hang, 
-      email, 
-      so_dien_thoai, 
-      gioi_tinh, 
+    const {
+      ten_khach_hang,
+      email,
+      so_dien_thoai,
+      gioi_tinh,
       ngay_sinh,
-      update_by 
+      update_by
     } = req.body
 
     const request = pool.request()
@@ -255,12 +255,12 @@ router.delete('/:id', async (req, res) => {
 router.post('/:id/addresses', async (req, res) => {
   try {
     const { id } = req.params
-    const { 
-      ten_dia_chi, 
-      thanh_pho, 
-      quan, 
-      phuong, 
-      dia_chi_cu_the 
+    const {
+      ten_dia_chi,
+      thanh_pho,
+      quan,
+      phuong,
+      dia_chi_cu_the
     } = req.body
 
     if (!ten_dia_chi || !thanh_pho || !quan || !phuong || !dia_chi_cu_the) {
@@ -283,9 +283,9 @@ router.post('/:id/addresses', async (req, res) => {
       (@id_khach_hang, @ten_dia_chi, @thanh_pho, @quan, @phuong, @dia_chi_cu_the)
     `)
 
-    res.status(201).json({ 
+    res.status(201).json({
       id: result.recordset[0].id,
-      message: 'Thêm địa chỉ thành công' 
+      message: 'Thêm địa chỉ thành công'
     })
 
   } catch (error) {
