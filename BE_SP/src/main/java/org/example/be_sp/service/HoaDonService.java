@@ -66,8 +66,11 @@ public class HoaDonService {
             Integer soLuong = request.getDanhSachSanPham().get(idSanPham);
             hdct.setSoLuong(soLuong);
             java.math.BigDecimal giaGoc = chiTiet.getGiaBan();
-            Integer phanTramGiam = dotGiamGiaRepository.findById(idSanPham)
-                    .map(DotGiamGia::getGiaTriGiamGia)
+            Integer phanTramGiam = chiTiet.getChiTietDotGiamGias().stream()
+                    .filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.TRUE.equals(ct.getTrangThai()) && Boolean.FALSE.equals(ct.getDeleted()))
+                    .map(ct -> ct.getIdDotGiamGia().getGiaTriGiamGia())
+                    .filter(giaTri -> giaTri != null)
+                    .findFirst()
                     .orElse(0);
             if (phanTramGiam < 0) phanTramGiam = 0;
             if (phanTramGiam > 100) phanTramGiam = 100;
