@@ -65,6 +65,7 @@ D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\DiaChiKhac
 D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\DotGiamGiaRequest.java
 D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\HinhThucThanhToanRequest.java
 D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\HoaDonChiTietRequest.java
+D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\HoaDonRequest.java
 D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\KhachHangRequest.java
 D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\KichThuocRequest.java
 D:\LDPlayer\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\MauSacRequest.java

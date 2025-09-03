@@ -603,3 +603,5 @@ insert into thong_tin_don_hang (id_hoa_don, id_trang_thai_don_hang, thoi_gian, g
 (3, 1, GETDATE(), N'Đơn hàng mới được tạo', 1, 0),
 (3, 5, DATEADD(minute, 15, GETDATE()), N'Đơn hàng đã hoàn thành', 1, 0)
 go
+
+select * from chat_lieu

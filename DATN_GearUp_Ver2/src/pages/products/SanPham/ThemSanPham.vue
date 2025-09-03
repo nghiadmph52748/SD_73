@@ -1279,7 +1279,6 @@ const createNewChatLieu = async () => {
     showChatLieuDropdown.value = false;
   } catch (error) {
     console.error("Error creating chat lieu:", error);
-    alert("Có lỗi xảy ra khi tạo chất liệu!");
   }
 };
 
@@ -1295,7 +1294,6 @@ const createNewDeGiay = async () => {
     showDeGiayDropdown.value = false;
   } catch (error) {
     console.error("Error creating de giay:", error);
-    alert("Có lỗi xảy ra khi tạo đế giày!");
   }
 };
 
