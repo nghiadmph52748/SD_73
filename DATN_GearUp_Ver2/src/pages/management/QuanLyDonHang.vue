@@ -58,19 +58,17 @@
             <label class="filter-label">Loại đơn hàng</label>
             <div class="radio-group">
               <label class="radio-option">
-                <input type="radio" value="" v-model="selectedType" />
-                <span class="radio-text">Tất cả</span>
+                <input type="radio" value="" v-model="selectedType" /> Tất cả
               </label>
               <label class="radio-option">
-                <input type="radio" value="online" v-model="selectedType" />
-                <span class="radio-text">Trực tuyến</span>
+                 <input type="radio" :value="false" v-model="selectedType" /> Trực tuyến
               </label>
               <label class="radio-option">
-                <input type="radio" value="pos" v-model="selectedType" />
-                <span class="radio-text">Tại quầy</span>
+                <input type="radio" :value="true" v-model="selectedType" /> Tại quầy
               </label>
             </div>
           </div>
+
 
           <!-- Amount Range -->
           <div class="filter-group">
@@ -128,32 +126,29 @@
       </div>
     </div>
        <!-- Header Actions bên góc phải -->
-<div class="header-actions">
-  <button class="btn-action" @click="refreshData">
-    <i class="lucide lucide-refresh-ccw"></i>
-    <span> 🔄Làm mới</span>
-  </button>
+      <div class="header-actions">
+      
 
-  <button class="btn-action" @click="exportData">
-    <i class="lucide lucide-bar-chart-2"></i>
-    <span>  📊 Xuất báo cáo</span>
-  </button>
+        <button class="btn-action" @click="exportData">
+          <i class="lucide lucide-bar-chart-2"></i>
+          <span>  📊 Xuất báo cáo</span>
+        </button>
 
-  <button class="btn-action" @click="exportOrdersToExcel">
-    <i class="lucide lucide-file-spreadsheet"></i>
-    <span> 📗 Xuất Excel</span>
-  </button>
+        <button class="btn-action" @click="exportOrdersToExcel">
+          <i class="lucide lucide-file-spreadsheet"></i>
+          <span> 📗 Xuất Excel</span>
+        </button>
 
-  <button class="btn-action primary" @click="createOrder">
-    <i class="lucide lucide-plus-circle"></i>
-    <span>➕ Tạo đơn hàng</span>
-  </button>
+        <button class="btn-action primary" @click="createOrder">
+          <i class="lucide lucide-plus-circle"></i>
+          <span>➕ Tạo đơn hàng</span>
+        </button>
 
-  <button class="btn-action" @click="scanQRCode">
-    <i class="lucide lucide-smartphone"></i>
-    <span>📱Quét mã QR</span>
-  </button>
-</div>
+        <button class="btn-action" @click="scanQRCode">
+          <i class="lucide lucide-smartphone"></i>
+          <span>📱Quét mã QR</span>
+        </button>
+      </div>
 
     <!-- Orders Display -->
     <div class="orders-container">
@@ -206,16 +201,18 @@
                     <div class="customer-name">
                       {{ order.tenKhachHang || "Khách lẻ" }}
                     </div>
-                    <div class="customer-phone">{{ order.soDienThoai || "N/A" }}</div>
                   </div>
                 </td>
                 <td class="items-cell">
-                  <div class="items-info">
-                    <span class="items-count"
-                      >{{ order.totalItems }} sản phẩm</span
-                    >
-                  </div>
-                </td>
+                <div class="items-info">
+                  <span v-if="order.tenSanPhams && order.tenSanPhams.length">
+                    {{ order.tenSanPhams.join(', ') }}
+                  </span>
+                  <span v-else>
+                    Không có sản phẩm
+                  </span>
+                </div>
+              </td>
                 <td class="amount-cell text-right">
                   <div class="amount-info">
                     <span class="amount-value">{{
@@ -224,15 +221,16 @@
                   </div>
                 </td>
                 <td class="type-cell">
-                  <span :class="['type-badge', order.loaiDon]">
-                    <span class="type-icon">{{
-                      order.loaiDon === "online" ? "🌐" : "🏪"
-                    }}</span>
-                    <span class="type-text">{{
-                      order.loaiDon === "online" ? "Online" : "Tại quầy"
-                    }}</span>
+                  <span :class="['type-badge', order.loaiDon ? 'offline' : 'online']">
+                    <span class="type-icon">
+                      {{ order.loaiDon ? "🏪" : "🌐" }}
+                    </span>
+                    <span class="type-text">
+                      {{ order.loaiDon ? "Tại quầy" : "Online" }}
+                    </span>
                   </span>
                 </td>
+
                 <td class="status-cell">
                   <span :class="['status-badge', getStatusClass(order.trangThai)]">
                     {{ getStatusText(order.trangThai) }}
@@ -290,27 +288,28 @@
             <div class="card-header">
               <div class="order-meta">
                 <span class="order-code">{{ order.id }}</span>
-                <span :class="['type-badge', order.type]">
-                  {{ order.type === "online" ? "🌐 Online" : "🏪 Tại quầy" }}
+                <span :class="['type-badge', order.loaiDon ? 'offline' : 'online']">
+                  {{ order.loaiDon ? "🏪 Tại quầy" : "🌐 Online" }}
                 </span>
               </div>
-              <span :class="['status-badge', getStatusClass(order.status)]">
-                {{ getStatusText(order.status) }}
+              <span :class="['status-badge', getStatusClass(order.trangThai)]">
+                {{ getStatusText(order.trangThai) }}
               </span>
             </div>
+
 
             <div class="card-body">
               <div class="customer-section">
                 <div class="customer-name">
                   {{ order.tenKhachHang  || "Khách lẻ" }}
                 </div>
-                <div class="customer-phone">{{ order.phone || "N/A" }}</div>
+                <div class="customer-phone">{{ order.soDienThoai || "N/A" }}</div>
               </div>
 
               <div class="order-details">
                 <div class="detail-item">
                   <span class="label">Sản phẩm:</span>
-                  <span class="value">{{ order.totalItems }} item</span>
+                  <span class="value">{{ order.tenSanPham }} item</span>
                 </div>
                 <div class="detail-item">
                   <span class="label">Tổng tiền:</span>
@@ -342,6 +341,73 @@
           </div>
         </div>
       </div>
+      <!-- Edit Order Modal -->
+            <div
+              v-if="showEditModal"
+              class="modal-overlay"
+              @click="closeEditModal"
+            >
+              <div class="modal-content medium" @click.stop>
+                <div class="modal-header">
+                  <h3>✏️ Chỉnh sửa đơn hàng</h3>
+                  <button class="modal-close" @click="closeEditModal">✕</button>
+                </div>
+
+                <div class="modal-body">
+                  <form @submit.prevent="updateOrder">
+                    <!-- Tên khách hàng -->
+                    <div class="form-group">
+                      <label for="tenKhachHang">Tên khách hàng:</label>
+                      <input
+                        id="tenKhachHang"
+                        v-model="editingOrder.tenKhachHang"
+                        type="text"
+                        class="form-control"
+                      />
+                    </div>
+
+                    <!-- Trạng thái -->
+                    <div class="form-group">
+                      <label for="trangThai">Trạng thái:</label>
+                    <select v-model="editingOrder.trangThai" class="form-control">
+                      <option :value="true">Hoàn thành</option>
+                      <option :value="false">Chờ xác nhận</option>
+                    </select>
+
+                    </div>
+
+                    <!-- Loại đơn -->
+                    <select v-model="editingOrder.loaiDon" class="form-control">
+                      <option :value="true">🌐 Online</option>
+                      <option :value="false">🏪 Tại quầy</option>
+                    </select>
+
+
+                    <!-- Tổng tiền -->
+                    <div class="form-group">
+                      <label for="tongTienSauGiam">Tổng tiền sau giảm:</label>
+                      <input
+                        id="tongTienSauGiam"
+                        v-model="editingOrder.tongTienSauGiam"
+                        type="number"
+                        class="form-control"
+                      />
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="form-actions">
+                      <button type="button" class="btn btn-secondary" @click="closeEditModal">
+                        Hủy
+                      </button>
+                      <button type="submit" class="btn btn-primary" >
+                        💾 Lưu
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
 
       <!-- Enhanced Pagination -->
       <div class="pagination-section">
@@ -423,7 +489,7 @@
       @click="showDetailModal = false"
     >
       <div class="modal-content large" @click.stop>
-        <div class="modal-header">
+        <div class="order-detail-header">
           <h3>Thông tin đơn hàng - {{ selectedOrder?.code }}</h3>
           <button class="modal-close" @click="showDetailModal = false">
             ✕
@@ -453,9 +519,9 @@
                 <div class="info-item">
                   <label>Trạng thái:</label>
                   <span
-                    :class="['badge', getStatusClass(selectedOrder.status)]"
+                    :class="['badge', getStatusClass(selectedOrder.trangThai)]"
                   >
-                    {{ getStatusText(selectedOrder.status) }}
+                    {{ getStatusText(selectedOrder.trangThai) }}
                   </span>
                 </div>
                 <div class="info-item">
@@ -463,194 +529,209 @@
                   <span>{{ selectedOrder.soDienThoai || "N/A" }}</span>
                 </div>
                 <div class="info-item">
-                  <label>Loại:</label>
-                  <span
-                    :class="[
-                      'badge',
-                      selectedOrder.type === 'online'
-                        ? 'badge-info'
-                        : 'badge-success',
-                    ]"
-                  >
-                    {{
-                      selectedOrder.type === "online"
-                        ? "Trực tuyến"
-                        : "Tại quầy"
-                    }}
-                  </span>
-                </div>
+                <label>Loại:</label>
+                <span
+                  :class="[
+                    'badge',
+                    selectedOrder.loaiDon ? 'badge-success' : 'badge-info'
+                  ]"
+                >
+                  {{ selectedOrder.loaiDon ? "Tại quầy" : "Trực tuyến" }}
+                </span>
+              </div>
                 <div class="info-item">
                   <label>Tên người nhận:</label>
-                  <span>{{ selectedOrder.receiverName || "N/A" }}</span>
+                  <span>{{ selectedOrder.tenNguoiNhan || "N/A" }}</span>
                 </div>
               </div>
             </div>
 
-            <!-- Payment History -->
-            <div class="payment-history">
-              <h4>Lịch sử thanh toán</h4>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Số tiền</th>
-                    <th>Thời gian</th>
-                    <th>Loại giao dịch</th>
-                    <th>PTTT</th>
-                    <th>Trạng thái</th>
-                    <th>Ghi chú</th>
-                    <th>Nhân viên xác nhận</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="payment in selectedOrder.payments"
-                    :key="payment.id"
-                  >
-                    <td class="amount">{{ formatCurrency(payment.amount) }}</td>
-                    <td>{{ formatDateTime(payment.ngayTao) }}</td>
-                    <td>
-                      <span
-                        :class="[
-                          'badge',
-                          payment.type === 'payment'
-                            ? 'badge-success'
-                            : 'badge-warning',
-                        ]"
-                      >
-                        {{
-                          payment.type === "payment" ? "Thanh toán" : "Tiền mặt"
-                        }}
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                        :class="[
-                          'badge',
-                          payment.method === 'completed'
-                            ? 'badge-success'
-                            : 'badge-info',
-                        ]"
-                      >
-                        {{
-                          payment.method === "completed"
-                            ? "Thành công"
-                            : "Tím một"
-                        }}
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                        :class="[
-                          'badge',
-                          payment.status === 'completed'
-                            ? 'badge-success'
-                            : 'badge-warning',
-                        ]"
-                      >
-                        {{
-                          payment.status === "completed"
-                            ? "Thành công"
-                            : "Chờ xử lý"
-                        }}
-                      </span>
-                    </td>
-                    <td>{{ payment.note || "-" }}</td>
-                    <td>{{ payment.confirmedBy }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="payment-history">
+            <h4>Lịch sử thanh toán</h4>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Số tiền</th>
+                  <th>Thời gian</th>
+                  <th>Loại giao dịch</th>
+                  <th>PTTT</th>
+                  <th>Trạng thái</th>
+                  <th>Ghi chú</th>
+                  <th>Nhân viên xác nhận</th>
+                </tr>
+              </thead>
+              <tbody v-if="selectedOrder?.lichSuThanhToan?.length > 0">
+                <tr
+                  v-for="(payment, index) in selectedOrder.lichSuThanhToan"
+                  :key="payment.id"
+                >
+                  <!-- Số tiền -->
+                  <td class="amount">
+                    {{ formatCurrency((payment.tienMat || 0) + (payment.tienChuyenKhoan || 0)) }}
+                  </td>
 
-            <!-- Order Timeline -->
-            <div class="order-timeline">
-              <h4>Lịch sử đơn hàng</h4>
-              <div class="timeline">
-                <div class="timeline-item completed">
-                  <div class="timeline-icon">✓</div>
-                  <div class="timeline-content">
-                    <div class="timeline-header">
-                      <span class="timeline-title">Tạo đơn hàng</span>
-                      <span class="timeline-time">{{
-                        formatDateTime(selectedOrder.createdAt)
-                      }}</span>
+                  <!-- Thời gian -->
+                  <td>{{ formatDateTime(payment.ngayTao) }}</td>
+
+                  <!-- Loại giao dịch -->
+                  <td>
+                    <span class="badge badge-info">
+                      {{ payment.loaiGiaoDich || "Thanh toán" }}
+                    </span>
+                  </td>
+
+                  <!-- PTTT -->
+                  <td>
+                    <span class="badge badge-success">
+                      {{ payment.tenPhuongThucThanhToan }}
+                    </span>
+                  </td>
+
+                  <!-- Trạng thái -->
+                  <td>
+                    <span
+                      :class="[
+                        'badge',
+                        payment.trangThai === '1' ? 'badge-success' : 'badge-warning',
+                      ]"
+                    >
+                      {{ payment.trangThai === '1' ? 'Thành công' : 'Chờ xử lý' }}
+                    </span>
+                  </td>
+
+                  <!-- Ghi chú từ hóa đơn chi tiết -->
+                  <td>
+                    {{ payment.ghiChu || "-" }}
+                  </td>
+
+                  <!-- Nhân viên xác nhận -->
+                  <td>
+                    {{ payment.tenNhanVienXacNhan || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+
+                            <div class="order-timeline">
+                  <h4>Lịch sử đơn hàng</h4>
+                  <div class="timeline">
+                    <!-- Mốc 1: Tạo đơn -->
+                    <div class="timeline-item completed">
+                      <div class="timeline-icon">✓</div>
+                      <div class="timeline-content">
+                        <div class="timeline-header">
+                          <span class="timeline-title">Tạo đơn hàng</span>
+                          <span class="timeline-time">
+                            {{ formatDateTime(selectedOrder?.ngayTao) }}
+                          </span>
+                        </div>
+                        <div class="timeline-description">
+                          Nhân viên - {{ selectedOrder?.tenNhanVien || '---' }}
+                        </div>
+                      </div>
                     </div>
-                    <div class="timeline-description">
-                      Nhân viên - {{ selectedOrder.createdBy }} - NV6
+
+                    <!-- Mốc 2: Hoàn thành -->
+                    <div class="timeline-item completed" v-if="selectedOrder?.ngayThanhToan">
+                      <div class="timeline-icon">✓</div>
+                      <div class="timeline-content">
+                        <div class="timeline-header">
+                          <span class="timeline-title">Hoàn thành</span>
+                          <span class="timeline-time">
+                            {{ formatDateTime(selectedOrder?.ngayThanhToan) }}
+                          </span>
+                        </div>
+                        <div class="timeline-description">
+                          Nhân viên - {{
+                            selectedOrder?.lichSuThanhToan?.[0]?.tenNhanVienXacNhan || '---'
+                          }}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="timeline-item completed">
-                  <div class="timeline-icon">✓</div>
-                  <div class="timeline-content">
-                    <div class="timeline-header">
-                      <span class="timeline-title">Hoàn thành</span>
-                      <span class="timeline-time">{{
-                        formatDateTime(selectedOrder.completedAt)
-                      }}</span>
-                    </div>
-                    <div class="timeline-description">
-                      Nhân viên - {{ selectedOrder.completedBy }} - NV6
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
 
             <!-- Product List -->
             <div class="product-list">
-              <h4>Danh sách sản phẩm</h4>
-              <div class="product-items">
-                <div
-                  v-for="item in selectedOrder.items"
-                  :key="item.id"
-                  class="product-item"
-                >
-                  <div class="product-image">
-                    <img v-if="item.image" :src="item.image" :alt="item.name" />
-                    <div v-else class="placeholder-image">👟</div>
-                  </div>
-                  <div class="product-info">
-                    <h5>{{ item.name }}</h5>
-                    <p class="product-details">
-                      Mã: {{ item.code }} | Size: {{ item.size }}
-                    </p>
-                  </div>
-                  <div class="product-quantity">x{{ item.quantity }}</div>
-                  <div class="product-price">
-                    {{ formatCurrency(item.price) }}
-                  </div>
+            <h4>Danh sách sản phẩm</h4>
+            <div class="product-items">
+              <div 
+                v-for="item in products"
+                :key="item.id"
+                class="product-item"
+              >
+                <div class="product-image">
+                  <img v-if="item.anhSanPham && item.anhSanPham.length > 0"
+                      :src="item.anhSanPham[0]"
+                      :alt="item.tenNhaSanXuat" />
+                  <div v-else class="placeholder-image">👟</div>
+                </div>
+
+                <div class="product-info">
+                  <h5>{{ item.tenNhaSanXuat }} - Size {{ item.tenKichThuoc }}</h5>
+                  <p class="product-details">
+                    Màu: {{ item.tenMauSac }} | 
+                    Xuất xứ: {{ item.tenXuatXu }}
+                  </p>
+                  <p class="product-details">
+                    Đế: {{ item.tenDeGiay }} | 
+                    Chất liệu: {{ item.tenChatLieu }}
+                  </p>
+                  <p class="product-details">
+                    Trọng lượng: {{ item.tenTrongLuong }}
+                  </p>
+                </div>
+
+                <div class="product-quantity">SL: {{ item.soLuong }}</div>
+
+                <div class="product-price">
+                  <span v-if="item.giaTriGiamGia">
+                    <span class="old-price">{{ formatCurrency(item.giaBan) }}</span>
+                    <span class="discounted-price">
+                      {{ formatCurrency(item.giaBan * (1 - item.giaTriGiamGia / 100)) }}
+                    </span>
+                    <span class="discount-tag">-{{ item.giaTriGiamGia }}%</span>
+                  </span>
+                  <span v-else>
+                    {{ formatCurrency(item.giaBan) }}
+                  </span>
                 </div>
               </div>
+            </div>
+
+          
 
               <!-- Order Summary -->
               <div class="order-summary">
                 <div class="summary-row">
                   <span>Phiếu giảm giá:</span>
-                  <span>{{ selectedOrder.couponCode || "N/A" }}</span>
+                  <span>{{ selectedOrder.maPhieuGiamGia || "N/A" }}</span>
                 </div>
                 <div class="summary-row">
                   <span>Giảm giá từ cửa hàng:</span>
-                  <span>{{ selectedOrder.storeDiscount || "0%" }}</span>
+                  <span>{{ selectedOrder.giaTriGiamGia  || "0%" }}%</span>
                 </div>
                 <div class="summary-row">
                   <span>Tổng tiền hàng:</span>
-                  <span>{{ formatCurrency(selectedOrder.subtotal) }}</span>
+                  <span>{{ formatCurrency(selectedOrder.tongTien) }}</span>
                 </div>
-                <div class="summary-row">
+                <!-- <div class="summary-row">
                   <span>Giảm giá:</span>
                   <span class="discount"
-                    >-{{ formatCurrency(selectedOrder.discount) }}</span
-                  >
-                </div>
+                    >-{{ formatCurrency(selectedOrder.soTienGiam) }}</span>
+                </div> -->
                 <div class="summary-row">
                   <span>Phí vận chuyển:</span>
-                  <span>{{ formatCurrency(selectedOrder.shippingFee) }}</span>
+                  <span>{{ formatCurrency(selectedOrder.phiVanChuyen) }}</span>
                 </div>
                 <div class="summary-row">
                   <span
                     >Miễn phí vận chuyển với đơn hàng có tổng tiền trên
-                    1.000.000 VND</span
-                  >
+                    1.000.000 VND</span>
                 </div>
                 <div class="summary-row total">
                   <span>Tổng tiền:</span>
@@ -676,6 +757,10 @@ import axios from "axios"
 
 
 const router = useRouter();
+const selectedOrder = ref(null);        // hóa đơn đang xem chi tiết
+const showDetailModal = ref(false); 
+const showEditModal = ref(false);
+const editingOrder = ref({});
 
 // Data
 
@@ -691,8 +776,7 @@ const minAmount = ref('')
 const maxAmount = ref('')
 const sortField = ref('')
 const sortDirection = ref('asc') // 'asc' or 'desc'
-const showDetailModal = ref(false)
-const selectedOrder = ref(null)
+
 const orders = ref([])
 const backendTotalOrders = ref(0)
 const backendTotalPages = ref(0)
@@ -701,6 +785,7 @@ const endIndex = computed(() => startIndex.value + itemsPerPage.value)
 
 const loading = ref(false)
 const error = ref(null)
+
 
 
 const fetchOrders = async () => {
@@ -713,8 +798,10 @@ const fetchOrders = async () => {
       }
     });
 
+
     // Lấy object chính
     const response = res.data.data;
+
 
     // Trường hợp backend trả: { data: [...], totalPages, currentPage, pageSize }
     if (response && Array.isArray(response.data)) {
@@ -740,8 +827,6 @@ const fetchOrders = async () => {
 
 
 
-
-
 const statusTabs = [
   { value: "TAT_CA", label: "TẤT CẢ", icon: "📋" },
   { value: "CHO_XAC_NHAN", label: "CHỜ XÁC NHẬN", icon: "⏳" },
@@ -754,12 +839,17 @@ const statusTabs = [
   { value: "DA_HUY", label: "ĐÃ HỦY", icon: "❌" },
 ];
 
-// Mock data
+
+
 
 
 // Computed
 const filteredOrders = computed(() => {
   let filtered = orders.value;
+  console.log("Total orders:", orders.value.length);
+  console.log("Selected status:", selectedStatus.value);
+  console.log("From date:", fromDate.value);
+  console.log("To date:", toDate.value);
 
   if (searchQuery.value) {
   filtered = filtered.filter(
@@ -769,37 +859,37 @@ const filteredOrders = computed(() => {
         order.tenNguoiNhan.toLowerCase().includes(searchQuery.value.toLowerCase()))
   )
 }
+    if (selectedType.value !== "") {
+        filtered = filtered.filter((order) => order.loaiDon === selectedType.value);
+      }
+    if (fromDate.value) {
+      filtered = filtered.filter(
+        (order) => new Date(order.ngayTao) >= new Date(fromDate.value)
+      )
+    }
+    if (toDate.value) {
+      filtered = filtered.filter(
+        (order) => new Date(order.ngayTao) <= new Date(toDate.value + "T23:59:59")
+      )
+    }
+    if (minAmount.value) {
+      filtered = filtered.filter(
+        (order) => order.tongTien >= parseInt(minAmount.value)
+      )
+    }
+    if (maxAmount.value) {
+      filtered = filtered.filter(
+        (order) => order.tongTien <= parseInt(maxAmount.value)
+      )
+    }
 
-if (fromDate.value) {
-  filtered = filtered.filter(
-    (order) => new Date(order.ngayTao) >= new Date(fromDate.value)
-  )
-}
-
-if (toDate.value) {
-  filtered = filtered.filter(
-    (order) => new Date(order.ngayTao) <= new Date(toDate.value + "T23:59:59")
-  )
-}
-
-if (minAmount.value) {
-  filtered = filtered.filter(
-    (order) => order.tongTien >= parseInt(minAmount.value)
-  )
-}
-
-if (maxAmount.value) {
-  filtered = filtered.filter(
-    (order) => order.tongTien <= parseInt(maxAmount.value)
-  )
-}
-
-
+  console.log("Filtered orders count:", filtered.length);
+  console.log("Start index:", startIndex.value, "End index:", endIndex.value);
 
   return filtered.slice(startIndex.value, endIndex.value);
 
 });
-
+//
 const totalOrders = computed(() => {
   let filtered = orders.value;
 
@@ -811,9 +901,10 @@ const totalOrders = computed(() => {
           order.tenNguoiNhan.toLowerCase().includes(searchQuery.value.toLowerCase()))
     );
   }
-
-  if (selectedType.value) {
-    filtered = filtered.filter((order) => order.loaiDonHang === selectedType.value);
+  if (selectedType.value !== "") {
+    filtered = filtered.filter(
+      (order) => String(order.loaiDon) === selectedType.value
+    );
   }
 
   if (selectedStatus.value && selectedStatus.value !== "TAT_CA") {
@@ -848,6 +939,7 @@ const totalOrders = computed(() => {
 });
 
 
+
 // Statistics computed
 const pendingOrdersCount = computed(
   () => orders.value.filter((order) => order.status === "CHO_XAC_NHAN").length
@@ -859,6 +951,7 @@ const processingOrdersCount = computed(
       ["CHO_GIAO_HANG", "DANG_VAN_CHUYEN"].includes(order.status)
     ).length
 );
+
 
 const completedOrdersCount = computed(
   () => orders.value.filter((order) => order.status === "HOAN_THANH").length
@@ -874,15 +967,12 @@ const formatCurrency = (amount) => {
     .format(amount)
     .replace("₫", " đ");
 };
-
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("vi-VN");
 };
-
 const formatDateTime = (dateString) => {
   return new Date(dateString).toLocaleString("vi-VN");
 };
-
 const getStatusClass = (status) => {
   const statusClasses = {
     HOAN_THANH: "badge-success",
@@ -896,7 +986,6 @@ const getStatusClass = (status) => {
   };
   return statusClasses[status] || "badge-secondary";
 };
-
 const getStatusText = (status) => {
   if (typeof status === "boolean") {
     return status ? "Hoàn thành" : "Chờ xác nhận";
@@ -914,35 +1003,33 @@ const getStatusText = (status) => {
   };
   return statusTexts[status] || "Không xác định";
 };
-
-
 const previousPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
     fetchOrders()
   }
 };
-
 const nextPage = () => {
   if (currentPage.value < backendTotalPages.value) {
     currentPage.value++
     fetchOrders()
   }
 };
-
-const viewOrder = (order) => {
-  selectedOrder.value = order;
-  showDetailModal.value = true;
+  const viewOrder = (order) => {
+    selectedOrder.value = { ...order };   // clone dữ liệu để hiển thị chi tiết
+    showDetailModal.value = true;    
+  };
+  const closeDetailModal = () => {
+  showDetailModal.value = false;
+  selectedOrder.value = null;
 };
-
 const createOrder = () => {
   // Navigate to POS system to create new order
   router.push("/sales/pos");
 };
-
 const scanQRCode = () => {
+  console.log("Open QR code scanner");
 };
-
 const exportOrdersToExcel = () => {
   try {
     const headerMapping = {
@@ -955,7 +1042,6 @@ const exportOrdersToExcel = () => {
       status: "Trạng thái",
       createdAt: "Ngày tạo",
     };
-
    const dataToExport = orders.value.map((order) => ({
   code: order.maHoaDon,
   customerName: order.tenNguoiNhan || "Khách lẻ",
@@ -964,17 +1050,13 @@ const exportOrdersToExcel = () => {
   createdAt: order.ngayTao,
   status: getStatusText(order.trangThai ? "HOAN_THANH" : "CHO_XAC_NHAN")
 }));
-
-
     const formattedData = formatDataForExcel(dataToExport, headerMapping);
-
     const result = exportToExcel(
       formattedData,
       "Danh_sach_don_hang",
       "Đơn hàng",
       { skipHeader: false }
     );
-
     if (result && result.success) {
       alert(`✅ ${result.message}`);
     } else {
@@ -985,7 +1067,6 @@ const exportOrdersToExcel = () => {
     alert(`❌ Có lỗi xảy ra khi xuất file Excel: ${error.message}`);
   }
 };
-
 const resetFilters = () => {
   searchQuery.value = "";
   fromDate.value = "";
@@ -996,7 +1077,6 @@ const resetFilters = () => {
   maxAmount.value = "";
   currentPage.value = 1;
 };
-
 const sortBy = (field) => {
   if (sortField.value === field) {
     sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
@@ -1005,17 +1085,14 @@ const sortBy = (field) => {
     sortDirection.value = "asc";
   }
 };
-
 const getSortIcon = (field) => {
   if (sortField.value !== field) return "⇅";
   return sortDirection.value === "asc" ? "↑" : "↓";
 };
-
 const getStatusCount = (status) => {
   if (status === "TAT_CA") return orders.value.length;
   return orders.value.filter((order) => order.trangThai === status).length;
 };
-
 const formatTime = (dateString) => {
   return new Date(dateString).toLocaleTimeString("vi-VN", {
     hour: "2-digit",
@@ -1023,10 +1100,9 @@ const formatTime = (dateString) => {
   });
 };
 
-const editOrder = (order) => {
-};
-
 const printOrder = (order) => {
+ console.log("🖨️ In đơn:", order);
+  // Ở đây bạn có thể mở window.print() hoặc gọi API tạo PDF
 };
 
 const goToPage = (page) => {
@@ -1035,12 +1111,10 @@ const goToPage = (page) => {
     fetchOrders();
   }
 };
-
 const getPageNumbers = () => {
    const pages = [];
   const total = backendTotalPages.value;
   const current = currentPage.value;
-
   if (total <= 7) {
     for (let i = 1; i <= total; i++) {
       pages.push(i);
@@ -1063,35 +1137,130 @@ const getPageNumbers = () => {
     }
   }
 
+
   return pages;
 };
 
 const refreshData = () => {
   // Simulate data refresh
+  console.log("Refreshing orders data...");
 };
-
 const exportData = () => {  
   alert("Chức năng xuất báo cáo đang được phát triển");
 };
 onMounted(() => {
   fetchOrders();
-
   const today = new Date();
   toDate.value = today.toISOString().split("T")[0];
   fromDate.value = "2025-01-01"; 
 });
-
-
-
   // Set default dates to show all data
   const today = new Date();
   const oneMonthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   toDate.value = today.toISOString().split("T")[0];
   fromDate.value = "2025-01-01"; // Set to beginning of 2025 to show all example data
+
+
+const editOrder = (order) => {
+  editingOrder.value = {
+    id: order.id,   // PHẢI có dòng này để update dùng id
+    tongTienSauGiam: order.tongTienSauGiam,
+    trangThai: order.trangThai,
+    loaiDon: order.loaiDon === true || order.loaiDon === 1,
+    tenKhachHang: order.tenKhachHang, // chỉ hiển thị
+    tenHoaDon: order.tenHoaDon,
+    phiVanChuyen: order.phiVanChuyen,
+    tongTien: order.tongTien,
+    ghiChu: order.ghiChu,
+    tenNguoiNhan: order.tenNguoiNhan,
+    diaChiNhanHang: order.diaChiNhanHang,
+    soDienThoaiNguoiNhan: order.soDienThoaiNguoiNhan,
+    emailNguoiNhan: order.emailNguoiNhan,
+    ngayThanhToan: order.ngayThanhToan,
+    ngayTao: order.ngayTao,
+    idKhachHang: order.idKhachHang,
+    idNhanVien: order.idNhanVien,
+    idPhieuGiamGia: order.idPhieuGiamGia,
+  };
+  showEditModal.value = true;
+};
+
+
+
+
+// đóng form sửa
+const closeEditModal = () => {
+  showEditModal.value = false
+  editingOrder.value = {}
+}
+
+// cập nhật đơn hàng
+// cập nhật đơn hàng
+const updateOrder = async () => {
+  try {
+    const id = editingOrder.value?.id;
+    if (!id) {
+      alert("❌ Không tìm thấy ID đơn hàng!");
+      return;
+    }
+
+    const payload = {
+  tenHoaDon: editingOrder.value.tenHoaDon || "",
+  loaiDon: editingOrder.value.loaiDon,     
+  phiVanChuyen: Number(editingOrder.value.phiVanChuyen) || 0,
+  tongTien: Number(editingOrder.value.tongTien) || 0,
+  tongTienSauGiam: Number(editingOrder.value.tongTienSauGiam) || 0,
+  ghiChu: editingOrder.value.ghiChu || "",
+  tenNguoiNhan: editingOrder.value.tenNguoiNhan || "",
+  diaChiNhanHang: editingOrder.value.diaChiNhanHang || "",
+  soDienThoaiNguoiNhan: editingOrder.value.soDienThoaiNguoiNhan || "",
+  emailNguoiNhan: editingOrder.value.emailNguoiNhan || "",
+  ngayThanhToan: editingOrder.value.ngayThanhToan 
+      ? editingOrder.value.ngayThanhToan.slice(0,10) : null,
+  ngayTao: editingOrder.value.ngayTao 
+      ? editingOrder.value.ngayTao.slice(0,10) : null,
+  idKhachHang: editingOrder.value.idKhachHang || null,
+  idNhanVien: editingOrder.value.idNhanVien || null,
+  idPhieuGiamGia: editingOrder.value.idPhieuGiamGia || null,
+  trangThai: editingOrder.value.trangThai === true,
+};
+
+
+    console.log("Update payload:", payload);
+
+    const { data } = await axios.put(
+      `http://localhost:8080/api/hoa-don-management/update/${id}`, 
+      payload,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    alert(data?.message || "✅ Cập nhật thành công!");
+    
+    closeEditModal();
+  } catch (err) {
+    console.error("❌ Update error:", err?.response?.data || err);
+    alert("❌ Cập nhật thất bại: " + (err?.response?.data?.message || err.message));
+  }
+};
+
+
+
+
+
 </script>
 
 <style scoped>
+.modal-content.large {
+  max-width: 1200px;
+  width: 90%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .header-actions {
   display: flex;
   gap: 12px;
@@ -1384,16 +1553,18 @@ onMounted(() => {
 .radio-option {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 6px;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
+  color: #374151;
 }
 
 .radio-option input[type="radio"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #4ade80;
+   width: 16px;
+  height: 16px;
+  accent-color: #22c55e;
+  cursor: pointer;
+  margin: 0;
 }
 
 .radio-text {
@@ -2202,7 +2373,16 @@ onMounted(() => {
   }
 
   .modal-overlay {
-    padding: 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
   }
 
   .order-actions {
@@ -2210,8 +2390,105 @@ onMounted(() => {
   }
 
   .info-grid {
-    grid-template-columns: 1fr;
+      display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
   }
+  .payment-history table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.payment-history th, 
+.payment-history td {
+  border: 1px solid #eee;
+  padding: 8px;
+  text-align: center;
+}
+.payment-history th {
+  background: #f8f8f8;
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.timeline-icon {
+  background: #4caf50;
+  color: #fff;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Product List */
+.product-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.product-item {
+  display: grid;
+  grid-template-columns: 60px 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+.product-image img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Summary */
+.order-summary {
+  margin-top: 16px;
+  border-top: 2px solid #f0f0f0;
+  padding-top: 12px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+.summary-row.total {
+  font-weight: bold;
+  font-size: 16px;
+}
+.total-amount {
+  color: #e53935;
+}
+.order-detail-modal {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* chiếm toàn bộ chiều cao modal */
+}
+.order-detail-header {
+  position: sticky;
+  top: 0;
+  background: #fff; /* để header không bị trong suốt */
+  z-index: 10;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.order-detail-body {
+  flex: 1;
+  overflow-y: auto; /* cuộn riêng phần nội dung */
+  padding: 10px 20px;
+}
 
   .product-item {
     flex-direction: column;
