@@ -3422,7 +3422,7 @@ const handleImageError = (event) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 1.25rem 1rem;
   border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 600;

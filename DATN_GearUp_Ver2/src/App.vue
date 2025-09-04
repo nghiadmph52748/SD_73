@@ -273,7 +273,10 @@ const filterCounts = computed(() => {
 
 // Notification functions
 const toggleNotifications = () => {
-  console.log("Toggle notifications clicked, current state:", showNotifications.value);
+  console.log(
+    "Toggle notifications clicked, current state:",
+    showNotifications.value
+  );
   showNotifications.value = !showNotifications.value;
 };
 
@@ -775,7 +778,7 @@ const checkMobile = () => {
           </div>
         </div>
       </header>
-      <hr>
+      <hr />
       <!-- Page Content -->
       <main class="page-content">
         <router-view />

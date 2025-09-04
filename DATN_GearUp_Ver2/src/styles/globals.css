@@ -327,7 +327,7 @@
 /* Dashboard-style page header */
 .page-header {
   margin-bottom: 2rem;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  background: white;
   /* Light green background */
   border-radius: 16px;
   padding: 2rem;
@@ -346,7 +346,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
   opacity: 0.3;
 }
 
@@ -371,7 +371,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: 400;
-  color: #ffffff !important;
+  color: #000000 !important;
   /* White text for light background */
   opacity: 0.9;
   font-family: 'Inter', sans-serif;
@@ -379,10 +379,6 @@
 }
 
 /* Ensure page-subtitle in header-text is white */
-.header-text .page-subtitle {
-  color: #ffffff !important;
-  /* White text for light background */
-}
 
 /* Page title and subtitle styles removed - headers now only contain actions */
 
@@ -637,9 +633,9 @@
 /* Đã xóa hover effect */
 
 .btn.btn-secondary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  border: 2px solid transparent;
+  background: #ffffff;
+  color: black;
+  border: 2px solid black;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-size: 0.875rem;

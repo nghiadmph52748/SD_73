@@ -166,7 +166,7 @@
               <td>
                 <div class="action-buttons">
                   <router-link :to="`/products/details/${product.id}`">
-                    <button class="btn btn-secondary">👁️</button>
+                    <button class="btn btn-secondary">Chi tiết</button>
                   </router-link>
                 </div>
               </td>

@@ -714,9 +714,9 @@ body {
 
 /* Button xem chi tiết trong table */
 .btn-detail {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-  color: white !important;
-  border: 2px solid #3b82f6 !important;
+  background: rgb(226, 226, 226) !important;
+  color: black !important;
+  border: 2px solid black !important;
 }
 
 .btn-detail:hover {
@@ -727,9 +727,9 @@ body {
 
 /* Button xóa trong table */
 .btn-delete {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-  color: white !important;
-  border: 2px solid #ef4444 !important;
+  background: rgb(226, 226, 226) !important;
+  color: black !important;
+  border: 2px solid black !important;
 }
 
 .btn-delete:hover {
@@ -769,14 +769,13 @@ body {
   justify-content: center !important;
   width: 28px !important;
   height: 28px !important;
-  border: none !important;
   border-radius: 4px !important;
   font-size: 12px !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
   text-decoration: none !important;
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 1.15rem 2rem !important;
   min-width: 28px !important;
   min-height: 28px !important;
 }
@@ -1527,7 +1526,7 @@ body {
 }
 
 .btn-sm {
-  padding: 6px 8px !important;
+  padding: 15px 24px !important;
   font-size: 12px !important;
   margin: 0 2px !important;
   width: 28px !important;
@@ -2487,7 +2486,7 @@ body {
 /* Button secondary style */
 .btn-secondary {
   background: #6b7280;
-  color: white !important;
+  color: black !important;
   border-color: #6b7280;
 }
 
@@ -2831,7 +2830,7 @@ body {
 }
 
 .fas {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 /* ===== SPECIFIC MODAL VARIATIONS ===== */
@@ -2842,7 +2841,7 @@ body {
 }
 
 .add-header {
-  background: transparent;
+  background: white;
   border-bottom: 2px solid var(--accent-color);
 }
 
@@ -2851,7 +2850,7 @@ body {
 }
 
 .add-footer {
-  background: transparent;
+  background: white;
 }
 
 /* Delete Modal - modal xác nhận xóa */

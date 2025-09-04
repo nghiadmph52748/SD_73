@@ -19,7 +19,7 @@
   <div class="search-filter-section">
     <div class="search-box">
       <div class="search-input-group">
-        <label><i class="fas fa-search"></i> Tìm kiếm:</label>
+        <label><i class="fas"></i> Tìm kiếm:</label>
         <input
           v-model="searchQuery"
           type="text"
@@ -29,11 +29,11 @@
       </div>
       <div class="action-group">
         <button @click="showAddForm = true" class="btn-export">
-          <i class="fas fa-plus"></i> Thêm Xuất Xứ Mới
+          <i class="fas"></i> Thêm Xuất Xứ Mới
         </button>
       </div>
       <div class="filter-group">
-        <label><i class="fas fa-filter"></i> Lọc theo trạng thái:</label>
+        <label><i class="fas"></i> Lọc theo trạng thái:</label>
         <div class="radio-filter">
           <label class="radio-label">
             <input
@@ -74,9 +74,9 @@
   <div v-if="showAddForm" class="modal-overlay" @click="closeAddForm">
     <div class="modal-content add-modal" @click.stop>
       <div class="modal-header add-header">
-        <h3><i class="fas fa-plus"></i> Thêm Xuất Xứ Mới</h3>
+        <h3><i class="fas"></i> Thêm Xuất Xứ Mới</h3>
         <button @click="closeAddForm" class="modal-close">
-          <i class="fas fa-times"></i>
+          <i class="fas"></i>
         </button>
       </div>
       <div class="modal-body">
@@ -129,14 +129,14 @@
       </div>
       <div class="modal-footer add-footer">
         <button type="button" @click="closeAddForm" class="btn btn-secondary">
-          <i class="fas fa-times"></i> Hủy bỏ
+          <i class="fas"></i> Hủy bỏ
         </button>
         <button
           @click="fetchCreate"
           :disabled="uploading"
           class="btn btn-primary"
         >
-          <i class="fas fa-plus"></i>
+          <i class="fas"></i>
           {{ uploading ? "Đang thêm..." : "Thêm Mới" }}
         </button>
       </div>
@@ -163,7 +163,7 @@
             class="btn btn-detail btn-icon btn-sm"
             title="Xem chi tiết"
           >
-            <i class="fas fa-eye"></i>
+            Chi tiết
           </button>
           <button
             v-on:click="fetchDelete(value.id)"
@@ -171,7 +171,7 @@
             :disabled="uploading"
             title="Xóa"
           >
-            <i class="fas fa-trash"></i>
+            Xóa
           </button>
         </td>
       </tr>
