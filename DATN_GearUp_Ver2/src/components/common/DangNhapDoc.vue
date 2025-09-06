@@ -527,7 +527,7 @@ defineExpose({
 }
 
 .form-control:disabled {
-  background-color: #f9fafb;
+  background-color: #ffffff;
   cursor: not-allowed;
 }
 

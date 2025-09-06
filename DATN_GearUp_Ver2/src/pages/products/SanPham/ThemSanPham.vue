@@ -807,41 +807,41 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { fetchCreateChiTietSanPham } from "../../../services/SanPham/ChiTietSanPhamService";
 import {
-  fetchAllSanPham,
-  fetchCreateSanPham,
+    fetchAllSanPham,
+    fetchCreateSanPham,
 } from "../../../services/SanPham/SanPhamService";
 import {
-  fetchAllAnhSanPham,
-  fetchCreateAnhSanPham,
+    fetchAllAnhSanPham,
+    fetchCreateAnhSanPham,
 } from "../../../services/ThuocTinh/AnhSanPhamService";
 import {
-  fetchAllChatLieu,
-  fetchCreateChatLieu,
+    fetchAllChatLieu,
+    fetchCreateChatLieu,
 } from "../../../services/ThuocTinh/ChatLieuService";
 import { fetchCreateMultipleChiTietSanPhamAnh } from "../../../services/ThuocTinh/ChiTietSanPhamAnhService";
 import {
-  fetchAllDeGiay,
-  fetchCreateDeGiay,
+    fetchAllDeGiay,
+    fetchCreateDeGiay,
 } from "../../../services/ThuocTinh/DeGiayService";
 import {
-  fetchAllKichThuoc,
-  fetchCreateKichThuoc,
+    fetchAllKichThuoc,
+    fetchCreateKichThuoc,
 } from "../../../services/ThuocTinh/KichThuocService";
 import {
-  fetchAllMauSac,
-  fetchCreateMauSac,
+    fetchAllMauSac,
+    fetchCreateMauSac,
 } from "../../../services/ThuocTinh/MauSacService";
 import {
-  fetchAllNhaSanXuat,
-  fetchCreateNhaSanXuat,
+    fetchAllNhaSanXuat,
+    fetchCreateNhaSanXuat,
 } from "../../../services/ThuocTinh/NhaSanXuatService";
 import {
-  fetchAllTrongLuong,
-  fetchCreateTrongLuong,
+    fetchAllTrongLuong,
+    fetchCreateTrongLuong,
 } from "../../../services/ThuocTinh/TrongLuongService";
 import {
-  fetchAllXuatXu,
-  fetchCreateXuatXu,
+    fetchAllXuatXu,
+    fetchCreateXuatXu,
 } from "../../../services/ThuocTinh/XuatXuService";
 
 const router = useRouter();
@@ -2637,7 +2637,7 @@ const isValidImageUrl = (url) => {
 .product-form-grid .product-form-field.ten-san-pham {
   width: 100%; /* Chiếm toàn bộ 70% container */
   padding: 20px;
-  background: #f8f9fa;
+  background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e9ecef;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -2874,7 +2874,7 @@ const isValidImageUrl = (url) => {
 .dropdown-refresh-section {
   padding: 10px 20px;
   border-bottom: 1px solid #eee;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
 }
 
 .refresh-dropdown-btn {
@@ -3050,7 +3050,7 @@ const isValidImageUrl = (url) => {
 }
 
 .variant-table th {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   font-weight: 600;
   color: #333;
   text-align: center;
@@ -3062,7 +3062,7 @@ const isValidImageUrl = (url) => {
 }
 
 .variant-table tr:hover {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
 }
 
 .variant-input {
@@ -3079,7 +3079,7 @@ const isValidImageUrl = (url) => {
   width: 100%;
   padding: 8px 12px;
   border: none;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border-radius: 4px;
   font-size: 14px;
   color: #333;
@@ -3429,7 +3429,7 @@ const isValidImageUrl = (url) => {
 .variant-info {
   font-size: 14px;
   color: #666;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #e9ecef;
@@ -3509,7 +3509,7 @@ const isValidImageUrl = (url) => {
   border: 1px solid #eee;
   border-radius: 8px;
   padding: 15px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
 }
 
 .anh-item {
@@ -3569,7 +3569,7 @@ const isValidImageUrl = (url) => {
   border-radius: 8px;
   padding: 30px;
   text-align: center;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   transition: all 0.2s;
   display: flex;
   flex-direction: column;
@@ -3700,7 +3700,7 @@ const isValidImageUrl = (url) => {
 .selected-anh-display {
   margin-top: 20px;
   padding: 15px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border-radius: 8px;
   border: 1px solid #e9ecef;
 }

@@ -654,14 +654,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import ActionButton from "@/components/ui/NutHanhDong.vue";
 import ButtonGroup from "@/components/ui/NhomNut.vue";
+import { computed, onMounted, ref } from "vue";
 import * as XLSX from "xlsx";
 import {
-  fetchAllNhanVien,
-  fetchUpdateNhanVien,
-  fetchCreateNhanVien,
+    fetchAllNhanVien,
+    fetchCreateNhanVien,
+    fetchUpdateNhanVien,
 } from "../../services/NhanVien/NhanVienService";
 import { fetchAllQuyenHan } from "../../services/NhanVien/QuyenHanService";
 
@@ -1042,7 +1041,7 @@ onMounted(() => {
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.3s ease;
-  background-color: #f8fff9;
+  background-color: #ffffff;
   box-sizing: border-box;
 }
 
@@ -1071,7 +1070,7 @@ onMounted(() => {
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   font-size: 14px;
-  background-color: #f8fff9;
+  background-color: #ffffff;
   transition: all 0.3s ease;
   cursor: pointer;
   box-sizing: border-box;
@@ -1087,7 +1086,7 @@ onMounted(() => {
 
 .filter-controls select:hover {
   border-color: #d1d5db;
-  background-color: #f9fafb;
+  background-color: #ffffff;
 }
 
 /* Table Styles */
@@ -1367,7 +1366,7 @@ onMounted(() => {
 }
 
 .btn-cancel:hover {
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #9ca3af;
   transform: scale(1.05);
 }
@@ -1471,7 +1470,7 @@ onMounted(() => {
 
 .modal-body {
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8fff9 0%, #f0fdf4 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
   max-height: 60vh;    /* Giới hạn chiều cao để bật scroll */
   overflow-y: auto;    /* Bật scroll dọc khi nội dung vượt quá */
   box-sizing: border-box;
@@ -1482,7 +1481,7 @@ onMounted(() => {
   justify-content: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 0%, #ecfdf5 100%);
   border-top: 2px solid rgba(74, 222, 128, 0.2);
   border-radius: 0 0 16px 16px;
 }
@@ -1649,12 +1648,12 @@ onMounted(() => {
 }
 
 .edit-body {
-  background: #f9fafb;
+  background: #ffffff;
   padding: 2rem;
 }
 
 .edit-footer {
-  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 0%, #ecfdf5 100%);
   border-top: 2px solid rgba(16, 185, 129, 0.2);
 }
 
@@ -1689,7 +1688,7 @@ onMounted(() => {
 
 .edit-input:hover {
   border-color: #d1d5db;
-  background-color: #f9fafb;
+  background-color: #ffffff;
 }
 
 .form-group {
@@ -1719,12 +1718,12 @@ onMounted(() => {
 }
 
 .add-body {
-  background: #f9fafb;
+  background: #ffffff;
   padding: 2rem;
 }
 
 .add-footer {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 0%, #dbeafe 100%);
   border-top: 2px solid rgba(59, 130, 246, 0.2);
 }
 
@@ -1747,7 +1746,7 @@ onMounted(() => {
 
 .add-input:hover {
   border-color: #d1d5db;
-  background-color: #f9fafb;
+  background-color: #ffffff;
 }
 
 /* Responsive Design */
@@ -1891,7 +1890,7 @@ onMounted(() => {
     border: none;
     padding: 0.5rem 0;
     position: relative;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid #ffffff;
   }
 
   .table td:last-child {

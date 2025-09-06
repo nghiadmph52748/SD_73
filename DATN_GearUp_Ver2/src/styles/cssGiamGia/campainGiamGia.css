@@ -73,7 +73,7 @@
 
 /* Search Section */
 .search-section {
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   padding: 1.5rem;
   border: 1px solid #e2e8f0;
@@ -131,7 +131,7 @@
   display: grid;
   grid-template-columns: 1fr auto auto auto;
   gap: 1.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   padding: 1.5rem;
   border: 1px solid #e2e8f0;
@@ -273,7 +273,7 @@
 }
 
 .btn-outline:hover {
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #d1d5db;
   color: #374151;
   transform: translateY(-1px);
@@ -308,7 +308,7 @@
 
 .coupons-table th,
 .table th {
-  background: #f8f9fa !important;
+  background: #ffffff !important;
   padding: 0.6rem 0.25rem !important;
   text-align: center !important;
   font-weight: 600 !important;
@@ -348,11 +348,11 @@
 }
 
 .table tbody tr:nth-child(even) {
-  background-color: #f8f9fa !important;
+  background-color: #ffffff !important;
 }
 
 .table tbody tr:hover {
-  background-color: #f8f9fa !important;
+  background-color: #ffffff !important;
   transform: none !important;
   box-shadow: none !important;
   transition: background-color 0.2s ease !important;
@@ -485,7 +485,7 @@
 
 .action-buttons .btn-action:hover {
   transform: translateY(-2px) scale(1.1);
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #4ade80;
   box-shadow: 0 8px 25px rgba(74, 222, 128, 0.3);
 }
@@ -729,7 +729,7 @@
   align-items: center;
   padding: 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
 }
 
 .modal-header h3 {
@@ -769,7 +769,7 @@
   gap: 1rem;
   padding: 1.5rem;
   border-top: 1px solid var(--border-color);
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .modal-footer .btn {
@@ -814,7 +814,7 @@
 }
 
 .modal-footer .btn-outline:hover {
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #4ade80;
   color: #374151;
   transform: translateY(-1px);
@@ -857,7 +857,7 @@
 }
 
 .form-control:disabled {
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   color: #9ca3af;
   cursor: not-allowed;
 }
@@ -1057,7 +1057,7 @@
 
 .notification-body {
   padding: 1.5rem;
-  background: #f9fafb;
+  background: #ffffff;
 }
 
 .notification-details h4 {
@@ -1194,7 +1194,7 @@
 
 .delete-body {
   padding: 2rem;
-  background: #f9fafb;
+  background: #ffffff;
 }
 
 .delete-warning {
@@ -1262,7 +1262,7 @@
   flex-direction: column;
   gap: 0.25rem;
   padding: 1rem;
-  background: #f9fafb;
+  background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
@@ -1340,7 +1340,7 @@
 }
 
 .delete-footer .btn-outline:hover {
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #9ca3af;
   transform: translateY(-2px);
 }

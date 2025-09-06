@@ -710,7 +710,7 @@ onMounted(() => {
 /* Base Layout */
 .notifications-page {
   padding: 2rem;
-  background: #f8fafc;
+  background: #ffffff;
   min-height: 100vh;
 }
 
@@ -939,13 +939,13 @@ onMounted(() => {
   color: #374151;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: #f8fafc;
+  background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .data-table td {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #ffffff;
 }
 
 .index-cell {
@@ -1022,7 +1022,7 @@ onMounted(() => {
 }
 
 .type-account {
-  background: #e0f2fe;
+  background: #ffffff;
   color: #0369a1;
 }
 
@@ -1075,7 +1075,7 @@ onMounted(() => {
 }
 
 .action-btn:hover {
-  background: #f1f5f9;
+  background: #ffffff;
 }
 
 .action-btn .icon {
@@ -1129,7 +1129,7 @@ onMounted(() => {
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background: #f1f5f9;
+  background: #ffffff;
 }
 
 .pagination-btn:disabled {
@@ -1181,7 +1181,7 @@ onMounted(() => {
 }
 
 .btn-secondary:hover {
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #cbd5e1;
   color: #374151;
 }
@@ -1235,7 +1235,7 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border: none;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1247,7 +1247,7 @@ onMounted(() => {
 }
 
 .modal-close:hover {
-  background: #e2e8f0;
+  background: #ffffff;
   color: #374151;
 }
 
@@ -1359,7 +1359,7 @@ onMounted(() => {
 }
 
 .content-display {
-  background: #f8fafc;
+  background: #ffffff;
   padding: 1rem;
   border-radius: 8px;
   color: #1e293b;

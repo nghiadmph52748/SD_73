@@ -649,10 +649,10 @@ import { computed, onMounted, ref } from "vue";
 import * as XLSX from "xlsx";
 
 import {
-  fetchAllKhachHang,
-  fetchCreateKhachHang,
-  fetchUpdateKhachHang,
-  fetchUpdateStatusKhachHang,
+    fetchAllKhachHang,
+    fetchCreateKhachHang,
+    fetchUpdateKhachHang,
+    fetchUpdateStatusKhachHang,
 } from "../../services/KhachHang/KhachHangService";
 
 // Data
@@ -981,7 +981,7 @@ onMounted(fetchAll);
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   font-size: 14px;
-  background-color: #f8fff9;
+  background-color: #ffffff;
   transition: all 0.3s ease;
   cursor: pointer;
   box-sizing: border-box;
@@ -997,7 +997,7 @@ onMounted(fetchAll);
 
 .filter-controls select:hover {
   border-color: #d1d5db;
-  background-color: #f9fafb;
+  background-color: #ffffff;
 }
 
 /* Table Styles */
@@ -1269,7 +1269,7 @@ onMounted(fetchAll);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 1rem;
-  background-color: #f9fafb;
+  background-color: #ffffff;
 }
 
 .address-item-header {
@@ -1322,7 +1322,7 @@ onMounted(fetchAll);
 
 .address-detail-item {
   padding: 0.75rem;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
   display: flex;

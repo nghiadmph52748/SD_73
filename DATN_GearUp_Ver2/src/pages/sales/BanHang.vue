@@ -1632,14 +1632,13 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { fetchCreateHoaDon } from "../../services/BanHang/HoaDonService";
 import {
-  fetchActivePhieuGiamGiaForCustomer,
-  fetchAllPhieuGiamGia,
+    fetchActivePhieuGiamGiaForCustomer,
+    fetchAllPhieuGiamGia,
 } from "../../services/GiamGia/PhieuGiamGiaService";
 import {
-  fetchAllKhachHang,
-  fetchCreateKhachHang,
-  fetchQuickAddKhachHang,
-  fetchUpdateKhachHang,
+    fetchAllKhachHang,
+    fetchQuickAddKhachHang,
+    fetchUpdateKhachHang
 } from "../../services/KhachHang/KhachHangService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { fetchAllChatLieu } from "../../services/ThuocTinh/ChatLieuService";
@@ -3191,7 +3190,7 @@ const handleImageError = (event) => {
 .modern-tabs-container {
   margin-bottom: 2rem;
   padding: 0.5rem;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   border-radius: 16px;
   border: 1px solid #e2e8f0;
 }
@@ -3224,7 +3223,7 @@ const handleImageError = (event) => {
 }
 
 .modern-tab:hover .tab-content {
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   border-color: #0ea5e9;
   transform: translateY(-1px);
 }
@@ -3242,7 +3241,7 @@ const handleImageError = (event) => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -3337,7 +3336,7 @@ const handleImageError = (event) => {
 
 /* Modern Product Section */
 .modern-product-section {
-  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   border-radius: 20px;
   padding: 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -3566,7 +3565,7 @@ const handleImageError = (event) => {
   left: 0;
   height: 24px;
   width: 24px;
-  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   border: 2px solid #e2e8f0;
   border-radius: 6px;
   transition: all 0.3s ease;
@@ -3600,7 +3599,7 @@ const handleImageError = (event) => {
   height: 60px;
   border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3659,7 +3658,7 @@ const handleImageError = (event) => {
 }
 
 .item-size {
-  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   padding: 0.125rem 0.5rem;
   border-radius: 6px;
   font-weight: 500;
@@ -3702,7 +3701,7 @@ const handleImageError = (event) => {
 .quantity-controls {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   padding: 0.25rem;
@@ -3900,7 +3899,7 @@ const handleImageError = (event) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+  background: linear-gradient(135deg, #ffffff, #ffffff), #e0e7ff);
   opacity: 0.5;
 }
 
@@ -3948,7 +3947,7 @@ const handleImageError = (event) => {
 
 /* Modern Customer Section */
 .modern-customer-section {
-  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  background: linear-gradient(135deg, #ffffff, #ffffff));
   border-radius: 20px;
   padding: 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -4667,7 +4666,7 @@ const handleImageError = (event) => {
   padding: 1rem;
   border: 2px solid #e3f2fd;
   border-radius: 8px;
-  background: #f8f9fa;
+  background: #ffffff;
 }
 
 .qr-code-container {
@@ -5291,7 +5290,7 @@ const handleImageError = (event) => {
   justify-content: center;
   gap: 10px;
   padding: 15px;
-  background: #f8f9fa;
+  background: #ffffff;
   border-top: 1px solid #dee2e6;
   overflow-x: auto;
 }
@@ -5535,7 +5534,7 @@ const handleImageError = (event) => {
 .delivery-address-section {
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 8px;
   border: 1px solid var(--border-color);
 }

@@ -669,10 +669,10 @@
 
 <script setup>
 
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js'
-import axios from "axios"
+import axios from "axios";
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js';
 
 
 const router = useRouter();
@@ -1103,7 +1103,7 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: #f5f6f8;
+  background: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   cursor: pointer;
@@ -1117,7 +1117,7 @@ onMounted(() => {
 }
 
 .btn-action:hover {
-  background: #e8ebee;
+  background: #ffffff;
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
@@ -1136,7 +1136,7 @@ onMounted(() => {
   max-width: 1600px;
   margin: 0 auto;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
   min-height: 100vh;
 }
 
@@ -1149,7 +1149,7 @@ onMounted(() => {
 }
 
 .stat-card {
-  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
   border-radius: 16px;
   padding: 1.5rem;
   border: 1px solid var(--border-color);
@@ -1553,7 +1553,7 @@ onMounted(() => {
 }
 
 .orders-table thead th {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
   color: var(--text-primary);
   font-weight: 600;
   padding: 1.25rem 1rem;
@@ -1782,7 +1782,7 @@ onMounted(() => {
 
 .card-header {
   padding: 1.25rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
@@ -2151,7 +2151,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #f8f9fa;
+  background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 6px 12px;
@@ -2160,7 +2160,7 @@ onMounted(() => {
   transition: all 0.2s ease;
 }
 .btn-action:hover {
-  background: #e9ecef;
+  background: #ffffff;
   border-color: #ccc;
 }
 

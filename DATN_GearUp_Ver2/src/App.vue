@@ -79,6 +79,81 @@ const currentUser = computed(() => {
 // Check if current route is login page
 const isLoginPage = computed(() => route.path === "/login");
 
+// Compute current page title for breadcrumb
+const currentPageTitle = computed(() => {
+  const pathTitles = {
+    // Main routes
+    '/': 'Bảng điều khiển',
+    '/dashboard': 'Bảng điều khiển',
+    '/login': 'Đăng nhập',
+
+    // User Management
+    '/users/nhan-vien': 'Quản lý nhân viên',
+    '/users/khach-hang': 'Quản lý khách hàng',
+
+    // Product Management
+    '/products': 'Danh sách sản phẩm',
+    '/products/add': 'Thêm sản phẩm',
+    '/products/xuat-xu': 'Xuất xứ',
+    '/products/nha-san-xuat': 'Nhà sản xuất',
+    '/products/mau-sac': 'Màu sắc',
+    '/products/kich-thuoc': 'Kích thước',
+    '/products/de-giay': 'Đế giày',
+    '/products/chat-lieu': 'Chất liệu',
+    '/products/trong-luong': 'Trọng lượng',
+    '/products/anh-san-pham': 'Ảnh sản phẩm',
+
+    // Sales & Orders
+    '/sales/pos': 'Hệ thống bán hàng',
+    '/sales/orders': 'Quản lý đơn hàng',
+    '/sales/returns': 'Quản lý trả hàng',
+
+    // Marketing & Promotions
+    '/marketing/discounts': 'Mã giảm giá',
+    '/marketing/campaigns': 'Chiến dịch khuyến mãi',
+    '/marketing/vouchers': 'Quản lý phiếu người dùng',
+
+    // Customer Engagement
+    '/customers/carts': 'Quản lý giỏ hàng',
+    '/customers/favorites': 'Quản lý yêu thích',
+    '/customers/reviews': 'Quản lý đánh giá',
+    '/customers/comments': 'Quản lý bình luận',
+
+    // Communication
+    '/communication/notifications': 'Quản lý thông báo',
+    '/communication/contacts': 'Quản lý liên hệ',
+
+    // Inventory
+    '/inventory/imports': 'Quản lý nhập kho',
+
+    // Analytics & System
+    '/analytics/price-history': 'Lịch sử giá bán',
+    '/system/activity-logs': 'Nhật ký hoạt động',
+
+    // Legacy route redirects
+    '/orders': 'Quản lý đơn hàng',
+    '/pos': 'Hệ thống bán hàng',
+    '/employees': 'Quản lý nhân viên',
+    '/customers': 'Quản lý khách hàng',
+    '/discounts': 'Mã giảm giá',
+    '/returns': 'Quản lý trả hàng',
+    '/reviews': 'Quản lý đánh giá'
+  };
+  
+  // Handle dynamic routes like /products/details/:id
+  if (route.path.startsWith('/products/details/')) {
+    return 'Chi tiết sản phẩm';
+  }
+  
+  // Debug: Log current route to console (can be removed later)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Current route path:', route.path);
+    console.log('Available paths:', Object.keys(pathTitles));
+  }
+  
+  return pathTitles[route.path] || `Trang không xác định (${route.path})`;
+});
+
 // Computed for display name with role
 const displayName = computed(() => {
   const user = currentUser.value;
@@ -326,6 +401,21 @@ const getTypeLabel = (type) => {
   return typeLabels[type] || "Khác";
 };
 
+const getIconClass = (type) => {
+  const iconClasses = {
+    order: "success-type",
+    inventory: "warning-type",
+    review: "info-type",
+    customer: "info-type",
+    report: "success-type",
+    error: "error-type",
+    success: "success-type",
+    warning: "warning-type",
+    info: "info-type",
+  };
+  return iconClasses[type] || "info-type";
+};
+
 const getEmptyMessage = () => {
   const filter = selectedFilter.value;
   if (filter === "all") return "Hiện tại không có thông báo nào.";
@@ -378,6 +468,29 @@ const closeMobileMenu = () => {
 };
 
 const toggleSubmenu = (menuName) => {
+  // If sidebar is collapsed, navigate to first page in submenu instead of toggling
+  if (!sidebarOpen.value) {
+    const menuItem = menuItems.find(item => item.name === menuName);
+    if (menuItem && menuItem.submenu && menuItem.submenu.length > 0) {
+      // Find first submenu item with a path
+      const firstItem = menuItem.submenu.find(subitem => subitem.path);
+      if (firstItem) {
+        router.push(firstItem.path);
+        return;
+      }
+      // If no direct path found, check for sub-submenu
+      const firstSubSubmenu = menuItem.submenu.find(subitem => subitem.hasSubSubmenu && subitem.subSubmenu);
+      if (firstSubSubmenu && firstSubSubmenu.subSubmenu.length > 0) {
+        const firstSubSubItem = firstSubSubmenu.subSubmenu.find(subsubitem => subsubitem.path);
+        if (firstSubSubItem) {
+          router.push(firstSubSubItem.path);
+          return;
+        }
+      }
+    }
+  }
+  
+  // Normal toggle behavior when sidebar is open
   expandedMenus.value[menuName] = !expandedMenus.value[menuName];
 };
 
@@ -657,11 +770,22 @@ const checkMobile = () => {
     >
       <!-- Header -->
       <header class="header">
-        <div class="header-left"></div>
+        <div class="header-left">
+          <!-- Breadcrumb Navigation -->
+          <nav class="breadcrumb-nav">
+            <div class="breadcrumb-container">
+              <a href="#" class="breadcrumb-item home" @click.prevent="router.push('/')">
+                Trang chủ
+              </a>
+              <span class="breadcrumb-separator">/</span>
+              <span class="breadcrumb-item current">{{ currentPageTitle }}</span>
+            </div>
+          </nav>
+        </div>
 
         <div class="header-right">
-          <div class="header-actions">
-            <button class="notification-button" @click="toggleNotifications">
+          <!-- Notification Button moved to header-right -->
+          <button class="notification-button" @click="toggleNotifications">
               <div class="bell-icon-container">
                 <!-- Clean Bell Icon -->
                 <svg
@@ -687,10 +811,10 @@ const checkMobile = () => {
                   {{ unreadNotifications > 9 ? "9+" : unreadNotifications }}
                 </div>
               </div>
-            </button>
+          </button>
 
-            <!-- Notifications Dropdown -->
-            <div
+          <!-- Notifications Dropdown -->
+          <div
               v-if="showNotifications"
               class="notifications-dropdown"
               @click.stop
@@ -744,7 +868,6 @@ const checkMobile = () => {
                   Xem tất cả thông báo
                 </button>
               </div>
-            </div>
           </div>
 
           <div class="user-profile" @click="toggleUserDropdown">
@@ -797,47 +920,51 @@ const checkMobile = () => {
         :class="{ 'modal-closing': isModalClosing }"
         @click.stop
       >
-        <div class="modal-header">
-          <div class="modal-title-section">
-            <h2 class="modal-title">
-              <i class="modal-icon">🔔</i>
-              Tất cả thông báo
-            </h2>
-            <span class="notifications-count"
-              >{{ notifications.length }} thông báo</span
-            >
-          </div>
-          <div class="modal-actions">
-            <button
-              v-if="unreadNotifications > 0"
-              class="mark-all-read-modal"
-              @click="markAllAsRead"
-            >
-              <i class="check-icon">✓</i>
-              Đánh dấu tất cả đã đọc
-            </button>
-            <button
-              v-if="notifications.length > 0"
-              class="clear-all-btn"
-              @click="clearAllNotifications"
-            >
-              <i class="clear-icon">🗑️</i>
-              Xóa tất cả
-            </button>
-            <button class="close-modal-btn" @click="closeAllNotificationsModal">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
+        <div class="modal-header-redesigned">
+          <div class="header-top">
+            <div class="notification-icon-redesigned">
+              <svg class="bell-icon-redesigned" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+              </svg>
+            </div>
+            <div class="notification-title-redesigned">
+              <h2 class="notification-title-text-redesigned">Trung tâm thông báo</h2>
+              <p class="notification-count-text">
+                {{ notifications.length }} thông báo
+                <span v-if="unreadNotifications > 0" class="unread-count-badge">
+                  {{ unreadNotifications }} chưa đọc
+                </span>
+              </p>
+            </div>
+            <button class="notification-close-redesigned" @click="closeAllNotificationsModal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
+            </button>
+          </div>
+          
+          <div class="header-actions-redesigned" v-if="notifications.length > 0">
+            <button
+              v-if="unreadNotifications > 0"
+              class="action-btn primary-action"
+              @click="markAllAsRead"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"></polyline>
+              </svg>
+              Đánh dấu đã đọc
+            </button>
+            <button
+              class="action-btn secondary-action"
+              @click="clearAllNotifications"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3,6 5,6 21,6"></polyline>
+                <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+              </svg>
+              Xóa tất cả
             </button>
           </div>
         </div>
@@ -851,7 +978,6 @@ const checkMobile = () => {
               :class="{ active: selectedFilter === filter.key }"
               @click="selectedFilter = filter.key"
             >
-              <i class="tab-icon">{{ filter.icon }}</i>
               <span class="tab-label">{{ filter.label }}</span>
               <span
                 v-if="filterCounts[filter.key] > 0"
@@ -872,7 +998,9 @@ const checkMobile = () => {
             v-if="filteredNotificationsModal.length === 0"
             class="empty-notifications"
           >
-            <div class="empty-icon">📭</div>
+            <div class="empty-icon-container">
+              <span class="empty-icon">📭</span>
+            </div>
             <h3>Không có thông báo</h3>
             <p>{{ getEmptyMessage() }}</p>
           </div>
@@ -891,7 +1019,9 @@ const checkMobile = () => {
                   class="notification-type"
                   :class="`type-${notification.type}`"
                 >
-                  <i class="type-icon">{{ notification.icon }}</i>
+                  <div class="type-icon-container">
+                    <span class="type-icon" :class="getIconClass(notification.type)">{{ notification.icon }}</span>
+                  </div>
                   <span class="type-label">{{
                     getTypeLabel(notification.type)
                   }}</span>
@@ -940,7 +1070,7 @@ const checkMobile = () => {
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
-  background: var(--gray-50);
+  background: #f9fafb;
   transform: translate3d(0, 0, 0);
   will-change: auto;
 }
@@ -965,7 +1095,7 @@ const checkMobile = () => {
 
 .logo-section {
   padding: 1.5rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #ffffff;
   background: #ffffff;
   display: flex;
   align-items: center;
@@ -974,7 +1104,7 @@ const checkMobile = () => {
 }
 
 .sidebar-toggle:hover {
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   color: #374151;
 }
 
@@ -994,21 +1124,7 @@ const checkMobile = () => {
   transition: all 0.3s ease;
 }
 
-.sidebar-collapsed .logo-section {
-  justify-content: center;
-}
-
-.sidebar-collapsed .sidebar-toggle {
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.sidebar-collapsed .logo-icon {
-  height: 32px;
-  width: auto;
-}
+/* Logo styles moved to globals.css - no local overrides needed */
 
 .logo-icon {
   height: 40px;
@@ -1017,10 +1133,10 @@ const checkMobile = () => {
 }
 
 .logo-text {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--primary-500);
-  font-family: var(--font-family-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4ade80;
+  font-family: 'Arial', 'Helvetica', sans-serif;
 }
 
 /* Navigation Menu */
@@ -1058,12 +1174,12 @@ const checkMobile = () => {
 }
 
 .menu-item:hover {
-  background-color: #f9fafb;
+  background-color: #ffffff;
   color: #1f2937;
 }
 
 .menu-item.active {
-  background-color: #eff6ff;
+  background-color: #ffffff;
   color: #2563eb;
   font-weight: 600;
   border-left: 3px solid #2563eb;
@@ -1129,12 +1245,12 @@ const checkMobile = () => {
 }
 
 .submenu-item:hover {
-  background-color: #f9fafb;
+  background-color: #ffffff;
   color: #374151;
 }
 
 .submenu-item.active {
-  background-color: #eff6ff;
+  background-color: #ffffff;
   color: #2563eb;
   font-weight: 500;
   border-left: 3px solid #2563eb;
@@ -1173,7 +1289,7 @@ const checkMobile = () => {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   border-left: 2px solid #e5e7eb;
   margin-left: 1rem;
 }
@@ -1199,12 +1315,12 @@ const checkMobile = () => {
 }
 
 .sub-submenu-item:hover {
-  background-color: #f1f5f9;
+  background-color: #ffffff;
   color: #374151;
 }
 
 .sub-submenu-item.active {
-  background-color: #eff6ff;
+  background-color: #ffffff;
   color: #2563eb;
   font-weight: 500;
   border-left-color: #2563eb;
@@ -1311,11 +1427,11 @@ const checkMobile = () => {
 }
 
 .sidebar-collapsed .menu-item:hover {
-  background-color: #f3f4f6;
+  background-color: #ffffff;
 }
 
 .sidebar-collapsed .menu-item.active {
-  background-color: #eff6ff;
+  background-color: #ffffff;
   border-left: 3px solid #2563eb;
 }
 
@@ -1356,46 +1472,130 @@ const checkMobile = () => {
 /* Header */
 .header {
   background: #ffffff;
-  border-bottom: 1px solid var(--border);
-  padding: var(--spacing-lg) var(--spacing-3xl);
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.75rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 80px;
-  box-shadow: var(--elevation-nav);
+  min-height: 56px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: 1rem;
+  flex: 1;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.breadcrumb-container:hover {
+  background: #ffffff;
+  border-color: #4ade80;
+  box-shadow: 0 2px 4px 0 rgba(74, 222, 128, 0.1);
+}
+
+.breadcrumb-item {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-item.home {
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.breadcrumb-item.home:hover {
+  color: #4ade80;
+  text-decoration: none;
+}
+
+.breadcrumb-item.current {
+  color: #212529;
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  margin: 0 0.75rem;
+  color: #6c757d;
+  font-weight: 400;
+  user-select: none;
+}
+
+/* Responsive breadcrumb */
+@media (max-width: 768px) {
+  .breadcrumb-container {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .breadcrumb-item {
+    font-size: 0.8125rem;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-container {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .breadcrumb-item {
+    font-size: 0.75rem;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 0.375rem;
+  }
 }
 
 .page-title {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-  font-family: var(--font-family-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000000;
+  font-family: 'Arial', 'Helvetica', sans-serif;
 }
 
 .header-right {
   display: flex;
   align-items: center;
+  gap: 0.125rem;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  margin-right: var(--spacing-md);
+  gap: 0.125rem;
+  margin-right: 0.5rem;
   position: relative;
 }
 
 .user-profile {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 1rem;
   position: relative;
   cursor: pointer;
 }
@@ -1403,9 +1603,9 @@ const checkMobile = () => {
 .user-info {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-lg);
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
 
@@ -1421,17 +1621,17 @@ const checkMobile = () => {
 }
 
 .user-name {
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: #000000;
+  font-size: 0.875rem;
   line-height: 1.2;
   text-align: right;
 }
 
 .user-role {
-  font-weight: var(--font-weight-normal);
-  color: var(--text-secondary);
-  font-size: var(--font-size-xs);
+  font-weight: 400;
+  color: #6b7280;
+  font-size: 0.75rem;
   line-height: 1.2;
   text-align: right;
   opacity: 0.8;
@@ -1441,20 +1641,20 @@ const checkMobile = () => {
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: var(--spacing-sm);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  margin-top: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   z-index: 1000;
   min-width: 250px;
   max-width: 300px;
 }
 
 .dropdown-header {
-  padding: var(--spacing-md);
-  background-color: var(--gray-50);
-  border-bottom: 1px solid var(--border);
+  padding: 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .user-role-info {
@@ -1463,51 +1663,51 @@ const checkMobile = () => {
   gap: 0.25rem;
 }
 
-.user-name {
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-  font-size: var(--font-size-sm);
+.dropdown-header .user-name {
+  font-weight: 600;
+  color: #000000;
+  font-size: 0.875rem;
 }
 
-.user-role {
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+.dropdown-header .user-role {
+  font-size: 0.75rem;
+  color: #6b7280;
 }
 
 .dropdown-divider {
   height: 1px;
-  background-color: var(--border);
+  background-color: #e5e7eb;
   margin: 0;
 }
 
 .dropdown-item {
   display: block;
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: 0.5rem 1rem;
   text-align: left;
   background: none;
   border: none;
   cursor: pointer;
-  transition: var(--transition-base);
-  color: var(--text-primary);
-  font-size: var(--font-size-sm);
-  border-radius: var(--radius-sm);
-  margin: 1px var(--spacing-xs);
+  transition: all 0.2s ease;
+  color: #000000;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  margin: 1px 0.25rem;
 }
 
 .dropdown-item:hover {
-  background-color: var(--gray-100);
-  color: var(--primary-600);
+  background-color: #f0fdf4;
+  color: #4ade80;
 }
 
 .dropdown-item.logout {
-  color: var(--danger-600);
-  margin-top: var(--spacing-xs);
+  color: #dc2626;
+  margin-top: 0.25rem;
 }
 
 .dropdown-item.logout:hover {
   background-color: rgba(239, 68, 68, 0.1);
-  color: var(--danger-700);
+  color: #b91c1c;
 }
 
 /* Modern Notification Button */
@@ -1530,7 +1730,7 @@ const checkMobile = () => {
 
 .notification-button:hover {
   background: rgba(255, 255, 255, 1);
-  border-color: var(--primary-300);
+  border-color: #93c5fd;
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
@@ -1552,12 +1752,12 @@ const checkMobile = () => {
 .bell-icon {
   width: 20px;
   height: 20px;
-  color: var(--gray-600);
+  color: #6b7280;
   transition: all 0.2s ease;
 }
 
 .notification-button:hover .bell-icon {
-  color: var(--primary-600);
+  color: #22c55e;
   transform: scale(1.05);
 }
 
@@ -1631,7 +1831,7 @@ const checkMobile = () => {
 }
 
 .notification-button:focus-visible {
-  outline: 2px solid var(--primary-500);
+  outline: 2px solid #4ade80;
   outline-offset: 2px;
 }
 
@@ -1641,7 +1841,7 @@ const checkMobile = () => {
   top: calc(100% + 0.5rem);
   right: 0;
   background: white;
-  border: 1px solid var(--border);
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -1666,25 +1866,25 @@ const checkMobile = () => {
 
 .notifications-header {
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--gray-50);
+  background: #f9fafb;
 }
 
 .notifications-header h3 {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #000000;
 }
 
 .mark-all-read {
   background: none;
   border: none;
   font-size: 0.875rem;
-  color: var(--primary-600);
+  color: #22c55e;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
@@ -1693,8 +1893,8 @@ const checkMobile = () => {
 }
 
 .mark-all-read:hover {
-  background-color: var(--primary-50);
-  color: var(--primary-700);
+  background-color: #f0fdf4;
+  color: #16a34a;
 }
 
 .notifications-list {
@@ -1705,7 +1905,7 @@ const checkMobile = () => {
 .no-notifications {
   padding: 2rem;
   text-align: center;
-  color: var(--gray-500);
+  color: #6b7280;
 }
 
 .no-notifications .empty-icon {
@@ -1723,14 +1923,14 @@ const checkMobile = () => {
   display: flex;
   align-items: flex-start;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #e5e7eb;
   cursor: pointer;
   transition: background-color 0.2s ease;
   position: relative;
 }
 
 .notification-item:hover {
-  background: var(--gray-50);
+  background: #f9fafb;
 }
 
 .notification-item:last-child {
@@ -1738,8 +1938,8 @@ const checkMobile = () => {
 }
 
 .notification-item.unread {
-  background: var(--primary-25);
-  border-left: 3px solid var(--primary-500);
+  background: #f0fdf4;
+  border-left: 3px solid #4ade80;
 }
 
 .notification-icon {
@@ -1751,12 +1951,12 @@ const checkMobile = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--gray-100);
+  background-color: #f3f4f6;
   border-radius: 50%;
 }
 
 .notification-item.unread .notification-icon {
-  background: var(--primary-100);
+  background: #dcfce7;
 }
 
 .notification-content {
@@ -1766,25 +1966,26 @@ const checkMobile = () => {
 
 .notification-title {
   font-weight: 600;
-  color: var(--gray-900);
+  color: #111827;
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
   line-height: 1.3;
 }
 
 .notification-message {
-  color: var(--gray-600);
+  color: #6b7280;
   font-size: 0.8125rem;
   line-height: 1.4;
   margin-bottom: 0.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .notification-time {
-  color: var(--gray-500);
+  color: #6b7280;
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -1796,33 +1997,33 @@ const checkMobile = () => {
   transform: translateY(-50%);
   width: 8px;
   height: 8px;
-  background: var(--primary-500);
+  background: #4ade80;
   border-radius: 50%;
   margin-top: 0.25rem;
 }
 
 .notifications-footer {
   padding: 0.75rem 1.25rem;
-  border-top: 1px solid var(--border);
-  background: var(--gray-50);
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
 }
 
 .view-all-btn {
   width: 100%;
   padding: 0.5rem;
   background: none;
-  border: 1px solid var(--border);
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  color: var(--primary-600);
+  color: #22c55e;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .view-all-btn:hover {
-  background: var(--primary-50);
-  border-color: var(--primary-300);
-  color: var(--primary-700);
+  background: #f0fdf4;
+  border-color: #93c5fd;
+  color: #16a34a;
 }
 
 /* Modal Overlay and Base */
@@ -1857,15 +2058,15 @@ const checkMobile = () => {
 
 /* Override the reset for specific styled buttons */
 .notifications-modal .mark-all-read-modal {
-  background: var(--primary-500) !important;
+  background: #4ade80 !important;
   color: white !important;
-  border: 2px solid var(--primary-500) !important;
+  border: 2px solid #4ade80 !important;
   padding: 0.5rem 1rem !important;
 }
 
 .notifications-modal .close-modal-btn {
   background: white !important;
-  border: 2px solid var(--gray-300) !important;
+  border: 2px solid #d1d5db !important;
   padding: 0 !important;
 }
 
@@ -1887,14 +2088,18 @@ const checkMobile = () => {
 .notifications-modal {
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
+  box-shadow: 
+    0 20px 40px -8px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  width: 90vw;
+  max-width: 600px;
+  max-height: 80vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: 2rem;
 }
 
 @keyframes modalSlideOut {
@@ -1929,12 +2134,156 @@ const checkMobile = () => {
 /* Modal Header */
 .modal-header {
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: white;
   position: relative;
+}
+
+.modal-header-redesigned {
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.notification-icon-redesigned {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+  flex-shrink: 0;
+}
+
+.bell-icon-redesigned {
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.notification-title-redesigned {
+  flex: 1;
+}
+
+.notification-title-text-redesigned {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.notification-count-text {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unread-count-badge {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.notification-close-redesigned {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(229, 231, 235, 0.6);
+  color: #6b7280;
+  padding: 0.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  backdrop-filter: blur(8px);
+}
+
+.notification-close-redesigned:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.header-actions-redesigned {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.action-btn:hover::before {
+  opacity: 1;
+}
+
+.primary-action {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  color: white;
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+}
+
+.primary-action:hover {
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.4);
+}
+
+.secondary-action {
+  background: rgba(249, 250, 251, 0.8);
+  color: #6b7280;
+  border: 1px solid rgba(229, 231, 235, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.secondary-action:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #374151;
+  border-color: #d1d5db;
 }
 
 .modal-title-section {
@@ -1947,7 +2296,7 @@ const checkMobile = () => {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #000000;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -1955,12 +2304,12 @@ const checkMobile = () => {
 
 .modal-icon {
   font-size: 1.5rem;
-  color: var(--primary-600);
+  color: #22c55e;
 }
 
 .notifications-count {
   font-size: 0.875rem;
-  color: var(--gray-600);
+  color: #6b7280;
   font-weight: 500;
 }
 
@@ -1968,6 +2317,13 @@ const checkMobile = () => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.modal-header-new .modal-actions {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
 }
 
 .mark-all-read-modal {
@@ -1975,7 +2331,7 @@ const checkMobile = () => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: var(--primary-500);
+  background: #4ade80;
   color: white;
   border: none;
   border-radius: 8px;
@@ -1986,7 +2342,7 @@ const checkMobile = () => {
 }
 
 .mark-all-read-modal:hover {
-  background: var(--primary-600);
+  background: #22c55e;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
@@ -2001,7 +2357,7 @@ const checkMobile = () => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: var(--danger-500);
+  background: #ef4444;
   color: white;
   border: none;
   border-radius: 8px;
@@ -2012,7 +2368,7 @@ const checkMobile = () => {
 }
 
 .clear-all-btn:hover {
-  background: var(--danger-600);
+  background: #dc2626;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
@@ -2025,9 +2381,9 @@ const checkMobile = () => {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  border: 1px solid var(--gray-300);
+  border: 1px solid #d1d5db;
   background: white;
-  color: var(--gray-500);
+  color: #6b7280;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -2036,71 +2392,84 @@ const checkMobile = () => {
 }
 
 .close-modal-btn:hover {
-  background: var(--gray-50);
-  border-color: var(--gray-400);
-  color: var(--gray-700);
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #374151;
 }
 
 /* Modal Filters */
 .modal-filters {
   padding: 1.5rem 2rem 1rem;
   background: white;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .filter-tabs {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
+  padding: 0 0.5rem;
 }
 
 .notifications-modal .filter-tab {
-  background: white;
-  border: 1px solid var(--border);
-  padding: 0.5rem 0.75rem !important;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(229, 231, 235, 0.6);
+  padding: 0.75rem 1rem !important;
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  color: #6b7280;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  min-height: 36px;
+  min-height: 44px;
   user-select: none;
-  will-change: transform, background-color;
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.notifications-modal .filter-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.notifications-modal .filter-tab:hover::before {
+  opacity: 1;
 }
 
 .notifications-modal .filter-tab:hover {
-  background: var(--gray-50) !important;
-  border-color: var(--primary-300);
-  transform: translate3d(0, -1px, 0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(74, 222, 128, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Active state - higher specificity and distinct styling */
 .notifications-modal .filter-tab.active {
-  background: var(--primary-500) !important;
-  border-color: var(--primary-500) !important;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+  border-color: transparent !important;
   color: white !important;
-  transform: translate3d(0, -2px, 0);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(74, 222, 128, 0.3);
 }
 
 /* Active tab hover state - slightly different from regular active */
 .notifications-modal .filter-tab.active:hover {
-  background: var(--primary-600) !important;
-  border-color: var(--primary-600) !important;
-  transform: translate3d(0, -2px, 0) !important;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4) !important;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.4) !important;
 }
 
-.tab-icon {
-  font-size: 1rem;
-  line-height: 1;
-}
 
 .tab-label {
   font-weight: inherit;
@@ -2108,30 +2477,50 @@ const checkMobile = () => {
 }
 
 .tab-badge {
-  background: var(--gray-200);
-  color: var(--gray-700);
-  padding: 0.125rem 0.375rem;
-  border-radius: 10px;
+  background: rgba(229, 231, 235, 0.8);
+  color: #374151;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
   font-size: 0.75rem;
-  font-weight: 600;
-  min-width: 20px;
-  height: 20px;
+  font-weight: 700;
+  min-width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .tab-badge.badge-unread {
-  background: var(--error);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+  box-shadow: 
+    0 0 0 2px rgba(239, 68, 68, 0.2),
+    0 4px 12px rgba(239, 68, 68, 0.3);
+  animation: pulse 2s infinite;
 }
 
 .tab-badge.badge-read {
-  background: var(--gray-400);
+  background: rgba(156, 163, 175, 0.8);
   color: white;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 0 0 2px rgba(239, 68, 68, 0.2),
+      0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 0 0 4px rgba(239, 68, 68, 0.3),
+      0 6px 16px rgba(239, 68, 68, 0.4);
+  }
 }
 
 /* Active tab badges - higher specificity */
@@ -2150,26 +2539,45 @@ const checkMobile = () => {
 /* Modal Content */
 .modal-content {
   flex: 1;
-  padding: 1.5rem 2rem;
+  padding: 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .empty-notifications {
   text-align: center;
-  padding: 3rem 2rem;
-  color: var(--gray-500);
+  padding: 2rem 1.5rem;
+  color: #6b7280;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+.empty-icon-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
 }
 
 .empty-notifications .empty-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  opacity: 0.6;
+  font-size: 2.5rem;
+  opacity: 0.7;
 }
 
 .empty-notifications h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
-  color: var(--gray-700);
+  color: #374151;
 }
 
 .empty-notifications p {
@@ -2178,20 +2586,24 @@ const checkMobile = () => {
 }
 
 .notifications-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  width: 100%;
 }
 
 .notification-card {
   background: white;
-  border: 1px solid var(--border);
+  border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
-  padding: 1.25rem;
+  padding: 1rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   animation: cardSlideIn 0.4s ease-out;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @keyframes cardSlideIn {
@@ -2208,19 +2620,20 @@ const checkMobile = () => {
 .notification-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary-200);
+  border-color: #bbf7d0;
 }
 
 .notification-card.unread {
-  border-left: 4px solid var(--primary-500);
-  background: linear-gradient(135deg, var(--primary-25) 0%, white 100%);
+  border-left: 4px solid #4ade80;
+  background: linear-gradient(135deg, #f0fdf4 0%, white 100%);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
 }
 
 .notification-type {
@@ -2228,18 +2641,60 @@ const checkMobile = () => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.25rem 0.75rem;
-  background: var(--gray-100);
+  background: #f3f4f6;
   border-radius: 16px;
+  flex-shrink: 0;
+}
+
+.type-icon-container {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 0.375rem;
 }
 
 .type-icon {
-  font-size: 1rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 1;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.type-icon.success-type {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  color: #166534;
+}
+
+.type-icon.error-type {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc2626;
+}
+
+.type-icon.warning-type {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #d97706;
+}
+
+.type-icon.info-type {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #2563eb;
 }
 
 .type-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--gray-700);
+  color: #374151;
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
@@ -2252,14 +2707,14 @@ const checkMobile = () => {
 
 .notification-time-full {
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: #6b7280;
   font-weight: 500;
 }
 
 .unread-dot {
   width: 8px;
   height: 8px;
-  background: var(--primary-500);
+  background: #4ade80;
   border-radius: 50%;
 }
 
@@ -2267,14 +2722,14 @@ const checkMobile = () => {
   margin: 0 0 0.5rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #000000;
   line-height: 1.4;
 }
 
 .notification-message-full {
   margin: 0;
   font-size: 0.875rem;
-  color: var(--gray-600);
+  color: #6b7280;
   line-height: 1.5;
 }
 
@@ -2286,14 +2741,14 @@ const checkMobile = () => {
 
 .time-ago {
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: #6b7280;
   font-weight: 500;
 }
 
 .mark-read-btn {
   padding: 0.25rem 0.5rem;
-  background: var(--primary-50);
-  color: var(--primary-600);
+  background: #f0fdf4;
+  color: #22c55e;
   border: none;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -2306,8 +2761,8 @@ const checkMobile = () => {
 }
 
 .mark-read-btn:hover {
-  background: var(--primary-100);
-  color: var(--primary-700);
+  background: #dcfce7;
+  color: #16a34a;
 }
 
 .mark-read-btn .check-icon {
@@ -2326,15 +2781,15 @@ const checkMobile = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
+  border-radius: 50%;
   background: linear-gradient(
     135deg,
-    var(--primary-500) 0%,
-    var(--primary-600) 100%
+    #4ade80 0%,
+    #22c55e 100%
   );
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  border: 2px solid var(--surface);
+  border: 2px solid #ffffff;
 }
 
 .avatar-circle:hover {
@@ -2343,10 +2798,11 @@ const checkMobile = () => {
 }
 
 .avatar-initial {
-  color: rgb(0, 0, 0);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.125rem;
   text-transform: uppercase;
+  line-height: 1;
 }
 
 .online-indicator {
@@ -2356,8 +2812,8 @@ const checkMobile = () => {
   width: 12px;
   height: 12px;
   background-color: #10b981;
-  border: 2px solid var(--surface);
-  border-radius: var(--radius-full);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
   animation: pulse 2s infinite;
 }
 
@@ -2378,7 +2834,7 @@ const checkMobile = () => {
   flex: 1;
   padding: 1rem;
   overflow-y: auto;
-  background-color: var(--background);
+  background-color: #ffffff;
 }
 
 /* Responsive Design */
@@ -2408,7 +2864,8 @@ const checkMobile = () => {
   }
 
   .header {
-    padding: 1rem;
+    padding: 0.5rem 1rem;
+    min-height: 50px;
   }
 
   .page-content {
@@ -2418,15 +2875,16 @@ const checkMobile = () => {
 
 @media (max-width: 480px) {
   .page-content {
-    padding: var(--spacing-md);
+    padding: 1rem;
   }
 
   .header {
-    padding: var(--spacing-md);
+    padding: 0.5rem 0.75rem;
+    min-height: 48px;
   }
 
   .page-title {
-    font-size: var(--font-size-lg);
+    font-size: 1.125rem;
   }
 
   .user-text-info {
@@ -2439,12 +2897,57 @@ const checkMobile = () => {
   }
 
   .avatar-initial {
-    font-size: var(--font-size-sm);
+    font-size: 0.875rem;
   }
 
   .online-indicator {
     width: 10px;
     height: 10px;
+  }
+
+  /* Responsive notification modal */
+  .notifications-modal {
+    max-width: 95vw;
+    max-height: 80vh;
+    border-radius: 1rem;
+  }
+
+  .modal-header-redesigned {
+    padding: 1.5rem;
+  }
+
+  .header-top {
+    margin-bottom: 1rem;
+  }
+
+  .notification-icon-redesigned {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .notification-title-text-redesigned {
+    font-size: 1.5rem;
+  }
+
+  .header-actions-redesigned {
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .filter-tabs {
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .notifications-modal .filter-tab {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.8125rem;
+    min-height: 40px;
   }
 }
 </style>

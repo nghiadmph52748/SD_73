@@ -14,8 +14,8 @@
   --discount-text-light: #9ca3af;
   
   --discount-border-color: #e5e7eb;
-  --discount-border-light: #f3f4f6;
-  --discount-bg-light: #f9fafb;
+  --discount-border-light: #ffffff;
+  --discount-bg-light: #ffffff;
   
   --discount-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --discount-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -93,11 +93,11 @@
 }
 
 .table:not(.coupons-table) tbody tr:nth-child(even) {
-  background-color: #f9fafb;
+  background-color: #ffffff;
 }
 
 .table:not(.coupons-table) tbody tr:hover {
-  background-color: #f3f4f6;
+  background-color: #ffffff;
 }
 
 /* Badge Styles - Only for general badges, not specific component badges */
@@ -132,7 +132,7 @@
 }
 
 .badge-secondary {
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   color: #374151;
 }
 

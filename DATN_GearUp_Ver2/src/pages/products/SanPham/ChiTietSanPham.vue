@@ -750,33 +750,33 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import {
-  fetchAllChiTietDotGiamGia,
-  fetchUpdateChiTietDotGiamGia,
+    fetchAllChiTietDotGiamGia,
+    fetchUpdateChiTietDotGiamGia,
 } from "../../../services/GiamGia/ChiTietDotGiamGiaService";
 import { fetchAllDotGiamGia } from "../../../services/GiamGia/DotGiamGiaService";
 import {
-  fetchAllChiTietSanPham,
-  fetchAllChiTietSanPhamBySanPhamId,
-  fetchCreateChiTietSanPham,
-  fetchUpdateChiTietSanPham,
-  fetchUpdateStatusChiTietSanPham,
+    fetchAllChiTietSanPham,
+    fetchAllChiTietSanPhamBySanPhamId,
+    fetchCreateChiTietSanPham,
+    fetchUpdateChiTietSanPham,
+    fetchUpdateStatusChiTietSanPham,
 } from "../../../services/SanPham/ChiTietSanPhamService";
 import {
-  fetchAllSanPham,
-  fetchUpdateSanPham,
+    fetchAllSanPham,
+    fetchUpdateSanPham,
 } from "../../../services/SanPham/SanPhamService";
 import {
-  fetchAllAnhSanPham,
-  fetchCreateAnhSanPham,
-  fetchOneAnhSanPham,
-  fetchUpdateAnhSanPham,
-  fetchUpdateStatusAnhSanPham,
+    fetchAllAnhSanPham,
+    fetchCreateAnhSanPham,
+    fetchOneAnhSanPham,
+    fetchUpdateAnhSanPham,
+    fetchUpdateStatusAnhSanPham,
 } from "../../../services/ThuocTinh/AnhSanPhamService";
 import { fetchAllChatLieu } from "../../../services/ThuocTinh/ChatLieuService";
 import {
-  fetchAllChiTietSanPhamAnh,
-  fetchCreateMultipleChiTietSanPhamAnh,
-  fetchDeleteChiTietSanPhamAnh,
+    fetchAllChiTietSanPhamAnh,
+    fetchCreateMultipleChiTietSanPhamAnh,
+    fetchDeleteChiTietSanPhamAnh,
 } from "../../../services/ThuocTinh/ChiTietSanPhamAnhService";
 import { fetchAllDeGiay } from "../../../services/ThuocTinh/DeGiayService";
 import { fetchAllKichThuoc } from "../../../services/ThuocTinh/KichThuocService";
@@ -1654,7 +1654,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
               z-index: 1000000 !important;
               transform: translateZ(0) !important;
               will-change: transform !important;
-              background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+              background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
               padding: 2.5rem;
               border-radius: 20px;
               box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
@@ -4068,7 +4068,7 @@ const loadImagesForChiTietSanPham = async (chiTietSanPhamId) => {
   width: 100%;
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
   border-radius: 12px;
   border: 2px solid #e2e8f0;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -4288,7 +4288,7 @@ const loadImagesForChiTietSanPham = async (chiTietSanPhamId) => {
   z-index: 1000000 !important;
   transform: translateZ(0) !important;
   will-change: transform !important;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%) !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.1) !important;
 }
@@ -4397,7 +4397,7 @@ body {
 }
 
 .btn-outline:hover {
-  background: #f9fafb;
+  background: #ffffff;
   border-color: #9ca3af;
   color: #374151;
 }

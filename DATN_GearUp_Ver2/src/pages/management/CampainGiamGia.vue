@@ -1104,19 +1104,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import {
-  fetchAllDotGiamGia,
-  fetchCreateDotGiamGia,
-  fetchUpdateDotGiamGia,
-  fetchUpdateStatusDotGiamGia,
-  fetchDeleteDotGiamGia,
-} from "../../services/GiamGia/DotGiamGiaService";
-import {
-  fetchAllChiTietDotGiamGia,
-  fetchCreateChiTietDotGiamGia,
-  fetchUpdateStatusChiTietDotGiamGia,
+    fetchAllChiTietDotGiamGia,
+    fetchCreateChiTietDotGiamGia,
+    fetchUpdateStatusChiTietDotGiamGia,
 } from "../../services/GiamGia/ChiTietDotGiamGiaService";
+import {
+    fetchAllDotGiamGia,
+    fetchCreateDotGiamGia,
+    fetchDeleteDotGiamGia,
+    fetchUpdateDotGiamGia
+} from "../../services/GiamGia/DotGiamGiaService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel";
 
@@ -2411,7 +2410,7 @@ const formatDiscountValue = (value) => {
 
 /* Search Section */
 .search-section {
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   padding: 1.5rem;
   border: 1px solid #e2e8f0;
@@ -2471,7 +2470,7 @@ const formatDiscountValue = (value) => {
   display: grid;
   grid-template-columns: 1fr auto auto auto;
   gap: 1.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   padding: 1.5rem;
   border: 1px solid #e2e8f0;
@@ -2616,7 +2615,7 @@ const formatDiscountValue = (value) => {
 }
 
 .btn-outline:hover {
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #d1d5db;
   color: #374151;
   transform: translateY(-1px);
@@ -2854,7 +2853,7 @@ const formatDiscountValue = (value) => {
 
 .action-buttons .btn-action:hover {
   transform: translateY(-2px) scale(1.1);
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #4ade80;
   box-shadow: 0 8px 25px rgba(74, 222, 128, 0.3);
 }
@@ -3008,7 +3007,7 @@ const formatDiscountValue = (value) => {
 
 .btn-action:hover {
   transform: scale(1.1);
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #22c55e;
 }
 
@@ -3139,7 +3138,7 @@ const formatDiscountValue = (value) => {
   align-items: center;
   padding: 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
 }
 
 .modal-header h3 {
@@ -3179,7 +3178,7 @@ const formatDiscountValue = (value) => {
   gap: 1rem;
   padding: 1.5rem;
   border-top: 1px solid var(--border-color);
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .modal-footer .btn {
@@ -3224,7 +3223,7 @@ const formatDiscountValue = (value) => {
 }
 
 .modal-footer .btn-outline:hover {
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #4ade80;
   color: #374151;
   transform: translateY(-1px);
@@ -3256,7 +3255,7 @@ const formatDiscountValue = (value) => {
   flex-direction: column;
   gap: 0.25rem;
   padding: 1rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
@@ -3528,7 +3527,7 @@ const formatDiscountValue = (value) => {
 }
 
 .discount-info {
-  background: #f8fafc;
+  background: #ffffff;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
@@ -3588,7 +3587,7 @@ const formatDiscountValue = (value) => {
 }
 
 .product-item:hover {
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -3695,7 +3694,7 @@ const formatDiscountValue = (value) => {
 
 .available-count {
   padding: 0.5rem;
-  background: #f3f4f6;
+  background: #ffffff;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -3729,7 +3728,7 @@ const formatDiscountValue = (value) => {
 }
 
 .current-campaign-title {
-  background: #eff6ff;
+  background: #ffffff;
   color: #1e40af;
   border: 1px solid #bfdbfe;
 }
@@ -3742,7 +3741,7 @@ const formatDiscountValue = (value) => {
 
 .available-product {
   border: 1px solid #d1fae5;
-  background: #fafafa;
+  background: #ffffff;
 }
 
 .available-product:hover {
@@ -3752,11 +3751,11 @@ const formatDiscountValue = (value) => {
 
 .current-campaign-product {
   border: 1px solid #bfdbfe;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .current-campaign-product:hover {
-  background: #eff6ff;
+  background: #ffffff;
   border-color: #93c5fd;
 }
 
@@ -3869,7 +3868,7 @@ const formatDiscountValue = (value) => {
 }
 
 .form-control:disabled {
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   color: #9ca3af;
   cursor: not-allowed;
 }
@@ -4016,7 +4015,7 @@ const formatDiscountValue = (value) => {
 }
 
 .badge-code {
-  background: #f3f4f6;
+  background: #ffffff;
   color: #6b7280;
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -4145,7 +4144,7 @@ const formatDiscountValue = (value) => {
   color: #6b7280;
   font-weight: 500;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-  background: #f9fafb;
+  background: #ffffff;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   border: 1px solid #e5e7eb;
@@ -4196,7 +4195,7 @@ const formatDiscountValue = (value) => {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   padding: 1rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
@@ -4235,7 +4234,7 @@ const formatDiscountValue = (value) => {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 1rem;
-  background: #f9fafb;
+  background: #ffffff;
 }
 
 .product-card {
@@ -4283,7 +4282,7 @@ const formatDiscountValue = (value) => {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 4px;
   border: 1px solid #e5e7eb;
 }
@@ -4328,7 +4327,7 @@ const formatDiscountValue = (value) => {
   text-align: center;
   padding: 3rem 2rem;
   color: #6b7280;
-  background: #f9fafb;
+  background: #ffffff;
   border-radius: 8px;
   border: 2px dashed #d1d5db;
 }
@@ -4376,7 +4375,7 @@ const formatDiscountValue = (value) => {
 .progress-bar {
   width: 100%;
   height: 12px;
-  background: #f3f4f6;
+  background: #ffffff;
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid #e5e7eb;
@@ -4522,7 +4521,7 @@ const formatDiscountValue = (value) => {
 
 .edit-modal .modal-body {
   padding: 2rem;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .form-section {
@@ -4600,7 +4599,7 @@ const formatDiscountValue = (value) => {
 }
 
 .form-control:disabled {
-  background: #f9fafb;
+  background: #ffffff;
   color: #6b7280;
   cursor: not-allowed;
 }
@@ -4660,13 +4659,13 @@ const formatDiscountValue = (value) => {
 }
 
 .btn-secondary {
-  background: #f3f4f6;
+  background: #ffffff;
   color: #374151;
   border-color: #d1d5db;
 }
 
 .btn-secondary:hover {
-  background: #e5e7eb;
+  background: #ffffff;
   border-color: #9ca3af;
   transform: translateY(-1px);
 }
@@ -4832,7 +4831,7 @@ const formatDiscountValue = (value) => {
 
 .notification-body {
   padding: 1.5rem;
-  background: #f9fafb;
+  background: #ffffff;
 }
 
 .notification-details h4 {
@@ -4969,7 +4968,7 @@ const formatDiscountValue = (value) => {
 
 .delete-body {
   padding: 2rem;
-  background: #f9fafb;
+  background: #ffffff;
 }
 
 .delete-warning {
@@ -5037,7 +5036,7 @@ const formatDiscountValue = (value) => {
   flex-direction: column;
   gap: 0.25rem;
   padding: 1rem;
-  background: #f9fafb;
+  background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
@@ -5115,7 +5114,7 @@ const formatDiscountValue = (value) => {
 }
 
 .delete-footer .btn-outline:hover {
-  background: #f3f4f6;
+  background: #ffffff;
   border-color: #9ca3af;
   transform: translateY(-2px);
 }

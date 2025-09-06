@@ -1377,7 +1377,7 @@ onMounted(() => {
 }
 
 .toggle-btn:hover {
-  background: #f9fafb;
+  background: #ffffff;
   border-color: #22c55e;
   color: #374151;
 }

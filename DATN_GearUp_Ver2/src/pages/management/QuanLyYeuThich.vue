@@ -698,7 +698,7 @@ onMounted(() => {
   max-width: 1600px;
   margin: 0 auto;
   min-height: 100vh;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 /* Remove custom header and button styles - using globals */
@@ -744,12 +744,12 @@ onMounted(() => {
 }
 
 .favorites-stat .stat-icon {
-  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  background: linear-gradient(135deg, #ffffff, #ffffff), #fce7f3);
   color: #ec4899;
 }
 
 .users-stat .stat-icon {
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  background: linear-gradient(135deg, #ffffff, #ffffff), #dbeafe);
   color: #3b82f6;
 }
 
@@ -759,7 +759,7 @@ onMounted(() => {
 }
 
 .conversion-stat .stat-icon {
-  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  background: linear-gradient(135deg, #ffffff, #ffffff), #dcfce7);
   color: #22c55e;
 }
 
@@ -797,7 +797,7 @@ onMounted(() => {
 }
 
 .stat-trend.neutral {
-  background: #f1f5f9;
+  background: #ffffff;
   color: #64748b;
   max-width: 200px;
   overflow: hidden;
@@ -858,7 +858,7 @@ onMounted(() => {
 }
 
 .toggle-btn:hover:not(.active) {
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #cbd5e1;
   color: #1e293b;
 }
@@ -941,7 +941,7 @@ onMounted(() => {
 .data-header {
   padding: 1.5rem 2rem;
   border-bottom: 1px solid #e2e8f0;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .data-header h3 {
@@ -961,7 +961,7 @@ onMounted(() => {
 }
 
 .data-table th {
-  background: #f8fafc;
+  background: #ffffff;
   padding: 1rem 1.5rem;
   text-align: left;
   font-weight: 600;
@@ -972,12 +972,12 @@ onMounted(() => {
 
 .data-table td {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #ffffff;
   vertical-align: middle;
 }
 
 .data-table tbody tr:hover {
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .index-cell {
@@ -1061,7 +1061,7 @@ onMounted(() => {
 }
 
 .category-badge {
-  background: #f1f5f9;
+  background: #ffffff;
   color: #64748b;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -1115,7 +1115,7 @@ onMounted(() => {
 }
 
 .view-btn:hover {
-  background: #eff6ff;
+  background: #ffffff;
 }
 
 .recommend-btn {
@@ -1161,7 +1161,7 @@ onMounted(() => {
   align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid #e2e8f0;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .card-header h4 {
@@ -1228,7 +1228,7 @@ onMounted(() => {
 
 .bar-visual {
   height: 6px;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: 3px;
   overflow: hidden;
 }
@@ -1278,7 +1278,7 @@ onMounted(() => {
 
 .category-bar {
   height: 4px;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -1295,7 +1295,7 @@ onMounted(() => {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   margin-bottom: 0.75rem;
 }
@@ -1367,7 +1367,7 @@ onMounted(() => {
 .time-bar {
   flex: 1;
   height: 8px;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -1394,7 +1394,7 @@ onMounted(() => {
   align-items: center;
   padding: 1.5rem 2rem;
   border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .pagination-info {
@@ -1457,7 +1457,7 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border: none;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1469,7 +1469,7 @@ onMounted(() => {
 }
 
 .modal-close:hover {
-  background: #e2e8f0;
+  background: #ffffff;
   color: #374151;
 }
 
@@ -1604,7 +1604,7 @@ onMounted(() => {
 }
 
 .btn-secondary:hover {
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #cbd5e1;
   color: #374151;
 }
@@ -1616,7 +1616,7 @@ onMounted(() => {
 }
 
 .btn-outline:hover {
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #cbd5e1;
   color: #374151;
 }

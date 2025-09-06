@@ -796,7 +796,7 @@ onMounted(() => {
   max-width: 1600px;
   margin: 0 auto;
   min-height: 100vh;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 /* Page Header uses global styling from globals.css */
@@ -904,7 +904,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #f1f5f9;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   color: #64748b;
@@ -914,7 +914,7 @@ onMounted(() => {
 }
 
 .clear-filters-btn:hover {
-  background: #e2e8f0;
+  background: #ffffff;
   color: #475569;
 }
 
@@ -1054,7 +1054,7 @@ onMounted(() => {
 
 .view-toggle {
   display: flex;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: 8px;
   padding: 4px;
 }
@@ -1106,7 +1106,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
 }
 
@@ -1134,7 +1134,7 @@ onMounted(() => {
   gap: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #ffffff;
 }
 
 .product-image {
@@ -1228,7 +1228,7 @@ onMounted(() => {
 
 .card-actions {
   padding: 1rem 1.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-top: 1px solid #e2e8f0;
   display: flex;
   gap: 0.5rem;
@@ -1285,7 +1285,7 @@ onMounted(() => {
 }
 
 .action-btn.primary {
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #e2e8f0;
   color: #4ade80;
 }
@@ -1297,13 +1297,13 @@ onMounted(() => {
 }
 
 .action-btn.secondary {
-  background: #f1f5f9;
+  background: #ffffff;
   border-color: #e2e8f0;
   color: #64748b;
 }
 
 .action-btn.secondary:hover {
-  background: #e2e8f0;
+  background: #ffffff;
   color: #475569;
 }
 
@@ -1345,7 +1345,7 @@ onMounted(() => {
 }
 
 .data-table th {
-  background: #f8fafc;
+  background: #ffffff;
   padding: 1rem;
   text-align: left;
   font-weight: 600;
@@ -1356,12 +1356,12 @@ onMounted(() => {
 
 .data-table td {
   padding: 1rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #ffffff;
   vertical-align: top;
 }
 
 .data-table tbody tr:hover {
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .checkbox-col {
@@ -1474,7 +1474,7 @@ onMounted(() => {
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #4ade80;
   color: #4ade80;
 }
@@ -1505,7 +1505,7 @@ onMounted(() => {
 }
 
 .page-btn:hover {
-  background: #f8fafc;
+  background: #ffffff;
   border-color: #4ade80;
   color: #4ade80;
 }
@@ -1564,7 +1564,7 @@ onMounted(() => {
   width: 40px;
   height: 40px;
   border: none;
-  background: #f1f5f9;
+  background: #ffffff;
   border-radius: 8px;
   color: #64748b;
   cursor: pointer;
@@ -1572,7 +1572,7 @@ onMounted(() => {
 }
 
 .modal-close:hover {
-  background: #e2e8f0;
+  background: #ffffff;
   color: #475569;
 }
 
@@ -1598,7 +1598,7 @@ onMounted(() => {
   display: flex;
   gap: 1.5rem;
   padding: 1.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
 }
@@ -1656,7 +1656,7 @@ onMounted(() => {
 
 .comment-detail-content {
   padding: 1.5rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   margin-bottom: 1rem;

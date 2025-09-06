@@ -56,13 +56,13 @@
   --text-muted: #9ca3af;
 
   --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #ffffff;
 
   --border-color: #e5e7eb;
-  --border-light: #f3f4f6;
+  --border-light: #ffffff;
 
-  --light-gray: #f8fafc;
+  --light-gray: #ffffff;
   --medium-gray: #e5e7eb;
   --dark-gray: #6b7280;
 
@@ -224,7 +224,7 @@ body {
 }
 
 .modern-stats-card {
-  background: linear-gradient(135deg, var(--surface) 0%, #fafbfc 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
   border-radius: var(--radius-lg);
   padding: var(--spacing-3xl);
   border: 1px solid var(--border);
@@ -549,7 +549,7 @@ a:hover {
 }
 
 .table th {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   font-weight: var(--font-weight-semibold);
   color: var(--secondary-color);
   font-size: var(--font-size-sm);
@@ -558,7 +558,7 @@ a:hover {
 }
 
 .table tr:hover {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   transform: scale(1.01);
   transition: all var(--duration-base) var(--easing);
 }
@@ -597,7 +597,7 @@ a:hover {
 }
 
 .badge-secondary {
-  background-color: #e2e3e5;
+  background-color: #ffffff;
   color: #383d41;
 }
 

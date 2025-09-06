@@ -7,7 +7,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid #e5e7eb;
-  background: #f8fafc;
+  background: #ffffff;
   color: #374151;
   border-radius: 12px;
   font-weight: 600;
@@ -55,7 +55,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid #e5e7eb;
-  background: #f8fafc;
+  background: #ffffff;
   color: #374151;
   border-radius: 12px;
   font-weight: 600;
@@ -152,7 +152,7 @@
   box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 5;
   padding: 1rem 0;
 }
 
@@ -208,7 +208,7 @@
 }
 
 .navbar-link:hover {
-  background: #e5e7eb;
+  background: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -240,7 +240,7 @@
 
 .navbar-dropdown-item {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #ffffff;
   transition: all 0.2s ease;
 }
 
@@ -249,7 +249,7 @@
 }
 
 .navbar-dropdown-item:hover {
-  background: #f2f5f7;
+  background: #ffffff;
   color: #22c55e;
 }
 
@@ -305,11 +305,11 @@
     color: #374151;
     padding: 1rem 2rem;
     border-radius: 0;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid #ffffff;
   }
 
   .navbar-link:hover {
-    background: #f8fafc;
+    background: #ffffff;
     color: #22c55e;
   }
 
@@ -426,7 +426,7 @@
 /* Đã xóa hover effect */
 
 .filter-header {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff 100%);
   padding: 1.5rem 2rem;
   border-bottom: 1px solid rgba(228, 228, 231, 0.3);
   display: flex;
@@ -492,7 +492,7 @@
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.2s ease;
-  background: #fafafa;
+  background: #ffffff;
   width: 100%;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -559,7 +559,7 @@
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   font-size: 0.875rem;
-  background: #fafafa;
+  background: #ffffff;
   transition: all 0.2s ease;
   cursor: pointer;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
@@ -578,7 +578,7 @@
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   font-size: 0.875rem;
-  background: #fafafa;
+  background: #ffffff;
   transition: all 0.2s ease;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 }
@@ -679,11 +679,7 @@
 
 /* ===== SIDEBAR & MENU STYLES ===== */
 
-/* App.vue Specific Sidebar Styles */
-.sidebar-collapsed {
-  width: 80px;
-  min-width: 80px;
-}
+/* App.vue Specific Sidebar Styles - definition moved to collapsed section */
 
 /* Logo section styles đã được thay thế bằng CSS mới */
 
@@ -704,335 +700,132 @@
 
 /* Collapsed sidebar styles đã được thay thế bằng CSS mới */
 
-/* ===== SIDEBAR STYLES ===== */
+/* ===== SIDEBAR STYLES - NEW DESIGN FROM SD_73_BAK ===== */
+
+/* App.vue Specific Sidebar Styles - definition moved to collapsed section */
 
 /* Main Sidebar */
 .sidebar {
-  width: 280px;
-  min-width: 280px;
-  background: white !important;
-  /* White background */
-  border-right: none !important;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  min-width: 320px;
+  height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
   position: fixed;
   left: 0;
   top: 0;
-  height: 100vh;
-  z-index: 1000;
   overflow-y: auto;
-}
-
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: #f2f5f7;
-  border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  overflow-x: hidden;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Logo Section */
 .logo-section {
-  padding: 1.5rem;
-  border-bottom: none !important;
-  background: transparent !important;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid #ffffff;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
-}
-
-.sidebar-toggle {
-  background: #e4e7ec !important;
-  border: none !important;
-  padding: 0.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #374151 !important;
-}
-
-.sidebar-toggle:hover {
-  background-color: #d1d5db !important;
-  color: #374151 !important;
-}
-
-.sidebar-toggle svg {
-  transition: transform 0.2s ease;
-}
-
-.sidebar-toggle:active svg {
-  transform: scale(0.95);
+  min-height: 80px;
+  gap: 1rem; /* Đảm bảo có khoảng cách giữa logo và button */
 }
 
 .logo {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.sidebar-collapsed .logo-section {
-  justify-content: center;
-}
-
-.sidebar-collapsed .sidebar-toggle {
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
+  flex: 1;
+  margin-right: 1rem;
 }
 
 .logo-icon {
   height: 40px;
   width: auto;
   transition: all 0.3s ease;
-  /* Removed filter to show original logo colors */
 }
 
-.sidebar-collapsed .logo-icon {
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  background: #ffffff;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
   height: 32px;
-  width: auto;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.sidebar-toggle:hover {
+  background: #ffffff;
+  color: #374151;
+}
+
+.sidebar-toggle:active {
+  transform: scale(0.95);
+}
+
+.sidebar-toggle svg {
+  transition: transform 0.2s ease;
+}
+
+.logo-text {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-500);
+  font-family: var(--font-family-heading);
 }
 
 /* Navigation Menu */
 .nav-menu {
-  padding: 1rem 0;
+  padding: 1rem 0.5rem;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
   padding: 0.75rem 1.5rem;
-  color: #000000 !important;
-  /* Black text for white background */
+  color: #374151;
   text-decoration: none;
   transition: all 0.2s ease;
   cursor: pointer;
   position: relative;
-  border-radius: 8px;
-  margin: 0.25rem 1rem;
-  border: none !important;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-bottom: 1px solid transparent;
 }
 
 .menu-item:hover {
-  background: #f2f5f7 !important;
-  /* Light gray background on hover */
-  color: #000000 !important;
-  /* Black text on hover */
-  transform: translateX(5px);
+  background-color: #ffffff;
+  color: #1f2937;
 }
 
 .menu-item.active {
-  background: #e4e7ec !important;
-  /* Solid gray background when active */
-  color: #000000 !important;
-  /* Black text when active */
-  box-shadow: none !important;
+  background-color: #ffffff;
+  color: #2563eb;
+  font-weight: 600;
+  border-left: 3px solid #2563eb;
 }
 
-.menu-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: #000000 !important;
-  /* Black icon for white background */
-}
-
-.menu-icon-placeholder {
-  width: 24px;
-  height: 24px;
-  margin-right: 1rem;
-  flex-shrink: 0;
-}
-
-.menu-text {
-  font-weight: 500;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #000000 !important;
-  /* Black text for white background */
-}
-
-.menu-arrow {
-  display: none !important;
-}
-
-.menu-item.expanded .menu-arrow {
-  display: none !important;
-}
-
-/* Submenu */
+/* Menu with submenu */
 .menu-group {
-  margin: 0.25rem 0;
+  margin-bottom: 0.25rem;
 }
 
-.submenu {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  background: #f9fafb !important;
-  margin: 0.25rem 1rem;
-  border-radius: 8px;
-  border: none !important;
-}
-
-.submenu-expanded {
-  max-height: 500px;
-}
-
-.submenu-item {
-  padding: 0.75rem 1.5rem;
-  color: #000000 !important;
-  /* Black text for white background */
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border-radius: 8px;
-  margin: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: none !important;
-}
-
-.submenu-item:hover {
-  background: #f2f5f7 !important;
-  /* Lighter background on hover */
-  color: #000000 !important;
-  /* Black text on hover */
-}
-
-.submenu-item.active {
-  background: #e4e7ec !important;
-  /* Solid background when active */
-  color: #000000 !important;
-  /* Black text when active */
-  box-shadow: none !important;
-}
-
-.submenu-bullet {
-  display: none !important;
-}
-
-.submenu-text {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #000000 !important;
-  /* Black text for white background */
-}
-
-/* Sub-submenu */
-.sub-submenu {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  background: #f9fafb !important;
-  margin: 0.25rem 1rem;
-  border-radius: 8px;
-  border: none !important;
-}
-
-.sub-submenu-expanded {
-  max-height: 300px;
-}
-
-.sub-submenu-item {
-  padding: 0.5rem 1.5rem;
-  color: #000000 !important;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border-radius: 8px;
-  margin: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: none !important;
-}
-
-.sub-submenu-item:hover {
-  background: #f2f5f7 !important;
-  color: #000000 !important;
-  /* Black text on hover */
-}
-
-.sub-submenu-item.active {
-  background: #e4e7ec !important;
-  color: #000000 !important;
-  /* Black text when active */
-  box-shadow: none !important;
-}
-
-.sub-submenu-bullet {
-  display: none !important;
-}
-
-.sub-submenu-text {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #000000 !important;
-}
-
-/* Collapsed sidebar styles */
-.sidebar-collapsed .menu-text,
-.sidebar-collapsed .submenu-text,
-.sidebar-collapsed .sub-submenu-text {
-  display: none;
-}
-
-.sidebar-collapsed .menu-arrow {
-  display: none !important;
-}
-
-.sidebar-collapsed .submenu,
-.sidebar-collapsed .sub-submenu {
-  display: none;
-}
-
-.sidebar-collapsed .menu-item {
-  justify-content: center;
-  padding: 0.75rem;
-}
-
-.sidebar-collapsed .menu-icon {
-  margin-right: 0;
-}
-
-.sidebar-collapsed .menu-icon-placeholder {
-  margin-right: 0;
-}
-
-.sidebar-collapsed .menu-item:hover {
-  transform: none;
-}
-
-.sidebar-collapsed .menu-item.active {
-  transform: none;
-}
-
-.sidebar-toggle-btn {
-  display: none;
-}
-
-/* Menu parent styles */
 .menu-parent {
   justify-content: space-between;
   user-select: none;
@@ -1040,37 +833,498 @@
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
-  color: #374151 !important;
+  color: #6b7280;
   padding-top: 1rem;
   padding-bottom: 0.5rem;
-  border: none !important;
 }
 
-.menu-parent:hover {
-  background: #f2f5f7 !important;
-  color: #111827 !important;
-  /* Dark text on hover */
+.menu-arrow {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+  opacity: 0.6;
 }
 
-.menu-parent.active {
-  background: #e4e7ec !important;
-  color: #111827 !important;
-  /* Dark text when active */
+.menu-parent.expanded .menu-arrow {
+  transform: rotate(180deg);
 }
 
-.menu-parent.expanded {
-  background: #f2f5f7 !important;
-  color: #111827 !important;
-  /* Dark text when expanded */
+/* Submenu styles */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: transparent;
 }
 
-/* Submenu arrow styles */
+.submenu-expanded {
+  max-height: 800px;
+}
+
+.submenu-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  padding-left: 3rem;
+  color: #6b7280;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 400;
+  position: relative;
+}
+
+.submenu-item.has-sub-submenu {
+  justify-content: space-between;
+}
+
+.submenu-item:hover {
+  background-color: #ffffff;
+  color: #374151;
+}
+
+.submenu-item.active {
+  background-color: #ffffff;
+  color: #2563eb;
+  font-weight: 500;
+  border-left: 3px solid #2563eb;
+}
+
+.submenu-bullet {
+  margin-right: 0.75rem;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  width: 4px;
+  height: 4px;
+  background-color: #9ca3af;
+  border-radius: 50%;
+}
+
+.submenu-text {
+  color: #000000;
+  flex: 1;
+}
+
 .submenu-arrow-sub {
-  display: none !important;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+  opacity: 0.6;
+  color: #9ca3af;
 }
 
 .submenu-item.has-sub-submenu.expanded .submenu-arrow-sub {
+  transform: rotate(180deg);
+}
+
+/* Sub-submenu styles */
+.sub-submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: #ffffff;
+  border-left: 2px solid #e5e7eb;
+  margin-left: 1rem;
+}
+
+.sub-submenu-expanded {
+  max-height: 800px !important;
+  padding: 0.5rem 0;
+}
+
+.sub-submenu-item {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 1.5rem;
+  padding-left: 4.5rem;
+  color: #6b7280;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 400;
+  border-left: 1px solid #e5e7eb;
+  margin-left: 1rem;
+}
+
+.sub-submenu-item:hover {
+  background-color: #ffffff;
+  color: #374151;
+}
+
+.sub-submenu-item.active {
+  background-color: #ffffff;
+  color: #2563eb;
+  font-weight: 500;
+  border-left-color: #2563eb;
+}
+
+.sub-submenu-bullet {
+  margin-right: 0.75rem;
+  color: #d1d5db;
+  font-size: 0.7rem;
+  width: 3px;
+  height: 3px;
+  background-color: #d1d5db;
+  border-radius: 50%;
+}
+
+.sub-submenu-text {
+  color: #000000;
+  flex: 1;
+}
+
+.menu-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+}
+
+.menu-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.menu-icon-placeholder {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.menu-item:hover .menu-icon {
+  opacity: 1;
+  color: #374151;
+}
+
+.menu-item.active .menu-icon {
+  opacity: 1;
+  color: #2563eb;
+}
+
+.menu-text {
+  margin-left: 0.75rem;
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+/* ===== COLLAPSED SIDEBAR STYLES ===== */
+/* 
+ * Collapsed sidebar behavior:
+ * - Width: 80px (desktop), 70px (mobile) - Compact design with only toggle button
+ * - Logo is hidden, only sidebar toggle button is shown and centered
+ * - Menu items with dropdowns navigate to first page when clicked
+ * - Tooltips show menu names on hover
+ * - Clean, minimal UI without overlap issues
+ */
+
+/* Collapsed sidebar adjustments - reduced width since only showing toggle + icons */
+.sidebar-collapsed {
+  width: 80px !important;
+  min-width: 80px !important;
+}
+
+/* Hide text elements when collapsed */
+.sidebar-collapsed .menu-text,
+.sidebar-collapsed .submenu-text,
+.sidebar-collapsed .sub-submenu-text,
+.sidebar-collapsed .logo-text {
+  display: none;
+}
+
+/* Hide logo when collapsed - only show toggle button */
+.sidebar-collapsed .logo {
   display: none !important;
+}
+
+/* Also hide logo icon specifically */
+.sidebar-collapsed .logo-icon {
+  display: none !important;
+}
+
+/* Hide arrows when collapsed */
+.sidebar-collapsed .menu-arrow,
+.sidebar-collapsed .submenu-arrow-sub {
+  display: none !important;
+}
+
+/* Hide submenu and sub-submenu when collapsed */
+.sidebar-collapsed .submenu,
+.sidebar-collapsed .sub-submenu {
+  display: none;
+}
+
+/* Center menu items when collapsed */
+.sidebar-collapsed .menu-item {
+  justify-content: center;
+  padding: 0.75rem;
+  margin: 0.25rem 0.5rem;
+  border-radius: 12px;
+  position: relative;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 10;
+}
+
+/* Center menu icons when collapsed */
+.sidebar-collapsed .menu-icon {
+  margin-right: 0;
+  margin-left: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.sidebar-collapsed .menu-icon-placeholder {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+/* Remove transform on hover when collapsed */
+.sidebar-collapsed .menu-item:hover {
+  transform: none;
+}
+
+.sidebar-collapsed .menu-item.active {
+  transform: none;
+  border-left: none;
+  border: 2px solid #2563eb;
+}
+
+/* Logo section adjustments when collapsed - only show centered toggle button */
+.sidebar-collapsed .logo-section {
+  padding: 1rem;
+  justify-content: center;
+  flex-direction: row;
+  gap: 0;
+  align-items: center;
+}
+
+.sidebar-collapsed .sidebar-toggle {
+  width: 36px;
+  height: 36px;
+  padding: 0.5rem;
+  position: static;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Tooltip styles for collapsed menu items */
+.sidebar-collapsed .menu-item {
+  position: relative;
+  /* Ensure clicks work properly */
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.sidebar-collapsed .menu-item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  margin-left: 0.75rem;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+.sidebar-collapsed .menu-item::before {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-right-color: #1f2937;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
+  z-index: 5;
+}
+
+.sidebar-collapsed .menu-item:hover::after,
+.sidebar-collapsed .menu-item:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Menu parent styling when collapsed */
+.sidebar-collapsed .menu-parent {
+  padding: 0.75rem;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  margin: 0.25rem 0.5rem;
+  border-radius: 8px;
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.sidebar-collapsed .menu-parent::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  margin-left: 0.75rem;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+.sidebar-collapsed .menu-parent::before {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-right-color: #1f2937;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
+  z-index: 5;
+}
+
+.sidebar-collapsed .menu-parent:hover::after,
+.sidebar-collapsed .menu-parent:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== COLLAPSED SIDEBAR ANIMATIONS & IMPROVEMENTS ===== */
+
+/* Smooth width transition for sidebar */
+.sidebar.sidebar-collapsed {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Better spacing for collapsed state */
+.sidebar-collapsed .nav-menu {
+  padding: 0.5rem 0;
+}
+
+/* Improved active state for collapsed items */
+.sidebar-collapsed .menu-item.active {
+  background-color: #ffffff;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+/* Better hover effect for collapsed state */
+.sidebar-collapsed .menu-item:hover {
+  background-color: #ffffff;
+  color: #374151;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+/* Smooth icon transitions */
+.sidebar-collapsed .menu-icon {
+  transition: all 0.2s ease;
+}
+
+.sidebar-collapsed .menu-item:hover .menu-icon {
+  color: #1f2937;
+  transform: scale(1.1);
+}
+
+.sidebar-collapsed .menu-item.active .menu-icon {
+  color: #2563eb;
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments for collapsed sidebar */
+@media (max-width: 768px) {
+  .sidebar-collapsed {
+    width: 70px !important;
+    min-width: 70px !important;
+  }
+  
+  .sidebar-collapsed .menu-item {
+    padding: 0.5rem;
+    margin: 0.125rem 0.25rem;
+  }
+  
+  .sidebar-collapsed .logo-section {
+    padding: 0.75rem;
+  }
+  
+  .sidebar-collapsed .sidebar-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 0.4rem;
+    border-radius: 8px;
+  }
+  
+  .sidebar-collapsed .menu-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ===== SIDEBAR CLICK EVENTS FIX ===== */
+
+/* Ensure all clickable elements work in collapsed state */
+.sidebar-collapsed .menu-item,
+.sidebar-collapsed .menu-parent,
+.sidebar-collapsed .logo,
+.sidebar-collapsed .sidebar-toggle {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Ensure router-link works in collapsed state */
+.sidebar-collapsed .menu-item[href],
+.sidebar-collapsed a.menu-item {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+}
+
+/* Fix any overlay issues */
+.sidebar-collapsed .menu-item * {
+  pointer-events: none;
+}
+
+.sidebar-collapsed .menu-item {
+  pointer-events: auto !important;
 }
 
 /* ===== LAYOUT STYLES ===== */
@@ -1079,7 +1333,7 @@
 .admin-layout {
   display: flex;
   min-height: 100vh;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 /* Main Content */
@@ -1141,7 +1395,7 @@
 }
 
 .user-profile:hover {
-  background: #f2f5f7;
+  background: #ffffff;
 }
 
 .user-info {
@@ -1184,7 +1438,7 @@
 }
 
 .notifications-toggle:hover {
-  background: #f2f5f7;
+  background: #ffffff;
   color: #374151;
 }
 

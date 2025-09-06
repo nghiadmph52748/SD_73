@@ -528,11 +528,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
 import { Chart, registerables } from 'chart.js'
-import { exportToExcel, formatDataForExcel } from '../utils/xuatExcel.js'
-import { exportToCSV } from '../utils/xuatCSV.js'
+import { computed, onMounted, ref, watch } from 'vue'
 import { dashboardService } from '../services/response/bangDieuKhien.js'
+import { exportToCSV } from '../utils/xuatCSV.js'
+import { exportToExcel } from '../utils/xuatExcel.js'
 
 Chart.register(...registerables)
 
@@ -1142,7 +1142,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   border-radius: 12px;
 }
 
@@ -1160,7 +1160,7 @@ onMounted(async () => {
 }
 
 .metric-trend.neutral {
-  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   color: #6b7280;
 }
 
@@ -1254,7 +1254,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
 }
 
 .stat-content {
@@ -1288,7 +1288,7 @@ onMounted(async () => {
 }
 
 .stat-change.neutral {
-  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   color: #6b7280;
 }
 
@@ -1302,7 +1302,7 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   border-left: 3px solid #e2e8f0;
 }
@@ -1321,7 +1321,7 @@ onMounted(async () => {
 
 /* Modern Filter Section */
 .modern-filter-section {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   border-radius: 20px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -1589,7 +1589,7 @@ onMounted(async () => {
 }
 
 .modern-card {
-  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.8);
@@ -1908,7 +1908,7 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #ffffff;
   flex-shrink: 0;
 }
 
@@ -1940,7 +1940,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8fafc;
+  background: #ffffff;
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -1948,7 +1948,7 @@ onMounted(async () => {
 }
 
 .action-btn:hover {
-  background: #e2e8f0;
+  background: #ffffff;
 }
 
 .action-icon {
@@ -2024,12 +2024,12 @@ onMounted(async () => {
   gap: 1rem;
   padding: 1.25rem;
   border-radius: 16px;
-  background: #f8fafc;
+  background: #ffffff;
   transition: all 0.2s ease;
 }
 
 .product-item:hover {
-  background: #f1f5f9;
+  background: #ffffff;
   transform: translateX(4px);
 }
 
@@ -2167,13 +2167,13 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 10px;
   transition: all 0.2s ease;
 }
 
 .legend-item:hover {
-  background: #f1f5f9;
+  background: #ffffff;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
@@ -2246,7 +2246,7 @@ onMounted(async () => {
 
 .modern-quick-stat-card {
   position: relative;
-  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
   border-radius: 18px;
   padding: 0;
   overflow: hidden;
@@ -2385,7 +2385,7 @@ onMounted(async () => {
 
 .modern-progress-bar {
   height: 6px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 3px;
   overflow: hidden;
   position: relative;
@@ -2625,14 +2625,14 @@ onMounted(async () => {
 .skeleton-icon {
   width: 48px;
   height: 48px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 12px;
 }
 
 .skeleton-trend {
   width: 60px;
   height: 24px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 16px;
 }
 
@@ -2645,35 +2645,35 @@ onMounted(async () => {
 .skeleton-title {
   width: 80px;
   height: 14px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 4px;
 }
 
 .skeleton-value {
   width: 120px;
   height: 28px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 4px;
 }
 
 .skeleton-subtitle {
   width: 100px;
   height: 14px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 4px;
 }
 
 .skeleton-rank {
   width: 32px;
   height: 32px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 50%;
 }
 
 .skeleton-image {
   width: 48px;
   height: 48px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 12px;
 }
 
@@ -2687,21 +2687,21 @@ onMounted(async () => {
 .skeleton-name {
   width: 60%;
   height: 14px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 4px;
 }
 
 .skeleton-details {
   width: 40%;
   height: 12px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 4px;
 }
 
 .skeleton-trend-icon {
   width: 28px;
   height: 28px;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 50%;
 }
 
@@ -2715,7 +2715,7 @@ onMounted(async () => {
 .skeleton-chart-content {
   width: 90%;
   height: 80%;
-  background: #e2e8f0;
+  background: #ffffff;
   border-radius: 8px;
 }
 </style>

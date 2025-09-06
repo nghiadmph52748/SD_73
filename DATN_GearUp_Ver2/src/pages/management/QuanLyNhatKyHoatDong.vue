@@ -715,7 +715,7 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #ffffff;
   min-height: 40px;
 }
 
@@ -787,7 +787,7 @@ onMounted(() => {
 }
 
 .filter-reset-btn:hover {
-  background: #f9fafb;
+  background: #ffffff;
   color: #374151;
   border-color: #d1d5db;
 }
@@ -864,7 +864,7 @@ onMounted(() => {
 }
 
 .time-chip:hover {
-  background: #f9fafb;
+  background: #ffffff;
   border-color: #d1d5db;
 }
 
