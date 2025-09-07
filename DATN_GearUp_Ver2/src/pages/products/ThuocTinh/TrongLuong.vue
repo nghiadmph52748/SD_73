@@ -164,7 +164,7 @@
             class="btn btn-detail btn-icon btn-sm"
             title="Xem chi tiết"
           >
-            <i class="fas fa-eye"></i>
+            Chi tiết
           </button>
           <button
             v-on:click="fetchDelete(value.id)"
@@ -172,7 +172,7 @@
             :disabled="uploading"
             title="Xóa"
           >
-            <i class="fas fa-trash"></i>
+            Xóa
           </button>
         </td>
       </tr>

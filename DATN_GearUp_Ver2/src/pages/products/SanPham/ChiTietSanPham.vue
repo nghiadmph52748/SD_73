@@ -5,126 +5,139 @@
         <span class="product-text">Sản phẩm</span>
       </RouterLink>
       <span class="breadcrumb-separator">/</span>
-      <span class="current-breadcrumb">{{ currentProductName }}</span>
+      <span class="current-breadcrumb" v-if="currentProductName">{{
+        currentProductName
+      }}</span>
+      <span class="current-breadcrumb" v-else>Chi tiết sản phẩm</span>
     </div>
   </div>
 
   <!-- Modern Filter Section -->
   <div class="filter-section">
-    <div class="filter-card">
-      <div class="filter-content">
-        <div class="search-section">
-          <div class="input-group">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Tìm kiếm tên sản phẩm, màu sắc, kích thước..."
-              class="form-control search-input"
-            />
-            <button
-              v-if="searchQuery"
-              @click="searchQuery = ''"
-              class="clear-btn"
+    <!-- <div class="filter-card"> -->
+    <div class="filter-content">
+      <div class="search-section">
+        <div class="input-group">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Tìm kiếm tên sản phẩm, màu sắc, kích thước..."
+            class="form-control search-input"
+          />
+          <button
+            v-if="searchQuery"
+            @click="searchQuery = ''"
+            class="clear-btn"
+          >
+            <span>✕</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label class="filter-label">Màu sắc</label>
+          <select v-model="selectedMauSac" class="form-select">
+            <option value="">Tất cả màu sắc</option>
+            <option v-for="color in mauSacs" :key="color.id" :value="color.id">
+              {{ color.tenMauSac }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Kích thước</label>
+          <select v-model="selectedKichThuoc" class="form-select">
+            <option value="">Tất cả kích thước</option>
+            <option v-for="size in kichThuocs" :key="size.id" :value="size.id">
+              {{ size.tenKichThuoc }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Chất liệu</label>
+          <select v-model="selectedChatLieu" class="form-select">
+            <option value="">Tất cả chất liệu</option>
+            <option
+              v-for="material in chatLieus"
+              :key="material.id"
+              :value="material.id"
             >
-              <span>✕</span>
-            </button>
-          </div>
+              {{ material.tenChatLieu }}
+            </option>
+          </select>
         </div>
 
-        <div class="filters-grid">
-          <div class="filter-group">
-            <label class="filter-label">Màu sắc</label>
-            <select v-model="selectedMauSac" class="form-select">
-              <option value="">Tất cả màu sắc</option>
-              <option
-                v-for="color in mauSacs"
-                :key="color.id"
-                :value="color.id"
-              >
-                {{ color.tenMauSac }}
-              </option>
-            </select>
-          </div>
+        <div class="filter-group">
+          <label class="filter-label">Đế giày</label>
+          <select v-model="selectedDeGiay" class="form-select">
+            <option value="">Tất cả đế giày</option>
+            <option v-for="sole in deGiays" :key="sole.id" :value="sole.id">
+              {{ sole.tenDeGiay }}
+            </option>
+          </select>
+        </div>
+      </div>
 
-          <div class="filter-group">
-            <label class="filter-label">Kích thước</label>
-            <select v-model="selectedKichThuoc" class="form-select">
-              <option value="">Tất cả kích thước</option>
-              <option
-                v-for="size in kichThuocs"
-                :key="size.id"
-                :value="size.id"
-              >
-                {{ size.tenKichThuoc }}
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Chất liệu</label>
-            <select v-model="selectedChatLieu" class="form-select">
-              <option value="">Tất cả chất liệu</option>
-              <option
-                v-for="material in chatLieus"
-                :key="material.id"
-                :value="material.id"
-              >
-                {{ material.tenChatLieu }}
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Đế giày</label>
-            <select v-model="selectedDeGiay" class="form-select">
-              <option value="">Tất cả đế giày</option>
-              <option v-for="sole in deGiays" :key="sole.id" :value="sole.id">
-                {{ sole.tenDeGiay }}
-              </option>
-            </select>
-          </div>
+      <div class="filters-grid-2">
+        <div class="filter-group">
+          <label class="filter-label">Trọng lượng</label>
+          <select v-model="selectedTrongLuong" class="form-select">
+            <option value="">Tất cả trọng lượng</option>
+            <option
+              v-for="weight in trongLuongs"
+              :key="weight.id"
+              :value="weight.id"
+            >
+              {{ weight.tenTrongLuong }}
+            </option>
+          </select>
         </div>
 
-        <div class="filters-grid-2">
-          <div class="filter-group">
-            <label class="filter-label">Trọng lượng</label>
-            <select v-model="selectedTrongLuong" class="form-select">
-              <option value="">Tất cả trọng lượng</option>
-              <option
-                v-for="weight in trongLuongs"
-                :key="weight.id"
-                :value="weight.id"
-              >
-                {{ weight.tenTrongLuong }}
-              </option>
-            </select>
-          </div>
+        <div class="filter-group">
+          <label class="filter-label">Trạng thái</label>
+          <select v-model="statusFilter" class="form-select">
+            <option value="">Tất cả trạng thái</option>
+            <option value="false">Hoạt động</option>
+            <option value="true">Ngừng hoạt động</option>
+          </select>
+        </div>
 
-          <div class="filter-group">
-            <label class="filter-label">Trạng thái</label>
-            <select v-model="statusFilter" class="form-select">
-              <option value="">Tất cả trạng thái</option>
-              <option value="false">Hoạt động</option>
-              <option value="true">Ngừng hoạt động</option>
-            </select>
-          </div>
-
-          <div class="filter-actions">
-            <button @click="clearFiltersForEdit" class="btn btn-outline">
-              Đặt lại
-            </button>
-          </div>
+        <div class="filter-actions">
+          <button @click="clearFiltersForEdit" class="btn btn-outline">
+            Đặt lại
+          </button>
         </div>
       </div>
     </div>
+    <!-- </div> -->
   </div>
 
   <!-- Product Details Table -->
   <div class="card">
     <div class="card-header">
       <div class="table-header-content">
-        <h3 class="table-title">Danh sách biến thể sản phẩm</h3>
+        <h3 class="table-title">
+          {{
+            showAllVariants
+              ? "Danh sách tất cả biến thể sản phẩm"
+              : "Danh sách biến thể sản phẩm"
+          }}
+        </h3>
         <div class="table-actions">
+          <button
+            @click="toggleShowAllVariants"
+            class="btn-show-all-variants"
+            :class="{ active: showAllVariants }"
+            title="Hiển thị toàn bộ biến thể sản phẩm"
+          >
+            {{
+              showAllVariants
+                ? "Hiện biến thể sản phẩm này"
+                : "Hiện toàn bộ biến thể"
+            }}
+          </button>
           <button
             v-if="hasCheckedChiTietSanPhams"
             @click="saveAllCheckedChiTietSanPhamsFromPopup"
@@ -150,6 +163,7 @@
                   title="Chọn tất cả chi tiết sản phẩm"
                 />
               </th>
+              <th class="ma-col">Mã chi tiết sản phẩm</th>
               <th class="image-col">Ảnh sản phẩm</th>
               <th class="nha-san-xuat-col">Nhà SX</th>
               <th class="xuat-xu-col">Xuất xứ</th>
@@ -179,6 +193,14 @@
                   @change="toggleChiTietSanPhamSelection(detail.id)"
                   @click.stop
                 />
+              </td>
+              <td
+                class="ma-col"
+                :key="`ma-${detail.id}-${imageDataKey.timestamp}`"
+              >
+                <span class="ma-text">{{
+                  detail.maChiTietSanPham || "N/A"
+                }}</span>
               </td>
               <td
                 class="image-col"
@@ -328,29 +350,12 @@
               </td>
               <td class="action-col">
                 <div class="action-buttons">
-                  <div v-if="editingChiTietSanPhams.has(detail.id)">
-                    <button
-                      @click="saveInlineEdit(detail.id)"
-                      class="btn btn-success btn-sm"
-                      title="Hoàn thành cập nhật"
-                    >
-                      ✓
-                    </button>
-                    <button
-                      @click="cancelInlineEdit(detail.id)"
-                      class="btn btn-danger btn-sm"
-                      title="Hủy bỏ"
-                    >
-                      ✕
-                    </button>
-                  </div>
                   <button
-                    v-else
                     @click="startEdit(detail)"
-                    class="btn btn-secondary"
+                    class="btn btn-outline-primary"
                     title="Chỉnh sửa"
                   >
-                    ✏️
+                    Edit
                   </button>
                 </div>
               </td>
@@ -732,14 +737,14 @@
         </div>
       </div>
       <div class="image-selector-actions">
+        <button @click="closeImageSelectorForEdit" class="btn btn-outline">
+          Hủy
+        </button>
         <button
           @click="confirmImageSelectionForEditPopup"
           class="btn btn-primary"
         >
           Xác nhận
-        </button>
-        <button @click="closeImageSelectorForEdit" class="btn btn-outline">
-          Hủy
         </button>
       </div>
     </div>
@@ -750,33 +755,33 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import {
-    fetchAllChiTietDotGiamGia,
-    fetchUpdateChiTietDotGiamGia,
+  fetchAllChiTietDotGiamGia,
+  fetchUpdateChiTietDotGiamGia,
 } from "../../../services/GiamGia/ChiTietDotGiamGiaService";
 import { fetchAllDotGiamGia } from "../../../services/GiamGia/DotGiamGiaService";
 import {
-    fetchAllChiTietSanPham,
-    fetchAllChiTietSanPhamBySanPhamId,
-    fetchCreateChiTietSanPham,
-    fetchUpdateChiTietSanPham,
-    fetchUpdateStatusChiTietSanPham,
+  fetchAllChiTietSanPham,
+  fetchAllChiTietSanPhamBySanPhamId,
+  fetchCreateChiTietSanPham,
+  fetchUpdateChiTietSanPham,
+  fetchUpdateStatusChiTietSanPham,
 } from "../../../services/SanPham/ChiTietSanPhamService";
 import {
-    fetchAllSanPham,
-    fetchUpdateSanPham,
+  fetchAllSanPham,
+  fetchUpdateSanPham,
 } from "../../../services/SanPham/SanPhamService";
 import {
-    fetchAllAnhSanPham,
-    fetchCreateAnhSanPham,
-    fetchOneAnhSanPham,
-    fetchUpdateAnhSanPham,
-    fetchUpdateStatusAnhSanPham,
+  fetchAllAnhSanPham,
+  fetchCreateAnhSanPham,
+  fetchOneAnhSanPham,
+  fetchUpdateAnhSanPham,
+  fetchUpdateStatusAnhSanPham,
 } from "../../../services/ThuocTinh/AnhSanPhamService";
 import { fetchAllChatLieu } from "../../../services/ThuocTinh/ChatLieuService";
 import {
-    fetchAllChiTietSanPhamAnh,
-    fetchCreateMultipleChiTietSanPhamAnh,
-    fetchDeleteChiTietSanPhamAnh,
+  fetchAllChiTietSanPhamAnh,
+  fetchCreateMultipleChiTietSanPhamAnh,
+  fetchDeleteChiTietSanPhamAnh,
 } from "../../../services/ThuocTinh/ChiTietSanPhamAnhService";
 import { fetchAllDeGiay } from "../../../services/ThuocTinh/DeGiayService";
 import { fetchAllKichThuoc } from "../../../services/ThuocTinh/KichThuocService";
@@ -805,6 +810,7 @@ const availableImages = ref([]);
 const showSuccessPopup = ref(false);
 const successMessage = ref("");
 const sanPhams = ref([]);
+const showAllVariants = ref(false);
 
 // Inline editing variables
 const editingChiTietSanPhams = ref(new Map()); // Map để lưu nhiều chi tiết sản phẩm đang edit
@@ -884,7 +890,7 @@ onMounted(async () => {
     await fetchDotGiamGia();
 
     // 2. Fetch chi tiết sản phẩm TRƯỚC
-    await fetchChiTietSanPham(id);
+    await fetchChiTietSanPhamId(id);
 
     // 3. Fetch chi tiết đợt giảm giá SAU khi đã có chi tiết sản phẩm
     await fetchChiTietDotGiamGia();
@@ -1051,7 +1057,7 @@ const fetchDotGiamGia = async () => {
   }
 };
 
-const fetchChiTietSanPham = async (id) => {
+const fetchChiTietSanPhamId = async (id) => {
   try {
     if (id) {
       // Fetch all chi tiet san pham by san pham ID
@@ -1078,12 +1084,34 @@ const fetchChiTietDotGiamGia = async () => {
   }
 };
 
+const fetchChiTietSanPham = async () => {
+  try {
+    const response = await fetchAllChiTietSanPham();
+    chiTietSanPhams.value = response.data || [];
+  } catch (error) {
+    console.error("Error fetching chi tiet san pham:", error);
+  }
+};
+
+const toggleShowAllVariants = async () => {
+  showAllVariants.value = !showAllVariants.value;
+  const id = route.params.id;
+
+  if (showAllVariants.value) {
+    // Hiển thị tất cả biến thể
+    await fetchChiTietSanPham();
+  } else {
+    // Hiển thị biến thể của sản phẩm hiện tại
+    await fetchChiTietSanPhamId(id);
+  }
+};
 const fetchAll = async () => {
   try {
     await Promise.all([
       fetchSanPham(),
       fetchAnhSanPham(),
       fetchChiTietSanPhamAnh(),
+      fetchChiTietSanPham(),
       fetchMauSac(),
       fetchKichThuoc(),
       fetchDeGiay(),
@@ -1455,8 +1483,12 @@ const saveEditPopupFromPopup = async () => {
         null,
       trangThai: currentProduct.value?.trangThai || 1,
       deleted: currentProduct.value?.deleted || false,
+      createdAt: currentProduct.value?.createAt,
+      createBy: currentProduct.value?.createBy || 1,
     };
 
+
+    console.log(sanPhamData);
     // Kiểm tra dữ liệu trước khi update
     if (!sanPhamData.idNhaSanXuat) {
       console.error("❌ idNhaSanXuat is null! Cannot update product.");
@@ -3788,6 +3820,11 @@ const loadImagesForChiTietSanPham = async (chiTietSanPhamId) => {
   margin-top: 10px;
 }
 
+.table-container {
+  margin: 0 !important;
+  border: none !important;
+}
+
 .image-actions {
   display: flex;
   flex-direction: row;
@@ -4068,7 +4105,7 @@ const loadImagesForChiTietSanPham = async (chiTietSanPhamId) => {
   width: 100%;
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
   border-radius: 12px;
   border: 2px solid #e2e8f0;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -4175,7 +4212,6 @@ const loadImagesForChiTietSanPham = async (chiTietSanPhamId) => {
 }
 
 .custom-confirm-dialog .btn::before {
-  content: "";
   position: absolute;
   top: 0;
   left: -100%;
@@ -4288,7 +4324,7 @@ const loadImagesForChiTietSanPham = async (chiTietSanPhamId) => {
   z-index: 1000000 !important;
   transform: translateZ(0) !important;
   will-change: transform !important;
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%) !important;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%) !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.1) !important;
 }
@@ -4416,5 +4452,142 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ===== CHI TIẾT SẢN PHẨM TABLE WIDTH OPTIMIZATION ===== */
+
+/* Cột STT - cực kỳ nhỏ gọn */
+.product-table thead th {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+.product-table th.stt-col,
+.product-table .stt-col {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+}
+
+/* Cột mã chi tiết sản phẩm - siêu compact */
+.product-table th.ma-col,
+.product-table .ma-col {
+  width: 85px !important;
+  min-width: 85px !important;
+  max-width: 100px !important;
+}
+
+/* Cột ảnh - giảm xuống */
+.product-table th.image-col,
+.product-table .image-col {
+  width: 70px !important;
+  min-width: 70px !important;
+  max-width: 70px !important;
+}
+
+/* Cột nhà sản xuất và xuất xứ - siêu compact */
+.product-table th.nha-san-xuat-col,
+.product-table .nha-san-xuat-col,
+.product-table th.xuat-xu-col,
+.product-table .xuat-xu-col {
+  width: 55px !important;
+  min-width: 55px !important;
+  max-width: 70px !important;
+}
+
+/* Căn giữa nội dung cột nhà sản xuất */
+.product-table th.nha-san-xuat-col,
+.product-table .nha-san-xuat-col {
+  text-align: center !important;
+}
+
+/* Cho phép nội dung xuống dòng khi không đủ chỗ mà không cắt chữ */
+.product-table .nha-san-xuat-col,
+.product-table .xuat-xu-col,
+.product-table .color-col,
+.product-table .size-col,
+.product-table .sole-col,
+.product-table .material-col,
+.product-table .weight-col,
+.product-table .gia-sau-giam-col {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  white-space: normal !important;
+  line-height: 1.2 !important;
+  padding: 4px !important;
+  hyphens: auto !important;
+}
+
+/* Các cột thuộc tính (màu, kích thước, đế giày, chất liệu, trọng lượng) - siêu compact */
+.product-table th.color-col,
+.product-table .color-col,
+.product-table th.size-col,
+.product-table .size-col,
+.product-table th.sole-col,
+.product-table .sole-col,
+.product-table th.material-col,
+.product-table .material-col,
+.product-table th.weight-col,
+.product-table .weight-col {
+  width: 50px !important;
+  min-width: 50px !important;
+  max-width: 65px !important;
+}
+
+/* Cột số lượng - siêu compact */
+.product-table th.quantity-col,
+.product-table .quantity-col {
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 75px !important;
+}
+
+/* Cột giá bán - compact */
+.product-table th.price-col,
+.product-table .price-col {
+  width: 75px !important;
+  min-width: 75px !important;
+  max-width: 90px !important;
+}
+
+/* Cột giảm giá và giá sau giảm - siêu compact */
+.product-table th.giam-gia-col,
+.product-table .giam-gia-col,
+.product-table th.gia-sau-giam-col,
+.product-table .gia-sau-giam-col {
+  width: 65px !important;
+  min-width: 65px !important;
+  max-width: 80px !important;
+}
+
+/* Cột trạng thái - compact */
+.product-table th.status-col,
+.product-table .status-col {
+  width: 75px !important;
+  min-width: 75px !important;
+  max-width: 90px !important;
+}
+
+/* Cột thao tác - compact */
+.product-table th.action-col,
+.product-table .action-col {
+  width: 85px !important;
+  min-width: 85px !important;
+  max-width: 100px !important;
+}
+
+/* Container để đảm bảo table không vượt quá màn hình */
+.product-management {
+  width: 100%;
+  overflow-x: auto;
+  max-width: 100vw;
+}
+
+.product-table {
+  width: 100%;
+  min-width: 950px; /* Tổng width các cột */
+  table-layout: fixed; /* Cố định width cột */
+}
+
+.btn.btn-outline-primary {
+  color: rgb(255, 255, 255) !important;
 }
 </style>

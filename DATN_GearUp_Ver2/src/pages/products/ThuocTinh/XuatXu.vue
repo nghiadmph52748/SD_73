@@ -76,7 +76,7 @@
       <div class="modal-header add-header">
         <h3><i class="fas"></i> Thêm Xuất Xứ Mới</h3>
         <button @click="closeAddForm" class="modal-close">
-          <i class="fas"></i>
+          <i class="fas fa-times"></i>
         </button>
       </div>
       <div class="modal-body">

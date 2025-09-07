@@ -22,13 +22,41 @@
             <div class="product-form-grid">
               <div class="product-form-field ten-san-pham">
                 <label class="modern-label">Tên sản phẩm *</label>
-                <input
-                  type="text"
-                  v-model="productForm.tenSanPham"
-                  class="modern-input"
-                  placeholder="Nhập tên sản phẩm"
-                  required
-                />
+                <div class="input-with-dropdown">
+                  <input
+                    type="text"
+                    v-model="productForm.tenSanPham"
+                    class="modern-input"
+                    placeholder="Nhập hoặc chọn tên sản phẩm"
+                    @input="filterTenSanPham"
+                    @focus="showTenSanPhamDropdown = true"
+                    required
+                  />
+                  <div v-if="showTenSanPhamDropdown" class="dropdown-list">
+                    <div
+                      v-for="tenSanPham in filteredTenSanPhams"
+                      :key="tenSanPham.id"
+                      class="dropdown-item"
+                      @click="selectTenSanPham(tenSanPham)"
+                    >
+                      {{ tenSanPham.tenSanPham }}
+                    </div>
+                    <div
+                      v-if="
+                        productForm.tenSanPham &&
+                        !filteredTenSanPhams.find(
+                          (item) =>
+                            item.tenSanPham.toLowerCase() ===
+                            productForm.tenSanPham.toLowerCase()
+                        )
+                      "
+                      class="dropdown-item create-new"
+                      @click="createNewTenSanPham"
+                    >
+                      Thêm mới "{{ productForm.tenSanPham }}"
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <!-- Các trường khác chia thành 2 cột -->
@@ -807,41 +835,41 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { fetchCreateChiTietSanPham } from "../../../services/SanPham/ChiTietSanPhamService";
 import {
-    fetchAllSanPham,
-    fetchCreateSanPham,
+  fetchAllSanPham,
+  fetchCreateSanPham,
 } from "../../../services/SanPham/SanPhamService";
 import {
-    fetchAllAnhSanPham,
-    fetchCreateAnhSanPham,
+  fetchAllAnhSanPham,
+  fetchCreateAnhSanPham,
 } from "../../../services/ThuocTinh/AnhSanPhamService";
 import {
-    fetchAllChatLieu,
-    fetchCreateChatLieu,
+  fetchAllChatLieu,
+  fetchCreateChatLieu,
 } from "../../../services/ThuocTinh/ChatLieuService";
 import { fetchCreateMultipleChiTietSanPhamAnh } from "../../../services/ThuocTinh/ChiTietSanPhamAnhService";
 import {
-    fetchAllDeGiay,
-    fetchCreateDeGiay,
+  fetchAllDeGiay,
+  fetchCreateDeGiay,
 } from "../../../services/ThuocTinh/DeGiayService";
 import {
-    fetchAllKichThuoc,
-    fetchCreateKichThuoc,
+  fetchAllKichThuoc,
+  fetchCreateKichThuoc,
 } from "../../../services/ThuocTinh/KichThuocService";
 import {
-    fetchAllMauSac,
-    fetchCreateMauSac,
+  fetchAllMauSac,
+  fetchCreateMauSac,
 } from "../../../services/ThuocTinh/MauSacService";
 import {
-    fetchAllNhaSanXuat,
-    fetchCreateNhaSanXuat,
+  fetchAllNhaSanXuat,
+  fetchCreateNhaSanXuat,
 } from "../../../services/ThuocTinh/NhaSanXuatService";
 import {
-    fetchAllTrongLuong,
-    fetchCreateTrongLuong,
+  fetchAllTrongLuong,
+  fetchCreateTrongLuong,
 } from "../../../services/ThuocTinh/TrongLuongService";
 import {
-    fetchAllXuatXu,
-    fetchCreateXuatXu,
+  fetchAllXuatXu,
+  fetchCreateXuatXu,
 } from "../../../services/ThuocTinh/XuatXuService";
 
 const router = useRouter();
@@ -883,6 +911,9 @@ const showAnhPopup = ref(false);
 // Selected attributes
 const selectedMauSacs = ref([]);
 const selectedKichThuocs = ref([]);
+
+// Selected product from dropdown (for adding variants to existing product)
+const selectedProductFromDropdown = ref(null);
 
 // Data cho ảnh sản phẩm
 const currentEditingVariant = ref({ mauIndex: -1, kichIndex: -1 });
@@ -955,6 +986,9 @@ const resetForm = () => {
   showXuatXuDropdown.value = false;
   showChatLieuDropdown.value = false;
   showDeGiayDropdown.value = false;
+
+  // Reset selected product from dropdown
+  selectedProductFromDropdown.value = null;
 
   selectedMauSacs.value = [];
   selectedKichThuocs.value = [];
@@ -1195,6 +1229,7 @@ const filterDeGiay = () => {
 // Select functions
 const selectTenSanPham = (tenSanPham) => {
   productForm.value.tenSanPham = tenSanPham.tenSanPham;
+  selectedProductFromDropdown.value = { ...tenSanPham }; // Lưu toàn bộ thông tin sản phẩm được chọn
   showTenSanPhamDropdown.value = false;
 };
 
@@ -1228,6 +1263,7 @@ const createNewTenSanPham = async () => {
     };
     await fetchCreateSanPham(newTenSanPham);
     await fetchTenSanPham();
+    selectedProductFromDropdown.value = null; // Reset vì tạo sản phẩm mới
     showTenSanPhamDropdown.value = false;
   } catch (error) {
     console.error("Error creating ten san pham:", error);
@@ -1853,6 +1889,115 @@ const handleClickOutside = (event) => {
   }
 };
 
+// Function to add variants to existing product
+const addVariantsToExistingProduct = async (existingProductId) => {
+  try {
+    const idDeGiay = await getDeGiayId(productForm.value.tenDeGiay);
+    const idChatLieu = await getChatLieuId(productForm.value.tenChatLieu);
+
+    // Validate common data
+    if (!idDeGiay) {
+      throw new Error("Thiếu thông tin đế giày!");
+    }
+    if (!idChatLieu) {
+      throw new Error("Thiếu thông tin chất liệu!");
+    }
+
+    // Tạo biến thể cho sản phẩm đã tồn tại
+    for (let i = 0; i < selectedMauSacs.value.length; i++) {
+      for (let j = 0; j < selectedKichThuocs.value.length; j++) {
+        const variant = productVariants.value[i][j];
+
+        const trongLuongId = await getTrongLuongId(variant.trongLuong);
+
+        if (!trongLuongId) {
+          throw new Error(
+            `Thiếu thông tin trọng lượng cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}`
+          );
+        }
+
+        const variantData = {
+          idSanPham: existingProductId,
+          idKichThuoc: selectedKichThuocs.value[j].id,
+          idMauSac: selectedMauSacs.value[i].id,
+          idDeGiay: idDeGiay,
+          idChatLieu: idChatLieu,
+          idTrongLuong: trongLuongId,
+          soLuong: variant.soLuong,
+          giaBan: variant.giaBan,
+          trangThai: true,
+          deleted: false,
+          createAt: new Date().toISOString().split("T")[0],
+          createBy: 1,
+          updateAt: new Date().toISOString().split("T")[0],
+          updateBy: 1,
+        };
+
+        // Gọi API tạo biến thể sản phẩm
+        const createdVariant = await fetchCreateChiTietSanPham(variantData);
+
+        if (!createdVariant || !createdVariant.id) {
+          console.error(
+            `Không thể tạo biến thể ${i}-${j}: Thiếu ID trong response`,
+            createdVariant
+          );
+          continue;
+        }
+
+        // Xử lý ảnh cho biến thể nếu cần
+        if (variant.anh && variant.anh.length > 0) {
+          try {
+            const uploadResults = await uploadMultipleImages(variant.anh);
+
+            const anhIdsToLink = [];
+            variant.anh.forEach((anh) => {
+              if (anh.type === "database" && anh.id) {
+                anhIdsToLink.push(anh.id);
+              }
+            });
+
+            uploadResults.forEach((result) => {
+              if (result.success && result.anhSanPhamId) {
+                anhIdsToLink.push(result.anhSanPhamId);
+              }
+            });
+
+            if (anhIdsToLink.length > 0) {
+              const chiTietSanPhamAnhData = {
+                idChiTietSanPham: createdVariant.id,
+                idAnhSanPhamList: anhIdsToLink,
+                trangThai: true,
+                deleted: false,
+                createAt: new Date().toISOString().split("T")[0],
+                createBy: 1,
+                updateAt: new Date().toISOString().split("T")[0],
+                updateBy: 1,
+              };
+
+              await fetchCreateMultipleChiTietSanPhamAnh(chiTietSanPhamAnhData);
+            }
+          } catch (error) {
+            console.error(`Lỗi khi xử lý ảnh cho biến thể ${i}-${j}:`, error);
+          }
+        }
+      }
+    }
+
+    successMessage.value = `Đã thêm biến thể mới cho sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" thành công!`;
+    showSuccessModal.value = true;
+
+    // Reset form after successful creation
+    resetForm();
+  } catch (error) {
+    console.error("❌ Error adding variants to existing product:", error);
+    let errorMessage = "Có lỗi xảy ra khi thêm biến thể!";
+    if (error.message.includes("trọng lượng")) {
+      errorMessage = error.message;
+    }
+    alert(errorMessage);
+  }
+};
+
 // Save product function
 const saveProduct = async () => {
   try {
@@ -1916,6 +2061,23 @@ const saveProduct = async () => {
           return;
         }
       }
+    }
+
+    // Kiểm tra xem có sản phẩm được chọn từ dropdown không
+    if (selectedProductFromDropdown.value) {
+      // Thêm biến thể cho sản phẩm đã tồn tại
+      const confirmed = confirm(
+        `Sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" đã tồn tại. Bạn có muốn thêm biến thể mới cho sản phẩm này không?\n\nNếu chọn "OK": Thêm biến thể cho sản phẩm cũ\nNếu chọn "Cancel": Tạo sản phẩm mới với tên này`
+      );
+
+      if (confirmed) {
+        // Thêm biến thể cho sản phẩm cũ
+        await addVariantsToExistingProduct(
+          selectedProductFromDropdown.value.id
+        );
+        return;
+      }
+      // Nếu không xác nhận, tiếp tục tạo sản phẩm mới
     }
 
     // Tạo dữ liệu sản phẩm chính trước
@@ -2103,7 +2265,7 @@ const saveProduct = async () => {
       }
     }
 
-    successMessage.value = "Sản phẩm đã được tạo thành công!";
+    successMessage.value = "Sản phẩm mới đã được tạo thành công!";
     showSuccessModal.value = true;
 
     // Reset form after successful creation

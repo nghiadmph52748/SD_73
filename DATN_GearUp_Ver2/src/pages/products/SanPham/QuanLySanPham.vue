@@ -10,7 +10,7 @@
     <div class="product-management">
       <!-- Modern Filter Section -->
       <div class="filter-section">
-        <div class="filter-card">
+        <!-- <div class="filter-card"> -->
           <div class="filter-content">
             <!-- Search và Actions cùng dòng -->
             <div class="search-actions-row">
@@ -70,7 +70,7 @@
             </div>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
 
     <!-- Products Table -->
@@ -107,6 +107,7 @@
               <th>Mã sản phẩm</th>
               <th>Tên sản phẩm</th>
               <th>Số lượng biến thể</th>
+              <th>Khoảng giá</th>
               <th>Ngày tạo</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
@@ -146,6 +147,7 @@
               <td style="text-align: center !important">
                 {{ product.soLuongBienThe }}
               </td>
+              <td>{{ product.giaNhoNhat !== null && product.giaLonNhat !== null ? product.giaNhoNhat + " - " + product.giaLonNhat : "N/A" }}</td>
               <td>{{ product.createAt }}</td>
               <td>
                 <div v-if="editingProducts.has(product.id)" class="inline-edit">
@@ -308,6 +310,7 @@ const fetchAllData = async () => {
   try {
     const res = await fetchAllSanPham();
     products.value = res.data;
+    console.log(products.value);
   } catch (error) {
     console.error("Error fetching products:", error);
   }
@@ -411,6 +414,7 @@ const exportProductsToExcel = () => {
       idNhaSanXuat: "Nhà sản xuất",
       idXuatXu: "Xuất xứ",
       soLuongBienThe: "Số lượng biến thể",
+      giaBan: "Khoảng giá",
       trangThai: "Trạng thái",
       createAt: "Ngày tạo",
       updateAt: "Ngày cập nhật",
@@ -422,6 +426,7 @@ const exportProductsToExcel = () => {
       idNhaSanXuat: item.idNhaSanXuat || "N/A",
       idXuatXu: item.idXuatXu || "N/A",
       soLuongBienThe: item.soLuongBienThe || "N/A",
+      giaBan: item.giaNhoNhat + " - " + item.giaLonNhat || "N/A",
       trangThai: item.trangThai === true ? "Đang bán" : "Tạm ngừng bán",
       createAt: item.createAt
         ? new Date(item.createAt).toLocaleDateString("vi-VN")

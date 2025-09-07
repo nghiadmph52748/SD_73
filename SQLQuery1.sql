@@ -1,6 +1,6 @@
-﻿create database GearUp
+﻿create database GearUp1
 go
-use GearUp
+use GearUp1
 go
 create table xuat_xu(
 	id int identity(1,1) primary key,
@@ -139,6 +139,7 @@ create table chi_tiet_san_pham(
 	id_de_giay int not null,
 	id_chat_lieu int not null,
 	id_trong_luong int not null,
+	ma_chi_tiet_san_pham AS 'CTSP' + RIGHT('00000' + CAST(ID AS VARCHAR(5)), 5) PERSISTED,
 	so_luong int default 0 CHECK (so_luong >= 0),
 	gia_ban decimal(18,2) CHECK (gia_ban >= 0),
 	trang_thai bit default 1,
@@ -477,37 +478,17 @@ insert into chi_tiet_san_pham (id_san_pham, id_mau_sac, id_kich_thuoc, id_de_gia
 (4, 5, 5, 4, 4, 4, 30, 2200000, 1, N'Giày casual phong cách', 0, GETDATE(), 1)
 go
 
--- 10. Dữ liệu ảnh sản phẩm
-insert into anh_san_pham (duong_dan_anh, loai_anh, mo_ta, trang_thai, deleted, create_at, create_by) values
-('/images/nike-airmax-270-black.jpg', 'main', N'Ảnh chính giày Nike đen', 1, 0, GETDATE(), 1),
-('/images/nike-airmax-270-white.jpg', 'main', N'Ảnh chính giày Nike trắng', 1, 0, GETDATE(), 1),
-('/images/adidas-ultraboost-red.jpg', 'main', N'Ảnh chính giày Adidas đỏ', 1, 0, GETDATE(), 1),
-('/images/puma-rsx-blue.jpg', 'main', N'Ảnh chính giày Puma xanh', 1, 0, GETDATE(), 1),
-('/images/newbalance-574-green.jpg', 'main', N'Ảnh chính giày New Balance xanh lá', 1, 0, GETDATE(), 1)
-go
-
--- 11. Dữ liệu chi tiết ảnh sản phẩm
-insert into chi_tiet_san_pham_anh (id_chi_tiet_san_pham, id_anh_san_pham, trang_thai, deleted, create_at, create_by) values
-(1, 1, 1, 0, GETDATE(), 1),
-(2, 2, 1, 0, GETDATE(), 1),
-(3, 3, 1, 0, GETDATE(), 1),
-(4, 4, 1, 0, GETDATE(), 1),
-(5, 5, 1, 0, GETDATE(), 1)
-go
-
 -- 12. Dữ liệu quyền hạn
 insert into quyen_han (ten_quyen_han, trang_thai, deleted, create_at, create_by) values
-(N'Admin', 1, 0, GETDATE(), 1),
-(N'Nhân viên bán hàng', 1, 0, GETDATE(), 1),
-(N'Nhân viên kho', 1, 0, GETDATE(), 1),
+(N'Nhân viên', 1, 0, GETDATE(), 1),
 (N'Quản lý', 1, 0, GETDATE(), 1)
 go
 
 -- 13. Dữ liệu nhân viên
 insert into nhan_vien (id_quyen_han, ten_nhan_vien, ten_tai_khoan, mat_khau, email, so_dien_thoai, ngay_sinh, ghi_chu, thanh_pho, quan, phuong, dia_chi_cu_the, cccd, trang_thai, deleted, create_at, create_by) values
-(1, N'Nguyễn Văn Admin', 'admin', 'admin123', 'admin@gearup.com', '0123456789', '1990-01-01', N'Quản trị viên hệ thống', N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng', N'Số 1 Đường ABC', '123456789012', 1, 0, GETDATE(), 1),
-(2, N'Trần Thị Bán Hàng', 'banhang', 'banhang123', 'banhang@gearup.com', '0987654321', '1995-05-15', N'Nhân viên bán hàng', N'Hà Nội', N'Đống Đa', N'Láng Hạ', N'Số 2 Đường XYZ', '987654321098', 1, 0, GETDATE(), 1),
-(3, N'Lê Văn Kho', 'kho', 'kho123', 'kho@gearup.com', '0111222333', '1992-08-20', N'Nhân viên quản lý kho', N'Hà Nội', N'Thanh Xuân', N'Thanh Xuân Bắc', N'Số 3 Đường DEF', '456789123012', 1, 0, GETDATE(), 1)
+(2, N'Nguyễn Văn Admin', 'admin', 'admin123', 'admin@gearup.com', '0123456789', '1990-01-01', N'Quản trị viên hệ thống', N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng', N'Số 1 Đường ABC', '123456789012', 1, 0, GETDATE(), 1),
+(1, N'Trần Thị Bán Hàng', 'banhang', 'banhang123', 'banhang@gearup.com', '0987654321', '1995-05-15', N'Nhân viên bán hàng', N'Hà Nội', N'Đống Đa', N'Láng Hạ', N'Số 2 Đường XYZ', '987654321098', 1, 0, GETDATE(), 1),
+(1, N'Lê Văn Kho', 'kho', 'kho123', 'kho@gearup.com', '0111222333', '1992-08-20', N'Nhân viên quản lý kho', N'Hà Nội', N'Thanh Xuân', N'Thanh Xuân Bắc', N'Số 3 Đường DEF', '456789123012', 1, 0, GETDATE(), 1)
 go
 
 -- 14. Dữ liệu khách hàng
@@ -603,5 +584,3 @@ insert into thong_tin_don_hang (id_hoa_don, id_trang_thai_don_hang, thoi_gian, g
 (3, 1, GETDATE(), N'Đơn hàng mới được tạo', 1, 0),
 (3, 5, DATEADD(minute, 15, GETDATE()), N'Đơn hàng đã hoàn thành', 1, 0)
 go
-
-select * from chat_lieu

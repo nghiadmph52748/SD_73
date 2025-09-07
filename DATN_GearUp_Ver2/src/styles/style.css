@@ -44,7 +44,7 @@
   --primary-color: #22c55e;
   --primary-light: #4ade80;
   --primary-dark: #16a34a;
-  --secondary-color: #64748b;
+  --secondary-color: #24aa4e;
   --accent-color: #f59e0b;
   --success-color: #10b981;
   --warning-color: #f59e0b;
@@ -336,7 +336,7 @@ a:hover {
 }
 
 /* Buttons - GearUp Design System */
-.btn {
+/* .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -354,7 +354,7 @@ a:hover {
   text-decoration: none;
   min-height: 40px;
   font-family: var(--font-family-base);
-}
+} */
 
 .btn:disabled {
   opacity: 0.6;
