@@ -168,14 +168,14 @@
                     @click="viewCoupon(coupon)"
                     title="Xem chi tiết"
                   >
-                    👁️
+                    <!-- icon: view -->
                   </button>
                   <button
                     class="action-btn edit-btn"
                     @click="editCoupon(coupon)"
                     title="Chỉnh sửa"
                   >
-                    ✏️
+                    <!-- icon: edit -->
                   </button>
                   <button
                     class="action-btn delete-btn"
@@ -184,7 +184,7 @@
                     :disabled="coupon.deleted"
                     :style="{ opacity: coupon.deleted ? 0.3 : 1 }"
                   >
-                    🗑️
+                    <!-- icon: delete -->
                   </button>
                 </div>
               </td>
@@ -265,7 +265,7 @@
               <!-- Basic Information Section -->
             <div class="form-section-new">
               <div class="section-header-new">
-                <div class="section-icon-new">📋</div>
+                <div class="section-icon-new"><!-- icon: clipboard --></div>
                 <h4 class="section-title-new">Thông tin cơ bản</h4>
                 </div>
               <div class="form-grid-new">
@@ -294,7 +294,7 @@
               <!-- Discount Information Section -->
             <div class="form-section-new">
               <div class="section-header-new">
-                <div class="section-icon-new">💰</div>
+                <div class="section-icon-new"><!-- icon: money --></div>
                 <h4 class="section-title-new">Thông tin giảm giá</h4>
                 </div>
               <div class="form-grid-new">
@@ -327,7 +327,7 @@
                       required
                     />
                   <div v-if="showDiscountError" class="error-message-new">
-                      ⚠️ Giảm giá phần trăm không được vượt quá 100%
+                      <!-- icon: warning --> Giảm giá phần trăm không được vượt quá 100%
                     </div>
                   </div>
                 <div class="form-item-new">
@@ -356,7 +356,7 @@
               <!-- Usage Information Section -->
             <div class="form-section-new">
               <div class="section-header-new">
-                <div class="section-icon-new">📊</div>
+                <div class="section-icon-new"><!-- icon: chart --></div>
                 <h4 class="section-title-new">Thông tin sử dụng</h4>
                 </div>
               
@@ -416,7 +416,7 @@
                         availableCustomers.length === 0
                       "
                     >
-                      ✅ Chọn hết
+                      <!-- icon: check --> Chọn hết
                     </button>
                     <button
                       type="button"
@@ -424,7 +424,7 @@
                       @click="clearAllCustomers"
                       :disabled="selectedCustomers.length === 0"
                     >
-                      ❌ Bỏ chọn hết
+                      <!-- icon: close --> Bỏ chọn hết
                     </button>
                   </div>
 
@@ -515,7 +515,7 @@
               <!-- Status Section (only for edit) -->
             <div class="form-section-new" v-if="showEditModal">
               <div class="section-header-new">
-                <div class="section-icon-new">⚙️</div>
+                <div class="section-icon-new"><!-- icon: settings --></div>
                 <h4 class="section-title-new">Trạng thái</h4>
                 </div>
               <div class="form-grid-new">
@@ -551,7 +551,7 @@
             Hủy
           </button>
           <button class="modal-btn-new save-btn" @click="saveCoupon">
-            <span class="btn-icon-new">💾</span>
+            <span class="btn-icon-new"><!-- icon: save --></span>
             {{ showAddModal ? "Tạo phiếu giảm giá" : "Cập nhật" }}
           </button>
         </div>
@@ -593,7 +593,7 @@
             <!-- Basic Information Section -->
             <div class="detail-section-new">
               <div class="section-header-new">
-                <div class="section-icon-new">📋</div>
+                <div class="section-icon-new"><!-- icon: clipboard --></div>
                 <h4 class="section-title-new">Thông tin cơ bản</h4>
               </div>
               <div class="detail-grid-new">
@@ -629,7 +629,7 @@
             <!-- Discount Information Section -->
             <div class="detail-section-new">
               <div class="section-header-new">
-                <div class="section-icon-new">💰</div>
+                <div class="section-icon-new"><!-- icon: money --></div>
                 <h4 class="section-title-new">Thông tin giảm giá</h4>
               </div>
               <div class="detail-grid-new">
@@ -671,7 +671,7 @@
             <!-- Usage Information Section -->
             <div class="detail-section-new">
               <div class="section-header-new">
-                <div class="section-icon-new">📊</div>
+                <div class="section-icon-new"><!-- icon: chart --></div>
                 <h4 class="section-title-new">Thông tin sử dụng</h4>
               </div>
               <div class="detail-grid-new">
@@ -748,7 +748,7 @@
             <!-- Applied Customers Section -->
             <div class="detail-section-new" v-if="getCustomerCountForCoupon(selectedCoupon.id) > 0">
               <div class="section-header-new">
-                <div class="section-icon-new">👥</div>
+                <div class="section-icon-new"><!-- icon: users --></div>
                 <h4 class="section-title-new">Khách hàng được áp dụng</h4>
               </div>
               <div class="detail-grid-new">
@@ -768,7 +768,7 @@
             class="btn btn-primary"
             @click="editFromDetail(selectedCoupon)"
           >
-            <span class="btn-icon">✏️</span>
+            <span class="btn-icon"><!-- icon: edit --></span>
             Chỉnh sửa
           </button>
         </div>
@@ -785,7 +785,7 @@
         <!-- Header -->
         <div class="notification-header-new" :class="notificationData.type">
           <div class="notification-icon-new">
-            <span v-if="notificationData.type === 'success'" class="success-icon">✓</span>
+            <span v-if="notificationData.type === 'success'" class="success-icon"><!-- icon: checkmark --></span>
             <span v-else class="error-icon">✕</span>
           </div>
           <div class="notification-title-new">
@@ -876,7 +876,7 @@
         <!-- Footer -->
         <div class="notification-footer-new">
           <button class="notification-btn-new" @click="closeNotificationModal">
-            <span class="btn-icon-new">✓</span>
+            <span class="btn-icon-new"><!-- icon: checkmark --></span>
             Đã hiểu
           </button>
         </div>
@@ -891,13 +891,13 @@
     >
       <div class="modal-content delete-modal" @click.stop>
         <div class="delete-header">
-          <div class="delete-icon">🗑️</div>
+          <div class="delete-icon"><!-- icon: delete --></div>
           <h3>Xác nhận xóa phiếu giảm giá</h3>
         </div>
 
         <div class="delete-body">
           <div class="delete-warning">
-            <div class="warning-icon">⚠️</div>
+            <div class="warning-icon"><!-- icon: warning --></div>
             <p class="warning-text">
               Bạn có chắc chắn muốn xóa phiếu giảm giá
               <strong>"{{ deleteCouponData?.tenPhieuGiamGia }}"</strong>?
@@ -944,7 +944,7 @@
           </div>
 
           <div class="delete-consequences">
-            <h4>⚠️ Hậu quả khi xóa:</h4>
+            <h4><!-- icon: warning --> Hậu quả khi xóa:</h4>
             <ul class="consequences-list">
               <li>Phiếu giảm giá sẽ bị vô hiệu hóa hoàn toàn</li>
               <li>Không thể khôi phục lại sau khi xóa</li>
@@ -956,11 +956,11 @@
 
         <div class="delete-footer">
           <button class="btn btn-outline" @click="closeDeleteModal">
-            <span class="btn-icon">❌</span>
+            <span class="btn-icon"><!-- icon: close --></span>
             Hủy bỏ
           </button>
           <button class="btn btn-danger" @click="confirmDelete">
-            <span class="btn-icon">🗑️</span>
+            <span class="btn-icon"><!-- icon: delete --></span>
             Xác nhận xóa
           </button>
         </div>
@@ -1049,15 +1049,15 @@ const selectedCustomers = ref([]);
 // ===== FETCH FUNCTIONS =====
 const fetchPGG = async () => {
   try {
-    console.log("🔄 Fetching fresh coupon data from backend...");
+    console.log("<!-- icon: refresh --> Fetching fresh coupon data from backend...");
     console.log("Before fetch - coupons.value:", JSON.parse(JSON.stringify(coupons.value)));
     
     // Use the working version's approach
     const response = await dichVuPhieuGiamGia.layTatCa();
-    console.log("📥 Received raw coupon data:", response);
-    console.log("📋 Sample item structure:", response[0]);
-    console.log("🔍 Debug trangThai field:", response[0]?.trangThai, typeof response[0]?.trangThai);
-    console.log("🔍 All fields with 'trang' in name:", Object.keys(response[0] || {}).filter(key => key.toLowerCase().includes('trang')));
+    console.log("<!-- icon: import --> Received raw coupon data:", response);
+    console.log("<!-- icon: clipboard --> Sample item structure:", response[0]);
+    console.log("<!-- icon: search --> Debug trangThai field:", response[0]?.trangThai, typeof response[0]?.trangThai);
+    console.log("<!-- icon: search --> All fields with 'trang' in name:", Object.keys(response[0] || {}).filter(key => key.toLowerCase().includes('trang')));
     
     // Convert trangThai to proper boolean if it's coming as 0/1
     const processedResponse = response.map(coupon => ({
@@ -1071,9 +1071,9 @@ const fetchPGG = async () => {
     
     // Validate và cập nhật trạng thái sau khi fetch dữ liệu
     await validateAllCoupons();
-    console.log("✅ Coupons data updated successfully");
+    console.log("<!-- icon: check --> Coupons data updated successfully");
   } catch (error) {
-    console.error("❌ Error fetching phieu giam gia: ", error);
+    console.error("<!-- icon: close --> Error fetching phieu giam gia: ", error);
   }
 };
 
@@ -1133,7 +1133,7 @@ const getSimpleStatus = (coupon) => {
 // ===== COMPUTED PROPERTIES =====
 // Apply all filters first
 const allFilteredCoupons = computed(() => {
-  console.log("🔄 Computing allFilteredCoupons...");
+  console.log("<!-- icon: refresh --> Computing allFilteredCoupons...");
   console.log("coupons.value in computed:", coupons.value.length, "items");
   
   let filtered = coupons.value;
@@ -1231,15 +1231,15 @@ const allFilteredCoupons = computed(() => {
     return a.loaiPhieuGiamGia ? 1 : -1;
   });
 
-  console.log("🎯 Computed allFilteredCoupons result:", filtered.length, "items");
+  console.log("<!-- icon: target --> Computed allFilteredCoupons result:", filtered.length, "items");
   return filtered;
 });
 
 // Paginated results from filtered data
 const filteredCoupons = computed(() => {
-  console.log("🔄 Computing filteredCoupons...");
+  console.log("<!-- icon: refresh --> Computing filteredCoupons...");
   const result = allFilteredCoupons.value.slice(startIndex.value, endIndex.value);
-  console.log("🎯 Final filteredCoupons for table:", result.length, "items");
+  console.log("<!-- icon: target --> Final filteredCoupons for table:", result.length, "items");
   return result;
 });
 
@@ -1684,15 +1684,15 @@ const fetchUpdatePGG = async (id) => {
     // CRITICAL FIX: Ensure deleted is always false for updates
     couponData.deleted = false;
     
-    console.log("🔄 Updating coupon ID:", id);
-    console.log("📤 Sending coupon data to backend:", JSON.stringify(couponData, null, 2));
+    console.log("<!-- icon: refresh --> Updating coupon ID:", id);
+    console.log("<!-- icon: export --> Sending coupon data to backend:", JSON.stringify(couponData, null, 2));
     
     await fetchUpdatePhieuGiamGia(id, couponData);
-    console.log("✅ Backend update API call successful");
+    console.log("<!-- icon: check --> Backend update API call successful");
     
     // Add a small delay to ensure database transaction completes
     await new Promise(resolve => setTimeout(resolve, 500));
-    console.log("⏱️ Waited 500ms for database transaction");
+    console.log("<!-- icon: timer --> Waited 500ms for database transaction");
   } catch (error) {
     console.error("Error updating phieu giam gia: ", error);
     throw error; // Re-throw to handle in saveCoupon
@@ -1752,9 +1752,9 @@ const saveCoupon = async () => {
         ? selectedCustomers.value.length 
         : 0;
 
-      console.log("🎯 Customer count for notification:", customerCount);
-      console.log("🎯 Form idKhachHang:", couponForm.value.idKhachHang);
-      console.log("🎯 Selected customers length:", selectedCustomers.value.length);
+      console.log("<!-- icon: target --> Customer count for notification:", customerCount);
+      console.log("<!-- icon: target --> Form idKhachHang:", couponForm.value.idKhachHang);
+      console.log("<!-- icon: target --> Selected customers length:", selectedCustomers.value.length);
 
       // Store form data for notification BEFORE closing modals
       const formDataForNotification = {
@@ -1800,12 +1800,12 @@ const saveCoupon = async () => {
       };
 
       // Call update API using the original approach with new API
-      console.log("🔄 Starting coupon update process...");
+      console.log("<!-- icon: refresh --> Starting coupon update process...");
       console.log("Editing coupon:", editingCoupon.value);
       console.log("Form data:", couponForm.value);
       
       await fetchUpdatePGG(editingCoupon.value.id);
-      console.log("✅ Update API call completed");
+      console.log("<!-- icon: check --> Update API call completed");
       
       // Store current selected coupon ID for refresh
       const selectedCouponId = selectedCoupon.value ? selectedCoupon.value.id : null;
@@ -1815,7 +1815,7 @@ const saveCoupon = async () => {
       closeModals();
       
       // Force refresh data
-      console.log("🔄 Refreshing all data after update...");
+      console.log("<!-- icon: refresh --> Refreshing all data after update...");
       await fetchAll(); // Refresh all data consistently
 
       // Refresh selectedCoupon if view modal was open
@@ -1824,13 +1824,13 @@ const saveCoupon = async () => {
         if (updatedCoupon) {
           selectedCoupon.value = updatedCoupon;
           showDetailModal.value = true; // Reopen the detail modal
-          console.log("🔄 Updated selectedCoupon with fresh data:", updatedCoupon);
+          console.log("<!-- icon: refresh --> Updated selectedCoupon with fresh data:", updatedCoupon);
         }
       }
 
       // Validate và cập nhật trạng thái sau khi cập nhật
       await validateAllCoupons();
-      console.log("✅ All data refreshed and validated");
+      console.log("<!-- icon: check --> All data refreshed and validated");
 
       // Show success notification with preserved data
       showSuccessNotification("Cập nhật phiếu giảm giá thành công!", formDataForNotification);
@@ -1870,7 +1870,7 @@ const closeModals = () => {
 const showSuccessNotification = (message, details = null) => {
   notificationData.value = {
     type: "success",
-    title: "Thành công! 🎉",
+    title: "Thành công! <!-- icon: celebration -->",
     message: message,
     details: details,
   };
@@ -1890,7 +1890,7 @@ const showSuccessNotification = (message, details = null) => {
 const showErrorNotification = (message, errorDetails = null) => {
   notificationData.value = {
     type: "error",
-    title: "Có lỗi xảy ra! ❌",
+    title: "Có lỗi xảy ra! <!-- icon: close -->",
     message: message,
     details: errorDetails,
   };

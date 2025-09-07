@@ -154,14 +154,14 @@
                     @click="viewCampaign(campaign)"
                     title="Xem chi tiết"
                   >
-                    👁️
+                    <!-- icon: view -->
                   </button>
                   <button
                     class="action-btn edit-btn"
                     @click="editCampaign(campaign)"
                     title="Chỉnh sửa"
                   >
-                    ✏️
+                    <!-- icon: edit -->
                   </button>
                   <button
                     class="action-btn delete-btn"
@@ -170,7 +170,7 @@
                     :disabled="campaign.deleted"
                     :style="{ opacity: campaign.deleted ? 0.3 : 1 }"
                   >
-                    🗑️
+                    <!-- icon: delete -->
                   </button>
                 </div>
               </td>
@@ -178,7 +178,7 @@
             <tr v-if="filteredCampaigns.length === 0">
               <td colspan="7" class="text-center empty-state">
                 <div class="empty-message">
-                  <span class="empty-icon">📭</span>
+                  <span class="empty-icon"><!-- icon: empty-mailbox --></span>
                   <p>Không có dữ liệu chiến dịch</p>
                   <small>Hãy tạo chiến dịch đầu tiên để bắt đầu</small>
                 </div>
@@ -223,7 +223,7 @@
       <div class="modal-content edit-modal" @click.stop>
         <div class="modal-header">
           <div class="header-content">
-            <div class="header-icon">✏️</div>
+            <div class="header-icon"><!-- icon: edit --></div>
             <div class="header-text">
               <h3>{{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật đợt giảm giá" }}</h3>
               <p class="header-subtitle">{{ showAddModal ? "Thiết lập chiến dịch mới" : "Chỉnh sửa thông tin chiến dịch" }}</p>
@@ -236,7 +236,7 @@
           <!-- Campaign Information Section -->
           <div class="form-section">
             <div class="section-header">
-              <div class="section-icon">📋</div>
+              <div class="section-icon"><!-- icon: clipboard --></div>
               <h4>Thông tin cơ bản</h4>
             </div>
             
@@ -271,7 +271,7 @@
           <!-- Campaign Schedule Section -->
           <div class="form-section">
             <div class="section-header">
-              <div class="section-icon">📅</div>
+              <div class="section-icon"><!-- icon: calendar --></div>
               <h4>Lịch trình chiến dịch</h4>
             </div>
             
@@ -302,7 +302,7 @@
           <!-- Campaign Status Section (Edit Mode Only) -->
           <div class="form-section" v-if="showEditModal">
             <div class="section-header">
-              <div class="section-icon">⚙️</div>
+              <div class="section-icon"><!-- icon: settings --></div>
               <h4>Trạng thái hoạt động</h4>
             </div>
             
@@ -324,8 +324,8 @@
             <div class="form-group">
               <label class="form-label">Hiện trạng *</label>
               <select v-model="formData.trangThai" class="form-control">
-                <option :value="true">✅ Hoạt động</option>
-                <option :value="false">❌ Ngừng hoạt động</option>
+                <option :value="true"><!-- icon: check --> Hoạt động</option>
+                <option :value="false"><!-- icon: close --> Ngừng hoạt động</option>
               </select>
             </div>
           </div>
@@ -333,11 +333,11 @@
         
         <div class="modal-footer">
           <button class="btn btn-secondary" @click="closeModals">
-            <span class="btn-icon">❌</span>
+            <span class="btn-icon"><!-- icon: close --></span>
             Hủy
           </button>
           <button class="btn btn-primary" @click="saveCampaign">
-            <span class="btn-icon">💾</span>
+            <span class="btn-icon"><!-- icon: save --></span>
             {{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật" }}
           </button>
         </div>
@@ -353,7 +353,7 @@
       <div class="modal-content detail-modal" @click.stop>
         <div class="modal-header">
           <div class="header-content">
-            <div class="header-icon">🎯</div>
+            <div class="header-icon"><!-- icon: target --></div>
             <div class="header-text">
               <h3>Chi tiết đợt giảm giá</h3>
               <p class="header-subtitle">Thông tin chi tiết và thống kê</p>
@@ -368,7 +368,7 @@
           <!-- Campaign Overview Section -->
           <div class="form-section">
             <div class="section-header">
-              <div class="section-icon">🎯</div>
+              <div class="section-icon"><!-- icon: target --></div>
               <h4>Tổng quan chiến dịch</h4>
             </div>
             
@@ -391,7 +391,7 @@
               <!-- Campaign Stats -->
               <div class="campaign-stats">
                 <div class="stat-card">
-                  <div class="stat-icon">💰</div>
+                  <div class="stat-icon"><!-- icon: money --></div>
                   <div class="stat-content">
                     <div class="stat-value">{{ selectedCampaign.giaTriGiamGia }}%</div>
                     <div class="stat-label">Giá trị giảm giá</div>
@@ -399,7 +399,7 @@
                 </div>
                 
                 <div class="stat-card">
-                  <div class="stat-icon">📅</div>
+                  <div class="stat-icon"><!-- icon: calendar --></div>
                   <div class="stat-content">
                     <div class="stat-value">{{ getCampaignDuration(selectedCampaign) }}</div>
                     <div class="stat-label">Thời gian diễn ra</div>
@@ -407,7 +407,7 @@
                 </div>
                 
                 <div class="stat-card">
-                  <div class="stat-icon">📊</div>
+                  <div class="stat-icon"><!-- icon: chart --></div>
                   <div class="stat-content">
                     <div class="stat-value">{{ getAppliedProductsCount(selectedCampaign.id) }}</div>
                     <div class="stat-label">Sản phẩm áp dụng</div>
@@ -428,7 +428,7 @@
           <!-- Basic Information Section -->
           <div class="form-section">
             <div class="section-header">
-              <div class="section-icon">📋</div>
+              <div class="section-icon"><!-- icon: clipboard --></div>
               <h4>Thông tin cơ bản</h4>
             </div>
             
@@ -473,7 +473,7 @@
           <!-- Schedule Information Section -->
           <div class="form-section">
             <div class="section-header">
-              <div class="section-icon">📅</div>
+              <div class="section-icon"><!-- icon: calendar --></div>
               <h4>Thông tin thời gian</h4>
             </div>
             
@@ -496,7 +496,7 @@
           <!-- Applied Products Section -->
           <div class="form-section">
             <div class="section-header">
-              <div class="section-icon">🛍️</div>
+              <div class="section-icon"><!-- icon: shopping-bag --></div>
               <h4>Sản phẩm đã áp dụng</h4>
             </div>
             
@@ -546,17 +546,17 @@
                         !product.deleted ? 'status-active' : 'status-inactive'
                       ]"
                     >
-                      {{ !product.deleted ? '✅ Đang áp dụng' : '❌ Đã dừng' }}
+                      {{ !product.deleted ? '<!-- icon: check --> Đang áp dụng' : '<!-- icon: close --> Đã dừng' }}
                     </span>
                   </div>
                 </div>
               </div>
               
               <div v-else class="no-products">
-                <div class="no-products-icon">📦</div>
+                <div class="no-products-icon"><!-- icon: package --></div>
                 <p>Chưa có sản phẩm nào được áp dụng cho đợt giảm giá này</p>
                 <button class="btn-apply-products" @click="openApplyModal(selectedCampaign)">
-                  <span class="btn-icon">➕</span>
+                  <span class="btn-icon"><!-- icon: plus --></span>
                   Áp dụng sản phẩm
                 </button>
               </div>
@@ -566,7 +566,7 @@
           <!-- Campaign Progress Section -->
           <div class="form-section">
             <div class="section-header">
-              <div class="section-icon">📈</div>
+              <div class="section-icon"><!-- icon: chart-up --></div>
               <h4>Tiến độ chiến dịch</h4>
             </div>
             
@@ -591,14 +591,14 @@
             class="btn btn-primary" 
             @click="openApplyModal(selectedCampaign)"
           >
-            <span class="btn-icon">✅</span>
+            <span class="btn-icon"><!-- icon: check --></span>
             Quản lý sản phẩm
           </button>
           <button 
             class="btn btn-primary" 
             @click="editCampaign(selectedCampaign)"
           >
-            <span class="btn-icon">✏️</span>
+            <span class="btn-icon"><!-- icon: edit --></span>
             Chỉnh sửa
           </button>
         </div>
@@ -648,14 +648,14 @@
                   availableProducts.length === 0
                 "
               >
-                ✅ Chọn hết
+                <!-- icon: check --> Chọn hết
               </button>
               <button
                 class="btn btn-outline btn-sm"
                 @click="clearAllProducts"
                 :disabled="selectedProducts.length === 0"
               >
-                ❌ Bỏ chọn hết
+                <!-- icon: close --> Bỏ chọn hết
               </button>
             </div>
 
@@ -666,7 +666,7 @@
                 class="product-section"
               >
                 <h5 class="section-title current-campaign-title">
-                  🔄 Sản phẩm đã áp dụng cho đợt này ({{
+                  <!-- icon: refresh --> Sản phẩm đã áp dụng cho đợt này ({{
                     currentCampaignProducts.length
                   }})
                 </h5>
@@ -731,7 +731,7 @@
                 class="product-section"
               >
                 <h5 class="section-title available-title">
-                  ✅ Sản phẩm có thể áp dụng ({{
+                  <!-- icon: check --> Sản phẩm có thể áp dụng ({{
                     availableProducts.length - currentCampaignProducts.length
                   }})
                 </h5>
@@ -835,7 +835,7 @@
                 class="product-section"
               >
                 <h5 class="section-title unavailable-title">
-                  ❌ Sản phẩm có giảm giá cao hơn ({{ productsWithDiscount.length }})
+                  <!-- icon: close --> Sản phẩm có giảm giá cao hơn ({{ productsWithDiscount.length }})
                 </h5>
                 <div
                   v-for="product in productsWithDiscount"
@@ -903,7 +903,7 @@
               class="empty-available"
             >
               <p class="warning-text">
-                ⚠️ Các sản phẩm còn lại đều có đợt giảm giá với giá trị cao hơn
+                <!-- icon: warning --> Các sản phẩm còn lại đều có đợt giảm giá với giá trị cao hơn
               </p>
             </div>
           </div>
@@ -944,8 +944,8 @@
       <div class="modal-content notification-modal" @click.stop>
         <div class="notification-header" :class="notificationData.type">
           <div class="notification-icon">
-            <span v-if="notificationData.type === 'success'">✅</span>
-            <span v-else>❌</span>
+            <span v-if="notificationData.type === 'success'"><!-- icon: check --></span>
+            <span v-else><!-- icon: close --></span>
           </div>
           <div class="notification-title">
             <h3>{{ notificationData.title }}</h3>
@@ -1035,13 +1035,13 @@
     >
       <div class="modal-content delete-modal" @click.stop>
         <div class="delete-header">
-          <div class="delete-icon">🗑️</div>
+          <div class="delete-icon"><!-- icon: delete --></div>
           <h3>Xác nhận xóa đợt giảm giá</h3>
         </div>
 
         <div class="delete-body">
           <div class="delete-warning">
-            <div class="warning-icon">⚠️</div>
+            <div class="warning-icon"><!-- icon: warning --></div>
             <p class="warning-text">
               Bạn có chắc chắn muốn xóa đợt giảm giá
               <strong>"{{ deleteCampaignData?.tenDotGiamGia }}"</strong>?
@@ -1078,7 +1078,7 @@
           </div>
 
           <div class="delete-consequences">
-            <h4>⚠️ Hậu quả khi xóa:</h4>
+            <h4><!-- icon: warning --> Hậu quả khi xóa:</h4>
             <ul class="consequences-list">
               <li>Đợt giảm giá sẽ bị vô hiệu hóa hoàn toàn</li>
               <li>Không thể khôi phục lại sau khi xóa</li>
@@ -1090,11 +1090,11 @@
 
         <div class="delete-footer">
           <button class="btn btn-outline" @click="closeDeleteModal">
-            <span class="btn-icon">❌</span>
+            <span class="btn-icon"><!-- icon: close --></span>
             Hủy bỏ
           </button>
           <button class="btn btn-danger" @click="confirmDelete">
-            <span class="btn-icon">🗑️</span>
+            <span class="btn-icon"><!-- icon: delete --></span>
             Xác nhận xóa
           </button>
         </div>
@@ -2114,7 +2114,7 @@ const openAddModal = () => {
 const showSuccessNotification = (message, details = null) => {
   notificationData.value = {
     type: "success",
-    title: "Thành công! 🎉",
+    title: "Thành công! <!-- icon: celebration -->",
     message: message,
     details: details,
   };
@@ -2134,7 +2134,7 @@ const showSuccessNotification = (message, details = null) => {
 const showErrorNotification = (message, errorDetails = null) => {
   notificationData.value = {
     type: "error",
-    title: "Có lỗi xảy ra! ❌",
+    title: "Có lỗi xảy ra! <!-- icon: close -->",
     message: message,
     details: errorDetails,
   };
@@ -4845,7 +4845,7 @@ const formatDiscountValue = (value) => {
 }
 
 .notification-details h4::before {
-  content: "📋";
+  content: "<!-- icon: clipboard -->";
   font-size: 1.25rem;
 }
 
@@ -5021,7 +5021,7 @@ const formatDiscountValue = (value) => {
 }
 
 .delete-details h4::before {
-  content: "📋";
+  content: "<!-- icon: clipboard -->";
   font-size: 1.25rem;
 }
 

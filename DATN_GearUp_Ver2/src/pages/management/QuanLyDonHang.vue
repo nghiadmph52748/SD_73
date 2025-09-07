@@ -5,7 +5,7 @@
       <div class="filters-header">
         <h3>Bộ lọc & Tìm kiếm</h3>
         <button class="btn-export" @click="resetFilters">
-          <span class="btn-icon">🔄</span>
+          <span class="btn-icon"><img :src="RefreshIcon" alt="Refresh" class="icon-sm" /></span>
           Đặt lại
         </button>
       </div>
@@ -104,7 +104,7 @@
           :class="['status-tab', { active: selectedStatus === status.value }]"
           @click="selectedStatus = status.value"
         >
-          <span class="tab-icon">{{ status.icon }}</span>
+          <span class="tab-icon"><img :src="status.iconComponent" alt="Status icon" class="icon-sm" /></span>
           <span class="tab-text">{{ status.label }}</span>
           <span class="tab-count">{{ getStatusCount(status.value) }}</span>
         </button>
@@ -116,42 +116,42 @@
           @click="viewMode = 'table'"
           title="Xem dạng bảng"
         >
-          📋
+          <img :src="ClipboardIcon" alt="Clipboard" class="icon-sm" />
         </button>
         <button
           :class="['view-btn', { active: viewMode === 'grid' }]"
           @click="viewMode = 'grid'"
           title="Xem dạng lưới"
         >
-          ▦
+          <img :src="DashboardIcon" alt="Grid view" class="icon-sm" />
         </button>
       </div>
     </div>
        <!-- Header Actions bên góc phải -->
 <div class="header-actions">
   <button class="btn-action" @click="refreshData">
-    <i class="lucide lucide-refresh-ccw"></i>
-    <span> 🔄Làm mới</span>
+    <img :src="RefreshIcon" alt="Refresh" class="icon-sm" />
+    <span>Làm mới</span>
   </button>
 
   <button class="btn-action" @click="exportData">
-    <i class="lucide lucide-bar-chart-2"></i>
-    <span>  📊 Xuất báo cáo</span>
+    <img :src="StatisticsIcon" alt="Chart" class="icon-sm" />
+    <span>Xuất báo cáo</span>
   </button>
 
   <button class="btn-action" @click="exportOrdersToExcel">
-    <i class="lucide lucide-file-spreadsheet"></i>
-    <span> 📗 Xuất Excel</span>
+    <img :src="ExcelIcon" alt="Excel" class="icon-sm" />
+    <span>Xuất Excel</span>
   </button>
 
   <button class="btn-action primary" @click="createOrder">
-    <i class="lucide lucide-plus-circle"></i>
-    <span>➕ Tạo đơn hàng</span>
+    <img :src="PlusIcon" alt="Plus" class="icon-sm" />
+    <span>Tạo đơn hàng</span>
   </button>
 
   <button class="btn-action" @click="scanQRCode">
-    <i class="lucide lucide-smartphone"></i>
-    <span>📱Quét mã QR</span>
+    <img :src="QRIcon" alt="QR Code" class="icon-sm" />
+    <span>Quét mã QR</span>
   </button>
 </div>
 
@@ -255,21 +255,21 @@
                       @click="viewOrder(order)"
                       title="Xem chi tiết"
                     >
-                      👁️
+                      <img :src="ViewIcon" alt="View" class="icon-sm" />
                     </button>
                     <button
                       class="action-btn edit-btn"
                       @click="editOrder(order)"
                       title="Chỉnh sửa"
                     >
-                      ✏️
+                      <img :src="EditIcon" alt="Edit" class="icon-sm" />
                     </button>
                     <button
                       class="action-btn print-btn"
                       @click="printOrder(order)"
                       title="In hóa đơn"
                     >
-                      🖨️
+                      <img :src="PrintIcon" alt="Print" class="icon-sm" />
                     </button>
                   </div>
                 </td>
@@ -327,15 +327,15 @@
 
             <div class="card-actions">
               <button class="action-btn primary" @click="viewOrder(order)">
-                <span class="btn-icon">👁️</span>
+                <span class="btn-icon"><img :src="ViewIcon" alt="View" class="icon-sm" /></span>
                 <span class="btn-text">Xem</span>
               </button>
               <button class="action-btn secondary" @click="editOrder(order)">
-                <span class="btn-icon">✏️</span>
+                <span class="btn-icon"><img :src="EditIcon" alt="Edit" class="icon-sm" /></span>
                 <span class="btn-text">Sửa</span>
               </button>
               <button class="action-btn tertiary" @click="printOrder(order)">
-                <span class="btn-icon">🖨️</span>
+                <span class="btn-icon"><img :src="PrintIcon" alt="Print" class="icon-sm" /></span>
                 <span class="btn-text">In</span>
               </button>
             </div>
@@ -368,7 +368,7 @@
             :disabled="currentPage === 1"
             title="Trang đầu"
           >
-            ⏮️
+            <img :src="ChevronsLeftIcon" alt="First" class="icon-sm" />
           </button>
           <button
             class="pagination-btn prev"
@@ -376,7 +376,7 @@
             :disabled="currentPage === 1"
             title="Trang trước"
           >
-            ◀️
+            <img :src="ChevronLeftIcon" alt="Previous" class="icon-sm" />
           </button>
 
           <div class="page-numbers">
@@ -400,7 +400,7 @@
             :disabled="currentPage === totalPages"
             title="Trang sau"
           >
-            ▶️
+            <img :src="ChevronRightIcon" alt="Next" class="icon-sm" />
           </button>
           <button
             class="pagination-btn last"
@@ -409,7 +409,7 @@
 
             title="Trang cuối"
           >
-            ⏭️
+            <img :src="ChevronsRightIcon" alt="Last" class="icon-sm" />
           </button>
         </div>
       </div>
@@ -566,7 +566,7 @@
               <h4>Lịch sử đơn hàng</h4>
               <div class="timeline">
                 <div class="timeline-item completed">
-                  <div class="timeline-icon">✓</div>
+                  <div class="timeline-icon">✅</div>
                   <div class="timeline-content">
                     <div class="timeline-header">
                       <span class="timeline-title">Tạo đơn hàng</span>
@@ -580,7 +580,7 @@
                   </div>
                 </div>
                 <div class="timeline-item completed">
-                  <div class="timeline-icon">✓</div>
+                  <div class="timeline-icon">✅</div>
                   <div class="timeline-content">
                     <div class="timeline-header">
                       <span class="timeline-title">Hoàn thành</span>
@@ -607,7 +607,7 @@
                 >
                   <div class="product-image">
                     <img v-if="item.image" :src="item.image" :alt="item.name" />
-                    <div v-else class="placeholder-image">👟</div>
+                    <div v-else class="placeholder-image"></div>
                   </div>
                   <div class="product-info">
                     <h5>{{ item.name }}</h5>
@@ -668,6 +668,43 @@
 </template>
 
 <script setup>
+// SVG Icons
+import RefreshIcon from "@/assets/Reload.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import ViewIcon from "@/assets/View.svg?url";
+import PrintIcon from "@/assets/Print.svg?url";
+import PlusIcon from "@/assets/Plus.svg?url";
+import TrashIcon from "@/assets/Trash.svg?url";
+import SaveIcon from "@/assets/Save.svg?url";
+import CancelIcon from "@/assets/Cancel.svg?url";
+import ChevronLeftIcon from "@/assets/chevron-left.svg?url";
+import ChevronRightIcon from "@/assets/chevron-right.svg?url";
+import ChevronsLeftIcon from "@/assets/chevrons-left.svg?url";
+import ChevronsRightIcon from "@/assets/chevrons-right.svg?url";
+import ClipboardIcon from "@/assets/Clipboard.svg?url";
+import ExcelIcon from "@/assets/Excel.svg?url";
+import StatisticsIcon from "@/assets/Statistics.svg?url";
+import PhoneIcon from "@/assets/Phone.svg?url";
+import UsersIcon from "@/assets/Users.svg?url";
+import ProfileIcon from "@/assets/Profile.svg?url";
+import DashboardIcon from "@/assets/Dashboard.svg?url";
+import OrdersIcon from "@/assets/Orders.svg?url";
+import ProductsIcon from "@/assets/Shoes.svg?url";
+import ShoppingCartIcon from "@/assets/ShoppingCart.svg?url";
+import CreditCardIcon from "@/assets/CreditCard.svg?url";
+import RevenueIcon from "@/assets/Revenue.svg?url";
+import GrowthIcon from "@/assets/Growth.svg?url";
+import SettingsIcon from "@/assets/Settings.svg?url";
+import ExportIcon from "@/assets/Export.svg?url";
+import FindIcon from "@/assets/Find.svg?url";
+import QRIcon from "@/assets/QR.svg?url";
+import PendingIcon from "@/assets/Pending.svg?url";
+import ShippingIcon from "@/assets/Shipping.svg?url";
+import CompletedIcon from "@/assets/Completed.svg?url";
+import SuccessIcon from "@/assets/Success.svg?url";
+import CelebrationIcon from "@/assets/Celebration.svg?url";
+import FailedIcon from "@/assets/Failed.svg?url";
+
 
 import axios from "axios";
 import { computed, onMounted, ref } from 'vue';
@@ -743,15 +780,15 @@ const fetchOrders = async () => {
 
 
 const statusTabs = [
-  { value: "TAT_CA", label: "TẤT CẢ", icon: "📋" },
-  { value: "CHO_XAC_NHAN", label: "CHỜ XÁC NHẬN", icon: "⏳" },
-  { value: "CHO_GIAO_HANG", label: "CHỜ GIAO HÀNG", icon: "📦" },
-  { value: "DANG_VAN_CHUYEN", label: "ĐANG VẬN CHUYỂN", icon: "🚚" },
-  { value: "DA_GIAO_HANG", label: "ĐÃ GIAO HÀNG", icon: "✅" },
-  { value: "CHO_THANH_TOAN", label: "CHỜ THANH TOÁN", icon: "💳" },
-  { value: "DA_THANH_TOAN", label: "ĐÃ THANH TOÁN", icon: "💰" },
-  { value: "HOAN_THANH", label: "HOÀN THÀNH", icon: "🎉" },
-  { value: "DA_HUY", label: "ĐÃ HỦY", icon: "❌" },
+  { value: "TAT_CA", label: "TẤT CẢ", iconComponent: ClipboardIcon },
+  { value: "CHO_XAC_NHAN", label: "CHỞ XÁC NHẬN", iconComponent: PendingIcon },
+  { value: "CHO_GIAO_HANG", label: "CHỞ GIAO HÀNG", iconComponent: ShippingIcon },
+  { value: "DANG_VAN_CHUYEN", label: "ĐANG VẬN CHUYỂN", iconComponent: ShippingIcon },
+  { value: "DA_GIAO_HANG", label: "ĐÃ GIAO HÀNG", iconComponent: CompletedIcon },
+  { value: "CHO_THANH_TOAN", label: "CHỞ THANH TOÁN", iconComponent: CreditCardIcon },
+  { value: "DA_THANH_TOAN", label: "ĐÃ THANH TOÁN", iconComponent: SuccessIcon },
+  { value: "HOAN_THANH", label: "HOÀN THÀNH", iconComponent: CelebrationIcon },
+  { value: "DA_HUY", label: "ĐÃ HỦY", iconComponent: FailedIcon },
 ];
 
 // Mock data
@@ -1092,1201 +1129,85 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.header-actions {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
+/* Import external CSS file */
+@import '../../styles/cssQuanLy/quanLyDonHang.css';
+
+/* SVG Icon Styles */
+.icon-xs {
+  width: 12px;
+  height: 12px;
 }
 
+.icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-md {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-xl {
+  width: 32px;
+  height: 32px;
+}
+
+/* Icon alignment improvements */
 .btn-action {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  transition: all 0.2s ease;
+  gap: 8px;
 }
 
-.btn-action i {
-  font-size: 16px;
-}
-
-.btn-action:hover {
-  background: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-.btn-action.primary {
-  background: #7588af;
-  color: white;
-  border: none;
-}
-
-.btn-action.primary:hover {
-  background: #8b95af;
-}
-
-.order-management {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
-  min-height: 100vh;
-}
-
-/* === STATISTICS OVERVIEW === */
-.stats-overview {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.stat-card {
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.stat-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #4ade80, #22c55e);
-}
-
-.stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.stat-card.total::before {
-  background: linear-gradient(90deg, #4ade80, #22c55e);
-}
-
-.stat-card.pending::before {
-  background: linear-gradient(90deg, #f093fb, #f5576c);
-}
-
-.stat-card.processing::before {
-  background: linear-gradient(90deg, #4facfe, #00f2fe);
-}
-
-.stat-card.completed::before {
-  background: linear-gradient(90deg, #43e97b, #38f9d7);
-}
-
-.stat-icon {
-  font-size: 2.5rem;
-  opacity: 0.8;
-}
-
-.stat-content {
-  flex: 1;
-}
-
-.stat-number {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  line-height: 1;
-  margin-bottom: 0.25rem;
-}
-
-.stat-label {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.stat-trend {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  background: var(--gray-100);
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-.stat-trend.positive {
-  background: rgba(74, 222, 128, 0.1);
-  color: var(--success-color);
-}
-
-/* === ADVANCED FILTERS PANEL === */
-.filters-panel {
-  background: white;
-  border-radius: 16px;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-color);
-  overflow: hidden;
-}
-
-.filters-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border-color);
-  background: #e5e9f0; /* nền panel */
-}
-
-.filters-header h3 {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-.btn-reset {
-  background: transparent !important;
-  color: var(--text-secondary) !important;
-  border: 1px solid var(--border-color) !important;
-  padding: 0.5rem 1rem !important;
-}
-
-.btn-reset:hover {
-  background: var(--gray-50) !important;
-  color: var(--text-primary) !important;
-}
-
-.filters-content {
-  padding: 2rem;
-}
-
-.search-section {
-  margin-bottom: 2rem;
-}
-
-.search-input-group {
-  position: relative;
-  max-width: 100%;
-  width: 100%;
-}
-
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.125rem;
-  color: var(--text-secondary);
-  z-index: 2;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: white;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #4ade80;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
-}
-
-.clear-search {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  font-size: 1.125rem;
-  padding: 0.25rem;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.clear-search:hover {
-  background: var(--gray-100);
-  color: var(--text-primary);
-}
-
-.filter-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  align-items: start;
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.filter-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.date-range-group {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.date-input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 0.875rem;
-  transition: border-color 0.3s ease;
-}
-
-.date-input:focus {
-  outline: none;
-  border-color: #4ade80;
-}
-
-.date-separator {
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-.radio-group {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.radio-option input[type="radio"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #4ade80;
-}
-
-.radio-text {
-  color: var(--text-secondary);
-  transition: color 0.2s ease;
-}
-
-.radio-option:hover .radio-text {
-  color: var(--text-primary);
-}
-
-.amount-range-group {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.amount-input {
-  flex: 1;
-  min-width: 80px;
-  padding: 0.75rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 0.875rem;
-  transition: border-color 0.3s ease;
-}
-
-.amount-input:focus {
-  outline: none;
-  border-color: #4ade80;
-}
-
-.amount-separator {
-  color: var(--text-secondary);
-  font-weight: 600;
+.btn-action img {
   flex-shrink: 0;
 }
 
-/* === STATUS TABS ENHANCED === */
-.status-tabs-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-color);
-}
-
-.status-tabs {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.status-tab {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 0.875rem;
-  border: 1px solid var(--border-color);
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  white-space: nowrap;
-  font-size: 0.8125rem;
-}
-
-.status-tab:hover {
-  background: var(--gray-50);
-  border-color: #4ade80;
-}
-
-.status-tab.active {
-  background: #4ade80;
-  border-color: #4ade80;
-  color: white;
-  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
-}
-
-.tab-icon {
-  font-size: 1rem;
-}
-
-.tab-text {
-  font-weight: 500;
-}
-
-.tab-count {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.125rem 0.375rem;
-  border-radius: 6px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  min-width: 20px;
-  text-align: center;
-}
-
-.status-tab:not(.active) .tab-count {
-  background: var(--gray-100);
-  color: var(--text-secondary);
-}
-
-.view-options {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.view-btn {
-  padding: 0.75rem;
-  border: 2px solid var(--border-color);
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.125rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-}
-
-.view-btn:hover {
-  background: var(--gray-50);
-  border-color: #4ade80;
-}
-
-.view-btn.active {
-  background: #4ade80;
-  border-color: #4ade80;
-  color: white;
-}
-
-/* === ENHANCED TABLE VIEW === */
-.orders-container {
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-color);
-}
-
-.table-container {
-  overflow-x: auto;
-}
-
-.orders-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-}
-
-.orders-table thead th {
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
-  color: var(--text-primary);
-  font-weight: 600;
-  padding: 1.25rem 1rem;
-  text-align: left;
-  border-bottom: 2px solid var(--border-color);
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.sortable {
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.2s ease;
-}
-
-.sortable:hover {
-  background: var(--gray-100) !important;
-}
-
-.sort-icon {
-  margin-left: 0.5rem;
-  opacity: 0.5;
-  transition: opacity 0.2s ease;
-}
-
-.sortable:hover .sort-icon {
-  opacity: 1;
-}
-
-.order-row {
-  transition: all 0.2s ease;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.order-row:hover {
-  background: var(--gray-50);
-}
-
-.order-row:last-child {
-  border-bottom: none;
-}
-
-.orders-table td {
-  padding: 1.25rem 1rem;
-  vertical-align: middle;
-}
-
-.code-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.code-text {
-  font-weight: 700;
-  color: #4ade80;
-  font-size: 0.9375rem;
-}
-
-.code-id {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  opacity: 0.7;
-}
-
-.customer-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.customer-name {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.9375rem;
-}
-
-.customer-phone {
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-}
-
-.items-info {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.items-count {
-  font-weight: 500;
-}
-
-.amount-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.25rem;
-}
-
-.amount-value {
-  font-weight: 700;
-  color: var(--success-color);
-  font-size: 1rem;
-}
-
-.type-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.type-badge.online {
-  background: rgba(59, 130, 246, 0.1);
-  color: #1d4ed8;
-}
-
-.type-badge.pos {
-  background: rgba(74, 222, 128, 0.1);
-  color: #15803d;
-}
-
-.type-icon {
-  font-size: 0.875rem;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 0.375rem 0.875rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-align: center;
-  min-width: 80px;
-}
-
-.date-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  align-items: flex-start;
-}
-
-.date-value {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.875rem;
-}
-
-.time-value {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-}
-
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
 .action-btn {
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  min-height: 36px;
+  gap: 4px;
 }
 
-.action-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.action-btn.view-btn:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-}
-
-.action-btn.edit-btn:hover {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: #f59e0b;
-}
-
-.action-btn.print-btn:hover {
-  background: rgba(107, 114, 128, 0.1);
-  border-color: #6b7280;
-}
-
-/* === ENHANCED GRID VIEW === */
-.grid-view {
-  padding: 1.5rem;
-}
-
-.orders-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
-}
-
-.order-card {
-  background: white;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.order-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.order-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.order-card .order-code {
-  font-weight: 700;
-  color: #4ade80;
-  font-size: 1.125rem;
-}
-
-.card-body {
-  padding: 1.25rem;
-}
-
-.customer-section {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.customer-section .customer-name {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
-
-.customer-section .customer-phone {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.order-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detail-item .label {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.detail-item .value {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.detail-item .value.amount {
-  color: var(--success-color);
-  font-size: 1rem;
-}
-
-.card-actions {
-  padding: 1.25rem;
-  background: var(--gray-50);
-  display: flex;
-  gap: 0.75rem;
-}
-
-.card-actions .action-btn {
-  flex: 1;
+.btn-icon {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  min-height: 40px;
-}
-
-.card-actions .action-btn.primary {
-  background: #4ade80;
-  border-color: #4ade80;
-  color: white;
-}
-
-.card-actions .action-btn.secondary {
-  background: white;
-  border-color: var(--border-color);
-  color: var(--text-primary);
-}
-
-.card-actions .action-btn.tertiary {
-  background: var(--gray-100);
-  border-color: var(--gray-200);
-  color: var(--text-secondary);
-}
-
-/* === ENHANCED PAGINATION === */
-.pagination-section {
-  padding: 1.5rem 2rem;
-  background: var(--gray-50);
-  border-top: 1px solid var(--border-color);
-}
-
-.pagination-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  gap: 1rem;
-}
-
-.showing {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.per-page-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.per-page-select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: white;
-  font-size: 0.875rem;
-}
-
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .pagination-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  border: 1px solid var(--border-color);
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.875rem;
 }
 
-.pagination-btn:hover:not(:disabled) {
-  background: var(--gray-50);
-  border-color: #4ade80;
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.page-numbers {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.page-btn {
+.view-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  border: 1px solid var(--border-color);
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-  font-size: 0.875rem;
 }
 
-.page-btn:hover:not(.active):not(:disabled) {
-  background: var(--gray-50);
-  border-color: #4ade80;
-}
-
-.page-btn.active {
-  background: #4ade80;
-  border-color: #4ade80;
-  color: white;
-}
-
-.page-btn.dots {
-  border: none;
-  background: none;
-  cursor: default;
-  color: var(--text-secondary);
-}
-
-.page-btn:disabled {
-  cursor: not-allowed;
-}
-
-/* page-header styles are now defined in globals.css */
-
-/* Modern Button Styles */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: left 0.5s;
-}
-
-.btn:hover:before {
-  left: 100%;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  color: white;
-  box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, #4ade80, #16a34a);
-  color: white;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-}
-
-.btn-secondary:hover {
-  background: linear-gradient(135deg, #5b5fcf, #3730a3);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-}
-
-.btn-outline {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-}
-
-.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-}
-
-/* btn-export styles now in globals.css */
-
-.btn-icon {
-  font-size: 1.125rem;
-}
-
-.btn-text {
-  font-weight: 600;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .filter-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .filter-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .search-input-group {
-    max-width: 100%;
-  }
-
-  .date-range-group {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .date-separator {
-    display: none;
-  }
-
-  .amount-range-group {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .amount-separator {
-    display: none;
-  }
-
-  .radio-group {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .status-tabs-container {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
-
-  .view-options {
-    justify-content: center;
-  }
-  /* page-header responsive styles are handled in globals.css */
-
-  .header-actions {
-    display: flex;
-    justify-content: flex-end; /* canh phải */
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1rem; /* tạo khoảng cách với bảng */
-  }
-  .btn-action {
+/* Status tab icon alignment */
+.status-tab {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-action:hover {
-  background: #ffffff;
-  border-color: #ccc;
 }
 
-.btn-action.primary {
-  background: #4ade80;
-  border-color: #4ade80;
-  color: white;
-  font-weight: 500;
-}
-
-.btn-action.primary:hover {
-  background: #45a049;
-}
-
-.btn-icon {
-  font-size: 16px;
-}
-
-  .status-tabs {
-    flex-wrap: wrap;
-  }
-
-  .table {
-    font-size: 0.875rem;
-  }
-
-  .table th,
-  .table td {
-    padding: 0.5rem;
-  }
-
-  .action-buttons {
-    flex-direction: column;
-  }
-
-  .pagination-wrapper {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .modal-overlay {
-    padding: 1rem;
-  }
-
-  .order-actions {
-    flex-direction: column;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .product-item {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .timeline-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-}
-.btn-export {
+.tab-icon {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid #2ab37f; /* xanh lá */
-  border-radius: 8px;
-  background: #0fbc43;       /* nền xanh luôn */
-  color: #fff;               /* chữ trắng sáng */
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  justify-content: center;
 }
 
-.btn-export .btn-icon {
-  font-size: 16px;
-}
-
-.btn-export:hover {
-  background: #16a34a; /* xanh đậm hơn khi hover */
-}
-  /* Chỉ chỉnh phần radio Loại đơn hàng */
-.radio-group {
-  display: flex;
-  gap: 20px; /* khoảng cách giữa các lựa chọn */
-  align-items: center;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  color: #374151;
-}
-
-.radio-option input[type="radio"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #22c55e; /* màu xanh đồng bộ */
-  cursor: pointer;
-}
-
-.radio-text {
-  user-select: none;
-}
-.radio-group {
-  display: flex;
-  align-items: center; /* Căn giữa dọc */
-  gap: 15px;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center; /* Căn giữa input radio và text */
-  gap: 5px;
-}
-
-.radio-option input[type="radio"] {
-  margin: 0; /* bỏ margin mặc định của radio */
-  vertical-align: middle;
+.tab-icon img {
+  flex-shrink: 0;
 }
 
 </style>

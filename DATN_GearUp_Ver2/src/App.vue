@@ -47,13 +47,13 @@ const previousUnreadCount = ref(0);
 
 // Filters
 const notificationFilters = markRaw([
-  { key: "all", label: "Tất cả", icon: "📋" },
+  { key: "all", label: "Tất cả", icon: "<!-- icon: clipboard -->" },
   { key: "unread", label: "Chưa đọc", icon: "🔴" },
-  { key: "order", label: "Đơn hàng", icon: "🛒" },
-  { key: "inventory", label: "Kho hàng", icon: "📦" },
-  { key: "review", label: "Đánh giá", icon: "⭐" },
-  { key: "customer", label: "Khách hàng", icon: "👥" },
-  { key: "report", label: "Báo cáo", icon: "📊" },
+  { key: "order", label: "Đơn hàng", icon: "<!-- icon: cart -->" },
+  { key: "inventory", label: "Kho hàng", icon: "<!-- icon: package -->" },
+  { key: "review", label: "Đánh giá", icon: "<!-- icon: star -->" },
+  { key: "customer", label: "Khách hàng", icon: "<!-- icon: users -->" },
+  { key: "report", label: "Báo cáo", icon: "<!-- icon: chart -->" },
 ]);
 
 const selectedFilter = ref("all");
@@ -84,7 +84,7 @@ const currentPageTitle = computed(() => {
   const pathTitles = {
     // Main routes
     '/': 'Bảng điều khiển',
-    '/dashboard': 'Bảng điều khiển',
+    '/dashboard': 'Bảng điều khiển', 
     '/login': 'Đăng nhập',
 
     // User Management
@@ -92,52 +92,52 @@ const currentPageTitle = computed(() => {
     '/users/khach-hang': 'Quản lý khách hàng',
 
     // Product Management
-    '/products': 'Danh sách sản phẩm',
-    '/products/add': 'Thêm sản phẩm',
-    '/products/xuat-xu': 'Xuất xứ',
-    '/products/nha-san-xuat': 'Nhà sản xuất',
-    '/products/mau-sac': 'Màu sắc',
-    '/products/kich-thuoc': 'Kích thước',
-    '/products/de-giay': 'Đế giày',
-    '/products/chat-lieu': 'Chất liệu',
-    '/products/trong-luong': 'Trọng lượng',
-    '/products/anh-san-pham': 'Ảnh sản phẩm',
+    '/products': 'Quản lý sản phẩm',
+    '/products/add': 'Thêm sản phẩm mới',
+    '/products/xuat-xu': 'Quản lý xuất xứ',
+    '/products/nha-san-xuat': 'Quản lý nhà sản xuất', 
+    '/products/mau-sac': 'Quản lý màu sắc',
+    '/products/kich-thuoc': 'Quản lý kích thước',
+    '/products/de-giay': 'Quản lý đế giày',
+    '/products/chat-lieu': 'Quản lý chất liệu',
+    '/products/trong-luong': 'Quản lý trọng lượng',
+    '/products/anh-san-pham': 'Quản lý ảnh sản phẩm',
 
     // Sales & Orders
-    '/sales/pos': 'Hệ thống bán hàng',
+    '/sales/pos': 'Hệ thống bán hàng (POS)',
     '/sales/orders': 'Quản lý đơn hàng',
-    '/sales/returns': 'Quản lý trả hàng',
+    '/sales/returns': 'Quản lý đơn trả hàng',
 
     // Marketing & Promotions
-    '/marketing/discounts': 'Mã giảm giá',
-    '/marketing/campaigns': 'Chiến dịch khuyến mãi',
+    '/marketing/discounts': 'Quản lý phiếu giảm giá',
+    '/marketing/campaigns': 'Quản lý chiến dịch giảm giá',
     '/marketing/vouchers': 'Quản lý phiếu người dùng',
 
     // Customer Engagement
     '/customers/carts': 'Quản lý giỏ hàng',
-    '/customers/favorites': 'Quản lý yêu thích',
-    '/customers/reviews': 'Quản lý đánh giá',
+    '/customers/favorites': 'Quản lý danh sách yêu thích',
+    '/customers/reviews': 'Quản lý đánh giá sản phẩm',
     '/customers/comments': 'Quản lý bình luận',
 
     // Communication
-    '/communication/notifications': 'Quản lý thông báo',
-    '/communication/contacts': 'Quản lý liên hệ',
+    '/communication/notifications': 'Quản lý thông báo hệ thống',
+    '/communication/contacts': 'Quản lý liên hệ khách hàng',
 
-    // Inventory
-    '/inventory/imports': 'Quản lý nhập kho',
+    // Inventory Management
+    '/inventory/imports': 'Quản lý phiếu nhập kho',
 
     // Analytics & System
-    '/analytics/price-history': 'Lịch sử giá bán',
-    '/system/activity-logs': 'Nhật ký hoạt động',
+    '/analytics/price-history': 'Quản lý lịch sử giá bán',
+    '/system/activity-logs': 'Nhật ký hoạt động hệ thống',
 
-    // Legacy route redirects
+    // Legacy routes (redirected routes should show target page title)
     '/orders': 'Quản lý đơn hàng',
-    '/pos': 'Hệ thống bán hàng',
-    '/employees': 'Quản lý nhân viên',
+    '/pos': 'Hệ thống bán hàng (POS)',
+    '/employees': 'Quản lý nhân viên', 
     '/customers': 'Quản lý khách hàng',
-    '/discounts': 'Mã giảm giá',
-    '/returns': 'Quản lý trả hàng',
-    '/reviews': 'Quản lý đánh giá'
+    '/discounts': 'Quản lý phiếu giảm giá',
+    '/returns': 'Quản lý đơn trả hàng',
+    '/reviews': 'Quản lý đánh giá sản phẩm'
   };
   
   // Handle dynamic routes like /products/details/:id
@@ -178,55 +178,63 @@ const displayName = computed(() => {
   }
 });
 
-// Page title from route
+// Page title from route (use same titles as breadcrumb for consistency)
 const pageTitle = computed(() => {
   const titleMap = {
-    // Dashboard
-    "/dashboard": "Thống kê & Báo cáo",
+    // Main routes
+    '/': 'Bảng điều khiển',
+    '/dashboard': 'Bảng điều khiển',
+    '/login': 'Đăng nhập',
 
     // User Management
-    "/users/nhan-vien": "Quản lý Nhân viên",
-    "/users/khach-hang": "Quản lý Khách hàng",
+    '/users/nhan-vien': 'Quản lý nhân viên',
+    '/users/khach-hang': 'Quản lý khách hàng',
 
     // Product Management
-    "/products": "Danh sách Sản phẩm",
-    "/products/details": "Chi tiết Sản phẩm",
-    "/products/xuat-xu": "Xuất xứ",
-    "/products/nha-san-xuat": "Nhà sản xuất",
-    "/products/mau-sac": "Màu sắc",
-    "/products/kich-thuoc": "Kích thước",
-    "/products/de-giay": "Đế giày",
-    "/products/chat-lieu": "Chất liệu",
-    "/products/trong-luong": "Trọng lượng",
-    "/products/anh-san-pham": "Ảnh sản phẩm",
+    '/products': 'Quản lý sản phẩm',
+    '/products/add': 'Thêm sản phẩm mới',
+    '/products/xuat-xu': 'Quản lý xuất xứ',
+    '/products/nha-san-xuat': 'Quản lý nhà sản xuất',
+    '/products/mau-sac': 'Quản lý màu sắc',
+    '/products/kich-thuoc': 'Quản lý kích thước',
+    '/products/de-giay': 'Quản lý đế giày',
+    '/products/chat-lieu': 'Quản lý chất liệu',
+    '/products/trong-luong': 'Quản lý trọng lượng',
+    '/products/anh-san-pham': 'Quản lý ảnh sản phẩm',
 
     // Sales & Orders
-    "/sales/pos": "Bán hàng tại quầy",
-    "/sales/orders": "Quản lý Đơn hàng",
-    "/sales/returns": "Quản lý Trả hàng",
+    '/sales/pos': 'Hệ thống bán hàng (POS)',
+    '/sales/orders': 'Quản lý đơn hàng',
+    '/sales/returns': 'Quản lý đơn trả hàng',
 
     // Marketing & Promotions
-    "/marketing/discounts": "Mã giảm giá",
-    "/marketing/campaigns": "Chiến dịch khuyến mãi",
-    "/marketing/vouchers": "Phiếu giảm giá người dùng",
+    '/marketing/discounts': 'Quản lý phiếu giảm giá',
+    '/marketing/campaigns': 'Quản lý chiến dịch giảm giá',
+    '/marketing/vouchers': 'Quản lý phiếu người dùng',
 
     // Customer Engagement
-    "/customers/carts": "Quản lý Giỏ hàng",
-    "/customers/favorites": "Sản phẩm Yêu thích",
-    "/customers/reviews": "Đánh giá Sản phẩm",
-    "/customers/comments": "Bình luận",
+    '/customers/carts': 'Quản lý giỏ hàng',
+    '/customers/favorites': 'Quản lý danh sách yêu thích',
+    '/customers/reviews': 'Quản lý đánh giá sản phẩm',
+    '/customers/comments': 'Quản lý bình luận',
 
     // Communication
-    "/communication/notifications": "Thông báo",
-    "/communication/contacts": "Liên hệ",
+    '/communication/notifications': 'Quản lý thông báo hệ thống',
+    '/communication/contacts': 'Quản lý liên hệ khách hàng',
 
-    // Inventory
-    "/inventory/imports": "Nhập kho",
+    // Inventory Management
+    '/inventory/imports': 'Quản lý phiếu nhập kho',
 
     // Analytics & System
-    "/analytics/price-history": "Lịch sử Giá",
-    "/system/activity-logs": "Nhật ký Hoạt động",
+    '/analytics/price-history': 'Quản lý lịch sử giá bán',
+    '/system/activity-logs': 'Nhật ký hoạt động hệ thống',
   };
+  
+  // Handle dynamic routes
+  if (route.path.startsWith('/products/details/')) {
+    return 'Chi tiết sản phẩm';
+  }
+  
   return titleMap[route.path] || "GearUp Admin";
 });
 
@@ -832,7 +840,7 @@ const checkMobile = () => {
 
               <div class="notifications-list">
                 <div v-if="notifications.length === 0" class="no-notifications">
-                  <i class="empty-icon">📭</i>
+                  <i class="empty-icon"><!-- icon: empty-mailbox --></i>
                   <p>Không có thông báo mới</p>
                 </div>
 
@@ -999,7 +1007,7 @@ const checkMobile = () => {
             class="empty-notifications"
           >
             <div class="empty-icon-container">
-              <span class="empty-icon">📭</span>
+              <span class="empty-icon"><!-- icon: empty-mailbox --></span>
             </div>
             <h3>Không có thông báo</h3>
             <p>{{ getEmptyMessage() }}</p>
@@ -1052,7 +1060,7 @@ const checkMobile = () => {
                   class="mark-read-btn"
                   @click.stop="markAsRead(notification.id)"
                 >
-                  <i class="check-icon">✓</i>
+                  <i class="check-icon"><!-- icon: checkmark --></i>
                   Đánh dấu đã đọc
                 </button>
               </div>

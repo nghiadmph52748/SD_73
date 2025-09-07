@@ -9,15 +9,15 @@
         </div>
         <div class="header-actions">
           <button class="btn-refresh" @click="refreshData">
-            <span class="btn-icon">🔄</span>
+            <span class="btn-icon"><!-- icon: refresh --></span>
             Làm mới
           </button>
           <button class="btn-export" @click="exportData">
-            <span class="btn-icon">📊</span>
+            <span class="btn-icon"><!-- icon: chart --></span>
             Xuất báo cáo
           </button>
           <button class="btn-export" @click="exportToExcel">
-            <span class="btn-icon">📗</span>
+            <span class="btn-icon"><!-- icon: excel --></span>
             Xuất Excel
           </button>
         </div>
@@ -27,28 +27,28 @@
     <!-- Statistics Cards -->
     <div class="stats-cards">
       <div class="stats-card">
-        <div class="stats-icon">📝</div>
+        <div class="stats-icon"><!-- icon: note --></div>
         <div class="stats-content">
           <div class="stats-number">{{ totalPriceChanges }}</div>
           <div class="stats-label">Lần thay đổi giá</div>
         </div>
       </div>
       <div class="stats-card">
-        <div class="stats-icon">📈</div>
+        <div class="stats-icon"><!-- icon: chart-up --></div>
         <div class="stats-content">
           <div class="stats-number">{{ priceIncreases }}</div>
           <div class="stats-label">Lần tăng giá</div>
         </div>
       </div>
       <div class="stats-card">
-        <div class="stats-icon">📉</div>
+        <div class="stats-icon"><!-- icon: chart-down --></div>
         <div class="stats-content">
           <div class="stats-number">{{ priceDecreases }}</div>
           <div class="stats-label">Lần giảm giá</div>
         </div>
       </div>
       <div class="stats-card">
-        <div class="stats-icon">💰</div>
+        <div class="stats-icon"><!-- icon: money --></div>
         <div class="stats-content">
           <div class="stats-number">{{ formatCurrency(avgPriceChange) }}</div>
           <div class="stats-label">Biến động TB</div>
@@ -61,7 +61,7 @@
       <div class="filter-card">
         <div class="filter-header">
           <div class="filter-title">
-            <span class="filter-icon">📊</span>
+            <span class="filter-icon"><!-- icon: chart --></span>
             <h3>Tìm kiếm lịch sử giá</h3>
           </div>
           <div class="filter-stats">
@@ -72,7 +72,7 @@
         <div class="filter-content">
           <div class="search-section">
             <div class="input-group">
-              <span class="input-icon">🔍</span>
+              <span class="input-icon"><!-- icon: search --></span>
               <input
                 v-model="searchQuery"
                 type="text"
@@ -88,7 +88,7 @@
           <div class="filters-grid">
             <div class="filter-group">
               <label class="filter-label">
-                <span class="label-icon">📦</span>
+                <span class="label-icon"><!-- icon: package --></span>
                 Sản phẩm
               </label>
               <select v-model="selectedProduct" class="form-select">
@@ -101,7 +101,7 @@
             
             <div class="filter-group">
               <label class="filter-label">
-                <span class="label-icon">👤</span>
+                <span class="label-icon"><!-- icon: user --></span>
                 Người thay đổi
               </label>
               <select v-model="selectedUser" class="form-select">
@@ -114,19 +114,19 @@
 
             <div class="filter-group">
               <label class="filter-label">
-                <span class="label-icon">📈</span>
+                <span class="label-icon"><!-- icon: chart-up --></span>
                 Loại thay đổi
               </label>
               <select v-model="changeType" class="form-select">
                 <option value="">Tất cả loại</option>
-                <option value="increase">📈 Tăng giá</option>
-                <option value="decrease">📉 Giảm giá</option>
+                <option value="increase"><!-- icon: chart-up --> Tăng giá</option>
+                <option value="decrease"><!-- icon: chart-down --> Giảm giá</option>
               </select>
             </div>
 
             <div class="filter-group">
               <label class="filter-label">
-                <span class="label-icon">📅</span>
+                <span class="label-icon"><!-- icon: calendar --></span>
                 Từ ngày
               </label>
               <input type="date" v-model="fromDate" class="form-control date-input">
@@ -134,7 +134,7 @@
 
             <div class="filter-group">
               <label class="filter-label">
-                <span class="label-icon">📅</span>
+                <span class="label-icon"><!-- icon: calendar --></span>
                 Đến ngày
               </label>
               <input type="date" v-model="toDate" class="form-control date-input">
@@ -142,11 +142,11 @@
             
             <div class="filter-actions">
               <button @click="clearFilters" class="btn btn-outline">
-                <span class="btn-icon">🔄</span>
+                <span class="btn-icon"><!-- icon: refresh --></span>
                 Đặt lại
               </button>
               <button @click="applyFilters" class="btn btn-primary">
-                <span class="btn-icon">🔍</span>
+                <span class="btn-icon"><!-- icon: search --></span>
                 Áp dụng
               </button>
             </div>
@@ -162,13 +162,13 @@
           :class="['toggle-btn', { active: viewMode === 'list' }]"
           @click="viewMode = 'list'"
         >
-          📋 Danh sách
+          <!-- icon: clipboard --> Danh sách
         </button>
         <button 
           :class="['toggle-btn', { active: viewMode === 'chart' }]"
           @click="viewMode = 'chart'"
         >
-          📊 Biểu đồ
+          <!-- icon: chart --> Biểu đồ
         </button>
       </div>
     </div>
@@ -233,10 +233,10 @@
               <td>
                 <div class="action-buttons">
                   <button class="btn btn-sm btn-primary" @click="viewDetails(history)">
-                    👁️ Chi tiết
+                    <!-- icon: view --> Chi tiết
                   </button>
                   <button class="btn btn-sm btn-info" @click="viewPriceChart(history.san_pham)">
-                    📊 Biểu đồ
+                    <!-- icon: chart --> Biểu đồ
                   </button>
                 </div>
               </td>
@@ -309,7 +309,7 @@
       </div>
 
       <div v-else class="no-chart-selected">
-        <div class="no-chart-icon">📊</div>
+        <div class="no-chart-icon"><!-- icon: chart --></div>
         <div class="no-chart-text">Chọn sản phẩm để xem biểu đồ biến động giá</div>
       </div>
     </div>
@@ -381,7 +381,7 @@
 
             <div class="modal-actions">
               <button class="btn btn-info" @click="viewProductHistory(selectedHistory.san_pham)">
-                📊 Xem toàn bộ lịch sử
+                <!-- icon: chart --> Xem toàn bộ lịch sử
               </button>
               <button class="btn btn-secondary" @click="showDetailsModal = false">
                 Đóng
@@ -627,864 +627,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.price-history-management {
-  max-width: 1800px;
-  margin: 0 auto;
-}
-
-/* Page Header - Modern Style */
-.page-header {
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  border-radius: 20px;
-  padding: 2rem 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.page-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-  transform: skewX(-45deg);
-  animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%) skewX(-45deg); }
-  100% { transform: translateX(200%) skewX(-45deg); }
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-}
-
-.header-text {
-  flex: 1;
-}
-
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: white;
-  margin: 0 0 0.5rem 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  letter-spacing: -0.02em;
-}
-
-.page-subtitle {
-  font-size: 1.125rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0;
-  font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.header-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.btn-refresh, .btn-export {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  text-decoration: none;
-}
-
-.btn-refresh:hover, .btn-export:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.btn-icon {
-  font-size: 1.125rem;
-  display: inline-flex;
-  align-items: center;
-}
-
-/* Statistics Cards */
-.stats-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.stats-card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.stats-icon {
-  font-size: 2rem;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #4ade80, var(--secondary-color));
-  border-radius: 12px;
-}
-
-.stats-content {
-  flex: 1;
-}
-
-.stats-number {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--secondary-color);
-}
-
-.stats-label {
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-/* Filter Section */
-.filter-section {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow);
-}
-
-.filter-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.filter-controls > div {
-  display: flex;
-  gap: 1rem;
-  align-items: end;
-  flex-wrap: wrap;
-}
-
-.search-box {
-  flex: 1;
-  min-width: 250px;
-}
-
-.filter-group {
-  display: flex;
-  gap: 1rem;
-}
-
-.date-filters {
-  display: flex;
-  gap: 1rem;
-}
-
-.date-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.date-group label {
-  font-size: 0.875rem;
-  color: var(--medium-gray);
-  font-weight: 500;
-}
-
-.view-toggle {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.toggle-btn {
-  padding: 0.5rem 1rem;
-  border: 2px solid var(--border-color);
-  background: white;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.875rem;
-}
-
-.toggle-btn.active,
-.toggle-btn:hover {
-  background-color: #4ade80;
-  border-color: #4ade80;
-  color: white;
-}
-
-/* Table Styles */
-.table th {
-  background-color: #4ade80;
-  color: white;
-  font-weight: 600;
-  padding: 1rem;
-  text-align: center;
-}
-
-.table td {
-  padding: 1rem;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.product-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  text-align: left;
-}
-
-.product-image {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-}
-
-.product-details {
-  flex: 1;
-}
-
-.product-name {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-.product-brand {
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-.old-price {
-  color: var(--medium-gray);
-  text-decoration: line-through;
-}
-
-.new-price {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-.price-change {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.change-amount {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.change-percentage {
-  font-size: 0.875rem;
-}
-
-.price-increase .change-amount,
-.price-increase .change-percentage {
-  color: #dc3545;
-}
-
-.price-decrease .change-amount,
-.price-decrease .change-percentage {
-  color: #28a745;
-}
-
-.price-neutral .change-amount,
-.price-neutral .change-percentage {
-  color: var(--medium-gray);
-}
-
-.price-increase::before {
-  content: '📈';
-  margin-right: 0.25rem;
-}
-
-.price-decrease::before {
-  content: '📉';
-  margin-right: 0.25rem;
-}
-
-.reason-info {
-  text-align: left;
-  max-width: 200px;
-}
-
-.reason-info p {
-  margin: 0;
-  color: var(--secondary-color);
-  font-size: 0.875rem;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.user-info {
-  text-align: left;
-}
-
-.user-name {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-.user-role {
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-.date-info {
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* Chart Section */
-.chart-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: var(--shadow);
-}
-
-.chart-controls {
-  margin-bottom: 2rem;
-}
-
-.chart-controls select {
-  max-width: 400px;
-}
-
-.chart-header {
-  margin-bottom: 2rem;
-}
-
-.chart-header h4 {
-  margin: 0;
-  color: var(--secondary-color);
-  font-size: 1.25rem;
-}
-
-.price-timeline {
-  position: relative;
-  padding-left: 2rem;
-}
-
-.timeline-point {
-  position: relative;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-left: 2px solid var(--border-color);
-}
-
-.timeline-point:last-child {
-  border-left: none;
-}
-
-.timeline-date {
-  position: absolute;
-  left: -120px;
-  top: 0;
-  width: 100px;
-  font-weight: 600;
-  color: var(--secondary-color);
-  font-size: 0.875rem;
-  text-align: right;
-}
-
-.timeline-connector {
-  position: absolute;
-  left: -6px;
-  top: 5px;
-  width: 10px;
-  height: 10px;
-  background-color: #4ade80;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 0 0 2px var(--border-color);
-}
-
-.timeline-content {
-  margin-left: 2rem;
-}
-
-.price-change-info {
-  padding: 1.5rem;
-  border-radius: 8px;
-  border-left: 4px solid var(--border-color);
-}
-
-.price-change-info.price-increase {
-  background-color: rgba(220, 53, 69, 0.05);
-  border-left-color: #dc3545;
-}
-
-.price-change-info.price-decrease {
-  background-color: rgba(40, 167, 69, 0.05);
-  border-left-color: #28a745;
-}
-
-.change-prices {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.from-price, .to-price {
-  font-weight: 600;
-  font-size: 1.125rem;
-}
-
-.from-price {
-  color: var(--medium-gray);
-}
-
-.to-price {
-  color: var(--secondary-color);
-}
-
-.arrow {
-  color: #4ade80;
-  font-weight: bold;
-}
-
-.change-details {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.change-details .change-amount,
-.change-details .change-percentage {
-  font-weight: 600;
-}
-
-.change-reason {
-  color: var(--secondary-color);
-  margin-bottom: 0.5rem;
-  font-style: italic;
-}
-
-.change-author {
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-.no-chart-selected {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  color: var(--medium-gray);
-}
-
-.no-chart-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-}
-
-.no-chart-text {
-  font-size: 1.125rem;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: var(--secondary-color);
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-}
-
-.modal-close:hover {
-  background-color: var(--light-gray);
-}
-
-.modal-body {
-  padding: 1.5rem;
-}
-
-.history-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.detail-section {
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.5rem;
-}
-
-.detail-section h4 {
-  margin: 0 0 1rem 0;
-  color: var(--secondary-color);
-  font-size: 1.125rem;
-}
-
-.product-detail {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.detail-product-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-}
-
-.product-detail-info {
-  flex: 1;
-}
-
-.product-detail-info .product-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--secondary-color);
-  margin-bottom: 0.5rem;
-}
-
-.product-detail-info .product-brand,
-.product-detail-info .product-category {
-  color: var(--medium-gray);
-  margin-bottom: 0.25rem;
-}
-
-.price-change-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.price-comparison {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  justify-content: center;
-}
-
-.price-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.price-label {
-  font-size: 0.875rem;
-  color: var(--medium-gray);
-}
-
-.price-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.price-item.old .price-value {
-  color: var(--medium-gray);
-  text-decoration: line-through;
-}
-
-.price-item.new .price-value {
-  color: var(--secondary-color);
-}
-
-.price-arrow {
-  font-size: 2rem;
-  color: #4ade80;
-  font-weight: bold;
-}
-
-.change-summary {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: var(--light-gray);
-}
-
-.change-summary .change-amount,
-.change-summary .change-percentage {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.info-item label {
-  font-weight: 500;
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-.info-item span {
-  color: var(--secondary-color);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
-}
-
-/* Pagination */
-.pagination-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.page-info {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-/* View Controls */
-.view-controls {
-  margin-bottom: 2rem;
-}
-
-.view-toggle {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-btn {
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #e5e7eb;
-  background: white;
-  color: #6b7280;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.toggle-btn:hover {
-  background: #ffffff;
-  border-color: #22c55e;
-  color: #374151;
-}
-
-.toggle-btn.active {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  color: white;
-  border-color: #22c55e;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .filter-controls > div {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .filter-group {
-    flex-direction: column;
-  }
-  
-  .date-filters {
-    flex-direction: column;
-  }
-  
-  .price-comparison {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .change-summary {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .timeline-date {
-    position: relative;
-    left: auto;
-    width: auto;
-    text-align: left;
-    margin-bottom: 0.5rem;
-  }
-  
-  .timeline-content {
-    margin-left: 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-header {
-    padding: 1.5rem;
-    text-align: center;
-  }
-  
-  .header-content {
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
-  }
-  
-  .page-title {
-    font-size: 2rem;
-  }
-  
-  .page-subtitle {
-    font-size: 1rem;
-  }
-  
-  .header-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .btn-refresh, .btn-export {
-    justify-content: center;
-  }
-  
-  .stats-cards {
-    grid-template-columns: 1fr;
-  }
-  
-  .product-info {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .action-buttons {
-    flex-direction: column;
-  }
-  
-  .product-detail {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .modal-actions {
-    flex-direction: column;
-  }
-  
-  .price-timeline {
-    padding-left: 1rem;
-  }
-}
+/* Import external CSS file */
+@import '../../styles/cssQuanLy/quanLyLichSuGia.css';
 </style>

@@ -542,7 +542,7 @@
                 <span
                   v-if="isMauSacSelected(mauSac)"
                   class="attribute-checkmark"
-                  >✓</span
+                  ><!-- icon: checkmark --></span
                 >
                 {{ mauSac.tenMauSac }}
               </div>
@@ -605,7 +605,7 @@
                 <span
                   v-if="isKichThuocSelected(kichThuoc)"
                   class="attribute-checkmark"
-                  >✓</span
+                  ><!-- icon: checkmark --></span
                 >
                 {{ kichThuoc.tenKichThuoc }}
               </div>
@@ -754,7 +754,7 @@
                     @error="handleImageError($event, anh)"
                   />
                   <div class="anh-overlay">
-                    <span v-if="isAnhSelected(anh)" class="checkmark">✓</span>
+                    <span v-if="isAnhSelected(anh)" class="checkmark"><!-- icon: checkmark --></span>
                   </div>
                   <div class="anh-name">{{ getAnhName(anh) }}</div>
                 </div>
@@ -2247,7 +2247,7 @@ const saveProduct = async () => {
                 );
               } catch (linkError) {
                 console.error(
-                  `❌ Lỗi khi tạo liên kết ảnh cho biến thể ${i}-${j}:`,
+                  `<!-- icon: close --> Lỗi khi tạo liên kết ảnh cho biến thể ${i}-${j}:`,
                   linkError
                 );
                 // Tiếp tục với biến thể khác
@@ -2256,7 +2256,7 @@ const saveProduct = async () => {
             }
           } catch (error) {
             console.error(
-              `❌ Lỗi khi xử lý ảnh cho biến thể ${i}-${j}:`,
+              `<!-- icon: close --> Lỗi khi xử lý ảnh cho biến thể ${i}-${j}:`,
               error
             );
             // Không throw error để tiếp tục tạo các biến thể khác
@@ -2271,7 +2271,7 @@ const saveProduct = async () => {
     // Reset form after successful creation
     resetForm();
   } catch (error) {
-    console.error("❌ Error creating product:", error);
+    console.error("<!-- icon: close --> Error creating product:", error);
     console.error("Error details:", {
       message: error.message,
       stack: error.stack,
@@ -2448,7 +2448,7 @@ const handleFileSelect = async (event) => {
           type: file.type,
         });
       } catch (error) {
-        console.error(`❌ Lỗi convert file ${file.name} sang base64:`, error);
+        console.error(`<!-- icon: close --> Lỗi convert file ${file.name} sang base64:`, error);
         invalidFiles.push(file.name);
       }
     } else {
@@ -2597,7 +2597,7 @@ const uploadMultipleImages = async (images) => {
             originalAnh: anh,
           };
         } else {
-          console.error("❌ Upload ảnh thất bại:", uploadResponse);
+          console.error("<!-- icon: close --> Upload ảnh thất bại:", uploadResponse);
           return {
             success: false,
             error: "Upload thất bại",
@@ -2605,7 +2605,7 @@ const uploadMultipleImages = async (images) => {
           };
         }
       } catch (error) {
-        console.error("❌ Lỗi upload ảnh:", error);
+        console.error("<!-- icon: close --> Lỗi upload ảnh:", error);
         return {
           success: false,
           error: error.message,

@@ -89,7 +89,7 @@
             </div>
 
             <div v-if="error" class="error-message">
-              <span class="error-icon">⚠️</span>
+              <span class="error-icon"><!-- icon: warning --></span>
               {{ error }}
             </div>
 
@@ -100,7 +100,7 @@
               :class="{ loading: loading && !loginSuccess, success: loginSuccess }"
             >
               <div class="button-content">
-                <span v-if="loginSuccess" class="success-icon">✓</span>
+                <span v-if="loginSuccess" class="success-icon"><!-- icon: checkmark --></span>
                 <span v-else class="login-icon">{{ loginIcon }}</span>
                 <span class="button-text">
                   {{ buttonText }}
@@ -165,7 +165,7 @@ const props = defineProps({
   },
   usernameIcon: {
     type: String,
-    default: '👤'
+    default: '<!-- icon: user -->'
   },
 
   // Password field
@@ -183,7 +183,7 @@ const props = defineProps({
   },
   passwordIcon: {
     type: String,
-    default: '🔒'
+    default: '<!-- icon: lock -->'
   },
 
   // Options
@@ -219,7 +219,7 @@ const props = defineProps({
   },
   loginIcon: {
     type: String,
-    default: '🚀'
+    default: '<!-- icon: rocket -->'
   },
 
   // Footer
