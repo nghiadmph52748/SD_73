@@ -108,14 +108,14 @@
 }
 
 .export-btn {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
   color: white;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
 }
 
 .export-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.4);
 }
 
 /* ===== MODERN METRICS GRID ===== */
@@ -719,6 +719,15 @@
 .action-btn:hover {
   border-color: #4ade80;
   background: #f0fdf4;
+}
+
+.action-btn:hover svg {
+  color: #4ade80;
+}
+
+.action-btn svg {
+  color: #64748b;
+  transition: color 0.2s ease;
 }
 
 .action-icon {

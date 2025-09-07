@@ -1,30 +1,28 @@
 <template>
   <div class="pos-system">
-    <!-- Compact Action Bar -->
-    <div class="action-bar">
-      <div class="action-bar-content">
-        <button class="action-btn refresh-btn" @click="refreshData" title="Làm mới dữ liệu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="23,4 23,10 17,10"></polyline>
-            <polyline points="1,20 1,14 7,14"></polyline>
-            <path d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"></path>
-          </svg>
-          <span>Làm mới</span>
-        </button>
-        <button class="action-btn search-btn" @click="showProductSearch = true" title="Tìm kiếm sản phẩm">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="M21 21l-4.35-4.35"></path>
-          </svg>
-          <span>Tìm sản phẩm</span>
-        </button>
-        <button class="action-btn primary-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"></path>
-          </svg>
-          <span>Tạo đơn hàng</span>
-        </button>
-      </div>
+    <!-- Simple Action Bar -->
+    <div class="simple-action-bar">
+      <button class="action-btn secondary-btn" @click="refreshData" title="Làm mới dữ liệu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23,4 23,10 17,10"></polyline>
+          <polyline points="1,20 1,14 7,14"></polyline>
+          <path d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"></path>
+        </svg>
+        <span>Làm mới</span>
+      </button>
+      <button class="action-btn secondary-btn" @click="showProductSearch = true" title="Tìm kiếm sản phẩm">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M21 21l-4.35-4.35"></path>
+        </svg>
+        <span>Tìm sản phẩm</span>
+      </button>
+      <button class="action-btn primary-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14"></path>
+        </svg>
+        <span>Tạo đơn hàng mới</span>
+      </button>
     </div>
 
     <!-- Modern Order Tabs -->
@@ -60,195 +58,224 @@
     </div>
 
     <div class="main-content">
-      <!-- Cart Section -->
-      <div class="cart-section">
-        <div class="section-header">
-          <div class="header-content">
-            <h2 class="section-title">Giỏ hàng</h2>
-            <div class="section-actions">
-              <button class="icon-btn" @click="showProductSearch = true" title="Quét QR code">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="5" height="5"/>
-                  <rect x="3" y="16" width="5" height="5"/>
-                  <rect x="16" y="3" width="5" height="5"/>
-                  <path d="M21 16h-3v3M21 21v.01M12 7v3M12 15.01V15"/>
-                </svg>
-              </button>
-              <button class="primary-icon-btn" @click="showProductSearch = true" title="Thêm sản phẩm">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 5v14M5 12h14"/>
-                </svg>
-              </button>
+      <!-- Modern Cart Section -->
+      <div class="modern-cart-section">
+        <div class="cart-header">
+          <div class="cart-header-left">
+            <div class="cart-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/> 
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              </svg>
             </div>
+            <div class="cart-info">
+              <h2 class="cart-title">Giỏ hàng</h2>
+              <p class="cart-subtitle">{{ currentOrder?.danhSachSanPham?.length || 0 }} sản phẩm</p>
+            </div>
+          </div>
+          <div class="cart-header-actions">
+            <button class="cart-action-btn secondary-btn" @click="showProductSearch = true" title="Quét QR code">
+              <img src="@/assets/QR.svg" alt="QR Code" width="18" height="18" />
+            </button>
+            <button class="cart-action-btn primary-btn" @click="showProductSearch = true" title="Thêm sản phẩm">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span>Thêm sản phẩm</span>
+            </button>
           </div>
         </div>
 
-        <!-- Cart Items -->
-        <div class="cart-items" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
-          <div v-for="item in currentOrder.danhSachSanPham" :key="item.id" class="cart-item">
-            <div class="item-select">
-              <input type="checkbox" v-model="item.selected" class="item-checkbox" />
-            </div>
-
-            <div class="item-image">
-              <img v-if="item.duongDanAnh" 
-                   :src="item.duongDanAnh.startsWith('http') ? item.duongDanAnh : IMAGE_BASE_URL + item.duongDanAnh" 
-                   :alt="item.tenSanPham" 
-                   class="product-img" />
-              <div v-else class="img-placeholder">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <rect x="3" y="3" width="18" height="18" rx="2"/>
-                  <circle cx="8.5" cy="8.5" r="1.5"/>
-                  <path d="M21 15l-5-5L5 21"/>
-                </svg>
+        <!-- Modern Cart Items -->
+        <div class="modern-cart-items" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
+          <div v-for="item in currentOrder.danhSachSanPham" :key="item.id" class="modern-cart-item">
+            <div class="cart-item-content">
+              <div class="item-checkbox-wrapper">
+                <input type="checkbox" v-model="item.selected" class="modern-checkbox" id="item-{{ item.id }}" />
+                <label :for="'item-' + item.id" class="checkbox-label"></label>
               </div>
-            </div>
-
-            <div class="item-details">
-              <div class="item-info">
-                <h3 class="product-name">{{ item.tenSanPham }}</h3>
-                <div class="product-specs">
-                  <span class="spec">{{ item.tenKichThuoc }}</span>
-                  <span class="spec-divider">•</span>
-                  <span class="spec">{{ item.tenMauSac }}</span>
-                  <span class="spec-divider">•</span>
-                  <span class="spec">{{ item.tenNhaSanXuat }}</span>
+              
+              <div class="item-image-wrapper">
+                <div class="item-image">
+                  <img v-if="item.duongDanAnh" 
+                       :src="item.duongDanAnh.startsWith('http') ? item.duongDanAnh : IMAGE_BASE_URL + item.duongDanAnh" 
+                       :alt="item.tenSanPham" 
+                       class="product-image" />
+                  <div v-else class="image-placeholder">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                  </div>
                 </div>
-                <div class="item-pricing">
-                  <span v-if="item.giaTriGiamGia > 0" class="original-price">
-                    {{ formatCurrency(item.giaBan) }}
-                  </span>
-                  <span class="current-price">
-                    {{ formatCurrency(item.giaSauGiam) }}
-                  </span>
-                  <span v-if="item.giaTriGiamGia > 0" class="discount-badge">
+              </div>
+
+              <div class="item-details-wrapper">
+                <div class="item-main-info">
+                  <h3 class="product-title">{{ item.tenSanPham }}</h3>
+                  <div class="product-attributes">
+                    <span class="attribute">{{ item.tenKichThuoc }}</span>
+                    <span class="attribute-separator">•</span>
+                    <span class="attribute">{{ item.tenMauSac }}</span>
+                    <span class="attribute-separator">•</span>
+                    <span class="attribute">{{ item.tenNhaSanXuat }}</span>
+                  </div>
+                </div>
+                
+                <div class="item-price-info">
+                  <div class="price-wrapper">
+                    <span v-if="item.giaTriGiamGia > 0" class="original-price">
+                      {{ formatCurrency(item.giaBan) }}
+                    </span>
+                    <span class="current-price">
+                      {{ formatCurrency(item.giaSauGiam) }}
+                    </span>
+                  </div>
+                  <span v-if="item.giaTriGiamGia > 0" class="discount-tag">
                     -{{ item.giaTriGiamGia }}%
                   </span>
                 </div>
               </div>
-            </div>
 
-            <div class="item-controls">
-              <div class="quantity-control">
-                <button @click="updateQuantity(item, -1)" class="qty-btn" :disabled="item.soLuong <= 1">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M5 12h14"/>
-                  </svg>
-                </button>
-                <span class="quantity">{{ item.soLuong }}</span>
-                <button @click="updateQuantity(item, 1)" class="qty-btn">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M12 5v14M5 12h14"/>
+              <div class="item-actions">
+                <div class="quantity-controls">
+                  <button @click="updateQuantity(item, -1)" class="quantity-btn" :disabled="item.soLuong <= 1">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14"/>
+                    </svg>
+                  </button>
+                  <span class="quantity-display">{{ item.soLuong }}</span>
+                  <button @click="updateQuantity(item, 1)" class="quantity-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                  </button>
+                </div>
+                
+                <div class="item-total-price">
+                  {{ formatCurrency(item.giaSauGiam * item.soLuong) }}
+                </div>
+                
+                <button @click="removeItem(item)" class="remove-item-btn" title="Xóa khỏi giỏ hàng">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
                   </svg>
                 </button>
               </div>
-              <div class="item-total">
-                {{ formatCurrency(item.giaSauGiam * item.soLuong) }}
-              </div>
-              <button @click="removeItem(item)" class="remove-btn" title="Xóa khỏi giỏ hàng">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
-                </svg>
-              </button>
             </div>
           </div>
         </div>
 
-        <!-- Redesigned Empty State -->
-        <div v-else class="empty-cart">
-          <div class="empty-state">
-            <div class="empty-icon">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+        <!-- Modern Empty State -->
+        <div v-else class="modern-empty-state">
+          <div class="empty-state-content">
+            <div class="empty-illustration">
+              <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/> 
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
               </svg>
             </div>
-            <div class="empty-content">
+            <div class="empty-text">
               <h3 class="empty-title">Giỏ hàng trống</h3>
-              <p class="empty-subtitle">Thêm sản phẩm để bắt đầu tạo đơn hàng</p>
-              <button class="empty-action-btn" @click="showProductSearch = true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 5v14M5 12h14"></path>
-                </svg>
-                <span>Thêm sản phẩm đầu tiên</span>
-              </button>
+              <p class="empty-description">Chưa có sản phẩm nào trong giỏ hàng. Hãy thêm sản phẩm để bắt đầu tạo đơn hàng.</p>
             </div>
+            <button class="add-first-product-btn" @click="showProductSearch = true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+              <span>Thêm sản phẩm đầu tiên</span>
+            </button>
           </div>
         </div>
 
-        <!-- Redesigned Total Section -->
-        <div class="total-section" v-if="currentOrder">
-          <div class="total-card">
-            <div class="total-header">
-              <div class="total-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 1v6l3-3 3 3V1" />
-                  <path d="M21 12v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" />
-                  <path d="M3 12h18" />
-                </svg>
-              </div>
-              <div class="total-info">
-                <span class="total-label">Tổng tiền hàng</span>
-                <span class="total-amount">{{
-                  formatCurrency(currentOrder.tongTien || 0)
-                }}</span>
-              </div>
+        <!-- Modern Total Section -->
+        <div class="modern-total-section" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
+          <div class="total-summary-card">
+            <div class="total-row">
+              <span class="total-label">Tổng tiền hàng:</span>
+              <span class="total-value">{{ formatCurrency(currentOrder.tongTien || 0) }}</span>
+            </div>
+            <div class="total-row" v-if="currentOrder.discount && currentOrder.discount > 0">
+              <span class="total-label discount-label">Giảm giá:</span>
+              <span class="total-value discount-value">-{{ formatCurrency(currentOrder.discount) }}</span>
+            </div>
+            <div class="total-divider"></div>
+            <div class="total-row final-total">
+              <span class="final-label">Thành tiền:</span>
+              <span class="final-value">{{ formatCurrency((currentOrder.tongTien || 0) - (currentOrder.discount || 0)) }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Redesigned Customer Section -->
-      <div class="customer-section">
-        <div class="section-header">
-          <div class="header-left">
-            <div class="section-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <!-- Clean Customer Section -->
+      <div class="clean-customer-section">
+        <div class="customer-section-header">
+          <div class="customer-header-content">
+            <div class="customer-icon-wrapper">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>
-            <div class="section-info">
-              <h3 class="section-title">Khách hàng & Thanh toán</h3>
-              <p class="section-subtitle">Thông tin khách hàng và xử lý thanh toán</p>
+            <div class="customer-header-text">
+              <h3 class="customer-section-title">Khách hàng & Thanh toán</h3>
+              <p class="customer-section-subtitle">Thông tin khách hàng và xử lý thanh toán</p>
             </div>
           </div>
-          <button class="section-action-btn customer-btn" @click="showCustomerSearch = true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="find-customer-btn" @click="showCustomerSearch = true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"></circle>
               <path d="M21 21l-4.35-4.35"></path>
             </svg>
-            <span>Chọn khách hàng</span>
+            <span>Tìm khách hàng</span>
           </button>
         </div>
 
-        <div class="customer-form" v-if="currentOrder">
+        <div class="clean-customer-form" v-if="currentOrder">
           <!-- Customer Info Section -->
           <div class="customer-info-section">
-            <div class="form-group">
-              <label class="form-label">Tên Khách hàng</label>
-              <div class="customer-input-container">
-                <input type="text" v-model="customerDisplayName" @input="searchCustomers"
-                  @focus="showCustomerDropdown = true" class="form-control"
-                  placeholder="Nhập tên hoặc email khách hàng để tìm kiếm" autocomplete="off" />
-                <button v-if="customerDisplayName" class="btn-clear-input" @click="clearCustomerInput"
-                  title="Xóa nội dung">
-                  ✕
-                </button>
+            <h4 class="section-title">Thông tin khách hàng</h4>
+            
+            <div class="customer-input-group">
+              <label class="customer-label">Tên khách hàng</label>
+              <div class="customer-input-wrapper">
+                <div class="customer-input-container">
+                  <svg class="customer-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <input type="text" v-model="customerDisplayName" @input="searchCustomers"
+                    @focus="showCustomerDropdown = true" class="customer-input"
+                    placeholder="Nhập tên hoặc email khách hàng" autocomplete="off" />
+                  <button v-if="customerDisplayName" class="clear-customer-input" @click="clearCustomerInput"
+                    title="Xóa nội dung">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
 
-                <!-- Customer Suggestions Dropdown -->
+                <!-- Customer Suggestions -->
                 <div v-if="customerSuggestions.length > 0 && showCustomerDropdown" class="customer-suggestions">
-                  <div v-for="customer in customerSuggestions" :key="customer.id" :class="[
-                    'customer-suggestion-item',
-                    { 'create-new-customer': customer.isCreateNew },
-                  ]" @click="selectCustomerFromSuggestions(customer)">
-                    <div class="customer-info">
-                      <strong>{{ customer.tenKhachHang }}</strong>
-                      <small v-if="!customer.isCreateNew">{{ customer.email }} |
-                        {{ customer.soDienThoai }}</small>
-                      <small v-else class="create-new-hint">
-                        Nhấn để tạo khách hàng mới
-                      </small>
+                  <div v-for="customer in customerSuggestions" :key="customer.id" 
+                       :class="['customer-suggestion', { 'create-new': customer.isCreateNew }]"
+                       @click="selectCustomerFromSuggestions(customer)">
+                    <div class="suggestion-content">
+                      <div class="suggestion-info" v-if="!customer.isCreateNew">
+                        <span class="suggestion-name">{{ customer.tenKhachHang }}</span>
+                        <span class="suggestion-details">{{ customer.email }} • {{ customer.soDienThoai }}</span>
+                      </div>
+                      <div class="suggestion-info create-new-info" v-else>
+                        <div class="create-new-row">
+                          <img :src="PlusIcon" alt="Plus" class="plus-icon" />
+                          <span class="create-new-text">{{ customer.displayName }}</span>
+                        </div>
+                        <span class="create-new-hint">Nhấn để tạo khách hàng mới</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -258,551 +285,504 @@
 
           <!-- Discount Section -->
           <div class="discount-section">
-            <h4 class="subsection-title"> Giảm giá & Khuyến mãi</h4>
-
-            <!-- Available Coupons -->
-            <div class="form-group">
-              <label class="form-label">Phiếu giảm giá khả dụng</label>
-              <div class="coupon-selector">
-                <!-- Main Coupon Select Button -->
-                <button class="btn btn-outline coupon-select-btn" @click="openCouponModal"
-                  :disabled="availableCoupons.length === 0">
-                  <span v-if="availableCoupons.length > 0">
-                    <span v-if="selectedCoupons.length > 0">
-                      🎫 Đã chọn phiếu giảm giá
-                      <span v-if="autoAppliedCoupon" class="auto-indicator">(🤖 Tự động)</span>
-                    </span>
-                    <span v-else>🎫 Chọn phiếu giảm giá</span>
-                  </span>
-                  <span v-else> 🎫 Chọn phiếu giảm giá (Đang tải...) </span>
-                </button>
-
-                <!-- Info Message -->
-                <div v-if="availableCoupons.length === 0" class="info-message">
-                  <small class="text-muted">
-                    Đang tải danh sách phiếu giảm giá...
-                  </small>
+            <h4 class="section-title">Giảm giá & Khuyến mãi</h4>
+            
+            <div class="coupon-selector">
+              <button class="select-coupon-btn" @click="openCouponModal"
+                :disabled="availableCoupons.length === 0">
+                <div class="coupon-btn-inner">
+                  <div class="coupon-btn-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
+                      <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
+                      <circle cx="9" cy="12" r="1"/>
+                      <circle cx="15" cy="12" r="1"/>
+                    </svg>
+                  </div>
+                  <div class="coupon-btn-text">
+                    <span v-if="selectedCoupons.length > 0">Chọn phiếu giảm giá</span>
+                    <span v-else-if="availableCoupons.length > 0">Chọn phiếu giảm giá</span>
+                    <span v-else>Đang tải phiếu giảm giá...</span>
+                  </div>
+                  <svg class="coupon-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                  </svg>
                 </div>
-              </div>
+              </button>
             </div>
 
-            <!-- Auto Applied Notification -->
-            <div v-if="autoAppliedCoupon" class="auto-applied-notification">
-              <small class="text-info">
-                🤖 Đã tự động áp dụng phiếu giảm giá tốt nhất cho đơn hàng của
-                bạn!
-              </small>
-            </div>
-
-            <!-- Selected Coupons Display -->
-            <div class="form-group" v-if="selectedCoupons.length > 0">
-              <label class="form-label">Phiếu giảm giá đã chọn</label>
-              <div class="selected-coupons">
-                <div class="selected-coupon-item">
-                  <div class="coupon-summary">
-                    <div class="coupon-header">
-                      <span class="coupon-name">{{
-                        selectedCoupons[0].tenPhieuGiamGia
-                      }}</span>
-                      <span v-if="
-                        autoAppliedCoupon &&
-                        autoAppliedCoupon.id === selectedCoupons[0].id
-                      " class="auto-applied-badge">
-                        🤖 Tự động
-                      </span>
-                    </div>
+              <!-- Selected Coupon Display -->
+              <div v-if="selectedCoupons.length > 0" class="selected-coupon">
+                <div class="coupon-info">
+                  <div class="coupon-details">
+                    <span class="coupon-name">{{ selectedCoupons[0].tenPhieuGiamGia }}</span>
                     <span class="coupon-value">
                       <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                        -{{ selectedCoupons[0].giaTriGiamGia }}% (-{{
-                          calculateCouponDiscount(
-                            selectedCoupons[0]
-                          ).toLocaleString()
-                        }}đ)
+                        -{{ selectedCoupons[0].giaTriGiamGia }}%
                       </span>
-                      <span v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true">
-                        -{{
-                          selectedCoupons[0].giaTriGiamGia.toLocaleString()
-                        }}đ
+                      <span v-else>
+                        -{{ formatCurrency(selectedCoupons[0].giaTriGiamGia) }}
                       </span>
                     </span>
                   </div>
-                  <div class="coupon-actions">
-                    <button class="btn-change-coupon" @click="openCouponModal" title="Thay đổi phiếu giảm giá">
-                      <img :src="RefreshIcon" alt="Refresh" class="icon-sm" />
-                    </button>
-                    <button class="btn-remove-coupon" @click="removeSelectedCoupon(selectedCoupons[0].id)"
-                      title="Xóa phiếu giảm giá">
-                      ✕
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Tổng giảm giá</label>
-              <div class="discount-display">
-                <span class="discount-amount">{{
-                  currentOrder.discount
-                    ? currentOrder.discount.toLocaleString()
-                    : "0"
-                }}đ</span>
-                <small class="discount-breakdown" v-if="selectedCoupons.length > 0">
-                  (Từ phiếu giảm giá)
-                </small>
-                <div v-if="selectedCoupons.length > 0" class="discount-details">
-                  <small class="discount-detail">
-                    {{ selectedCoupons[0].tenPhieuGiamGia }}:
-                    <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                      -{{
-                        calculateCouponDiscount(
-                          selectedCoupons[0]
-                        ).toLocaleString()
-                      }}đ
-                    </span>
-                    <span v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true">
-                      -{{ selectedCoupons[0].giaTriGiamGia.toLocaleString() }}đ
-                    </span>
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Shipping Section -->
-          <div class="shipping-section">
-            <h4 class="subsection-title"> Giao hàng</h4>
-            <div class="delivery-toggle" v-if="currentOrder">
-              <label class="toggle-option">
-                <input type="radio" value="pickup" v-model="currentOrder.ghiChu" checked />
-                <span>Nhận tại cửa hàng</span>
-              </label>
-              <label class="toggle-option">
-                <input type="radio" value="delivery" v-model="currentOrder.ghiChu" />
-                <span>Giao hàng tận nơi</span>
-              </label>
-            </div>
-
-            <div class="shipping-info" v-if="currentOrder && currentOrder.ghiChu === 'delivery'">
-              <div class="delivery-service-selector">
-                <label class="form-label">Đơn vị vận chuyển:</label>
-                <div class="delivery-service-toggle">
-                  <button v-for="service in deliveryServices" :key="service.code" :class="[
-                    'service-btn',
-                    {
-                      active:
-                        currentOrder?.selectedService?.code === service.code,
-                    },
-                  ]" @click="selectDeliveryService(service)">
-                    <div class="service-logo">
-                      <span class="service-text" :style="{ color: service.color }">{{ service.name }}</span>
-                    </div>
-                    <div class="service-info">
-                      <div class="service-time">{{ service.deliveryTime }}</div>
-                      <div class="service-fee">
-                        {{ formatCurrency(service.fee) }}
-                      </div>
-                    </div>
+                  <button class="remove-coupon-btn" @click="removeSelectedCoupon(selectedCoupons[0].id)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
                   </button>
                 </div>
               </div>
 
-              <div class="selected-service-info" v-if="currentOrder?.selectedService">
-                <div class="shipping-method">
-                  <span> Đơn vị: {{ currentOrder.selectedService.name }}</span>
-                </div>
-                <div class="estimated-delivery">
-                  <span> Thời gian:
-                    {{ currentOrder.selectedService.deliveryTime }}</span>
-                </div>
-                <div class="shipping-fee">
-                  <span> Phí vận chuyển:
-                    {{
-                      formatCurrency(currentOrder.selectedService.fee || 0)
-                    }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Delivery Address Section -->
-            <div v-if="currentOrder && currentOrder.ghiChu === 'delivery'" class="delivery-address-section">
-              <h5 class="address-title"> Địa chỉ giao hàng</h5>
-
-              <div class="address-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Họ tên người nhận</label>
-                    <input type="text" v-model="deliveryAddress.tenNguoiNhan" class="form-control"
-                      placeholder="Nhập họ tên người nhận" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Số điện thoại người nhận</label>
-                    <input type="tel" v-model="deliveryAddress.soDienThoaiNguoiNhan" class="form-control"
-                      placeholder="Nhập số điện thoại" />
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">Email người nhận (tùy chọn)</label>
-                  <input type="email" v-model="deliveryAddress.emailNguoiNhan" class="form-control"
-                    placeholder="Nhập email người nhận" />
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Tỉnh/Thành phố</label>
-                    <input type="text" v-model="deliveryAddress.thanhPho" class="form-control"
-                      placeholder="Nhập tỉnh/thành phố" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Quận/Huyện</label>
-                    <input type="text" v-model="deliveryAddress.quan" class="form-control"
-                      placeholder="Nhập quận/huyện" />
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Xã/Phường</label>
-                    <input type="text" v-model="deliveryAddress.phuong" class="form-control"
-                      placeholder="Nhập xã/phường" />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Địa chỉ cụ thể</label>
-                    <input type="text" v-model="deliveryAddress.diaChiCuThe" class="form-control"
-                      placeholder="Nhập địa chỉ cụ thể" />
-                  </div>
-                </div>
-
-                <div class="address-preview" v-if="isAddressComplete">
-                  <strong> Địa chỉ đầy đủ:</strong>
-                  <p>{{ getFullAddress }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Price Summary -->
-          <div class="price-summary-section">
-            <h4 class="subsection-title"><img :src="StatisticsIcon" alt="Chart" class="icon-sm" /> Tổng kết đơn hàng
-            </h4>
-            <div class="price-breakdown" v-if="currentOrder">
-              <div class="price-row">
-                <span>Tiền hàng</span>
-                <span>{{ formatCurrency(currentOrder.tongTien || 0) }}</span>
-              </div>
-              <div class="price-row">
-                <span>Phí vận chuyển</span>
-                <span v-if="
-                  currentOrder.tongTien >= 3000000 &&
-                  currentOrder.ghiChu === 'delivery'
-                ">
-                  <span class="free-shipping">Miễn phí </span>
-                </span>
-                <span v-else>
-                  {{ formatCurrency(currentOrder.phiVanChuyen || 0) }}
-                </span>
-              </div>
-              <!-- Thông báo miễn phí giao hàng -->
-              <div v-if="currentOrder.ghiChu === 'delivery'" class="shipping-notice">
-                <small v-if="currentOrder.tongTien >= 3000000" class="text-success">
-                  Đơn hàng đủ điều kiện miễn phí giao hàng!
-                </small>
-                <small v-else class="text-muted">
-                  Mua thêm
-                  {{ formatCurrency(3000000 - currentOrder.tongTien) }} để được
-                  miễn phí giao hàng
-                </small>
-              </div>
-              <!-- Coupon Discount Breakdown -->
-              <div v-if="selectedCoupons.length > 0" class="coupon-discount-breakdown">
-                <div class="price-row coupon-discount">
-                  <span>
-                    {{ selectedCoupons[0].tenPhieuGiamGia }}
-                    <small v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                      ({{ selectedCoupons[0].giaTriGiamGia }}%)
-                    </small>
-                    <small v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true">
-                      ({{ selectedCoupons[0].giaTriGiamGia.toLocaleString() }}đ)
-                    </small>
-                  </span>
-                  <span class="discount">
-                    <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                      -{{
-                        calculateCouponDiscount(
-                          selectedCoupons[0]
-                        ).toLocaleString()
-                      }}đ
-                    </span>
-                    <span v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true">
-                      -{{ selectedCoupons[0].giaTriGiamGia.toLocaleString() }}đ
-                    </span>
-                  </span>
-                </div>
-
-                <!-- Total Discount Row -->
-                <div class="price-row discount-total">
-                  <span><strong>Tổng giảm giá</strong></span>
-                  <span class="discount">-{{ formatCurrency(currentOrder.discount || 0) }}</span>
-                </div>
-              </div>
-              <div class="price-row total">
-                <span>Tổng số tiền</span>
-                <span class="total-amount">{{
-                  formatCurrency(currentOrder.tongTienSauGiam || 0)
-                }}</span>
+              <!-- Auto Applied Notification -->
+              <div v-if="autoAppliedCoupon" class="auto-applied-notice">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4"/>
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <span>Đã tự động áp dụng phiếu giảm giá tốt nhất</span>
               </div>
             </div>
           </div>
 
           <!-- Payment Section -->
           <div class="payment-section">
-            <h4 class="subsection-title"><img :src="CreditCardIcon" alt="Credit Card" class="icon-sm" /> Thanh toán</h4>
-
-            <!-- Payment Method Selection -->
-            <div class="payment-method-selection" v-if="currentOrder">
-              <label class="form-label">Phương thức thanh toán</label>
-              <div class="payment-options">
-                <div class="payment-option">
-                  <input type="radio" id="pay_now" value="pay_now" v-model="currentOrder.phuongThucThanhToan" />
-                  <label for="pay_now"> Trả ngay</label>
+            <h4 class="section-title">Thanh toán</h4>
+            
+            <!-- Payment Methods -->
+            <div class="payment-options">
+              <div class="payment-option" 
+                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'pay_now' }"
+                   @click="currentOrder.phuongThucThanhToan = 'pay_now'">
+                <div class="payment-option-icon">
+                  <img src="@/assets/Money.svg" alt="Cash Icon" width="18" height="18" />
                 </div>
-                <div class="payment-option">
-                  <input type="radio" id="bank_transfer" value="bank_transfer"
-                    v-model="currentOrder.phuongThucThanhToan" />
-                  <label for="bank_transfer">🏦 Chuyển khoản</label>
+                <div class="payment-option-content">
+                  <span class="payment-option-title">Tiền mặt</span>
+                  <span class="payment-option-desc">Thanh toán trực tiếp</span>
                 </div>
-                <div class="payment-option" v-if="
-                  currentOrder.ghiChu &&
-                  currentOrder.ghiChu.includes('delivery')
-                ">
-                  <input type="radio" id="cod" value="cod" v-model="currentOrder.phuongThucThanhToan" />
-                  <label for="cod"> Thanh toán khi nhận hàng</label>
+              </div>
+              
+              <div class="payment-option" 
+                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'bank_transfer' }"
+                   @click="currentOrder.phuongThucThanhToan = 'bank_transfer'">
+                <div class="payment-option-icon">
+                  <img src="@/assets/Banking.svg" alt="Banking Icon" width="18" height="18" />
+                </div>
+                <div class="payment-option-content">
+                  <span class="payment-option-title">Chuyển khoản</span>
+                  <span class="payment-option-desc">Thanh toán qua ngân hàng</span>
+                </div>
+              </div>
+              
+              <div class="payment-option" 
+                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'home_delivery' }"
+                   @click="currentOrder.phuongThucThanhToan = 'home_delivery'">
+                <div class="payment-option-icon">
+                  <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="18" height="18" />
+                </div>
+                <div class="payment-option-content">
+                  <span class="payment-option-title">Giao hàng tận nơi</span>
+                  <span class="payment-option-desc">Thanh toán khi nhận hàng</span>
                 </div>
               </div>
             </div>
-
-            <!-- Pay Now Input -->
-            <div class="payment-method" v-if="currentOrder?.phuongThucThanhToan === 'pay_now'">
-              <label class="form-label">Số tiền khách trả</label>
-              <div class="payment-amount">
-                <input type="number" v-model="currentOrder.tienKhachTra" class="form-control"
-                  placeholder="Nhập số tiền khách thanh toán" min="0" :max="currentOrder.tongTienSauGiam" />
-              </div>
-            </div>
-
-            <!-- Bank Transfer QR Code -->
-            <div class="bank-transfer-section" v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'">
-              <div class="qr-code-container">
-                <h5>🏦 Thông tin chuyển khoản</h5>
-                <div class="bank-info">
-                  <p><strong>Ngân hàng:</strong> Vietcombank</p>
-                  <p><strong>Số tài khoản:</strong> 1234567890</p>
-                  <p><strong>Chủ tài khoản:</strong> GEAR UP STORE</p>
-                  <p>
-                    <strong>Số tiền:</strong>
-                    {{ formatCurrency(currentOrder.tongTienSauGiam) }}
-                  </p>
-                  <p><strong>Nội dung:</strong> HD{{ Date.now() }}</p>
-                </div>
-                <div class="qr-placeholder">
-                  <div class="qr-code">
-                    <img :src="PhoneIcon" alt="Phone" class="icon-sm" /><br />QR Code<br />{{
-                      formatCurrency(currentOrder.tongTienSauGiam)
-                    }}
+            
+            <!-- Bank Transfer Details -->
+            <div v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'" class="bank-transfer-info">
+              <div class="bank-info-card">
+                <div class="bank-card-header">
+                  <div class="bank-icon">
+                    <img src="@/assets/Banking.svg" alt="Banking Icon" width="24" height="24" />
                   </div>
-                  <p class="qr-note">Quét mã QR để chuyển khoản</p>
+                  <div class="bank-header-text">
+                    <h5 class="bank-title">Thông tin chuyển khoản</h5>
+                    <p class="bank-subtitle">Vui lòng chuyển khoản theo thông tin bên dưới</p>
+                  </div>
+                </div>
+                
+                <div class="bank-details">
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Ngân hàng:</span>
+                    <span class="bank-value">Vietcombank (VCB)</span>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Số tài khoản:</span>
+                    <div class="bank-account">
+                      <span class="bank-value">1234567890123</span>
+                      <button class="copy-btn" @click="copyToClipboard('1234567890123')" title="Sao chép số tài khoản">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Chủ tài khoản:</span>
+                    <span class="bank-value">CONG TY TNHH GEAR UP</span>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Số tiền:</span>
+                    <span class="bank-value amount">{{ formatCurrency((currentOrder?.tongTien || 0) - (currentOrder?.discount || 0)) }}</span>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Nội dung:</span>
+                    <div class="bank-account">
+                      <span class="bank-value">{{ `THANH TOAN DON HANG ${currentOrder?.tenDonHang || 'HD' + currentOrder?.id}` }}</span>
+                      <button class="copy-btn" @click="copyToClipboard(`THANH TOAN DON HANG ${currentOrder?.tenDonHang || 'HD' + currentOrder?.id}`)" title="Sao chép nội dung chuyển khoản">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="qr-code-section">
+                  <div class="qr-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="5" height="5"/>
+                      <rect x="3" y="16" width="5" height="5"/>
+                      <rect x="16" y="3" width="5" height="5"/>
+                      <path d="M21 16h-3v3M21 21v.01M12 7v3M12 15.01V15"/>
+                    </svg>
+                    <span class="qr-title">Quét mã QR để chuyển khoản</span>
+                  </div>
+                  
+                  <div class="qr-code-container">
+                    <div class="qr-placeholder">
+                      <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <!-- QR Code placeholder pattern -->
+                        <rect width="120" height="120" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" rx="8"/>
+                        <rect x="10" y="10" width="20" height="20" fill="#1e293b" rx="2"/>
+                        <rect x="35" y="10" width="5" height="5" fill="#1e293b"/>
+                        <rect x="45" y="10" width="5" height="5" fill="#1e293b"/>
+                        <rect x="55" y="10" width="10" height="10" fill="#1e293b"/>
+                        <rect x="90" y="10" width="20" height="20" fill="#1e293b" rx="2"/>
+                        
+                        <rect x="15" y="15" width="10" height="10" fill="#ffffff" rx="1"/>
+                        <rect x="95" y="15" width="10" height="10" fill="#ffffff" rx="1"/>
+                        
+                        <rect x="10" y="40" width="5" height="5" fill="#1e293b"/>
+                        <rect x="20" y="40" width="10" height="5" fill="#1e293b"/>
+                        <rect x="35" y="40" width="5" height="10" fill="#1e293b"/>
+                        <rect x="50" y="40" width="15" height="5" fill="#1e293b"/>
+                        <rect x="80" y="40" width="5" height="10" fill="#1e293b"/>
+                        
+                        <rect x="10" y="60" width="10" height="5" fill="#1e293b"/>
+                        <rect x="30" y="60" width="5" height="10" fill="#1e293b"/>
+                        <rect x="45" y="60" width="5" height="5" fill="#1e293b"/>
+                        <rect x="60" y="60" width="10" height="10" fill="#1e293b"/>
+                        <rect x="85" y="60" width="10" height="5" fill="#1e293b"/>
+                        
+                        <rect x="10" y="90" width="20" height="20" fill="#1e293b" rx="2"/>
+                        <rect x="15" y="95" width="10" height="10" fill="#ffffff" rx="1"/>
+                        
+                        <rect x="40" y="80" width="5" height="5" fill="#1e293b"/>
+                        <rect x="50" y="80" width="5" height="10" fill="#1e293b"/>
+                        <rect x="65" y="80" width="10" height="5" fill="#1e293b"/>
+                        <rect x="85" y="80" width="5" height="15" fill="#1e293b"/>
+                        <rect x="100" y="80" width="10" height="10" fill="#1e293b"/>
+                      </svg>
+                    </div>
+                    <div class="qr-info">
+                      <p class="qr-description">Quét mã QR bằng app ngân hàng để chuyển khoản nhanh chóng</p>
+                      <div class="supported-banks">
+                        <span class="bank-tag">VCB</span>
+                        <span class="bank-tag">MB Bank</span>
+                        <span class="bank-tag">TPBank</span>
+                        <span class="bank-tag">+10 khác</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="transfer-note">
+                  <div class="note-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                  </div>
+                  <div class="note-content">
+                    <p><strong>Lưu ý quan trọng:</strong></p>
+                    <ul>
+                      <li>Vui lòng chuyển đúng số tiền và nội dung chuyển khoản</li>
+                      <li>Đơn hàng sẽ được xử lý sau khi nhận được thanh toán</li>
+                      <li>Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ trợ</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- COD Info -->
-            <div class="cod-info" v-if="currentOrder?.phuongThucThanhToan === 'cod'">
-              <div class="cod-notice">
-                <h5> Thanh toán khi nhận hàng</h5>
-                <p>
-                  Khách hàng sẽ thanh toán khi nhận được hàng tại địa chỉ giao
-                  hàng.
-                </p>
-                <p>
-                  <strong>Số tiền cần thanh toán:</strong>
-                  {{ formatCurrency(currentOrder.tongTienSauGiam) }}
-                </p>
+            <!-- Home Delivery Details -->
+            <div v-if="currentOrder?.phuongThucThanhToan === 'home_delivery'" class="delivery-info">
+              <div class="delivery-info-card">
+                <div class="delivery-card-header">
+                  <div class="delivery-icon">
+                    <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="24" height="24" />
+                  </div>
+                  <div class="delivery-header-text">
+                    <h5 class="delivery-title">Thông tin giao hàng</h5>
+                    <p class="delivery-subtitle">Thông tin địa chỉ và thời gian giao hàng</p>
+                  </div>
+                </div>
+                
+                <div class="delivery-form">
+                  <div class="form-group">
+                    <label class="form-label">Họ và tên người nhận:</label>
+                    <input type="text" class="form-input" :value="customerDisplayName" readonly placeholder="Tên khách hàng" />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Số điện thoại:</label>
+                    <input type="text" class="form-input" placeholder="Nhập số điện thoại người nhận" />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Địa chỉ giao hàng:</label>
+                    <textarea class="form-textarea" rows="3" placeholder="Nhập địa chỉ cụ thể để giao hàng"></textarea>
+                  </div>
+                  
+                  <div class="delivery-options">
+                    <div class="delivery-option-item">
+                      <label class="form-label">Đơn vị vận chuyển:</label>
+                      <select class="form-select" v-model="selectedShippingCarrier" @change="updateShippingFee">
+                        <option value="">Chọn đơn vị vận chuyển</option>
+                        <option value="ghn">Giao Hàng Nhanh (GHN)</option>
+                        <option value="ghtk">Giao Hàng Tiết Kiệm (GHTK)</option>
+                        <option value="vnpost">VNPost</option>
+                        <option value="jnt">J&T Express</option>
+                        <option value="grab">GrabExpress</option>
+                        <option value="shopee">Shopee Express</option>
+                      </select>
+                    </div>
+                    
+                    <div class="delivery-option-item">
+                      <label class="form-label">Loại dịch vụ:</label>
+                      <select class="form-select" v-model="selectedServiceType" @change="updateShippingFee" :disabled="!selectedShippingCarrier">
+                        <option value="">Chọn loại dịch vụ</option>
+                        <template v-if="selectedShippingCarrier === 'ghn'">
+                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 25.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 35.000Đ</option>
+                          <option value="same_day">Trong ngày - 50.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'ghtk'">
+                          <option value="standard">Tiêu chuẩn (2-4 ngày) - 22.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 30.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'vnpost'">
+                          <option value="standard">Tiêu chuẩn (3-5 ngày) - 20.000Đ</option>
+                          <option value="express">Nhanh (2-3 ngày) - 28.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'jnt'">
+                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 24.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 32.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'grab'">
+                          <option value="standard">Standard (2-4h) - 40.000Đ</option>
+                          <option value="express">Express (1-2h) - 60.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'shopee'">
+                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 23.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 31.000Đ</option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="shipping-fee-summary">
+                    <div class="fee-breakdown">
+                      <div class="fee-item">
+                        <span class="fee-label">Phí giao hàng:</span>
+                        <span class="fee-value">{{ formatShippingFee() }}</span>
+                      </div>
+                      <div class="fee-item" v-if="isEligibleForFreeShipping()">
+                        <span class="fee-label text-green">Miễn phí giao hàng:</span>
+                        <span class="fee-value text-green">-{{ formatShippingFee() }}</span>
+                      </div>
+                      <div class="fee-total">
+                        <span class="total-label">Tổng phí vận chuyển:</span>
+                        <span class="total-value">{{ formatFinalShippingFee() }}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="shipping-note" v-if="selectedShippingCarrier">
+                      <div class="carrier-info">
+                        <div class="carrier-logo">
+                          <span class="carrier-name">{{ getCarrierDisplayName() }}</span>
+                        </div>
+                        <div class="delivery-estimate">
+                          <span class="estimate-text">{{ getDeliveryEstimate() }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="delivery-note">
+                  <div class="note-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                  </div>
+                  <div class="note-content">
+                    <p><strong>Lưu ý quan trọng:</strong></p>
+                    <ul>
+                      <li>Vui lòng kiểm tra kỹ sản phẩm trước khi thanh toán</li>
+                      <li>Thanh toán tiền mặt khi nhận hàng</li>
+                      <li>Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ trợ</li>
+                      <li>Khách hàng có thể trả hàng trong vòng 7 ngày</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Payment Status -->
-            <div class="payment-details" v-if="currentOrder?.phuongThucThanhToan === 'pay_now'">
-              <div class="detail-row">
-                <span>Số tiền cần trả</span>
-                <span class="amount">{{
-                  formatCurrency(currentOrder?.tongTienSauGiam || 0)
-                }}</span>
-              </div>
-              <div class="detail-row">
-                <span>Khách đã trả</span>
-                <span class="amount paid">{{
-                  formatCurrency(currentOrder?.tienKhachTra || 0)
-                }}</span>
-              </div>
-              <div class="detail-row">
-                <span>Tiền thiếu/Trả lại</span>
-                <span :class="[
-                  'amount',
-                  (currentOrder?.tienKhachTra || 0) -
-                    (currentOrder?.tongTienSauGiam || 0) >=
-                    0
-                    ? 'surplus'
-                    : 'deficit',
-                ]">
-                  {{
-                    formatCurrency(
-                      Math.abs(
-                        (currentOrder?.tienKhachTra || 0) -
-                        (currentOrder?.tongTienSauGiam || 0)
-                      )
-                    )
-                  }}
-                </span>
+            <!-- Order Total -->
+            <div class="order-total">
+              <div class="total-summary">
+                <div class="total-row">
+                  <span class="total-label">Tổng tiền hàng:</span>
+                  <span class="total-amount">{{ formatCurrency(currentOrder?.tongTien || 0) }}</span>
+                </div>
+                <div class="total-row" v-if="currentOrder?.discount">
+                  <span class="total-label">Giảm giá:</span>
+                  <span class="total-amount discount-amount">-{{ formatCurrency(currentOrder.discount) }}</span>
+                </div>
+                <div class="total-divider"></div>
+                <div class="total-row final-row">
+                  <span class="final-label">Thành tiền:</span>
+                  <span class="final-amount">{{ formatCurrency((currentOrder?.tongTien || 0) - (currentOrder?.discount || 0)) }}</span>
+                </div>
               </div>
             </div>
 
-            <!-- Transfer Status -->
-            <div class="payment-details" v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'">
-              <div class="detail-row">
-                <span>Trạng thái</span>
-                <span class="status pending"> Chờ chuyển khoản</span>
-              </div>
-              <div class="detail-row">
-                <span>Số tiền cần chuyển</span>
-                <span class="amount">{{
-                  formatCurrency(currentOrder?.tongTienSauGiam || 0)
-                }}</span>
-              </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-              <button class="btn btn-primary btn-lg w-100" @click="confirmOrder">
-                XÁC NHẬN ĐẶT HÀNG
-              </button>
-            </div>
+            <!-- Confirm Order Button -->
+            <button class="confirm-order-btn" @click="confirmOrder" 
+                    :disabled="!currentOrder || !currentOrder.danhSachSanPham?.length || !customerDisplayName.trim()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4"/>
+                <circle cx="12" cy="12" r="10"/>
+              </svg>
+              <span>Xác nhận đặt hàng</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Redesigned Product Search Modal -->
+    <!-- Modern Product Search Modal -->
     <div v-if="showProductSearch" class="modal-overlay" @click="showProductSearch = false">
-      <div class="modal-content" @click.stop>
-        <div class="modal-header">
-          <div class="modal-header-left">
-            <div class="modal-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="M21 21l-4.35-4.35"></path>
-              </svg>
-            </div>
-            <div class="modal-title-section">
-              <h3 class="modal-title">Tìm kiếm sản phẩm</h3>
-              <p class="modal-subtitle">Chọn sản phẩm để thêm vào đơn hàng</p>
-            </div>
-          </div>
+      <div class="product-modal" @click.stop>
+        <div class="product-modal-header">
+          <h3 class="modal-title">Tìm kiếm sản phẩm</h3>
+          <p class="modal-subtitle">Chọn sản phẩm để thêm vào đơn hàng</p>
           <button class="modal-close-btn" @click="showProductSearch = false">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
           </button>
         </div>
 
         <div class="modal-body">
-          <!-- Redesigned Search and Filter -->
-          <div class="search-section">
-            <div class="search-bar">
+          <!-- Clean Search Header -->
+          <div class="search-header">
+            <div class="main-search-container">
               <div class="search-input-wrapper">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  class="search-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
                   <circle cx="11" cy="11" r="8"></circle>
                   <path d="M21 21l-4.35-4.35"></path>
                 </svg>
-                <input type="text" v-model="productSearchQuery" class="search-input"
-                  placeholder="Tìm theo tên sản phẩm, mã và thuộc tính sản phẩm" />
+                <input type="text" v-model="productSearchQuery" class="main-search-input" placeholder="Tìm theo tên sản phẩm, mã sản phẩm..." />
               </div>
-            </div>
-
-            <div class="price-filter">
-              <div class="price-range">
+              
+              <div class="price-filter-compact">
                 <span class="price-label">Khoảng giá:</span>
-                <div class="price-slider-container">
-                  <span class="price-min">{{ formatCurrency(priceRange.min) }}</span>
-                  <input type="range" :min="priceRange.min" :max="priceRange.max" v-model="selectedPriceMax"
-                    class="price-slider" />
-                  <span class="price-max">{{ formatCurrency(priceRange.max) }}</span>
+                <div class="price-display">
+                  <span class="price-value">{{ formatCurrency(priceRange.min) }}</span>
+                  <input type="range" :min="priceRange.min" :max="priceRange.max" v-model="selectedPriceMax" class="price-slider" />
+                  <span class="price-value">{{ formatCurrency(priceRange.max) }}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="filter-row">
-            <div class="filter-group">
-              <label class="filter-label">Nhà sản xuất</label>
-              <select v-model="selectedNhaSanXuat" class="filter-select">
-                <option value="">Tất cả</option>
-                <option v-for="category in NhaSanXuats" :key="category.id" :value="category.id">
-                  {{ category.tenNhaSanXuat }}
-                </option>
-              </select>
+          <!-- Clean Filter Section -->
+          <div class="filter-section">
+            <div class="filter-header">
+              <h4 class="filter-title">Bộ lọc sản phẩm</h4>
+              <button class="clear-filters-btn" @click="clearAllFilters">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/>
+                </svg>
+                Xóa bộ lọc
+              </button>
             </div>
+            
+            <div class="filters-grid">
+              <div class="filter-item">
+                <label class="filter-label">Nhà sản xuất</label>
+                <select v-model="selectedNhaSanXuat" class="filter-select">
+                  <option value="">Tất cả nhà sản xuất</option>
+                  <option v-for="category in NhaSanXuats" :key="category.id" :value="category.id">
+                    {{ category.tenNhaSanXuat }}
+                  </option>
+                </select>
+              </div>
 
-            <div class="filter-group">
-              <label class="filter-label">Xuất xứ</label>
-              <select v-model="selectedXuatXu" class="filter-select">
-                <option value="">Tất cả</option>
-                <option v-for="category in XuatXus" :key="category.id" :value="category.id">
-                  {{ category.tenXuatXu }}
-                </option>
-              </select>
-            </div>
+              <div class="filter-item">
+                <label class="filter-label">Xuất xứ</label>
+                <select v-model="selectedXuatXu" class="filter-select">
+                  <option value="">Tất cả xuất xứ</option>
+                  <option v-for="category in XuatXus" :key="category.id" :value="category.id">
+                    {{ category.tenXuatXu }}
+                  </option>
+                </select>
+              </div>
 
-            <div class="filter-group">
-              <label class="filter-label">Chất liệu</label>
-              <select v-model="selectedChatLieu" class="filter-select">
-                <option value="">Tất cả</option>
-                <option v-for="category in ChatLieus" :key="category.id" :value="category.id">
-                  {{ category.tenChatLieu }}
-                </option>
-              </select>
-            </div>
+              <div class="filter-item">
+                <label class="filter-label">Chất liệu</label>
+                <select v-model="selectedChatLieu" class="filter-select">
+                  <option value="">Tất cả chất liệu</option>
+                  <option v-for="category in ChatLieus" :key="category.id" :value="category.id">
+                    {{ category.tenChatLieu }}
+                  </option>
+                </select>
+              </div>
 
-            <div class="filter-group">
-              <label class="filter-label">Kích thước</label>
-              <select v-model="selectedSize" class="filter-select">
-                <option value="">Tất cả</option>
-                <option v-for="category in KichThuocs" :key="category.id" :value="category.id">
-                  {{ category.tenKichThuoc }}
-                </option>
-              </select>
-            </div>
+              <div class="filter-item">
+                <label class="filter-label">Kích thước</label>
+                <select v-model="selectedSize" class="filter-select">
+                  <option value="">Tất cả kích thước</option>
+                  <option v-for="category in KichThuocs" :key="category.id" :value="category.id">
+                    {{ category.tenKichThuoc }}
+                  </option>
+                </select>
+              </div>
 
-            <div class="filter-group">
-              <label class="filter-label">Đế giày</label>
-              <select v-model="selectedDeGiay" class="filter-select">
-                <option value="">Tất cả</option>
-                <option v-for="category in DeGiays" :key="category.id" :value="category.id">
-                  {{ category.tenDeGiay }}
-                </option>
-              </select>
-            </div>
+              <div class="filter-item">
+                <label class="filter-label">Đế giày</label>
+                <select v-model="selectedDeGiay" class="filter-select">
+                  <option value="">Tất cả loại đế</option>
+                  <option v-for="category in DeGiays" :key="category.id" :value="category.id">
+                    {{ category.tenDeGiay }}
+                  </option>
+                </select>
+              </div>
 
-            <div class="filter-group">
-              <label class="filter-label">Màu sắc</label>
-              <select v-model="selectedMauSac" class="filter-select">
-                <option value="">Tất cả</option>
-                <option v-for="category in MauSacs" :key="category.id" :value="category.id">
-                  {{ category.tenMauSac }}
-                </option>
-              </select>
+              <div class="filter-item">
+                <label class="filter-label">Màu sắc</label>
+                <select v-model="selectedMauSac" class="filter-select">
+                  <option value="">Tất cả màu sắc</option>
+                  <option v-for="category in MauSacs" :key="category.id" :value="category.id">
+                    {{ category.tenMauSac }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -872,95 +852,111 @@
       </div>
     </div>
 
-    <!-- Customer Search Modal -->
+    <!-- Modern Customer Search Modal -->
     <div v-if="showCustomerSearch" class="modal-overlay" @click="showCustomerSearch = false">
-      <div class="modal-content customer-modal" @click.stop>
-        <div class="modal-header">
-          <h3>Tìm kiếm khách hàng</h3>
-          <button class="modal-close" @click="showCustomerSearch = false">
-            ✕
+      <div class="customer-modal" @click.stop>
+        <div class="customer-modal-header">
+          <h3 class="modal-title">Tìm kiếm khách hàng</h3>
+          <button class="modal-close-btn" @click="showCustomerSearch = false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
           </button>
         </div>
 
-        <div class="modal-body">
-          <div class="search-section">
-            <input type="text" v-model="customerSearchQuery" class="form-control"
-              placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email" />
-            <button class="btn btn-primary" @click="openAddCustomerForm">
-              <img :src="PlusIcon" alt="Plus" class="icon-sm" /> THÊM KHÁCH HÀNG
+        <div class="customer-modal-body">
+          <div class="customer-search-section">
+            <div class="search-input-container">
+              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <input type="text" v-model="customerSearchQuery" class="customer-search-input"
+                placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email" />
+            </div>
+            <button class="add-customer-btn" @click="openAddCustomerForm">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span>THÊM KHÁCH HÀNG</span>
             </button>
           </div>
 
-          <div class="customer-list">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Email</th>
-                  <th>Họ tên</th>
-                  <th>Ngày sinh</th>
-                  <th>Số điện thoại</th>
-                  <th>Giới tính</th>
-                  <th>Trạng thái</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(customer, index) in filteredCustomers" :key="customer.id">
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ customer.email }}</td>
-                  <td>{{ customer.tenKhachHang }}</td>
-                  <td>{{ customer.ngaySinh }}</td>
-                  <td>{{ customer.soDienThoai }}</td>
-                  <td>{{ customer.gioiTinh ? "Nam" : "Nữ" }}</td>
-                  <td>
-                    <span class="badge badge-success">{{
-                      !customer.trangThai ? "Hoạt động" : "Không hoạt động"
-                    }}</span>
-                  </td>
-                  <td>
-                    <button class="btn btn-primary btn-sm" @click="selectCustomer(customer)">
+          <div class="customer-table-container">
+            <div class="modern-table">
+              <div class="table-header">
+                <div class="header-cell">STT</div>
+                <div class="header-cell">EMAIL</div>
+                <div class="header-cell">HỌ TÊN</div>
+                <div class="header-cell">NGÀY SINH</div>
+                <div class="header-cell">SỐ ĐIỆN THOẠI</div>
+                <div class="header-cell">GIỚI TÍNH</div>
+                <div class="header-cell">TRẠNG THÁI</div>
+                <div class="header-cell">THAO TÁC</div>
+              </div>
+              <div class="table-body">
+                <div v-for="(customer, index) in filteredCustomers" :key="customer.id" class="table-row">
+                  <div class="table-cell">{{ index + 1 }}</div>
+                  <div class="table-cell">{{ customer.email }}</div>
+                  <div class="table-cell">
+                    <div class="customer-name">{{ customer.tenKhachHang }}</div>
+                  </div>
+                  <div class="table-cell">{{ customer.ngaySinh || '1998-03-10' }}</div>
+                  <div class="table-cell">{{ customer.soDienThoai }}</div>
+                  <div class="table-cell">
+                    <span class="gender-badge">{{ customer.gioiTinh ? "Nam" : "Nữ" }}</span>
+                  </div>
+                  <div class="table-cell">
+                    <span class="status-badge active">
+                      {{ !customer.trangThai ? "Hoạt động" : "Không hoạt động" }}
+                    </span>
+                  </div>
+                  <div class="table-cell">
+                    <button class="select-customer-btn" @click="selectCustomer(customer)">
                       CHỌN
                     </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Add Customer Form -->
-          <div v-if="showAddCustomerForm" class="add-customer-form">
-            <div class="form-sections">
-              <div class="form-section">
-                <h4>Thông tin cá nhân</h4>
-                <div class="form-group">
-                  <label class="form-label">*Họ và tên</label>
-                  <input type="text" v-model="newCustomerForm.tenKhachHang" class="form-control" required />
-                </div>
+          <!-- Modern Add Customer Form -->
+          <div v-if="showAddCustomerForm" class="modern-add-customer-form">
+            <div class="add-form-header">
+              <h4 class="add-form-title">Thông tin cá nhân</h4>
+              <small class="add-form-subtitle">*Họ và tên</small>
+            </div>
+            <div class="add-form-content">
+              <div class="modern-form-group">
+                <input type="text" v-model="newCustomerForm.tenKhachHang" class="modern-form-input" 
+                       placeholder="Nhập họ và tên" required />
+              </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Email</label>
-                    <input type="email" v-model="newCustomerForm.email" class="form-control" required />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Số điện thoại</label>
-                    <input type="tel" v-model="newCustomerForm.soDienThoai" class="form-control" required />
-                  </div>
+              <div class="form-row">
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Email</label>
+                  <input type="email" v-model="newCustomerForm.email" class="modern-form-input" 
+                         placeholder="Nhập email" required />
                 </div>
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Số điện thoại</label>
+                  <input type="tel" v-model="newCustomerForm.soDienThoai" class="modern-form-input" 
+                         placeholder="Nhập số điện thoại" required />
+                </div>
+              </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Ngày sinh</label>
-                    <input type="date" v-model="newCustomerForm.ngaySinh" class="form-control" required />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Giới tính</label>
-                    <select v-model="newCustomerForm.gioiTinh" class="form-control">
-                      <option :value="true">Nam</option>
-                      <option :value="false">Nữ</option>
-                    </select>
-                  </div>
+              <div class="form-row">
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Ngày sinh</label>
+                  <input type="date" v-model="newCustomerForm.ngaySinh" class="modern-form-input" required />
+                </div>
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Giới tính</label>
+                  <select v-model="newCustomerForm.gioiTinh" class="modern-form-select">
+                    <option :value="true">Nam</option>
+                    <option :value="false">Nữ</option>
+                  </select>
                 </div>
               </div>
 
@@ -1055,84 +1051,162 @@
       </div>
     </div>
 
-    <!-- Coupon Selection Modal -->
+    <!-- Modern Coupon Selection Modal -->
     <div v-if="showCouponModal" class="modal-overlay" @click="closeCouponModal">
-      <div class="modal-content coupon-modal" @click.stop>
-        <div class="modal-header">
-          <h3>🎫 Chọn phiếu giảm giá</h3>
-          <button class="modal-close-btn" @click="closeCouponModal">✕</button>
+      <div class="coupon-selection-modal" @click.stop>
+        <div class="coupon-modal-header">
+          <div class="header-content">
+            <div class="header-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
+                <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
+                <circle cx="9" cy="12" r="1"/>
+                <circle cx="15" cy="12" r="1"/>
+              </svg>
+            </div>
+            <div class="header-text">
+              <h3 class="modal-title">Chọn phiếu giảm giá</h3>
+              <p class="modal-subtitle">Chọn phiếu giảm giá phù hợp cho đơn hàng của bạn</p>
+            </div>
+          </div>
+          <button class="modern-close-btn" @click="closeCouponModal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
 
-        <div class="modal-body">
-          <div class="coupon-list">
-            <div v-for="coupon in availableCoupons" :key="coupon.id" class="coupon-modal-item" :class="{
-              selected: isCouponSelected(coupon.id),
-              disabled: !canApplyCoupon(coupon),
-            }" @click="
-              canApplyCoupon(coupon) ? toggleCouponSelection(coupon) : null
-              ">
-              <div class="coupon-modal-info">
-                <div class="coupon-modal-name">
-                  {{ coupon.tenPhieuGiamGia }}
-                </div>
-                <div class="coupon-modal-details">
-                  <span v-if="coupon.loaiPhieuGiamGia === false">
-                    Giảm {{ coupon.giaTriGiamGia }}% (sẽ trừ:
-                    {{ calculateCouponDiscount(coupon).toLocaleString() }}đ)
-                  </span>
-                  <span v-else-if="coupon.loaiPhieuGiamGia === true">
-                    Giảm {{ coupon.giaTriGiamGia.toLocaleString() }}đ
-                  </span>
-                  <span v-if="coupon.donHangToiThieu" class="min-order">
-                    • Đơn tối thiểu:
-                    {{ coupon.donHangToiThieu.toLocaleString() }}đ
-                  </span>
-                </div>
-                <div v-if="!canApplyCoupon(coupon)" class="coupon-reason">
-                  <small v-if="
-                    coupon.donHangToiThieu &&
-                    currentOrder.tongTien < coupon.donHangToiThieu
-                  ">
-                    Đơn hàng chưa đủ giá trị tối thiểu
-                  </small>
-                  <small v-else-if="
-                    selectedCoupons.length > 0 &&
-                    !selectedCoupons.some((c) => c.id === coupon.id)
-                  ">
-                    ⚠️ Đã chọn phiếu khác, chỉ được dùng 1 phiếu
-                  </small>
-                  <small v-else> ⚠️ Phiếu không khả dụng </small>
-                </div>
-              </div>
-              <div class="coupon-modal-checkbox">
-                <input type="checkbox" :checked="isCouponSelected(coupon.id)" :disabled="!canApplyCoupon(coupon)"
-                  @change="toggleCouponSelection(coupon)" />
-              </div>
-            </div>
-
-            <div v-if="availableCoupons.length === 0" class="no-coupons-available">
-              <p> Không có phiếu giảm giá nào khả dụng</p>
+        <div class="coupon-modal-body">
+          <div class="order-info-card">
+            <div class="order-summary">
+              <span class="order-label">Tổng đơn hàng:</span>
+              <span class="order-amount">{{ formatCurrency(currentOrder?.tongTien || 0) }}</span>
             </div>
           </div>
 
-          <div class="modal-footer">
-            <div class="selected-count">
-              <span v-if="selectedCoupons.length > 0"> Đã chọn: 1 phiếu </span>
-              <span v-else> Chưa chọn phiếu nào </span>
+          <div class="coupon-grid">
+            <div v-for="coupon in availableCoupons" :key="coupon.id" 
+                 class="modern-coupon-card" 
+                 :class="{
+                   selected: isCouponSelected(coupon.id),
+                   disabled: !canApplyCoupon(coupon),
+                   percentage: coupon.loaiPhieuGiamGia === false,
+                   fixed: coupon.loaiPhieuGiamGia === true
+                 }" 
+                 @click="canApplyCoupon(coupon) ? toggleCouponSelection(coupon) : null">
+              
+              <div class="coupon-badge">
+                <div class="discount-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path v-if="coupon.loaiPhieuGiamGia === false" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    <path v-else d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                  </svg>
+                </div>
+                <div class="discount-value">
+                  <span v-if="coupon.loaiPhieuGiamGia === false" class="percentage-discount">
+                    {{ coupon.giaTriGiamGia }}%
+                  </span>
+                  <span v-else class="fixed-discount">
+                    {{ Math.round(coupon.giaTriGiamGia / 1000) }}K
+                  </span>
+                </div>
+              </div>
+
+              <div class="coupon-content">
+                <h4 class="coupon-name">{{ coupon.tenPhieuGiamGia }}</h4>
+                
+                <div class="coupon-details">
+                  <div class="discount-info">
+                    <span v-if="coupon.loaiPhieuGiamGia === false" class="discount-text">
+                      Giảm {{ coupon.giaTriGiamGia }}% đơn hàng
+                    </span>
+                    <span v-else class="discount-text">
+                      Giảm {{ formatCurrency(coupon.giaTriGiamGia) }}
+                    </span>
+                    <div class="savings-amount">
+                      Tiết kiệm: {{ formatCurrency(calculateCouponDiscount(coupon)) }}
+                    </div>
+                  </div>
+                  
+                  <div v-if="coupon.donHangToiThieu" class="min-order-requirement">
+                    Đơn tối thiểu: {{ formatCurrency(coupon.donHangToiThieu) }}
+                  </div>
+                </div>
+
+                <div v-if="!canApplyCoupon(coupon)" class="unavailable-reason">
+                  <div class="reason-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M15 9l-6 6M9 9l6 6"/>
+                    </svg>
+                  </div>
+                  <span v-if="coupon.donHangToiThieu && currentOrder.tongTien < coupon.donHangToiThieu">
+                    Chưa đủ giá trị tối thiểu
+                  </span>
+                  <span v-else-if="selectedCoupons.length > 0 && !selectedCoupons.some((c) => c.id === coupon.id)">
+                    Chỉ được chọn 1 phiếu
+                  </span>
+                  <span v-else>Phiếu không khả dụng</span>
+                </div>
+              </div>
+
+              <div class="coupon-selection">
+                <div class="custom-radio">
+                  <input type="radio" 
+                         :id="'coupon-' + coupon.id" 
+                         :name="'coupon-selection'" 
+                         :checked="isCouponSelected(coupon.id)" 
+                         :disabled="!canApplyCoupon(coupon)" 
+                         @change="toggleCouponSelection(coupon)" />
+                  <label :for="'coupon-' + coupon.id" class="radio-label"></label>
+                </div>
+              </div>
             </div>
-            <div class="modal-actions">
-              <button class="btn btn-outline" @click="closeCouponModal">
-                Hủy
-              </button>
-              <button class="btn btn-primary" @click="confirmCouponSelection">
-                {{ selectedCoupons.length > 0 ? "Xác nhận (1)" : "Xác nhận" }}
-              </button>
+
+            <div v-if="availableCoupons.length === 0" class="no-coupons-state">
+              <div class="empty-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
+                  <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
+                  <circle cx="9" cy="12" r="1"/>
+                  <circle cx="15" cy="12" r="1"/>
+                </svg>
+              </div>
+              <h4 class="empty-title">Chưa có phiếu giảm giá</h4>
+              <p class="empty-description">Hiện tại không có phiếu giảm giá nào khả dụng cho đơn hàng này.</p>
             </div>
+          </div>
+        </div>
+
+        <div class="coupon-modal-footer">
+          <div class="selection-summary">
+            <div class="selection-info">
+              <span v-if="selectedCoupons.length > 0" class="selected-text">
+                🎉 Đã chọn 1 phiếu giảm giá
+              </span>
+              <span v-else class="no-selection-text">
+                Chưa chọn phiếu nào
+              </span>
+            </div>
+            <div v-if="selectedCoupons.length > 0" class="total-savings">
+              Tiết kiệm: {{ formatCurrency(calculateCouponDiscount(selectedCoupons[0])) }}
+            </div>
+          </div>
+          
+          <div class="modal-actions">
+            <button class="cancel-btn" @click="closeCouponModal">
+              Hủy
+            </button>
+            <button class="confirm-btn" @click="confirmCouponSelection" :disabled="selectedCoupons.length === 0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+              {{ selectedCoupons.length > 0 ? 'Xác nhận (1 phiếu)' : 'Xác nhận' }}
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -1354,6 +1428,11 @@ const selectedDeGiay = ref("");
 const selectedMauSac = ref("");
 const selectedKichThuoc = ref("");
 const selectedPriceMax = ref(10000000);
+
+// Shipping carrier variables
+const selectedShippingCarrier = ref("");
+const selectedServiceType = ref("");
+const shippingFee = ref(0);
 
 const priceRange = ref({
   min: 100000,
@@ -2321,7 +2400,8 @@ const searchCustomers = () => {
         // Add "Create new customer" option if not already in suggestions
         const createNewOption = {
           id: "create_new",
-          tenKhachHang: `<img :src="PlusIcon" alt="Plus" class="icon-sm" /> Tạo khách hàng mới: "${query}"`,
+          tenKhachHang: "Tạo khách hàng mới",
+          displayName: `Tạo khách hàng mới: "${query}"`,
           email: "",
           soDienThoai: "",
           isCreateNew: true,
@@ -2332,7 +2412,8 @@ const searchCustomers = () => {
         customerSuggestions.value = [
           {
             id: "create_new",
-            tenKhachHang: `<img :src="PlusIcon" alt="Plus" class="icon-sm" /> Tạo khách hàng mới: "${query}"`,
+            tenKhachHang: "Tạo khách hàng mới",
+            displayName: `Tạo khách hàng mới: "${query}"`,
             email: "",
             soDienThoai: "",
             isCreateNew: true,
@@ -2521,20 +2602,118 @@ const clearCustomerInput = () => {
     clearTimeout(searchTimeout);
     searchTimeout = null;
   }
-  // Also clear customer selection and delivery address
-  if (currentOrder.value) {
-    currentOrder.value.idKhachHang = null;
+};
+
+// Copy to clipboard function
+const copyToClipboard = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    // You can add a toast notification here if needed
+    console.log('Đã sao chép:', text);
+  } catch (error) {
+    console.error('Lỗi sao chép:', error);
+    // Fallback method for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      console.log('Đã sao chép (fallback):', text);
+    } catch (fallbackError) {
+      console.error('Lỗi sao chép fallback:', fallbackError);
+    }
+    document.body.removeChild(textArea);
   }
-  // Clear delivery address
-  deliveryAddress.value = {
-    tenNguoiNhan: "",
-    soDienThoaiNguoiNhan: "",
-    emailNguoiNhan: "",
-    diaChiCuThe: "",
-    thanhPho: "",
-    quan: "",
-    phuong: "",
+};
+
+// Refresh data function
+const refreshData = async () => {
+  try {
+    console.log('Làm mới dữ liệu...');
+    await fetchAll();
+    console.log('Đã làm mới dữ liệu thành công!');
+  } catch (error) {
+    console.error('Lỗi khi làm mới dữ liệu:', error);
+  }
+};
+
+// Clear all filters function
+const clearAllFilters = () => {
+  selectedNhaSanXuat.value = '';
+  selectedXuatXu.value = '';
+  selectedChatLieu.value = '';
+  selectedSize.value = '';
+  selectedDeGiay.value = '';
+  selectedMauSac.value = '';
+  productSearchQuery.value = '';
+};
+
+// Shipping carrier utility functions
+const getShippingFeeByCarrierAndService = (carrier, serviceType) => {
+  const feeMap = {
+    ghn: { standard: 25000, express: 35000, same_day: 50000 },
+    ghtk: { standard: 22000, express: 30000 },
+    vnpost: { standard: 20000, express: 28000 },
+    jnt: { standard: 24000, express: 32000 },
+    grab: { standard: 40000, express: 60000 },
+    shopee: { standard: 23000, express: 31000 }
   };
+  
+  return feeMap[carrier]?.[serviceType] || 0;
+};
+
+const updateShippingFee = () => {
+  if (selectedShippingCarrier.value && selectedServiceType.value) {
+    shippingFee.value = getShippingFeeByCarrierAndService(
+      selectedShippingCarrier.value, 
+      selectedServiceType.value
+    );
+  } else {
+    shippingFee.value = 0;
+  }
+};
+
+const formatShippingFee = () => {
+  return shippingFee.value > 0 ? formatCurrency(shippingFee.value) : "0 VNĐ";
+};
+
+const isEligibleForFreeShipping = () => {
+  const orderTotal = (currentOrder.value?.tongTien || 0) - (currentOrder.value?.discount || 0);
+  return orderTotal >= 500000 && shippingFee.value > 0;
+};
+
+const formatFinalShippingFee = () => {
+  const finalFee = isEligibleForFreeShipping() ? 0 : shippingFee.value;
+  return finalFee > 0 ? formatCurrency(finalFee) : "Miễn phí";
+};
+
+const getCarrierDisplayName = () => {
+  const carrierNames = {
+    ghn: "Giao Hàng Nhanh",
+    ghtk: "Giao Hàng Tiết Kiệm",
+    vnpost: "VNPost",
+    jnt: "J&T Express",
+    grab: "GrabExpress",
+    shopee: "Shopee Express"
+  };
+  return carrierNames[selectedShippingCarrier.value] || "";
+};
+
+const getDeliveryEstimate = () => {
+  if (!selectedShippingCarrier.value || !selectedServiceType.value) return "";
+  
+  const estimates = {
+    ghn: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày", same_day: "Giao trong ngày" },
+    ghtk: { standard: "Giao trong 2-4 ngày", express: "Giao trong 1-2 ngày" },
+    vnpost: { standard: "Giao trong 3-5 ngày", express: "Giao trong 2-3 ngày" },
+    jnt: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày" },
+    grab: { standard: "Giao trong 2-4 giờ", express: "Giao trong 1-2 giờ" },
+    shopee: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày" }
+  };
+  
+  return estimates[selectedShippingCarrier.value]?.[selectedServiceType.value] || "";
 };
 
 // Open add customer form

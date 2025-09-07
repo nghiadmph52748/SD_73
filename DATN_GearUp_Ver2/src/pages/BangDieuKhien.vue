@@ -380,8 +380,12 @@
             <p class="card-subtitle">{{ currentChartSubtitle }}</p>
           </div>
           <div class="header-actions">
-            <button class="action-btn" @click="changeChartType">
-              <span class="action-icon"></span>
+            <button class="action-btn" @click="changeChartType" title="Đổi loại biểu đồ">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
             </button>
           </div>
         </div>
@@ -929,6 +933,50 @@ const exportData = () => {
 }
 
 const changeChartType = () => {
+  if (!chartInstance.value) return
+  
+  // Toggle between line and bar chart types
+  const currentType = chartInstance.value.config.type
+  const newType = currentType === 'line' ? 'bar' : 'line'
+  
+  // Store the old data
+  const oldData = chartInstance.value.data
+  const oldOptions = chartInstance.value.options
+  
+  // Destroy old chart
+  chartInstance.value.destroy()
+  
+  // Create new chart with different type
+  setTimeout(() => {
+    if (salesChart.value) {
+      const ctx = salesChart.value.getContext('2d')
+      const gradient = ctx.createLinearGradient(0, 0, 0, 400)
+      gradient.addColorStop(0, 'rgba(74, 222, 128, 0.3)')
+      gradient.addColorStop(1, 'rgba(74, 222, 128, 0)')
+      
+      chartInstance.value = new Chart(salesChart.value, {
+        type: newType,
+        data: {
+          labels: oldData.labels,
+          datasets: [{
+            label: oldData.datasets[0].label,
+            data: oldData.datasets[0].data,
+            borderColor: '#4ade80',
+            backgroundColor: newType === 'line' ? gradient : 'rgba(74, 222, 128, 0.8)',
+            borderWidth: newType === 'line' ? 3 : 1,
+            fill: newType === 'line',
+            tension: newType === 'line' ? 0.4 : 0,
+            pointBackgroundColor: newType === 'line' ? '#4ade80' : undefined,
+            pointBorderColor: newType === 'line' ? '#ffffff' : undefined,
+            pointBorderWidth: newType === 'line' ? 2 : undefined,
+            pointRadius: newType === 'line' ? 6 : undefined,
+            pointHoverRadius: newType === 'line' ? 8 : undefined
+          }]
+        },
+        options: oldOptions
+      })
+    }
+  }, 50)
 }
 
 const updateChart = () => {
