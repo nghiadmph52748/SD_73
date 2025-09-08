@@ -1,7 +1,8 @@
 /* CSS cho trang Quản lý sản phẩm - Search và Actions cùng dòng */
+/* Scope all rules to .them-san-pham-page to prevent global conflicts */
 
 /* Container chính cho search và actions */
-.search-actions-row {
+.them-san-pham-page .search-actions-row {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -10,7 +11,7 @@
 }
 
 /* Phần search input */
-.search-section {
+.them-san-pham-page .search-section {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -19,7 +20,7 @@
   margin-bottom: 0 !important;
 }
 
-.search-input {
+.them-san-pham-page .search-input {
   width: 100% !important;
   min-width: 60% !important;
   padding: 12px 16px !important;
@@ -30,18 +31,18 @@
   flex-shrink: 0 !important;
 }
 
-.search-input:focus {
+.them-san-pham-page .search-input:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-.input-icon {
+.them-san-pham-page .input-icon {
   font-size: 18px;
   color: #6c757d;
 }
 
-.clear-btn {
+.them-san-pham-page .clear-btn {
   background: none;
   border: none;
   color: #6c757d;
@@ -51,7 +52,7 @@
 }
 
 /* Phần 2 button cùng dòng với search */
-.header-actions {
+.them-san-pham-page .header-actions {
   display: flex;
   gap: 15px;
   align-items: center;
@@ -60,36 +61,37 @@
   margin-right: 2%;
 }
 
-.btn-icon {
+.them-san-pham-page .btn-icon {
   font-size: 16px;
 }
 
 /* Responsive - chỉ khi màn hình nhỏ mới chuyển dọc */
 @media (max-width: 768px) {
-  .search-actions-row {
+  .them-san-pham-page .search-actions-row {
     flex-direction: column;
     align-items: stretch;
     gap: 15px;
   }
 
-  .search-section {
+  .them-san-pham-page .search-section {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .search-input {
+  .them-san-pham-page .search-input {
     max-width: 100%;
   }
 
-  .header-actions {
+  .them-san-pham-page .header-actions {
     flex-direction: column;
     align-items: stretch;
     white-space: normal;
   }
 }
 
-/* Confirm Modal Styles */
-.confirm-modal-overlay {
+/* Confirm Modal Styles - Keep modal styles global since they're overlays */
+.them-san-pham-page .confirm-modal-overlay,
+.confirm-modal-overlay.product-management-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -107,7 +109,8 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-.confirm-modal-content {
+.them-san-pham-page .confirm-modal-content,
+.confirm-modal-overlay.product-management-modal .confirm-modal-content {
   background: white;
   border-radius: 12px;
   padding: 0;
@@ -148,39 +151,45 @@
   }
 }
 
-.confirm-header {
+.them-san-pham-page .confirm-header,
+.confirm-modal-overlay.product-management-modal .confirm-header {
   background-color: #007bff;
   padding: 20px;
   text-align: center;
 }
 
-.confirm-title {
+.them-san-pham-page .confirm-title,
+.confirm-modal-overlay.product-management-modal .confirm-title {
   color: white;
   margin: 0;
   font-size: 20px;
   font-weight: 600;
 }
 
-.confirm-body {
+.them-san-pham-page .confirm-body,
+.confirm-modal-overlay.product-management-modal .confirm-body {
   padding: 25px 20px;
   text-align: center;
 }
 
-.confirm-body p {
+.them-san-pham-page .confirm-body p,
+.confirm-modal-overlay.product-management-modal .confirm-body p {
   margin: 0;
   color: #495057;
   font-size: 16px;
   line-height: 1.5;
 }
 
-.confirm-actions {
+.them-san-pham-page .confirm-actions,
+.confirm-modal-overlay.product-management-modal .confirm-actions {
   display: flex;
   gap: 15px;
   padding: 20px;
   justify-content: center;
 }
 
-.btn-cancel {
+.them-san-pham-page .btn-cancel,
+.confirm-modal-overlay.product-management-modal .btn-cancel {
   background-color: white;
   color: #6c757d;
   border: 2px solid #dee2e6;
@@ -193,14 +202,16 @@
 }
 
 /* Hover effects cho buttons */
-.btn-cancel:hover {
+.them-san-pham-page .btn-cancel:hover,
+.confirm-modal-overlay.product-management-modal .btn-cancel:hover {
   background-color: #ffffff;
   border-color: #adb5bd;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.btn-confirm {
+.them-san-pham-page .btn-confirm,
+.confirm-modal-overlay.product-management-modal .btn-confirm {
   background-color: #28a745;
   color: white;
   border: 2px solid #28a745;
@@ -213,12 +224,15 @@
 }
 
 /* Transition cho buttons */
-.btn-cancel,
-.btn-confirm {
+.them-san-pham-page .btn-cancel,
+.them-san-pham-page .btn-confirm,
+.confirm-modal-overlay.product-management-modal .btn-cancel,
+.confirm-modal-overlay.product-management-modal .btn-confirm {
   transition: all 0.2s ease;
 }
 
-.btn-confirm:hover {
+.them-san-pham-page .btn-confirm:hover,
+.confirm-modal-overlay.product-management-modal .btn-confirm:hover {
   background-color: #218838;
   border-color: #218838;
   transform: translateY(-1px);
@@ -226,19 +240,19 @@
 }
 
 /* Header checkbox styling */
-thead th:first-child input[type="checkbox"] {
+.them-san-pham-page thead th:first-child input[type="checkbox"] {
   cursor: pointer;
   transform: scale(1.2);
 }
 
 /* Indeterminate state styling */
-thead th:first-child input[type="checkbox"]:indeterminate {
+.them-san-pham-page thead th:first-child input[type="checkbox"]:indeterminate {
   background-color: #007bff;
   border-color: #007bff;
   position: relative;
 }
 
-thead th:first-child input[type="checkbox"]:indeterminate::after {
+.them-san-pham-page thead th:first-child input[type="checkbox"]:indeterminate::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -251,7 +265,7 @@ thead th:first-child input[type="checkbox"]:indeterminate::after {
 }
 
 /* Product cell styling */
-.product-cell {
+.them-san-pham-page .product-cell {
   width: 159.137px;
 }
 

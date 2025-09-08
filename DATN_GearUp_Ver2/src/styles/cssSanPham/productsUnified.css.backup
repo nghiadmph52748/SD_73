@@ -53,30 +53,18 @@ body {
   margin-bottom: 10px;
 }
 
-/* ===== CHỈ ÁP DỤNG CHO PRODUCTS PAGES CONTENT ===== */
-.them-san-pham-page *,
-.mau-sac-page *,
-.chat-lieu-page *,
-.de-giay-page *,
-.xuat-xu-page *,
-.trong-luong-page *,
-.kich-thuoc-page *,
-.nha-san-xuat-page *,
-.anh-san-pham-page * {
-  /* Common styles for products pages content only */
+/* ===== CHỈ ÁP DỤNG CHO PRODUCTS PAGES ===== */
+[data-route*="/products"] *,
+[data-route*="/products/"] *,
+.products-page *,
+.product-management *,
+.them-san-pham-page * {
+  /* Common styles for products pages */
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
 /* ===== PRODUCT TABLE STYLES ===== */
-.them-san-pham-page .product-table,
-.mau-sac-page .product-table,
-.chat-lieu-page .product-table,
-.de-giay-page .product-table,
-.xuat-xu-page .product-table,
-.trong-luong-page .product-table,
-.kich-thuoc-page .product-table,
-.nha-san-xuat-page .product-table,
-.anh-san-pham-page .product-table {
+.product-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -92,15 +80,7 @@ body {
   font-size: 12px;
 }
 
-.them-san-pham-page .product-table th,
-.mau-sac-page .product-table th,
-.chat-lieu-page .product-table th,
-.de-giay-page .product-table th,
-.xuat-xu-page .product-table th,
-.trong-luong-page .product-table th,
-.kich-thuoc-page .product-table th,
-.nha-san-xuat-page .product-table th,
-.anh-san-pham-page .product-table th {
+.product-table th {
   background: var(--header-bg);
   color: var(--header-text);
   font-weight: 600;
@@ -116,39 +96,15 @@ body {
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
-.them-san-pham-page .product-table th:first-child,
-.mau-sac-page .product-table th:first-child,
-.chat-lieu-page .product-table th:first-child,
-.de-giay-page .product-table th:first-child,
-.xuat-xu-page .product-table th:first-child,
-.trong-luong-page .product-table th:first-child,
-.kich-thuoc-page .product-table th:first-child,
-.nha-san-xuat-page .product-table th:first-child,
-.anh-san-pham-page .product-table th:first-child {
+.product-table th:first-child {
   border-top-left-radius: 12px;
 }
 
-.them-san-pham-page .product-table th:last-child,
-.mau-sac-page .product-table th:last-child,
-.chat-lieu-page .product-table th:last-child,
-.de-giay-page .product-table th:last-child,
-.xuat-xu-page .product-table th:last-child,
-.trong-luong-page .product-table th:last-child,
-.kich-thuoc-page .product-table th:last-child,
-.nha-san-xuat-page .product-table th:last-child,
-.anh-san-pham-page .product-table th:last-child {
+.product-table th:last-child {
   border-top-right-radius: 12px;
 }
 
-.them-san-pham-page .product-table th::after,
-.mau-sac-page .product-table th::after,
-.chat-lieu-page .product-table th::after,
-.de-giay-page .product-table th::after,
-.xuat-xu-page .product-table th::after,
-.trong-luong-page .product-table th::after,
-.kich-thuoc-page .product-table th::after,
-.nha-san-xuat-page .product-table th::after,
-.anh-san-pham-page .product-table th::after {
+.product-table th::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -158,15 +114,7 @@ body {
   background: rgba(255, 255, 255, 0.4);
 }
 
-.them-san-pham-page .product-table td,
-.mau-sac-page .product-table td,
-.chat-lieu-page .product-table td,
-.de-giay-page .product-table td,
-.xuat-xu-page .product-table td,
-.trong-luong-page .product-table td,
-.kich-thuoc-page .product-table td,
-.nha-san-xuat-page .product-table td,
-.anh-san-pham-page .product-table td {
+.product-table td {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
@@ -179,29 +127,13 @@ body {
   background: var(--bg-primary);
 }
 
-.them-san-pham-page .product-table tbody tr,
-.mau-sac-page .product-table tbody tr,
-.chat-lieu-page .product-table tbody tr,
-.de-giay-page .product-table tbody tr,
-.xuat-xu-page .product-table tbody tr,
-.trong-luong-page .product-table tbody tr,
-.kich-thuoc-page .product-table tbody tr,
-.nha-san-xuat-page .product-table tbody tr,
-.anh-san-pham-page .product-table tbody tr {
+.product-table tbody tr {
   transition: all 0.3s ease;
   position: relative;
 }
 
 /* KHÔNG có hover effect */
-.them-san-pham-page .product-table tbody tr.editing-row,
-.mau-sac-page .product-table tbody tr.editing-row,
-.chat-lieu-page .product-table tbody tr.editing-row,
-.de-giay-page .product-table tbody tr.editing-row,
-.xuat-xu-page .product-table tbody tr.editing-row,
-.trong-luong-page .product-table tbody tr.editing-row,
-.kich-thuoc-page .product-table tbody tr.editing-row,
-.nha-san-xuat-page .product-table tbody tr.editing-row,
-.anh-san-pham-page .product-table tbody tr.editing-row {
+.product-table tbody tr.editing-row {
   background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
   border-left: 4px solid var(--accent-color);
   box-shadow: 0 4px 20px rgba(34, 197, 94, 0.15);
@@ -220,27 +152,11 @@ body {
 }
 
 /* ===== SPECIFIC COLUMN ALIGNMENT ===== */
-.them-san-pham-page .product-table td:nth-child(4),
-.mau-sac-page .product-table td:nth-child(4),
-.chat-lieu-page .product-table td:nth-child(4),
-.de-giay-page .product-table td:nth-child(4),
-.xuat-xu-page .product-table td:nth-child(4),
-.trong-luong-page .product-table td:nth-child(4),
-.kich-thuoc-page .product-table td:nth-child(4),
-.nha-san-xuat-page .product-table td:nth-child(4),
-.anh-san-pham-page .product-table td:nth-child(4) {
+.product-table td:nth-child(4) {
   text-align: left;
 }
 
-.them-san-pham-page .product-table td:nth-child(5),
-.mau-sac-page .product-table td:nth-child(5),
-.chat-lieu-page .product-table td:nth-child(5),
-.de-giay-page .product-table td:nth-child(5),
-.xuat-xu-page .product-table td:nth-child(5),
-.trong-luong-page .product-table td:nth-child(5),
-.kich-thuoc-page .product-table td:nth-child(5),
-.nha-san-xuat-page .product-table td:nth-child(5),
-.anh-san-pham-page .product-table td:nth-child(5) {
+.product-table td:nth-child(5) {
   text-align: center;
 }
 
@@ -272,15 +188,7 @@ body {
 }
 
 /* CSS để table không bị nhảy cột khi vào edit mode */
-.them-san-pham-page .product-table td,
-.mau-sac-page .product-table td,
-.chat-lieu-page .product-table td,
-.de-giay-page .product-table td,
-.xuat-xu-page .product-table td,
-.trong-luong-page .product-table td,
-.kich-thuoc-page .product-table td,
-.nha-san-xuat-page .product-table td,
-.anh-san-pham-page .product-table td {
+.product-table td {
   /* Đảm bảo kích thước cột cố định */
   min-width: 0;
   max-width: none;
@@ -301,15 +209,7 @@ body {
 }
 
 /* Các cột có thể edit cần có width cố định */
-.them-san-pham-page .product-table .quantity-col,
-.mau-sac-page .product-table .quantity-col,
-.chat-lieu-page .product-table .quantity-col,
-.de-giay-page .product-table .quantity-col,
-.xuat-xu-page .product-table .quantity-col,
-.trong-luong-page .product-table .quantity-col,
-.kich-thuoc-page .product-table .quantity-col,
-.nha-san-xuat-page .product-table .quantity-col,
-.anh-san-pham-page .product-table .quantity-col {
+.product-table .quantity-col {
   width: 110px;
   min-width: 110px;
   max-width: 110px;
@@ -317,15 +217,7 @@ body {
   vertical-align: middle;
 }
 
-.them-san-pham-page .product-table .status-col,
-.mau-sac-page .product-table .status-col,
-.chat-lieu-page .product-table .status-col,
-.de-giay-page .product-table .status-col,
-.xuat-xu-page .product-table .status-col,
-.trong-luong-page .product-table .status-col,
-.kich-thuoc-page .product-table .status-col,
-.nha-san-xuat-page .product-table .status-col,
-.anh-san-pham-page .product-table .status-col {
+.product-table .status-col {
   width: auto;
   min-width: 60px;
   max-width: 80px;
@@ -334,15 +226,7 @@ body {
 }
 
 /* Cột giá bán có thể edit */
-.them-san-pham-page .product-table .price-col,
-.mau-sac-page .product-table .price-col,
-.chat-lieu-page .product-table .price-col,
-.de-giay-page .product-table .price-col,
-.xuat-xu-page .product-table .price-col,
-.trong-luong-page .product-table .price-col,
-.kich-thuoc-page .product-table .price-col,
-.nha-san-xuat-page .product-table .price-col,
-.anh-san-pham-page .product-table .price-col {
+.product-table .price-col {
   width: 120px;
   min-width: 120px;
   max-width: 120px;
@@ -355,69 +239,13 @@ body {
 }
 
 /* CSS cho các cột có nội dung dài */
-.them-san-pham-page .product-table .nha-san-xuat-col,
-.them-san-pham-page .product-table .xuat-xu-col,
-.them-san-pham-page .product-table .color-col,
-.them-san-pham-page .product-table .size-col,
-.them-san-pham-page .product-table .sole-col,
-.them-san-pham-page .product-table .material-col,
-.them-san-pham-page .product-table .weight-col,
-.mau-sac-page .product-table .nha-san-xuat-col,
-.mau-sac-page .product-table .xuat-xu-col,
-.mau-sac-page .product-table .color-col,
-.mau-sac-page .product-table .size-col,
-.mau-sac-page .product-table .sole-col,
-.mau-sac-page .product-table .material-col,
-.mau-sac-page .product-table .weight-col,
-.chat-lieu-page .product-table .nha-san-xuat-col,
-.chat-lieu-page .product-table .xuat-xu-col,
-.chat-lieu-page .product-table .color-col,
-.chat-lieu-page .product-table .size-col,
-.chat-lieu-page .product-table .sole-col,
-.chat-lieu-page .product-table .material-col,
-.chat-lieu-page .product-table .weight-col,
-.de-giay-page .product-table .nha-san-xuat-col,
-.de-giay-page .product-table .xuat-xu-col,
-.de-giay-page .product-table .color-col,
-.de-giay-page .product-table .size-col,
-.de-giay-page .product-table .sole-col,
-.de-giay-page .product-table .material-col,
-.de-giay-page .product-table .weight-col,
-.xuat-xu-page .product-table .nha-san-xuat-col,
-.xuat-xu-page .product-table .xuat-xu-col,
-.xuat-xu-page .product-table .color-col,
-.xuat-xu-page .product-table .size-col,
-.xuat-xu-page .product-table .sole-col,
-.xuat-xu-page .product-table .material-col,
-.xuat-xu-page .product-table .weight-col,
-.trong-luong-page .product-table .nha-san-xuat-col,
-.trong-luong-page .product-table .xuat-xu-col,
-.trong-luong-page .product-table .color-col,
-.trong-luong-page .product-table .size-col,
-.trong-luong-page .product-table .sole-col,
-.trong-luong-page .product-table .material-col,
-.trong-luong-page .product-table .weight-col,
-.kich-thuoc-page .product-table .nha-san-xuat-col,
-.kich-thuoc-page .product-table .xuat-xu-col,
-.kich-thuoc-page .product-table .color-col,
-.kich-thuoc-page .product-table .size-col,
-.kich-thuoc-page .product-table .sole-col,
-.kich-thuoc-page .product-table .material-col,
-.kich-thuoc-page .product-table .weight-col,
-.nha-san-xuat-page .product-table .nha-san-xuat-col,
-.nha-san-xuat-page .product-table .xuat-xu-col,
-.nha-san-xuat-page .product-table .color-col,
-.nha-san-xuat-page .product-table .size-col,
-.nha-san-xuat-page .product-table .sole-col,
-.nha-san-xuat-page .product-table .material-col,
-.nha-san-xuat-page .product-table .weight-col,
-.anh-san-pham-page .product-table .nha-san-xuat-col,
-.anh-san-pham-page .product-table .xuat-xu-col,
-.anh-san-pham-page .product-table .color-col,
-.anh-san-pham-page .product-table .size-col,
-.anh-san-pham-page .product-table .sole-col,
-.anh-san-pham-page .product-table .material-col,
-.anh-san-pham-page .product-table .weight-col {
+.product-table .nha-san-xuat-col,
+.product-table .xuat-xu-col,
+.product-table .color-col,
+.product-table .size-col,
+.product-table .sole-col,
+.product-table .material-col,
+.product-table .weight-col {
   /* Cho phép xuống dòng tốt hơn */
   word-break: break-word;
   hyphens: auto;
@@ -426,15 +254,7 @@ body {
 }
 
 /* CSS cho cột giảm giá */
-.them-san-pham-page .product-table .giam-gia-col,
-.mau-sac-page .product-table .giam-gia-col,
-.chat-lieu-page .product-table .giam-gia-col,
-.de-giay-page .product-table .giam-gia-col,
-.xuat-xu-page .product-table .giam-gia-col,
-.trong-luong-page .product-table .giam-gia-col,
-.kich-thuoc-page .product-table .giam-gia-col,
-.nha-san-xuat-page .product-table .giam-gia-col,
-.anh-san-pham-page .product-table .giam-gia-col {
+.product-table .giam-gia-col {
   text-align: center;
   /* Căn giữa */
   vertical-align: middle;
@@ -449,24 +269,8 @@ body {
 }
 
 /* CSS cho các cột giá tiền để hiển thị viết liền */
-.them-san-pham-page .product-table .price-col,
-.them-san-pham-page .product-table .gia-sau-giam-col,
-.mau-sac-page .product-table .price-col,
-.mau-sac-page .product-table .gia-sau-giam-col,
-.chat-lieu-page .product-table .price-col,
-.chat-lieu-page .product-table .gia-sau-giam-col,
-.de-giay-page .product-table .price-col,
-.de-giay-page .product-table .gia-sau-giam-col,
-.xuat-xu-page .product-table .price-col,
-.xuat-xu-page .product-table .gia-sau-giam-col,
-.trong-luong-page .product-table .price-col,
-.trong-luong-page .product-table .gia-sau-giam-col,
-.kich-thuoc-page .product-table .price-col,
-.kich-thuoc-page .product-table .gia-sau-giam-col,
-.nha-san-xuat-page .product-table .price-col,
-.nha-san-xuat-page .product-table .gia-sau-giam-col,
-.anh-san-pham-page .product-table .price-col,
-.anh-san-pham-page .product-table .gia-sau-giam-col {
+.product-table .price-col,
+.product-table .gia-sau-giam-col {
   white-space: nowrap;
   /* Không cho phép xuống dòng */
   overflow: visible;
@@ -479,143 +283,31 @@ body {
 }
 
 /* CSS cho cột ảnh để hiển thị tốt hơn */
-.them-san-pham-page .product-table .image-col,
-.mau-sac-page .product-table .image-col,
-.chat-lieu-page .product-table .image-col,
-.de-giay-page .product-table .image-col,
-.xuat-xu-page .product-table .image-col,
-.trong-luong-page .product-table .image-col,
-.kich-thuoc-page .product-table .image-col,
-.nha-san-xuat-page .product-table .image-col,
-.anh-san-pham-page .product-table .image-col {
+.product-table .image-col {
   vertical-align: middle;
   text-align: center;
   /* Giữ căn giữa cho cột ảnh */
 }
 
 /* Căn giữa tất cả các cột ngoại trừ giá bán và giá sau giảm */
-.them-san-pham-page .product-table .stt-col,
-.them-san-pham-page .product-table .nha-san-xuat-col,
-.them-san-pham-page .product-table .xuat-xu-col,
-.them-san-pham-page .product-table .color-col,
-.them-san-pham-page .product-table .size-col,
-.them-san-pham-page .product-table .sole-col,
-.them-san-pham-page .product-table .material-col,
-.them-san-pham-page .product-table .weight-col,
-.them-san-pham-page .product-table .quantity-col,
-.them-san-pham-page .product-table .giam-gia-col,
-.them-san-pham-page .product-table .status-col,
-.them-san-pham-page .product-table .action-col,
-.mau-sac-page .product-table .stt-col,
-.mau-sac-page .product-table .nha-san-xuat-col,
-.mau-sac-page .product-table .xuat-xu-col,
-.mau-sac-page .product-table .color-col,
-.mau-sac-page .product-table .size-col,
-.mau-sac-page .product-table .sole-col,
-.mau-sac-page .product-table .material-col,
-.mau-sac-page .product-table .weight-col,
-.mau-sac-page .product-table .quantity-col,
-.mau-sac-page .product-table .giam-gia-col,
-.mau-sac-page .product-table .status-col,
-.mau-sac-page .product-table .action-col,
-.chat-lieu-page .product-table .stt-col,
-.chat-lieu-page .product-table .nha-san-xuat-col,
-.chat-lieu-page .product-table .xuat-xu-col,
-.chat-lieu-page .product-table .color-col,
-.chat-lieu-page .product-table .size-col,
-.chat-lieu-page .product-table .sole-col,
-.chat-lieu-page .product-table .material-col,
-.chat-lieu-page .product-table .weight-col,
-.chat-lieu-page .product-table .quantity-col,
-.chat-lieu-page .product-table .giam-gia-col,
-.chat-lieu-page .product-table .status-col,
-.chat-lieu-page .product-table .action-col,
-.de-giay-page .product-table .stt-col,
-.de-giay-page .product-table .nha-san-xuat-col,
-.de-giay-page .product-table .xuat-xu-col,
-.de-giay-page .product-table .color-col,
-.de-giay-page .product-table .size-col,
-.de-giay-page .product-table .sole-col,
-.de-giay-page .product-table .material-col,
-.de-giay-page .product-table .weight-col,
-.de-giay-page .product-table .quantity-col,
-.de-giay-page .product-table .giam-gia-col,
-.de-giay-page .product-table .status-col,
-.de-giay-page .product-table .action-col,
-.xuat-xu-page .product-table .stt-col,
-.xuat-xu-page .product-table .nha-san-xuat-col,
-.xuat-xu-page .product-table .xuat-xu-col,
-.xuat-xu-page .product-table .color-col,
-.xuat-xu-page .product-table .size-col,
-.xuat-xu-page .product-table .sole-col,
-.xuat-xu-page .product-table .material-col,
-.xuat-xu-page .product-table .weight-col,
-.xuat-xu-page .product-table .quantity-col,
-.xuat-xu-page .product-table .giam-gia-col,
-.xuat-xu-page .product-table .status-col,
-.xuat-xu-page .product-table .action-col,
-.trong-luong-page .product-table .stt-col,
-.trong-luong-page .product-table .nha-san-xuat-col,
-.trong-luong-page .product-table .xuat-xu-col,
-.trong-luong-page .product-table .color-col,
-.trong-luong-page .product-table .size-col,
-.trong-luong-page .product-table .sole-col,
-.trong-luong-page .product-table .material-col,
-.trong-luong-page .product-table .weight-col,
-.trong-luong-page .product-table .quantity-col,
-.trong-luong-page .product-table .giam-gia-col,
-.trong-luong-page .product-table .status-col,
-.trong-luong-page .product-table .action-col,
-.kich-thuoc-page .product-table .stt-col,
-.kich-thuoc-page .product-table .nha-san-xuat-col,
-.kich-thuoc-page .product-table .xuat-xu-col,
-.kich-thuoc-page .product-table .color-col,
-.kich-thuoc-page .product-table .size-col,
-.kich-thuoc-page .product-table .sole-col,
-.kich-thuoc-page .product-table .material-col,
-.kich-thuoc-page .product-table .weight-col,
-.kich-thuoc-page .product-table .quantity-col,
-.kich-thuoc-page .product-table .giam-gia-col,
-.kich-thuoc-page .product-table .status-col,
-.kich-thuoc-page .product-table .action-col,
-.nha-san-xuat-page .product-table .stt-col,
-.nha-san-xuat-page .product-table .nha-san-xuat-col,
-.nha-san-xuat-page .product-table .xuat-xu-col,
-.nha-san-xuat-page .product-table .color-col,
-.nha-san-xuat-page .product-table .size-col,
-.nha-san-xuat-page .product-table .sole-col,
-.nha-san-xuat-page .product-table .material-col,
-.nha-san-xuat-page .product-table .weight-col,
-.nha-san-xuat-page .product-table .quantity-col,
-.nha-san-xuat-page .product-table .giam-gia-col,
-.nha-san-xuat-page .product-table .status-col,
-.nha-san-xuat-page .product-table .action-col,
-.anh-san-pham-page .product-table .stt-col,
-.anh-san-pham-page .product-table .nha-san-xuat-col,
-.anh-san-pham-page .product-table .xuat-xu-col,
-.anh-san-pham-page .product-table .color-col,
-.anh-san-pham-page .product-table .size-col,
-.anh-san-pham-page .product-table .sole-col,
-.anh-san-pham-page .product-table .material-col,
-.anh-san-pham-page .product-table .weight-col,
-.anh-san-pham-page .product-table .quantity-col,
-.anh-san-pham-page .product-table .giam-gia-col,
-.anh-san-pham-page .product-table .status-col,
-.anh-san-pham-page .product-table .action-col {
+.product-table .stt-col,
+.product-table .nha-san-xuat-col,
+.product-table .xuat-xu-col,
+.product-table .color-col,
+.product-table .size-col,
+.product-table .sole-col,
+.product-table .material-col,
+.product-table .weight-col,
+.product-table .quantity-col,
+.product-table .giam-gia-col,
+.product-table .status-col,
+.product-table .action-col {
   text-align: center;
   vertical-align: middle;
 }
 
 /* CSS cho ảnh trong cột ảnh */
-.them-san-pham-page .product-table .image-col img,
-.mau-sac-page .product-table .image-col img,
-.chat-lieu-page .product-table .image-col img,
-.de-giay-page .product-table .image-col img,
-.xuat-xu-page .product-table .image-col img,
-.trong-luong-page .product-table .image-col img,
-.kich-thuoc-page .product-table .image-col img,
-.nha-san-xuat-page .product-table .image-col img,
-.anh-san-pham-page .product-table .image-col img {
+.product-table .image-col img {
   width: 80px;
   height: 80px;
   object-fit: cover;
@@ -625,15 +317,7 @@ body {
 }
 
 /* CSS cho cột thao tác để căn giữa */
-.them-san-pham-page .product-table .action-col,
-.mau-sac-page .product-table .action-col,
-.chat-lieu-page .product-table .action-col,
-.de-giay-page .product-table .action-col,
-.xuat-xu-page .product-table .action-col,
-.trong-luong-page .product-table .action-col,
-.kich-thuoc-page .product-table .action-col,
-.nha-san-xuat-page .product-table .action-col,
-.anh-san-pham-page .product-table .action-col {
+.product-table .action-col {
   vertical-align: middle;
   text-align: center;
   /* Giữ căn giữa cho cột thao tác */
@@ -675,15 +359,7 @@ body {
 }
 
 /* Đảm bảo các cột có kích thước cố định */
-.them-san-pham-page .product-table th.stt-col,
-.mau-sac-page .product-table th.stt-col,
-.chat-lieu-page .product-table th.stt-col,
-.de-giay-page .product-table th.stt-col,
-.xuat-xu-page .product-table th.stt-col,
-.trong-luong-page .product-table th.stt-col,
-.kich-thuoc-page .product-table th.stt-col,
-.nha-san-xuat-page .product-table th.stt-col,
-.anh-san-pham-page .product-table th.stt-col {
+.product-table th.stt-col {
   width: 35px;
   min-width: 35px;
   max-width: 35px;
@@ -691,150 +367,30 @@ body {
 }
 
 /* CSS cho cột STT để căn giữa */
-.them-san-pham-page .product-table .stt-col,
-.mau-sac-page .product-table .stt-col,
-.chat-lieu-page .product-table .stt-col,
-.de-giay-page .product-table .stt-col,
-.xuat-xu-page .product-table .stt-col,
-.trong-luong-page .product-table .stt-col,
-.kich-thuoc-page .product-table .stt-col,
-.nha-san-xuat-page .product-table .stt-col,
-.anh-san-pham-page .product-table .stt-col {
+.product-table .stt-col {
   text-align: center;
   /* Căn giữa cho cột STT */
 }
 
 /* CSS cho cột STT trong thead cũng căn giữa */
-.them-san-pham-page .product-table th.stt-col,
-.mau-sac-page .product-table th.stt-col,
-.chat-lieu-page .product-table th.stt-col,
-.de-giay-page .product-table th.stt-col,
-.xuat-xu-page .product-table th.stt-col,
-.trong-luong-page .product-table th.stt-col,
-.kich-thuoc-page .product-table th.stt-col,
-.nha-san-xuat-page .product-table th.stt-col,
-.anh-san-pham-page .product-table th.stt-col {
+.product-table th.stt-col {
   text-align: center;
 }
 
 /* Căn giữa tất cả header ngoại trừ giá bán và giá sau giảm */
-.them-san-pham-page .product-table th.stt-col,
-.them-san-pham-page .product-table th.image-col,
-.them-san-pham-page .product-table th.nha-san-xuat-col,
-.them-san-pham-page .product-table th.xuat-xu-col,
-.them-san-pham-page .product-table th.color-col,
-.them-san-pham-page .product-table th.size-col,
-.them-san-pham-page .product-table th.sole-col,
-.them-san-pham-page .product-table th.material-col,
-.them-san-pham-page .product-table th.weight-col,
-.them-san-pham-page .product-table th.quantity-col,
-.them-san-pham-page .product-table th.giam-gia-col,
-.them-san-pham-page .product-table th.status-col,
-.them-san-pham-page .product-table th.action-col,
-.mau-sac-page .product-table th.stt-col,
-.mau-sac-page .product-table th.image-col,
-.mau-sac-page .product-table th.nha-san-xuat-col,
-.mau-sac-page .product-table th.xuat-xu-col,
-.mau-sac-page .product-table th.color-col,
-.mau-sac-page .product-table th.size-col,
-.mau-sac-page .product-table th.sole-col,
-.mau-sac-page .product-table th.material-col,
-.mau-sac-page .product-table th.weight-col,
-.mau-sac-page .product-table th.quantity-col,
-.mau-sac-page .product-table th.giam-gia-col,
-.mau-sac-page .product-table th.status-col,
-.mau-sac-page .product-table th.action-col,
-.chat-lieu-page .product-table th.stt-col,
-.chat-lieu-page .product-table th.image-col,
-.chat-lieu-page .product-table th.nha-san-xuat-col,
-.chat-lieu-page .product-table th.xuat-xu-col,
-.chat-lieu-page .product-table th.color-col,
-.chat-lieu-page .product-table th.size-col,
-.chat-lieu-page .product-table th.sole-col,
-.chat-lieu-page .product-table th.material-col,
-.chat-lieu-page .product-table th.weight-col,
-.chat-lieu-page .product-table th.quantity-col,
-.chat-lieu-page .product-table th.giam-gia-col,
-.chat-lieu-page .product-table th.status-col,
-.chat-lieu-page .product-table th.action-col,
-.de-giay-page .product-table th.stt-col,
-.de-giay-page .product-table th.image-col,
-.de-giay-page .product-table th.nha-san-xuat-col,
-.de-giay-page .product-table th.xuat-xu-col,
-.de-giay-page .product-table th.color-col,
-.de-giay-page .product-table th.size-col,
-.de-giay-page .product-table th.sole-col,
-.de-giay-page .product-table th.material-col,
-.de-giay-page .product-table th.weight-col,
-.de-giay-page .product-table th.quantity-col,
-.de-giay-page .product-table th.giam-gia-col,
-.de-giay-page .product-table th.status-col,
-.de-giay-page .product-table th.action-col,
-.xuat-xu-page .product-table th.stt-col,
-.xuat-xu-page .product-table th.image-col,
-.xuat-xu-page .product-table th.nha-san-xuat-col,
-.xuat-xu-page .product-table th.xuat-xu-col,
-.xuat-xu-page .product-table th.color-col,
-.xuat-xu-page .product-table th.size-col,
-.xuat-xu-page .product-table th.sole-col,
-.xuat-xu-page .product-table th.material-col,
-.xuat-xu-page .product-table th.weight-col,
-.xuat-xu-page .product-table th.quantity-col,
-.xuat-xu-page .product-table th.giam-gia-col,
-.xuat-xu-page .product-table th.status-col,
-.xuat-xu-page .product-table th.action-col,
-.trong-luong-page .product-table th.stt-col,
-.trong-luong-page .product-table th.image-col,
-.trong-luong-page .product-table th.nha-san-xuat-col,
-.trong-luong-page .product-table th.xuat-xu-col,
-.trong-luong-page .product-table th.color-col,
-.trong-luong-page .product-table th.size-col,
-.trong-luong-page .product-table th.sole-col,
-.trong-luong-page .product-table th.material-col,
-.trong-luong-page .product-table th.weight-col,
-.trong-luong-page .product-table th.quantity-col,
-.trong-luong-page .product-table th.giam-gia-col,
-.trong-luong-page .product-table th.status-col,
-.trong-luong-page .product-table th.action-col,
-.kich-thuoc-page .product-table th.stt-col,
-.kich-thuoc-page .product-table th.image-col,
-.kich-thuoc-page .product-table th.nha-san-xuat-col,
-.kich-thuoc-page .product-table th.xuat-xu-col,
-.kich-thuoc-page .product-table th.color-col,
-.kich-thuoc-page .product-table th.size-col,
-.kich-thuoc-page .product-table th.sole-col,
-.kich-thuoc-page .product-table th.material-col,
-.kich-thuoc-page .product-table th.weight-col,
-.kich-thuoc-page .product-table th.quantity-col,
-.kich-thuoc-page .product-table th.giam-gia-col,
-.kich-thuoc-page .product-table th.status-col,
-.kich-thuoc-page .product-table th.action-col,
-.nha-san-xuat-page .product-table th.stt-col,
-.nha-san-xuat-page .product-table th.image-col,
-.nha-san-xuat-page .product-table th.nha-san-xuat-col,
-.nha-san-xuat-page .product-table th.xuat-xu-col,
-.nha-san-xuat-page .product-table th.color-col,
-.nha-san-xuat-page .product-table th.size-col,
-.nha-san-xuat-page .product-table th.sole-col,
-.nha-san-xuat-page .product-table th.material-col,
-.nha-san-xuat-page .product-table th.weight-col,
-.nha-san-xuat-page .product-table th.quantity-col,
-.nha-san-xuat-page .product-table th.giam-gia-col,
-.nha-san-xuat-page .product-table th.status-col,
-.nha-san-xuat-page .product-table th.action-col,
-.anh-san-pham-page .product-table th.stt-col,
-.anh-san-pham-page .product-table th.image-col,
-.anh-san-pham-page .product-table th.nha-san-xuat-col,
-.anh-san-pham-page .product-table th.xuat-xu-col,
-.anh-san-pham-page .product-table th.color-col,
-.anh-san-pham-page .product-table th.size-col,
-.anh-san-pham-page .product-table th.sole-col,
-.anh-san-pham-page .product-table th.material-col,
-.anh-san-pham-page .product-table th.weight-col,
-.anh-san-pham-page .product-table th.quantity-col,
-.anh-san-pham-page .product-table th.giam-gia-col,
-.anh-san-pham-page .product-table th.status-col,
-.anh-san-pham-page .product-table th.action-col {
+.product-table th.stt-col,
+.product-table th.image-col,
+.product-table th.nha-san-xuat-col,
+.product-table th.xuat-xu-col,
+.product-table th.color-col,
+.product-table th.size-col,
+.product-table th.sole-col,
+.product-table th.material-col,
+.product-table th.weight-col,
+.product-table th.quantity-col,
+.product-table th.giam-gia-col,
+.product-table th.status-col,
+.product-table th.action-col {
   text-align: center;
 }
 
@@ -1231,15 +787,7 @@ body {
 /* KHÔNG có hover effect */
 
 /* ===== CHECKBOX STYLES ===== */
-.them-san-pham-page .product-table input[type="checkbox"],
-.mau-sac-page .product-table input[type="checkbox"],
-.chat-lieu-page .product-table input[type="checkbox"],
-.de-giay-page .product-table input[type="checkbox"],
-.xuat-xu-page .product-table input[type="checkbox"],
-.trong-luong-page .product-table input[type="checkbox"],
-.kich-thuoc-page .product-table input[type="checkbox"],
-.nha-san-xuat-page .product-table input[type="checkbox"],
-.anh-san-pham-page .product-table input[type="checkbox"] {
+.product-table input[type="checkbox"] {
   width: 18px;
   height: 18px;
   border: 2px solid var(--border-color);
@@ -1253,28 +801,12 @@ body {
   display: block;
 }
 
-.them-san-pham-page .product-table input[type="checkbox"]:checked,
-.mau-sac-page .product-table input[type="checkbox"]:checked,
-.chat-lieu-page .product-table input[type="checkbox"]:checked,
-.de-giay-page .product-table input[type="checkbox"]:checked,
-.xuat-xu-page .product-table input[type="checkbox"]:checked,
-.trong-luong-page .product-table input[type="checkbox"]:checked,
-.kich-thuoc-page .product-table input[type="checkbox"]:checked,
-.nha-san-xuat-page .product-table input[type="checkbox"]:checked,
-.anh-san-pham-page .product-table input[type="checkbox"]:checked {
+.product-table input[type="checkbox"]:checked {
   background: var(--accent-color);
   border-color: var(--accent-color);
 }
 
-.them-san-pham-page .product-table input[type="checkbox"]:checked::after,
-.mau-sac-page .product-table input[type="checkbox"]:checked::after,
-.chat-lieu-page .product-table input[type="checkbox"]:checked::after,
-.de-giay-page .product-table input[type="checkbox"]:checked::after,
-.xuat-xu-page .product-table input[type="checkbox"]:checked::after,
-.trong-luong-page .product-table input[type="checkbox"]:checked::after,
-.kich-thuoc-page .product-table input[type="checkbox"]:checked::after,
-.nha-san-xuat-page .product-table input[type="checkbox"]:checked::after,
-.anh-san-pham-page .product-table input[type="checkbox"]:checked::after {
+.product-table input[type="checkbox"]:checked::after {
   content: '✓';
   position: absolute;
   top: 50%;
@@ -1288,15 +820,7 @@ body {
 /* KHÔNG có hover effect */
 
 /* ===== PAGINATION STYLES ===== */
-.them-san-pham-page .pagination-wrapper,
-.mau-sac-page .pagination-wrapper,
-.chat-lieu-page .pagination-wrapper,
-.de-giay-page .pagination-wrapper,
-.xuat-xu-page .pagination-wrapper,
-.trong-luong-page .pagination-wrapper,
-.kich-thuoc-page .pagination-wrapper,
-.nha-san-xuat-page .pagination-wrapper,
-.anh-san-pham-page .pagination-wrapper {
+.pagination-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1305,43 +829,19 @@ body {
   border-top: 1px solid var(--border-color);
 }
 
-.them-san-pham-page .pagination-info,
-.mau-sac-page .pagination-info,
-.chat-lieu-page .pagination-info,
-.de-giay-page .pagination-info,
-.xuat-xu-page .pagination-info,
-.trong-luong-page .pagination-info,
-.kich-thuoc-page .pagination-info,
-.nha-san-xuat-page .pagination-info,
-.anh-san-pham-page .pagination-info {
+.pagination-info {
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
 }
 
-.them-san-pham-page .pagination,
-.mau-sac-page .pagination,
-.chat-lieu-page .pagination,
-.de-giay-page .pagination,
-.xuat-xu-page .pagination,
-.trong-luong-page .pagination,
-.kich-thuoc-page .pagination,
-.nha-san-xuat-page .pagination,
-.anh-san-pham-page .pagination {
+.pagination {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.them-san-pham-page .page-info,
-.mau-sac-page .page-info,
-.chat-lieu-page .page-info,
-.de-giay-page .page-info,
-.xuat-xu-page .page-info,
-.trong-luong-page .page-info,
-.kich-thuoc-page .page-info,
-.nha-san-xuat-page .page-info,
-.anh-san-pham-page .page-info {
+.page-info {
   padding: 8px 16px;
   background: var(--bg-secondary);
   border-radius: 8px;
@@ -1353,15 +853,7 @@ body {
 }
 
 /* ===== PAGINATION STYLES ===== */
-.them-san-pham-page .pagination-wrapper,
-.mau-sac-page .pagination-wrapper,
-.chat-lieu-page .pagination-wrapper,
-.de-giay-page .pagination-wrapper,
-.xuat-xu-page .pagination-wrapper,
-.trong-luong-page .pagination-wrapper,
-.kich-thuoc-page .pagination-wrapper,
-.nha-san-xuat-page .pagination-wrapper,
-.anh-san-pham-page .pagination-wrapper {
+.pagination-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1369,171 +861,55 @@ body {
   border-top: 1px solid #e2e8f0;
 }
 
-.them-san-pham-page .pagination-info,
-.mau-sac-page .pagination-info,
-.chat-lieu-page .pagination-info,
-.de-giay-page .pagination-info,
-.xuat-xu-page .pagination-info,
-.trong-luong-page .pagination-info,
-.kich-thuoc-page .pagination-info,
-.nha-san-xuat-page .pagination-info,
-.anh-san-pham-page .pagination-info {
+.pagination-info {
   color: #64748b;
   font-size: 0.875rem;
 }
 
-.them-san-pham-page .pagination,
-.mau-sac-page .pagination,
-.chat-lieu-page .pagination,
-.de-giay-page .pagination,
-.xuat-xu-page .pagination,
-.trong-luong-page .pagination,
-.kich-thuoc-page .pagination,
-.nha-san-xuat-page .pagination,
-.anh-san-pham-page .pagination {
+.pagination {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.them-san-pham-page .pagination-btn,
-.mau-sac-page .pagination-btn,
-.chat-lieu-page .pagination-btn,
-.de-giay-page .pagination-btn,
-.xuat-xu-page .pagination-btn,
-.trong-luong-page .pagination-btn,
-.kich-thuoc-page .pagination-btn,
-.nha-san-xuat-page .pagination-btn,
-.anh-san-pham-page .pagination-btn {
+.pagination-btn {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid var(--accent-color);
   border-radius: 8px;
-  background: var(--accent-color);
-  color: white;
+  background: white;
+  color: var(--accent-color);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
   white-space: nowrap;
   text-decoration: none;
 }
 
-.them-san-pham-page .pagination-btn:hover:not(:disabled),
-.mau-sac-page .pagination-btn:hover:not(:disabled),
-.chat-lieu-page .pagination-btn:hover:not(:disabled),
-.de-giay-page .pagination-btn:hover:not(:disabled),
-.xuat-xu-page .pagination-btn:hover:not(:disabled),
-.trong-luong-page .pagination-btn:hover:not(:disabled),
-.kich-thuoc-page .pagination-btn:hover:not(:disabled),
-.nha-san-xuat-page .pagination-btn:hover:not(:disabled),
-.anh-san-pham-page .pagination-btn:hover:not(:disabled) {
+.pagination-btn:hover:not(:disabled) {
   background: var(--accent-color);
   color: white;
-  border-color: white;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
 }
 
-.them-san-pham-page .pagination-btn:disabled,
-.mau-sac-page .pagination-btn:disabled,
-.chat-lieu-page .pagination-btn:disabled,
-.de-giay-page .pagination-btn:disabled,
-.xuat-xu-page .pagination-btn:disabled,
-.trong-luong-page .pagination-btn:disabled,
-.kich-thuoc-page .pagination-btn:disabled,
-.nha-san-xuat-page .pagination-btn:disabled,
-.anh-san-pham-page .pagination-btn:disabled {
+.pagination-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
   box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
 }
 
-.them-san-pham-page .pagination-btn .icon,
-.mau-sac-page .pagination-btn .icon,
-.chat-lieu-page .pagination-btn .icon,
-.de-giay-page .pagination-btn .icon,
-.xuat-xu-page .pagination-btn .icon,
-.trong-luong-page .pagination-btn .icon,
-.kich-thuoc-page .pagination-btn .icon,
-.nha-san-xuat-page .pagination-btn .icon,
-.anh-san-pham-page .pagination-btn .icon {
+.pagination-btn .icon {
   width: 16px;
   height: 16px;
 }
 
-/* ===== FORCE PAGINATION BUTTON STYLES WITH HIGHEST SPECIFICITY ===== */
-div.xuat-xu-page .pagination-wrapper .pagination .pagination-btn,
-div.mau-sac-page .pagination-wrapper .pagination .pagination-btn,
-div.chat-lieu-page .pagination-wrapper .pagination .pagination-btn,
-div.de-giay-page .pagination-wrapper .pagination .pagination-btn,
-div.trong-luong-page .pagination-wrapper .pagination .pagination-btn,
-div.kich-thuoc-page .pagination-wrapper .pagination .pagination-btn,
-div.nha-san-xuat-page .pagination-wrapper .pagination .pagination-btn,
-div.anh-san-pham-page .pagination-wrapper .pagination .pagination-btn,
-div.them-san-pham-page .pagination-wrapper .pagination .pagination-btn {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.75rem !important;
-  padding: 0.75rem 1.5rem !important;
-  border: 2px solid var(--accent-color) !important;
-  border-radius: 8px !important;
-  background: var(--accent-color) !important;
-  color: white !important;
-  font-size: 0.875rem !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1) !important;
-  white-space: nowrap !important;
-  text-decoration: none !important;
-}
-
-div.xuat-xu-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.mau-sac-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.chat-lieu-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.de-giay-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.trong-luong-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.kich-thuoc-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.nha-san-xuat-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.anh-san-pham-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled),
-div.them-san-pham-page .pagination-wrapper .pagination .pagination-btn:hover:not(:disabled) {
-  color: var(--accent-color) !important;
-  background-color: white !important;
-  border: 2px solid var(--accent-color) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3) !important;
-}
-
-div.xuat-xu-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.mau-sac-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.chat-lieu-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.de-giay-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.trong-luong-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.kich-thuoc-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.nha-san-xuat-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.anh-san-pham-page .pagination-wrapper .pagination .pagination-btn:disabled,
-div.them-san-pham-page .pagination-wrapper .pagination .pagination-btn:disabled {
-  opacity: 0.5 !important;
-  cursor: not-allowed !important;
-  transform: none !important;
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1) !important;
-}
-
-.them-san-pham-page .page-info,
-.mau-sac-page .page-info,
-.chat-lieu-page .page-info,
-.de-giay-page .page-info,
-.xuat-xu-page .page-info,
-.trong-luong-page .page-info,
-.kich-thuoc-page .page-info,
-.nha-san-xuat-page .page-info,
-.anh-san-pham-page .page-info {
+.page-info {
   color: #64748b;
   font-size: 0.875rem;
   font-weight: 500;
@@ -1556,36 +932,12 @@ div.them-san-pham-page .pagination-wrapper .pagination .pagination-btn:disabled 
 }
 
 @media (max-width: 768px) {
-  .them-san-pham-page .product-table,
-  .mau-sac-page .product-table,
-  .chat-lieu-page .product-table,
-  .de-giay-page .product-table,
-  .xuat-xu-page .product-table,
-  .trong-luong-page .product-table,
-  .kich-thuoc-page .product-table,
-  .nha-san-xuat-page .product-table,
-  .anh-san-pham-page .product-table {
+  .product-table {
     font-size: 12px;
   }
 
-  .them-san-pham-page .product-table th,
-  .them-san-pham-page .product-table td,
-  .mau-sac-page .product-table th,
-  .mau-sac-page .product-table td,
-  .chat-lieu-page .product-table th,
-  .chat-lieu-page .product-table td,
-  .de-giay-page .product-table th,
-  .de-giay-page .product-table td,
-  .xuat-xu-page .product-table th,
-  .xuat-xu-page .product-table td,
-  .trong-luong-page .product-table th,
-  .trong-luong-page .product-table td,
-  .kich-thuoc-page .product-table th,
-  .kich-thuoc-page .product-table td,
-  .nha-san-xuat-page .product-table th,
-  .nha-san-xuat-page .product-table td,
-  .anh-san-pham-page .product-table th,
-  .anh-san-pham-page .product-table td {
+  .product-table th,
+  .product-table td {
     padding: 8px 12px;
     font-size: 12px;
   }
@@ -1603,15 +955,7 @@ div.them-san-pham-page .pagination-wrapper .pagination .pagination-btn:disabled 
     font-size: 14px;
   }
 
-  .them-san-pham-page .pagination-wrapper,
-  .mau-sac-page .pagination-wrapper,
-  .chat-lieu-page .pagination-wrapper,
-  .de-giay-page .pagination-wrapper,
-  .xuat-xu-page .pagination-wrapper,
-  .trong-luong-page .pagination-wrapper,
-  .kich-thuoc-page .pagination-wrapper,
-  .nha-san-xuat-page .pagination-wrapper,
-  .anh-san-pham-page .pagination-wrapper {
+  .pagination-wrapper {
     flex-direction: column;
     gap: 1rem;
     align-items: stretch;
@@ -1858,15 +1202,7 @@ div.them-san-pham-page .pagination-wrapper .pagination .pagination-btn:disabled 
   white-space: nowrap;
 }
 
-.them-san-pham-page .btn-outline:hover,
-.mau-sac-page .btn-outline:hover,
-.chat-lieu-page .btn-outline:hover,
-.de-giay-page .btn-outline:hover,
-.xuat-xu-page .btn-outline:hover,
-.trong-luong-page .btn-outline:hover,
-.kich-thuoc-page .btn-outline:hover,
-.nha-san-xuat-page .btn-outline:hover,
-.anh-san-pham-page .btn-outline:hover {
+.btn-outline:hover {
   background: var(--accent-color);
   color: white;
   transform: translateY(-2px);
@@ -2149,15 +1485,7 @@ body {
 }
 
 /* ===== BASIC BUTTON STYLES ===== */
-.them-san-pham-page .btn,
-.mau-sac-page .btn,
-.chat-lieu-page .btn,
-.de-giay-page .btn,
-.xuat-xu-page .btn,
-.trong-luong-page .btn,
-.kich-thuoc-page .btn,
-.nha-san-xuat-page .btn,
-.anh-san-pham-page .btn {
+.btn {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -2174,28 +1502,12 @@ body {
   /* Default background */
 }
 
-.them-san-pham-page .btn:hover,
-.mau-sac-page .btn:hover,
-.chat-lieu-page .btn:hover,
-.de-giay-page .btn:hover,
-.xuat-xu-page .btn:hover,
-.trong-luong-page .btn:hover,
-.kich-thuoc-page .btn:hover,
-.nha-san-xuat-page .btn:hover,
-.anh-san-pham-page .btn:hover {
+.btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.them-san-pham-page .btn:active,
-.mau-sac-page .btn:active,
-.chat-lieu-page .btn:active,
-.de-giay-page .btn:active,
-.xuat-xu-page .btn:active,
-.trong-luong-page .btn:active,
-.kich-thuoc-page .btn:active,
-.nha-san-xuat-page .btn:active,
-.anh-san-pham-page .btn:active {
+.btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -2220,15 +1532,7 @@ body {
   box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
-.them-san-pham-page .btn-success:hover,
-.mau-sac-page .btn-success:hover,
-.chat-lieu-page .btn-success:hover,
-.de-giay-page .btn-success:hover,
-.xuat-xu-page .btn-success:hover,
-.trong-luong-page .btn-success:hover,
-.kich-thuoc-page .btn-success:hover,
-.nha-san-xuat-page .btn-success:hover,
-.anh-san-pham-page .btn-success:hover {
+.btn-success:hover {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
 }
@@ -2239,15 +1543,7 @@ body {
   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
 }
 
-.them-san-pham-page .btn-danger:hover,
-.mau-sac-page .btn-danger:hover,
-.chat-lieu-page .btn-danger:hover,
-.de-giay-page .btn-danger:hover,
-.xuat-xu-page .btn-danger:hover,
-.trong-luong-page .btn-danger:hover,
-.kich-thuoc-page .btn-danger:hover,
-.nha-san-xuat-page .btn-danger:hover,
-.anh-san-pham-page .btn-danger:hover {
+.btn-danger:hover {
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
   box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
 }
@@ -2258,15 +1554,7 @@ body {
   box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3);
 }
 
-.them-san-pham-page .btn-secondary:hover,
-.mau-sac-page .btn-secondary:hover,
-.chat-lieu-page .btn-secondary:hover,
-.de-giay-page .btn-secondary:hover,
-.xuat-xu-page .btn-secondary:hover,
-.trong-luong-page .btn-secondary:hover,
-.kich-thuoc-page .btn-secondary:hover,
-.nha-san-xuat-page .btn-secondary:hover,
-.anh-san-pham-page .btn-secondary:hover {
+.btn-secondary:hover {
   background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
   box-shadow: 0 4px 8px rgba(107, 114, 128, 0.4);
 }
@@ -2277,15 +1565,7 @@ body {
   color: #374151 !important;
 }
 
-.them-san-pham-page .btn-outline:hover,
-.mau-sac-page .btn-outline:hover,
-.chat-lieu-page .btn-outline:hover,
-.de-giay-page .btn-outline:hover,
-.xuat-xu-page .btn-outline:hover,
-.trong-luong-page .btn-outline:hover,
-.kich-thuoc-page .btn-outline:hover,
-.nha-san-xuat-page .btn-outline:hover,
-.anh-san-pham-page .btn-outline:hover {
+.btn-outline:hover {
   background: var(--accent-color);
   border-color: var(--accent-color);
   color: white !important;
@@ -2309,15 +1589,7 @@ body {
 }
 
 /* ===== EXPORT BUTTON STYLES ===== */
-.them-san-pham-page .btn-export,
-.mau-sac-page .btn-export,
-.chat-lieu-page .btn-export,
-.de-giay-page .btn-export,
-.xuat-xu-page .btn-export,
-.trong-luong-page .btn-export,
-.kich-thuoc-page .btn-export,
-.nha-san-xuat-page .btn-export,
-.anh-san-pham-page .btn-export {
+.them-san-pham-page .btn-export {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -2334,28 +1606,12 @@ body {
   box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
 }
 
-.them-san-pham-page .btn-export:active,
-.mau-sac-page .btn-export:active,
-.chat-lieu-page .btn-export:active,
-.de-giay-page .btn-export:active,
-.xuat-xu-page .btn-export:active,
-.trong-luong-page .btn-export:active,
-.kich-thuoc-page .btn-export:active,
-.nha-san-xuat-page .btn-export:active,
-.anh-san-pham-page .btn-export:active {
+.them-san-pham-page .btn-export:active {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(34, 197, 94, 0.2);
 }
 
-.them-san-pham-page .btn-export .btn-icon,
-.mau-sac-page .btn-export .btn-icon,
-.chat-lieu-page .btn-export .btn-icon,
-.de-giay-page .btn-export .btn-icon,
-.xuat-xu-page .btn-export .btn-icon,
-.trong-luong-page .btn-export .btn-icon,
-.kich-thuoc-page .btn-export .btn-icon,
-.nha-san-xuat-page .btn-export .btn-icon,
-.anh-san-pham-page .btn-export .btn-icon {
+.them-san-pham-page .btn-export .btn-icon {
   font-size: 1rem;
 }
 
@@ -2565,15 +1821,7 @@ body {
   box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3) !important;
 }
 
-.them-san-pham-page .btn-export:hover,
-.mau-sac-page .btn-export:hover,
-.chat-lieu-page .btn-export:hover,
-.de-giay-page .btn-export:hover,
-.xuat-xu-page .btn-export:hover,
-.trong-luong-page .btn-export:hover,
-.kich-thuoc-page .btn-export:hover,
-.nha-san-xuat-page .btn-export:hover,
-.anh-san-pham-page .btn-export:hover {
+.them-san-pham-page .btn-export:hover {
   background: var(--accent-color) !important;
   color: white !important;
   border-color: white !important;
@@ -2809,16 +2057,7 @@ body {
 }
 
 /* ===== CSS CHO FILE QUẢN LÝ SẢN PHẨM ===== */
-.them-san-pham-page .card,
-.mau-sac-page .card,
-.chat-lieu-page .card,
-.de-giay-page .card,
-.xuat-xu-page .card,
-.trong-luong-page .card,
-.kich-thuoc-page .card,
-.nha-san-xuat-page .card,
-.anh-san-pham-page .card,
-.product-management .card {
+.card {
   background: white;
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
@@ -2862,31 +2101,13 @@ body {
   padding: 0;
 }
 
-.them-san-pham-page .table,
-.mau-sac-page .table,
-.chat-lieu-page .table,
-.de-giay-page .table,
-.xuat-xu-page .table,
-.trong-luong-page .table,
-.kich-thuoc-page .table,
-.nha-san-xuat-page .table,
-.anh-san-pham-page .table,
-.product-management .table {
+.table {
   width: 100%;
   margin-bottom: 0;
   border-collapse: collapse;
 }
 
-.them-san-pham-page .table th,
-.mau-sac-page .table th,
-.chat-lieu-page .table th,
-.de-giay-page .table th,
-.xuat-xu-page .table th,
-.trong-luong-page .table th,
-.kich-thuoc-page .table th,
-.nha-san-xuat-page .table th,
-.anh-san-pham-page .table th,
-.product-management .table th {
+.table th {
   background: #ffffff;
   color: var(--text-primary);
   font-weight: 600;
@@ -2896,16 +2117,7 @@ body {
   font-size: 14px;
 }
 
-.them-san-pham-page .table td,
-.mau-sac-page .table td,
-.chat-lieu-page .table td,
-.de-giay-page .table td,
-.xuat-xu-page .table td,
-.trong-luong-page .table td,
-.kich-thuoc-page .table td,
-.nha-san-xuat-page .table td,
-.anh-san-pham-page .table td,
-.product-management .table td {
+.table td {
   padding: 15px;
   border-bottom: 1px solid #e9ecef;
   vertical-align: middle;
@@ -2913,16 +2125,7 @@ body {
   color: var(--text-primary);
 }
 
-.them-san-pham-page .table tbody tr:hover,
-.mau-sac-page .table tbody tr:hover,
-.chat-lieu-page .table tbody tr:hover,
-.de-giay-page .table tbody tr:hover,
-.xuat-xu-page .table tbody tr:hover,
-.trong-luong-page .table tbody tr:hover,
-.kich-thuoc-page .table tbody tr:hover,
-.nha-san-xuat-page .table tbody tr:hover,
-.anh-san-pham-page .table tbody tr:hover,
-.product-management .table tbody tr:hover {
+.table tbody tr:hover {
   background-color: #ffffff;
 }
 
@@ -3228,15 +2431,7 @@ body {
 }
 
 /* ===== BUTTON STYLES CHO CHI TIET SAN PHAM ===== */
-.them-san-pham-page .btn,
-.mau-sac-page .btn,
-.chat-lieu-page .btn,
-.de-giay-page .btn,
-.xuat-xu-page .btn,
-.trong-luong-page .btn,
-.kich-thuoc-page .btn,
-.nha-san-xuat-page .btn,
-.anh-san-pham-page .btn {
+.btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -3254,29 +2449,12 @@ body {
   white-space: nowrap;
 }
 
-.them-san-pham-page .btn:active,
-.mau-sac-page .btn:active,
-.chat-lieu-page .btn:active,
-.de-giay-page .btn:active,
-.xuat-xu-page .btn:active,
-.trong-luong-page .btn:active,
-.kich-thuoc-page .btn:active,
-.nha-san-xuat-page .btn:active,
-.anh-san-pham-page .btn:active {
+.btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(34, 197, 94, 0.2);
 }
 
-.them-san-pham-page .btn .btn-icon,
-.mau-sac-page .btn .btn-icon,
-.chat-lieu-page .btn .btn-icon,
-.de-giay-page .btn .btn-icon,
-.xuat-xu-page .btn .btn-icon,
-.trong-luong-page .btn .btn-icon,
-.kich-thuoc-page .btn .btn-icon,
-.nha-san-xuat-page .btn .btn-icon,
-.anh-san-pham-page .btn .btn-icon,
-.product-management .btn .btn-icon {
+.btn .btn-icon {
   font-size: 1rem;
 }
 
@@ -4249,172 +3427,38 @@ body {
   }
 }
 
-/* ===== CSS CHO CÁC BUTTON TRONG PRODUCTS PAGES CONTENT ===== */
-/* Chỉ áp dụng cho button trong nội dung trang, không ảnh hưởng navigation */
-.them-san-pham-page button,
-.mau-sac-page button,
-.chat-lieu-page button,
-.de-giay-page button,
-.xuat-xu-page button,
-.trong-luong-page button,
-.kich-thuoc-page button,
-.nha-san-xuat-page button,
-.anh-san-pham-page button {
+/* ===== CSS CHO CÁC BUTTON TRONG PRODUCTS PAGES ===== */
+/* Áp dụng cho tất cả button trong các trang products */
+[data-route*="/products"] button,
+[data-route*="/products/"] button,
+.products-page button,
+.product-management button,
+.them-san-pham-page button {
   color: white !important;
   background-color: var(--accent-color) !important;
   border: 2px solid var(--accent-color) !important;
   transition: all 0.3s ease !important;
 }
 
-/* Hover effect cho các button trong products pages - Only target buttons within page content, not header/navigation */
-.them-san-pham-page .btn-export:hover,
-.mau-sac-page .btn-export:hover,
-.chat-lieu-page .btn-export:hover,
-.de-giay-page .btn-export:hover,
-.xuat-xu-page .btn-export:hover,
-.trong-luong-page .btn-export:hover,
-.kich-thuoc-page .btn-export:hover,
-.nha-san-xuat-page .btn-export:hover,
-.anh-san-pham-page .btn-export:hover,
-.them-san-pham-page .btn-secondary:hover,
-.mau-sac-page .btn-secondary:hover,
-.chat-lieu-page .btn-secondary:hover,
-.de-giay-page .btn-secondary:hover,
-.xuat-xu-page .btn-secondary:hover,
-.trong-luong-page .btn-secondary:hover,
-.kich-thuoc-page .btn-secondary:hover,
-.nha-san-xuat-page .btn-secondary:hover,
-.anh-san-pham-page .btn-secondary:hover,
-.them-san-pham-page .btn-outline:hover,
-.mau-sac-page .btn-outline:hover,
-.chat-lieu-page .btn-outline:hover,
-.de-giay-page .btn-outline:hover,
-.xuat-xu-page .btn-outline:hover,
-.trong-luong-page .btn-outline:hover,
-.kich-thuoc-page .btn-outline:hover,
-.nha-san-xuat-page .btn-outline:hover,
-.anh-san-pham-page .btn-outline:hover,
-.them-san-pham-page .btn-danger:hover,
-.mau-sac-page .btn-danger:hover,
-.chat-lieu-page .btn-danger:hover,
-.de-giay-page .btn-danger:hover,
-.xuat-xu-page .btn-danger:hover,
-.trong-luong-page .btn-danger:hover,
-.kich-thuoc-page .btn-danger:hover,
-.nha-san-xuat-page .btn-danger:hover,
-.anh-san-pham-page .btn-danger:hover,
-.them-san-pham-page .btn-primary:hover,
-.mau-sac-page .btn-primary:hover,
-.chat-lieu-page .btn-primary:hover,
-.de-giay-page .btn-primary:hover,
-.xuat-xu-page .btn-primary:hover,
-.trong-luong-page .btn-primary:hover,
-.kich-thuoc-page .btn-primary:hover,
-.nha-san-xuat-page .btn-primary:hover,
-.anh-san-pham-page .btn-primary:hover {
+/* Hover effect cho các button trong products pages */
+[data-route*="/products"] button:hover,
+[data-route*="/products/"] button:hover,
+.products-page button:hover,
+.product-management button:hover,
+.them-san-pham-page button:hover {
+  color: var(--accent-color) !important;
+  background-color: white !important;
+  border: 2px solid var(--accent-color) !important;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
 }
 
-/* Active state cho các button trong products pages - Only target buttons within page content */
-.them-san-pham-page .btn-export:active,
-.mau-sac-page .btn-export:active,
-.chat-lieu-page .btn-export:active,
-.de-giay-page .btn-export:active,
-.xuat-xu-page .btn-export:active,
-.trong-luong-page .btn-export:active,
-.kich-thuoc-page .btn-export:active,
-.nha-san-xuat-page .btn-export:active,
-.anh-san-pham-page .btn-export:active,
-.them-san-pham-page .btn-secondary:active,
-.mau-sac-page .btn-secondary:active,
-.chat-lieu-page .btn-secondary:active,
-.de-giay-page .btn-secondary:active,
-.xuat-xu-page .btn-secondary:active,
-.trong-luong-page .btn-secondary:active,
-.kich-thuoc-page .btn-secondary:active,
-.nha-san-xuat-page .btn-secondary:active,
-.anh-san-pham-page .btn-secondary:active,
-.them-san-pham-page .btn-outline:active,
-.mau-sac-page .btn-outline:active,
-.chat-lieu-page .btn-outline:active,
-.de-giay-page .btn-outline:active,
-.xuat-xu-page .btn-outline:active,
-.trong-luong-page .btn-outline:active,
-.kich-thuoc-page .btn-outline:active,
-.nha-san-xuat-page .btn-outline:active,
-.anh-san-pham-page .btn-outline:active,
-.them-san-pham-page .btn-danger:active,
-.mau-sac-page .btn-danger:active,
-.chat-lieu-page .btn-danger:active,
-.de-giay-page .btn-danger:active,
-.xuat-xu-page .btn-danger:active,
-.trong-luong-page .btn-danger:active,
-.kich-thuoc-page .btn-danger:active,
-.nha-san-xuat-page .btn-danger:active,
-.anh-san-pham-page .btn-danger:active,
-.them-san-pham-page .btn-primary:active,
-.mau-sac-page .btn-primary:active,
-.chat-lieu-page .btn-primary:active,
-.de-giay-page .btn-primary:active,
-.xuat-xu-page .btn-primary:active,
-.trong-luong-page .btn-primary:active,
-.kich-thuoc-page .btn-primary:active,
-.nha-san-xuat-page .btn-primary:active,
-.anh-san-pham-page .btn-primary:active {
+/* Active state cho các button trong products pages */
+[data-route*="/products"] button:active,
+[data-route*="/products/"] button:active,
+.products-page button:active,
+.product-management button:active,
+.them-san-pham-page button:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
-}
-
-/* ===== SVG ICON STYLES ===== */
-.icon-svg {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 5px;
-  filter: brightness(0) invert(1); /* Làm icon trắng */
-}
-
-.modal-close .icon-svg {
-  width: 18px;
-  height: 18px;
-  margin-right: 0;
-  filter: brightness(0) invert(1); /* Làm icon trắng cho nút close */
-}
-
-/* Icon trong button success */
-.btn-success .icon-svg {
-  filter: brightness(0) invert(1); /* Làm icon trắng */
-}
-
-/* Icon trong button secondary */
-.btn-secondary .icon-svg {
-  filter: brightness(0) invert(1); /* Làm icon trắng */
-}
-
-/* Icon trong button primary */
-.btn-primary .icon-svg {
-  filter: brightness(0) invert(1); /* Làm icon trắng */
-}
-
-/* Icon trong button delete */
-.btn-delete .icon-svg {
-  filter: brightness(0) invert(1); /* Làm icon trắng */
-}
-
-/* Icon trong delete content */
-.delete-icon .icon-svg {
-  width: 48px;
-  height: 48px;
-  margin-right: 0;
-  filter: hue-rotate(0deg) saturate(1) brightness(1); /* Giữ màu gốc cho icon delete lớn */
-}
-
-/* Icon trong header title */
-h3 .icon-svg {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-  filter: brightness(0) saturate(1); /* Màu đen cho icon trong title */
 }

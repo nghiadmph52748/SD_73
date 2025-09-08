@@ -11,84 +11,116 @@
       </div>
 
       <div class="filters-content">
-        <!-- Search Bar -->
-        <div class="search-section">
-          <div class="search-input-group">
-            <div class="search-icon"></div>
+        <!-- Search Section -->
+        <div class="tim-kiem-section">
+          <div class="tim-kiem-input-group">
+            <div class="tim-kiem-icon">
+              <img :src="FindIcon" alt="Search" class="icon-sm" />
+            </div>
             <input
               type="text"
               placeholder="Tìm theo mã đơn hàng, tên khách hàng, SĐT..."
               v-model="searchQuery"
-              class="search-input"
+              class="tim-kiem-input"
             />
             <button
               v-if="searchQuery"
-              class="clear-search"
+              class="xoa-tim-kiem"
               @click="searchQuery = ''"
             >
-              ✕
+              <img :src="CancelIcon" alt="Clear" class="icon-xs" />
             </button>
           </div>
         </div>
 
-        <!-- Filter Grid -->
-        <div class="filter-grid">
-          <!-- Date Range -->
-          <div class="filter-group">
-            <label class="filter-label">Thời gian</label>
-            <div class="date-range-group">
-              <input
-                type="date"
-                v-model="fromDate"
-                class="date-input"
-                placeholder="Từ ngày"
-              />
-              <span class="date-separator">→</span>
-              <input
-                type="date"
-                v-model="toDate"
-                class="date-input"
-                placeholder="Đến ngày"
-              />
+        <!-- Filter Groups Grid -->
+        <div class="bo-loc-grid">
+          <!-- Date Range Filter -->
+          <div class="bo-loc-group">
+            <div class="bo-loc-header">
+              <img :src="ClockIcon" alt="Time" class="icon-sm" />
+              <span class="bo-loc-title">Thời gian</span>
+            </div>
+            <div class="thoi-gian-range">
+              <div class="ngay-input-wrapper">
+                <input
+                  type="date"
+                  v-model="fromDate"
+                  class="ngay-input"
+                  title="Từ ngày"
+                />
+                <label class="ngay-label">Từ ngày</label>
+              </div>
+              <div class="range-separator">
+                <img :src="DateIcon" alt="To" class="icon-xs" />
+              </div>
+              <div class="ngay-input-wrapper">
+                <input
+                  type="date"
+                  v-model="toDate"
+                  class="ngay-input"
+                  title="Đến ngày"
+                />
+                <label class="ngay-label">Đến ngày</label>
+              </div>
             </div>
           </div>
 
-          <!-- Order Type -->
-          <div class="filter-group">
-            <label class="filter-label">Loại đơn hàng</label>
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" value="" v-model="selectedType" />
-                <span class="radio-text">Tất cả</span>
+          <!-- Order Type Filter -->
+          <div class="bo-loc-group">
+            <div class="bo-loc-header">
+              <img :src="OrdersIcon" alt="Orders" class="icon-sm" />
+              <span class="bo-loc-title">Loại đơn hàng</span>
+            </div>
+            <div class="loai-don-options">
+              <label class="loai-don-option" :class="{ active: selectedType === '' }">
+                <input type="radio" value="" v-model="selectedType" class="sr-only" />
+                <span class="option-indicator">•</span>
+                <span class="option-text">Tất cả</span>
               </label>
-              <label class="radio-option">
-                <input type="radio" value="online" v-model="selectedType" />
-                <span class="radio-text">Trực tuyến</span>
+              <label class="loai-don-option" :class="{ active: selectedType === 'online' }">
+                <input type="radio" value="online" v-model="selectedType" class="sr-only" />
+                <span class="option-indicator">🌐</span>
+                <span class="option-text">Trực tuyến</span>
               </label>
-              <label class="radio-option">
-                <input type="radio" value="pos" v-model="selectedType" />
-                <span class="radio-text">Tại quầy</span>
+              <label class="loai-don-option" :class="{ active: selectedType === 'pos' }">
+                <input type="radio" value="pos" v-model="selectedType" class="sr-only" />
+                <span class="option-indicator">🏪</span>
+                <span class="option-text">Tại quầy</span>
               </label>
             </div>
           </div>
 
-          <!-- Amount Range -->
-          <div class="filter-group">
-            <label class="filter-label">Khoảng giá</label>
-            <div class="amount-range-group">
-              <input
-                type="number"
-                v-model="minAmount"
-                class="amount-input"
-                placeholder="Từ"
-              />
-              <span class="amount-separator">-</span>
-              <input
-                type="number"
-                v-model="maxAmount"
-                class="amount-input"
-                placeholder="Đến"
-              />
+          <!-- Amount Range Filter -->
+          <div class="bo-loc-group">
+            <div class="bo-loc-header">
+              <img :src="MoneyIcon" alt="Money" class="icon-sm" />
+              <span class="bo-loc-title">Khoảng giá</span>
+            </div>
+            <div class="gia-range">
+              <div class="gia-input-wrapper">
+                <input
+                  type="number"
+                  v-model="minAmount"
+                  class="gia-input"
+                  placeholder="0"
+                  title="Giá từ"
+                />
+                <label class="gia-label">Từ (đ)</label>
+              </div>
+              <div class="range-separator">
+                <img :src="MoneyIcon" alt="To" class="icon-xs" />
+              </div>
+              <div class="gia-input-wrapper">
+                <input
+                  type="number"
+                  v-model="maxAmount"
+                  class="gia-input"
+                  placeholder="∞"
+                  title="Giá đến"
+                />
+                <label class="gia-label">Đến (đ)</label>
+              </div>
             </div>
           </div>
         </div>
@@ -419,72 +451,206 @@
     <!-- Order Detail Modal -->
     <div
       v-if="showDetailModal"
-      class="modal-overlay"
+      class="detail-modal-overlay"
       @click="showDetailModal = false"
     >
-      <div class="modal-content large" @click.stop>
-        <div class="modal-header">
-          <h3>Thông tin đơn hàng - {{ selectedOrder?.code }}</h3>
-          <button class="modal-close" @click="showDetailModal = false">
-            ✕
+      <div class="detail-modal-content" @click.stop>
+        <div class="detail-modal-header">
+          <div class="detail-header-content">
+            <div class="detail-modal-icon">
+              <img :src="OrdersIcon" alt="Order" class="icon-lg" />
+            </div>
+            <div class="detail-title-section">
+              <h3 class="detail-modal-title">Thông tin đơn hàng</h3>
+              <p class="detail-modal-subtitle">Mã đơn hàng: #{{ selectedOrder?.id }}</p>
+            </div>
+          </div>
+          <button class="detail-close-btn" @click="showDetailModal = false">
+            <img :src="CancelIcon" alt="Close" class="icon-md" />
           </button>
         </div>
 
-        <div class="modal-body" v-if="selectedOrder">
-          <!-- Order Actions -->
-          <div class="order-actions">
-            <button class="btn-export">Chi tiết</button>
-            <button class="btn-export">In hóa đơn</button>
+        <!-- Order Actions in Center -->
+        <div class="detail-order-actions">
+          <button class="detail-action-btn primary" @click="editOrder(selectedOrder)">
+            <img :src="EditIcon" alt="Edit" class="icon-sm" />
+            <span>Chỉnh sửa</span>
+          </button>
+          <button class="detail-action-btn primary" @click="printOrder(selectedOrder)">
+            <img :src="PrintIcon" alt="Print" class="icon-sm" />
+            <span>In hóa đơn</span>
+          </button>
+          <button class="detail-action-btn primary" @click="exportOrderDetail">
+            <img :src="ExportIcon" alt="Export" class="icon-sm" />
+            <span>Xuất file</span>
+          </button>
+        </div>
+
+        <div class="detail-modal-body" v-if="selectedOrder">
+
+          <!-- Order Overview Card -->
+          <div class="modern-info-card">
+            <div class="card-header">
+              <div class="header-content">
+                <h4 class="card-title">Thông tin cơ bản</h4>
+                <span class="card-subtitle">Chi tiết đơn hàng và khách hàng</span>
+              </div>
+              <div class="order-type-badge" :class="selectedOrder.loaiDon || 'pos'">
+                <span class="type-icon">{{
+                  (selectedOrder.loaiDon || 'pos') === 'online' ? '🌐' : '🏦'
+                }}</span>
+                <span class="type-text">{{
+                  (selectedOrder.loaiDon || 'pos') === 'online' ? 'Trực tuyến' : 'Tại quầy'
+                }}</span>
+              </div>
+            </div>
+            <div class="modern-info-grid">
+              <div class="info-item">
+                <div class="info-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                  </svg>
+                  <span>Mã đơn hàng</span>
+                </div>
+                <div class="info-value">#{{ selectedOrder.id }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span>Khách hàng</span>
+                </div>
+                <div class="info-value">{{ selectedOrder.tenKhachHang || 'Khách lẻ' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  <span>Số điện thoại</span>
+                </div>
+                <div class="info-value">{{ selectedOrder.soDienThoai || 'N/A' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V6a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V12a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                  </svg>
+                  <span>Trạng thái</span>
+                </div>
+                <div class="info-value">
+                  <span class="modern-status-badge" :class="getStatusClass(selectedOrder.trangThai)">
+                    {{ getStatusText(selectedOrder.trangThai) }}
+                  </span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                  </svg>
+                  <span>Ngày tạo</span>
+                </div>
+                <div class="info-value">{{ formatDateTime(selectedOrder.ngayTao) }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                  <span>Tổng tiền</span>
+                </div>
+                <div class="info-value amount">{{ formatCurrency(selectedOrder.tongTienSauGiam) }}</div>
+              </div>
+            </div>
           </div>
 
-          <!-- Order Info -->
-          <div class="order-detail-info">
-            <div class="info-section">
-              <h4>Thông tin đơn hàng - Đơn tại quầy</h4>
-              <div class="info-grid">
-                <div class="info-item">
-                  <label>Mã:</label>
-                  <span>{{ selectedOrder.id }}</span>
+          <!-- Product Details Card -->
+          <div class="san-pham-card">
+            <div class="card-header">
+              <div class="header-content">
+                <h3 class="card-title">Chi tiết sản phẩm</h3>
+                <span class="card-subtitle">Danh sách sản phẩm trong đơn hàng</span>
+              </div>
+              <div class="so-luong-badge">
+                <span>{{ getOrderItemsLength(selectedOrder) }} sản phẩm</span>
+              </div>
+            </div>
+            <div class="san-pham-table">
+              <div class="table-header">
+                <div class="cot-san-pham">Sản phẩm</div>
+                <div class="cot-size">Size</div>
+                <div class="cot-mau">Màu</div>
+                <div class="cot-so-luong">SL</div>
+                <div class="cot-gia">Đơn giá</div>
+                <div class="cot-tong">Tổng</div>
+              </div>
+              <div class="table-body">
+                <!-- Check if products exist in either chiTietDonHang or items -->
+                <div v-if="getOrderItems(selectedOrder).length === 0" class="no-products-message">
+                  <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <h4>Không có sản phẩm</h4>
+                    <p>Đơn hàng này chưa có sản phẩm nào.</p>
+                  </div>
                 </div>
-                <div class="info-item">
-                  <label>Tên khách hàng:</label>
-                  <span>{{ selectedOrder.tenKhachHang || "Khách lẻ" }}</span>
-                </div>
-                <div class="info-item">
-                  <label>Trạng thái:</label>
-                  <span
-                    :class="['badge', getStatusClass(selectedOrder.status)]"
-                  >
-                    {{ getStatusText(selectedOrder.status) }}
-                  </span>
-                </div>
-                <div class="info-item">
-                  <label>Số người nhận:</label>
-                  <span>{{ selectedOrder.soDienThoai || "N/A" }}</span>
-                </div>
-                <div class="info-item">
-                  <label>Loại:</label>
-                  <span
-                    :class="[
-                      'badge',
-                      selectedOrder.type === 'online'
-                        ? 'badge-info'
-                        : 'badge-success',
-                    ]"
-                  >
-                    {{
-                      selectedOrder.type === "online"
-                        ? "Trực tuyến"
-                        : "Tại quầy"
-                    }}
-                  </span>
-                </div>
-                <div class="info-item">
-                  <label>Tên người nhận:</label>
-                  <span>{{ selectedOrder.receiverName || "N/A" }}</span>
+                <div
+                  v-else
+                  v-for="(item, index) in getOrderItems(selectedOrder)"
+                  :key="index"
+                  class="san-pham-row"
+                >
+                  <div class="cot-san-pham">
+                    <div class="san-pham-cell">
+                      <div class="san-pham-image-wrapper">
+                        <img
+                          :src="getItemImage(item)"
+                          :alt="getItemName(item)"
+                          class="san-pham-image"
+                          loading="lazy"
+                          @error="handleImageError"
+                        />
+                      </div>
+                      <div class="san-pham-info">
+                        <div class="san-pham-name">{{ getItemName(item) }}</div>
+                        <div class="san-pham-sku" v-if="getItemCode(item)">
+                          SKU: {{ getItemCode(item) }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cot-size">
+                    <span class="size-badge">{{ getItemSize(item) }}</span>
+                  </div>
+                  <div class="cot-mau">
+                    <div class="mau-cell" v-if="getItemColor(item)">
+                      <div 
+                        class="mau-indicator" 
+                        :style="{ backgroundColor: getColorCode(getItemColor(item)) }"
+                      ></div>
+                      <span>{{ getItemColor(item) }}</span>
+                    </div>
+                    <span v-else class="no-data">N/A</span>
+                  </div>
+                  <div class="cot-so-luong">
+                    <div class="so-luong-badge">{{ getItemQuantity(item) }}</div>
+                  </div>
+                  <div class="cot-gia">
+                    <span class="gia-text">{{ formatCurrency(getItemPrice(item)) }}</span>
+                  </div>
+                  <div class="cot-tong">
+                    <span class="tong-text">{{ formatCurrency(getItemQuantity(item) * getItemPrice(item)) }}</span>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
             <!-- Payment History -->
             <div class="payment-history">
@@ -600,24 +766,37 @@
             <div class="product-list">
               <h4>Danh sách sản phẩm</h4>
               <div class="product-items">
+                <div v-if="getOrderItems(selectedOrder).length === 0" class="no-products-message">
+                  <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <h4>Không có sản phẩm</h4>
+                    <p>Đơn hàng này chưa có sản phẩm nào.</p>
+                  </div>
+                </div>
                 <div
-                  v-for="item in selectedOrder.items"
-                  :key="item.id"
+                  v-else
+                  v-for="item in getOrderItems(selectedOrder)"
+                  :key="item.id || item.index"
                   class="product-item"
                 >
                   <div class="product-image">
-                    <img v-if="item.image" :src="item.image" :alt="item.name" />
-                    <div v-else class="placeholder-image"></div>
+                    <img 
+                      v-if="getItemImage(item)" 
+                      :src="getItemImage(item)" 
+                      :alt="getItemName(item)"
+                      @error="handleImageError"
+                    />
+                    <div v-else class="placeholder-image">👟</div>
                   </div>
                   <div class="product-info">
-                    <h5>{{ item.name }}</h5>
+                    <h5>{{ getItemName(item) }}</h5>
                     <p class="product-details">
-                      Mã: {{ item.code }} | Size: {{ item.size }}
+                      Mã: {{ getItemCode(item) || 'N/A' }} | Size: {{ getItemSize(item) }}
                     </p>
                   </div>
-                  <div class="product-quantity">x{{ item.quantity }}</div>
+                  <div class="product-quantity">x{{ getItemQuantity(item) }}</div>
                   <div class="product-price">
-                    {{ formatCurrency(item.price) }}
+                    {{ formatCurrency(getItemPrice(item)) }}
                   </div>
                 </div>
               </div>
@@ -626,25 +805,25 @@
               <div class="order-summary">
                 <div class="summary-row">
                   <span>Phiếu giảm giá:</span>
-                  <span>{{ selectedOrder.couponCode || "N/A" }}</span>
+                  <span>{{ getOrderField(selectedOrder, 'couponCode', 'maPhieuGiamGia') || "N/A" }}</span>
                 </div>
                 <div class="summary-row">
                   <span>Giảm giá từ cửa hàng:</span>
-                  <span>{{ selectedOrder.storeDiscount || "0%" }}</span>
+                  <span>{{ getOrderField(selectedOrder, 'storeDiscount', 'giamGiaCuaHang') || "0%" }}</span>
                 </div>
                 <div class="summary-row">
                   <span>Tổng tiền hàng:</span>
-                  <span>{{ formatCurrency(selectedOrder.subtotal) }}</span>
+                  <span>{{ formatCurrency(getOrderField(selectedOrder, 'subtotal', 'tongTienHang') || 0) }}</span>
                 </div>
                 <div class="summary-row">
                   <span>Giảm giá:</span>
                   <span class="discount"
-                    >-{{ formatCurrency(selectedOrder.discount) }}</span
+                    >-{{ formatCurrency(getOrderField(selectedOrder, 'discount', 'giamGia') || 0) }}</span
                   >
                 </div>
                 <div class="summary-row">
                   <span>Phí vận chuyển:</span>
-                  <span>{{ formatCurrency(selectedOrder.shippingFee) }}</span>
+                  <span>{{ formatCurrency(getOrderField(selectedOrder, 'shippingFee', 'phiVanChuyen') || 0) }}</span>
                 </div>
                 <div class="summary-row">
                   <span
@@ -655,11 +834,163 @@
                 <div class="summary-row total">
                   <span>Tổng tiền:</span>
                   <span class="total-amount">{{
-                    formatCurrency(selectedOrder.tongTienSauGiam)
+                    formatCurrency(getOrderField(selectedOrder, 'total', 'tongTienSauGiam', 'tongTien') || 0)
                   }}</span>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Edit Order Modal -->
+    <div
+      v-if="showEditModal"
+      class="edit-modal-overlay"
+      @click.self="showEditModal = false"
+    >
+      <div class="edit-modal-content">
+        <div class="edit-modal-header">
+          <div class="edit-header-content">
+            <div class="edit-header-left">
+              <div class="edit-modal-icon">
+                <img :src="EditIcon" alt="Edit" class="icon-lg" />
+              </div>
+              <div class="edit-title-group">
+                <h2 class="edit-modal-title">Chỉnh sửa đơn hàng</h2>
+                <p class="edit-modal-subtitle">Mã đơn hàng: #{{ editingOrder?.id }}</p>
+              </div>
+            </div>
+            <button class="edit-close-btn" @click="showEditModal = false">
+              <img :src="CancelIcon" alt="Close" class="icon-md" />
+            </button>
+          </div>
+        </div>
+        
+        <div class="edit-modal-body" v-if="editingOrder">
+          <!-- Edit Form -->
+          <div class="edit-form-container">
+            <!-- Customer Information Section -->
+            <div class="edit-info-card">
+              <div class="edit-card-header">
+                <div class="edit-header-content">
+                  <img :src="ProfileIcon" alt="Customer" class="icon-md" />
+                  <h3 class="edit-card-title">Thông tin khách hàng</h3>
+                  <span class="edit-card-subtitle">Cập nhật thông tin liên hệ</span>
+                </div>
+              </div>
+              <div class="edit-form-grid">
+                <div class="edit-form-group">
+                  <label class="edit-form-label">
+                    <img :src="UsersIcon" alt="Name" class="icon-sm" />
+                    Tên khách hàng
+                  </label>
+                  <input
+                    type="text"
+                    v-model="editingOrder.tenNguoiNhan"
+                    class="edit-form-input"
+                    placeholder="Nhập tên khách hàng"
+                  />
+                </div>
+                <div class="edit-form-group">
+                  <label class="edit-form-label">
+                    <img :src="PhoneIcon" alt="Phone" class="icon-sm" />
+                    Số điện thoại
+                  </label>
+                  <input
+                    type="tel"
+                    v-model="editingOrder.soDienThoaiNguoiNhan"
+                    class="edit-form-input"
+                    placeholder="Nhập số điện thoại"
+                  />
+                </div>
+                <div class="edit-form-group full-width">
+                  <label class="edit-form-label">
+                    <img :src="OrdersIcon" alt="Address" class="icon-sm" />
+                    Địa chỉ giao hàng
+                  </label>
+                  <textarea
+                    v-model="editingOrder.diaChiGiaoHang"
+                    class="edit-form-textarea"
+                    placeholder="Nhập địa chỉ giao hàng"
+                    rows="3"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Status Section -->
+            <div class="edit-info-card">
+              <div class="edit-card-header">
+                <div class="edit-header-content">
+                  <img :src="SettingsIcon" alt="Status" class="icon-md" />
+                  <h3 class="edit-card-title">Trạng thái đơn hàng</h3>
+                  <span class="edit-card-subtitle">Cập nhật trạng thái xử lý</span>
+                </div>
+              </div>
+              <div class="edit-status-selection">
+                <div class="edit-status-options">
+                  <label
+                    v-for="status in orderStatuses"
+                    :key="status.value"
+                    class="edit-status-option"
+                    :class="{ active: editingOrder.trangThai === status.value }"
+                  >
+                    <input
+                      type="radio"
+                      :value="status.value"
+                      v-model="editingOrder.trangThai"
+                      class="edit-status-radio"
+                    />
+                    <div class="edit-status-card">
+                      <div class="edit-status-icon">
+                        <img :src="status.icon" alt="Status" class="icon-lg" />
+                      </div>
+                      <div class="edit-status-text">
+                        <div class="edit-status-name">{{ status.label }}</div>
+                        <div class="edit-status-desc">{{ status.description }}</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Notes Section -->
+            <div class="edit-info-card">
+              <div class="edit-card-header">
+                <div class="edit-header-content">
+                  <img :src="DocumentIcon" alt="Notes" class="icon-md" />
+                  <h3 class="edit-card-title">Ghi chú đơn hàng</h3>
+                  <span class="edit-card-subtitle">Thêm thông tin bổ sung</span>
+                </div>
+              </div>
+              <div class="edit-form-grid">
+                <div class="edit-form-group full-width">
+                  <label class="edit-form-label">
+                    Ghi chú thêm
+                  </label>
+                  <textarea
+                    v-model="editingOrder.ghiChu"
+                    class="edit-form-textarea"
+                    placeholder="Nhập ghi chú cho đơn hàng này..."
+                    rows="4"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="edit-modal-actions">
+            <button class="edit-action-btn secondary" @click="showEditModal = false">
+              <img :src="CancelIcon" alt="Cancel" class="icon-sm" />
+              <span>Hủy bỏ</span>
+            </button>
+            <button class="edit-action-btn primary" @click="saveOrderChanges">
+              <img :src="SaveIcon" alt="Save" class="icon-sm" />
+              <span>Lưu thay đổi</span>
+            </button>
           </div>
         </div>
       </div>
@@ -669,41 +1000,40 @@
 
 <script setup>
 // SVG Icons
-import RefreshIcon from "@/assets/Reload.svg?url";
-import EditIcon from "@/assets/Edit.svg?url";
-import ViewIcon from "@/assets/View.svg?url";
-import PrintIcon from "@/assets/Print.svg?url";
-import PlusIcon from "@/assets/Plus.svg?url";
-import TrashIcon from "@/assets/Trash.svg?url";
-import SaveIcon from "@/assets/Save.svg?url";
 import CancelIcon from "@/assets/Cancel.svg?url";
+import CelebrationIcon from "@/assets/Celebration.svg?url";
 import ChevronLeftIcon from "@/assets/chevron-left.svg?url";
 import ChevronRightIcon from "@/assets/chevron-right.svg?url";
 import ChevronsLeftIcon from "@/assets/chevrons-left.svg?url";
 import ChevronsRightIcon from "@/assets/chevrons-right.svg?url";
 import ClipboardIcon from "@/assets/Clipboard.svg?url";
-import ExcelIcon from "@/assets/Excel.svg?url";
-import StatisticsIcon from "@/assets/Statistics.svg?url";
-import PhoneIcon from "@/assets/Phone.svg?url";
-import UsersIcon from "@/assets/Users.svg?url";
-import ProfileIcon from "@/assets/Profile.svg?url";
-import DashboardIcon from "@/assets/Dashboard.svg?url";
-import OrdersIcon from "@/assets/Orders.svg?url";
-import ProductsIcon from "@/assets/Shoes.svg?url";
-import ShoppingCartIcon from "@/assets/ShoppingCart.svg?url";
-import CreditCardIcon from "@/assets/CreditCard.svg?url";
-import RevenueIcon from "@/assets/Revenue.svg?url";
-import GrowthIcon from "@/assets/Growth.svg?url";
-import SettingsIcon from "@/assets/Settings.svg?url";
-import ExportIcon from "@/assets/Export.svg?url";
-import FindIcon from "@/assets/Find.svg?url";
-import QRIcon from "@/assets/QR.svg?url";
-import PendingIcon from "@/assets/Pending.svg?url";
-import ShippingIcon from "@/assets/Shipping.svg?url";
+import ClockIcon from "@/assets/Clock.svg?url";
 import CompletedIcon from "@/assets/Completed.svg?url";
-import SuccessIcon from "@/assets/Success.svg?url";
-import CelebrationIcon from "@/assets/Celebration.svg?url";
+import CreditCardIcon from "@/assets/CreditCard.svg?url";
+import DashboardIcon from "@/assets/Dashboard.svg?url";
+import DateIcon from "@/assets/Date.svg?url";
+import DocumentIcon from "@/assets/Document.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import ExcelIcon from "@/assets/Excel.svg?url";
+import ExportIcon from "@/assets/Export.svg?url";
 import FailedIcon from "@/assets/Failed.svg?url";
+import FindIcon from "@/assets/Find.svg?url";
+import MoneyIcon from "@/assets/Money.svg?url";
+import OrdersIcon from "@/assets/Orders.svg?url";
+import PendingIcon from "@/assets/Pending.svg?url";
+import PhoneIcon from "@/assets/Phone.svg?url";
+import PlusIcon from "@/assets/Plus.svg?url";
+import PrintIcon from "@/assets/Print.svg?url";
+import ProfileIcon from "@/assets/Profile.svg?url";
+import QRIcon from "@/assets/QR.svg?url";
+import RefreshIcon from "@/assets/Reload.svg?url";
+import SaveIcon from "@/assets/Save.svg?url";
+import SettingsIcon from "@/assets/Settings.svg?url";
+import ShippingIcon from "@/assets/Shipping.svg?url";
+import StatisticsIcon from "@/assets/Statistics.svg?url";
+import SuccessIcon from "@/assets/Success.svg?url";
+import UsersIcon from "@/assets/Users.svg?url";
+import ViewIcon from "@/assets/View.svg?url";
 
 
 import axios from "axios";
@@ -730,6 +1060,8 @@ const sortField = ref('')
 const sortDirection = ref('asc') // 'asc' or 'desc'
 const showDetailModal = ref(false)
 const selectedOrder = ref(null)
+const showEditModal = ref(false)
+const editingOrder = ref(null)
 const orders = ref([])
 const backendTotalOrders = ref(0)
 const backendTotalPages = ref(0)
@@ -738,6 +1070,40 @@ const endIndex = computed(() => startIndex.value + itemsPerPage.value)
 
 const loading = ref(false)
 const error = ref(null)
+
+// Order statuses for editing
+const orderStatuses = ref([
+  {
+    value: 'CHO_XAC_NHAN',
+    label: 'Chờ xác nhận',
+    description: 'Đơn hàng chưa được xác nhận',
+    icon: PendingIcon
+  },
+  {
+    value: 'CHO_GIAO_HANG',
+    label: 'Chờ giao hàng',
+    description: 'Đơn hàng đã xác nhận, chờ giao',
+    icon: ClockIcon
+  },
+  {
+    value: 'DANG_VAN_CHUYEN',
+    label: 'Đang vận chuyển',
+    description: 'Đơn hàng đang được giao',
+    icon: ShippingIcon
+  },
+  {
+    value: 'HOAN_THANH',
+    label: 'Hoàn thành',
+    description: 'Đơn hàng đã giao thành công',
+    icon: CompletedIcon
+  },
+  {
+    value: 'DA_HUY',
+    label: 'Đã hủy',
+    description: 'Đơn hàng đã bị hủy',
+    icon: FailedIcon
+  }
+])
 
 
 const fetchOrders = async () => {
@@ -920,6 +1286,77 @@ const formatDateTime = (dateString) => {
   return new Date(dateString).toLocaleString("vi-VN");
 };
 
+// Helper functions for order item data handling
+const getOrderItems = (order) => {
+  if (!order) return [];
+  // Check for Vietnamese field names first, then English
+  return order.chiTietDonHang || order.items || order.orderItems || [];
+};
+
+const getOrderItemsLength = (order) => {
+  return getOrderItems(order).length;
+};
+
+const getItemName = (item) => {
+  return item.tenSanPham || item.name || item.productName || 'Sản phẩm không xác định';
+};
+
+const getItemCode = (item) => {
+  return item.maSanPham || item.code || item.sku || item.productCode || '';
+};
+
+const getItemImage = (item) => {
+  return item.hinhAnh || item.image || item.productImage || '/default-product.jpg';
+};
+
+const getItemSize = (item) => {
+  return item.kichCo || item.size || item.kichThuoc || 'N/A';
+};
+
+const getItemColor = (item) => {
+  return item.mauSac || item.color || item.mau || '';
+};
+
+const getItemQuantity = (item) => {
+  return item.soLuong || item.quantity || item.so_luong || 0;
+};
+
+const getItemPrice = (item) => {
+  return item.giaBan || item.price || item.gia_ban || item.unitPrice || 0;
+};
+
+const handleImageError = (event) => {
+  event.target.src = '/default-product.jpg';
+};
+
+const getColorCode = (colorName) => {
+  // Simple color mapping - can be expanded
+  const colorMap = {
+    'Đen': '#000000',
+    'Trắng': '#FFFFFF',
+    'Đỏ': '#FF0000',
+    'Xanh': '#0000FF',
+    'Xanh lá': '#00FF00',
+    'Vàng': '#FFFF00',
+    'Tím': '#800080',
+    'Hồng': '#FFC0CB',
+    'Nâu': '#8B4513',
+    'Xám': '#808080'
+  };
+  return colorMap[colorName] || '#666666';
+};
+
+const getOrderField = (order, ...fieldNames) => {
+  if (!order) return null;
+  
+  for (const fieldName of fieldNames) {
+    if (order[fieldName] !== undefined && order[fieldName] !== null) {
+      return order[fieldName];
+    }
+  }
+  return null;
+};
+
 const getStatusClass = (status) => {
   const statusClasses = {
     HOAN_THANH: "badge-success",
@@ -1061,9 +1498,32 @@ const formatTime = (dateString) => {
 };
 
 const editOrder = (order) => {
+  editingOrder.value = JSON.parse(JSON.stringify(order));
+  showEditModal.value = true;
+};
+
+const saveOrderChanges = async () => {
+  if (!editingOrder.value) return;
+  try {
+    // Example: call API to update order
+    await axios.put(`http://localhost:8080/api/hoa-don-management/${editingOrder.value.id}`, editingOrder.value);
+    // Update local selectedOrder and orders list
+    selectedOrder.value = { ...selectedOrder.value, ...editingOrder.value };
+    const idx = orders.value.findIndex(o => o.id === editingOrder.value.id);
+    if (idx !== -1) {
+      orders.value[idx] = { ...orders.value[idx], ...editingOrder.value };
+    }
+    showEditModal.value = false;
+    alert('✅ Đã lưu thay đổi đơn hàng');
+  } catch (e) {
+    console.error(e);
+    alert('❌ Lưu thay đổi thất bại');
+  }
 };
 
 const printOrder = (order) => {
+  // Simple print logic placeholder
+  window.print();
 };
 
 const goToPage = (page) => {
@@ -1110,6 +1570,16 @@ const refreshData = () => {
 const exportData = () => {  
   alert("Chức năng xuất báo cáo đang được phát triển");
 };
+
+// Helper functions for enhanced modal
+const exportOrderDetail = () => {
+  // Export current order details
+  if (selectedOrder.value) {
+    console.log('Exporting order details:', selectedOrder.value.id);
+    alert('Chức năng xuất chi tiết đơn hàng đang được phát triển');
+  }
+};
+
 onMounted(() => {
   fetchOrders();
 
@@ -1208,6 +1678,28 @@ onMounted(() => {
 
 .tab-icon img {
   flex-shrink: 0;
+}
+
+/* Edit Modal specific overrides to ensure proper styling */
+.edit-action-btn img {
+  flex-shrink: 0;
+}
+
+.edit-form-label img {
+  flex-shrink: 0;
+}
+
+.edit-header-content img {
+  flex-shrink: 0;
+}
+
+/* Ensure edit modal uses only specified colors */
+.edit-action-btn.primary {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+}
+
+.edit-action-btn.primary:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
 }
 
 </style>

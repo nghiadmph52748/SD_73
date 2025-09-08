@@ -548,7 +548,56 @@
 }
 
 .chip-icon {
-  font-size: 0.75rem;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+/* Default state - dark gray icons */
+.period-chip .chip-icon {
+  filter: brightness(0) saturate(100%) invert(45%) sepia(5%) saturate(1218%) hue-rotate(187deg) brightness(95%) contrast(88%);
+}
+
+/* Hover state - green icons */
+.period-chip:hover .chip-icon {
+  filter: brightness(0) saturate(100%) invert(73%) sepia(48%) saturate(406%) hue-rotate(89deg) brightness(105%) contrast(93%);
+}
+
+/* Active state - white icons */
+.period-chip.active .chip-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .quick-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .period-chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .period-chip {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .filter-actions {
+    margin-left: 0;
+    justify-content: center;
+  }
 }
 
 .custom-date-filter {

@@ -319,10 +319,10 @@
             <button 
               v-for="period in filterPeriods.slice(0, 4)" 
               :key="period.value"
-              :class="['period-chip', { active: selectedPeriod.value === period.value }]"
-              @click="selectedPeriod.value = period.value"
+              :class="['period-chip', { active: selectedPeriod === period.value }]"
+              @click="selectedPeriod = period.value"
             >
-              <span class="chip-icon">{{ period.icon }}</span>
+              <img :src="period.icon" :alt="period.label + ' Icon'" class="chip-icon" />
               <span class="chip-text">{{ period.label }}</span>
             </button>
           </div>
@@ -657,6 +657,11 @@ import SettingsIcon from "@/assets/Settings.svg?url";
 import ExportIcon from "@/assets/Export.svg?url";
 import FindIcon from "@/assets/Find.svg?url";
 
+// Time Period Icons
+import ClockIcon from "@/assets/Clock.svg?url";
+import DateIcon from "@/assets/Date.svg?url";
+import ChartDownIcon from "@/assets/ChartDown.svg?url";
+
 import { Chart, registerables } from 'chart.js'
 import { computed, onMounted, ref, watch } from 'vue'
 import { dashboardService } from '../services/response/bangDieuKhien.js'
@@ -709,11 +714,11 @@ const chartData = ref({
 })
 
 const filterPeriods = [
-  { value: 'NGAY', label: 'NGÀY', icon: '📅' },
-  { value: 'TUAN', label: 'TUẦN', icon: '📆' },
-  { value: 'THANG', label: 'THÁNG', icon: '📈' },
-  { value: 'NAM', label: 'NĂM', icon: '📊' },
-  { value: 'TUY_CHINH', label: 'TÙY CHỈNH', icon: '⚙️' }
+  { value: 'NGAY', label: 'Ngày', icon: ClockIcon },
+  { value: 'TUAN', label: 'Tuần', icon: DateIcon },
+  { value: 'THANG', label: 'Tháng', icon: GrowthIcon },
+  { value: 'NAM', label: 'Năm', icon: StatisticsIcon },
+  { value: 'TUY_CHINH', label: 'Tùy chỉnh', icon: SettingsIcon }
 ]
 
 // Computed properties for chart
