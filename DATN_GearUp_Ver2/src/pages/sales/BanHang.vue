@@ -2,23 +2,58 @@
   <div class="pos-system">
     <!-- Simple Action Bar -->
     <div class="simple-action-bar">
-      <button class="action-btn secondary-btn" @click="refreshData" title="Làm mới dữ liệu">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button
+        class="action-btn secondary-btn"
+        @click="refreshData"
+        title="Làm mới dữ liệu"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <polyline points="23,4 23,10 17,10"></polyline>
           <polyline points="1,20 1,14 7,14"></polyline>
-          <path d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"></path>
+          <path
+            d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"
+          ></path>
         </svg>
         <span>Làm mới</span>
       </button>
-      <button class="action-btn secondary-btn" @click="showProductSearch = true" title="Tìm kiếm sản phẩm">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button
+        class="action-btn secondary-btn"
+        @click="showProductSearch = true"
+        title="Tìm kiếm sản phẩm"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <circle cx="11" cy="11" r="8"></circle>
           <path d="M21 21l-4.35-4.35"></path>
         </svg>
         <span>Tìm sản phẩm</span>
       </button>
-      <button class="action-btn primary-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button
+        class="action-btn primary-btn"
+        @click="createNewOrder"
+        title="Tạo đơn hàng mới"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <path d="M12 5v14M5 12h14"></path>
         </svg>
         <span>Tạo đơn hàng mới</span>
@@ -29,29 +64,54 @@
     <div class="order-tabs">
       <div class="tabs-wrapper">
         <div class="tabs-scroll">
-          <div v-for="order in tempOrder" :key="order.id" 
-               :class="['order-tab', { active: currentOrderId === order.id }]"
-               @click="switchOrder(order.id)">
+          <div
+            v-for="order in tempOrder"
+            :key="order.id"
+            :class="['order-tab', { active: currentOrderId === order.id }]"
+            @click="switchOrder(order.id)"
+          >
             <div class="tab-main">
               <div class="tab-indicator"></div>
               <div class="tab-content">
                 <div class="tab-title">{{ order.tenDonHang }}</div>
-                <div class="tab-meta">{{ order.danhSachSanPham?.length || 0 }} sản phẩm</div>
+                <div class="tab-meta">
+                  {{ order.danhSachSanPham?.length || 0 }} sản phẩm
+                </div>
               </div>
-              <button v-if="tempOrder.length > 1" 
-                      class="tab-close" 
-                      @click.stop="closeOrder(order.id)"
-                      title="Đóng đơn hàng">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M18 6L6 18M6 6l12 12"/>
+              <button
+                v-if="tempOrder.length > 1"
+                class="tab-close"
+                @click.stop="closeOrder(order.id)"
+                title="Đóng đơn hàng"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
             </div>
           </div>
         </div>
-        <button class="new-tab-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M12 5v14M5 12h14"/>
+        <button
+          class="new-tab-btn"
+          @click="createNewOrder"
+          title="Tạo đơn hàng mới"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <path d="M12 5v14M5 12h14" />
           </svg>
         </button>
       </div>
@@ -63,24 +123,50 @@
         <div class="cart-header">
           <div class="cart-header-left">
             <div class="cart-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="8" cy="21" r="1"/>
-                <circle cx="19" cy="21" r="1"/> 
-                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path
+                  d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+                />
               </svg>
             </div>
             <div class="cart-info">
               <h2 class="cart-title">Giỏ hàng</h2>
-              <p class="cart-subtitle">{{ currentOrder?.danhSachSanPham?.length || 0 }} sản phẩm</p>
+              <p class="cart-subtitle">
+                {{ currentOrder?.danhSachSanPham?.length || 0 }} sản phẩm
+              </p>
             </div>
           </div>
           <div class="cart-header-actions">
-            <button class="cart-action-btn secondary-btn" @click="showProductSearch = true" title="Quét QR code">
+            <button
+              class="cart-action-btn secondary-btn"
+              @click="showProductSearch = true"
+              title="Quét QR code"
+            >
               <img src="@/assets/QR.svg" alt="QR Code" width="18" height="18" />
             </button>
-            <button class="cart-action-btn primary-btn" @click="showProductSearch = true" title="Thêm sản phẩm">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M5 12h14"/>
+            <button
+              class="cart-action-btn primary-btn"
+              @click="showProductSearch = true"
+              title="Thêm sản phẩm"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 5v14M5 12h14" />
               </svg>
               <span>Thêm sản phẩm</span>
             </button>
@@ -88,25 +174,50 @@
         </div>
 
         <!-- Modern Cart Items -->
-        <div class="modern-cart-items" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
-          <div v-for="item in currentOrder.danhSachSanPham" :key="item.id" class="modern-cart-item">
+        <div
+          class="modern-cart-items"
+          v-if="currentOrder && currentOrder.danhSachSanPham.length > 0"
+        >
+          <div
+            v-for="item in currentOrder.danhSachSanPham"
+            :key="item.id"
+            class="modern-cart-item"
+          >
             <div class="cart-item-content">
               <div class="item-checkbox-wrapper">
-                <input type="checkbox" v-model="item.selected" class="modern-checkbox" id="item-{{ item.id }}" />
+                <input
+                  type="checkbox"
+                  v-model="item.selected"
+                  class="modern-checkbox"
+                  id="item-{{ item.id }}"
+                />
                 <label :for="'item-' + item.id" class="checkbox-label"></label>
               </div>
-              
+
               <div class="item-image-wrapper">
                 <div class="item-image">
-                  <img v-if="item.duongDanAnh" 
-                       :src="item.duongDanAnh.startsWith('http') ? item.duongDanAnh : IMAGE_BASE_URL + item.duongDanAnh" 
-                       :alt="item.tenSanPham" 
-                       class="product-image" />
+                  <img
+                    v-if="item.duongDanAnh"
+                    :src="
+                      item.duongDanAnh.startsWith('http')
+                        ? item.duongDanAnh
+                        : IMAGE_BASE_URL + item.duongDanAnh
+                    "
+                    :alt="item.tenSanPham"
+                    class="product-image"
+                  />
                   <div v-else class="image-placeholder">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <path d="M21 15l-5-5L5 21"/>
+                    <svg
+                      width="28"
+                      height="28"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <path d="M21 15l-5-5L5 21" />
                     </svg>
                   </div>
                 </div>
@@ -123,7 +234,7 @@
                     <span class="attribute">{{ item.tenNhaSanXuat }}</span>
                   </div>
                 </div>
-                
+
                 <div class="item-price-info">
                   <div class="price-wrapper">
                     <span v-if="item.giaTriGiamGia > 0" class="original-price">
@@ -141,26 +252,57 @@
 
               <div class="item-actions">
                 <div class="quantity-controls">
-                  <button @click="updateQuantity(item, -1)" class="quantity-btn" :disabled="item.soLuong <= 1">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M5 12h14"/>
+                  <button
+                    @click="updateQuantity(item, -1)"
+                    class="quantity-btn"
+                    :disabled="item.soLuong <= 1"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M5 12h14" />
                     </svg>
                   </button>
                   <span class="quantity-display">{{ item.soLuong }}</span>
                   <button @click="updateQuantity(item, 1)" class="quantity-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 5v14M5 12h14"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M12 5v14M5 12h14" />
                     </svg>
                   </button>
                 </div>
-                
+
                 <div class="item-total-price">
                   {{ formatCurrency(item.giaSauGiam * item.soLuong) }}
                 </div>
-                
-                <button @click="removeItem(item)" class="remove-item-btn" title="Xóa khỏi giỏ hàng">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
+
+                <button
+                  @click="removeItem(item)"
+                  class="remove-item-btn"
+                  title="Xóa khỏi giỏ hàng"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"
+                    />
                   </svg>
                 </button>
               </div>
@@ -172,18 +314,40 @@
         <div v-else class="modern-empty-state">
           <div class="empty-state-content">
             <div class="empty-illustration">
-              <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                <circle cx="8" cy="21" r="1"/>
-                <circle cx="19" cy="21" r="1"/> 
-                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              <svg
+                width="96"
+                height="96"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1"
+              >
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path
+                  d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+                />
               </svg>
             </div>
             <div class="empty-text">
               <h3 class="empty-title">Giỏ hàng trống</h3>
-              <p class="empty-description">Chưa có sản phẩm nào trong giỏ hàng. Hãy thêm sản phẩm để bắt đầu tạo đơn hàng.</p>
+              <p class="empty-description">
+                Chưa có sản phẩm nào trong giỏ hàng. Hãy thêm sản phẩm để bắt
+                đầu tạo đơn hàng.
+              </p>
             </div>
-            <button class="add-first-product-btn" @click="showProductSearch = true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button
+              class="add-first-product-btn"
+              @click="showProductSearch = true"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <path d="M12 5v14M5 12h14"></path>
               </svg>
               <span>Thêm sản phẩm đầu tiên</span>
@@ -192,20 +356,34 @@
         </div>
 
         <!-- Modern Total Section -->
-        <div class="modern-total-section" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
+        <div
+          class="modern-total-section"
+          v-if="currentOrder && currentOrder.danhSachSanPham.length > 0"
+        >
           <div class="total-summary-card">
             <div class="total-row">
               <span class="total-label">Tổng tiền hàng:</span>
-              <span class="total-value">{{ formatCurrency(currentOrder.tongTien || 0) }}</span>
+              <span class="total-value">{{
+                formatCurrency(currentOrder.tongTien || 0)
+              }}</span>
             </div>
-            <div class="total-row" v-if="currentOrder.discount && currentOrder.discount > 0">
+            <div
+              class="total-row"
+              v-if="currentOrder.discount && currentOrder.discount > 0"
+            >
               <span class="total-label discount-label">Giảm giá:</span>
-              <span class="total-value discount-value">-{{ formatCurrency(currentOrder.discount) }}</span>
+              <span class="total-value discount-value"
+                >-{{ formatCurrency(currentOrder.discount) }}</span
+              >
             </div>
             <div class="total-divider"></div>
             <div class="total-row final-total">
               <span class="final-label">Thành tiền:</span>
-              <span class="final-value">{{ formatCurrency((currentOrder.tongTien || 0) - (currentOrder.discount || 0)) }}</span>
+              <span class="final-value">{{
+                formatCurrency(
+                  (currentOrder.tongTien || 0) - (currentOrder.discount || 0)
+                )
+              }}</span>
             </div>
           </div>
         </div>
@@ -216,18 +394,34 @@
         <div class="customer-section-header">
           <div class="customer-header-content">
             <div class="customer-icon-wrapper">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>
             <div class="customer-header-text">
               <h3 class="customer-section-title">Khách hàng & Thanh toán</h3>
-              <p class="customer-section-subtitle">Thông tin khách hàng và xử lý thanh toán</p>
+              <p class="customer-section-subtitle">
+                Thông tin khách hàng và xử lý thanh toán
+              </p>
             </div>
           </div>
           <button class="find-customer-btn" @click="showCustomerSearch = true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <circle cx="11" cy="11" r="8"></circle>
               <path d="M21 21l-4.35-4.35"></path>
             </svg>
@@ -239,42 +433,85 @@
           <!-- Customer Info Section -->
           <div class="customer-info-section">
             <h4 class="section-title">Thông tin khách hàng</h4>
-            
+
             <div class="customer-input-group">
               <label class="customer-label">Tên khách hàng</label>
               <div class="customer-input-wrapper">
                 <div class="customer-input-container">
-                  <svg class="customer-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg
+                    class="customer-input-icon"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
-                  <input type="text" v-model="customerDisplayName" @input="searchCustomers"
-                    @focus="showCustomerDropdown = true" class="customer-input"
-                    placeholder="Nhập tên hoặc email khách hàng" autocomplete="off" />
-                  <button v-if="customerDisplayName" class="clear-customer-input" @click="clearCustomerInput"
-                    title="Xóa nội dung">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M18 6L6 18M6 6l12 12"/>
+                  <input
+                    type="text"
+                    v-model="customerDisplayName"
+                    @input="searchCustomers"
+                    @focus="showCustomerDropdown = true"
+                    class="customer-input"
+                    placeholder="Nhập tên hoặc email khách hàng"
+                    autocomplete="off"
+                  />
+                  <button
+                    v-if="customerDisplayName"
+                    class="clear-customer-input"
+                    @click="clearCustomerInput"
+                    title="Xóa nội dung"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
 
                 <!-- Customer Suggestions -->
-                <div v-if="customerSuggestions.length > 0 && showCustomerDropdown" class="customer-suggestions">
-                  <div v-for="customer in customerSuggestions" :key="customer.id" 
-                       :class="['customer-suggestion', { 'create-new': customer.isCreateNew }]"
-                       @click="selectCustomerFromSuggestions(customer)">
+                <div
+                  v-if="customerSuggestions.length > 0 && showCustomerDropdown"
+                  class="customer-suggestions"
+                >
+                  <div
+                    v-for="customer in customerSuggestions"
+                    :key="customer.id"
+                    :class="[
+                      'customer-suggestion',
+                      { 'create-new': customer.isCreateNew },
+                    ]"
+                    @click="selectCustomerFromSuggestions(customer)"
+                  >
                     <div class="suggestion-content">
                       <div class="suggestion-info" v-if="!customer.isCreateNew">
-                        <span class="suggestion-name">{{ customer.tenKhachHang }}</span>
-                        <span class="suggestion-details">{{ customer.email }} • {{ customer.soDienThoai }}</span>
+                        <span class="suggestion-name">{{
+                          customer.tenKhachHang
+                        }}</span>
+                        <span class="suggestion-details"
+                          >{{ customer.email }} •
+                          {{ customer.soDienThoai }}</span
+                        >
                       </div>
                       <div class="suggestion-info create-new-info" v-else>
                         <div class="create-new-row">
                           <img :src="PlusIcon" alt="Plus" class="plus-icon" />
-                          <span class="create-new-text">{{ customer.displayName }}</span>
+                          <span class="create-new-text">{{
+                            customer.displayName
+                          }}</span>
                         </div>
-                        <span class="create-new-hint">Nhấn để tạo khách hàng mới</span>
+                        <span class="create-new-hint"
+                          >Nhấn để tạo khách hàng mới</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -286,972 +523,2260 @@
           <!-- Discount Section -->
           <div class="discount-section">
             <h4 class="section-title">Giảm giá & Khuyến mãi</h4>
-            
+
             <div class="coupon-selector">
-              <button class="select-coupon-btn" @click="openCouponModal"
-                :disabled="availableCoupons.length === 0">
+              <button
+                class="select-coupon-btn"
+                @click="openCouponModal"
+                :disabled="availableCoupons.length === 0"
+              >
                 <div class="coupon-btn-inner">
                   <div class="coupon-btn-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
-                      <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
-                      <circle cx="9" cy="12" r="1"/>
-                      <circle cx="15" cy="12" r="1"/>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
+                      <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2" />
+                      <circle cx="9" cy="12" r="1" />
+                      <circle cx="15" cy="12" r="1" />
                     </svg>
                   </div>
                   <div class="coupon-btn-text">
-                    <span v-if="selectedCoupons.length > 0">Chọn phiếu giảm giá</span>
-                    <span v-else-if="availableCoupons.length > 0">Chọn phiếu giảm giá</span>
+                    <span v-if="selectedCoupons.length > 0"
+                      >Chọn phiếu giảm giá</span
+                    >
+                    <span v-else-if="availableCoupons.length > 0"
+                      >Chọn phiếu giảm giá</span
+                    >
                     <span v-else>Đang tải phiếu giảm giá...</span>
                   </div>
-                  <svg class="coupon-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 18l6-6-6-6"/>
+                  <svg
+                    class="coupon-chevron"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M9 18l6-6-6-6" />
                   </svg>
                 </div>
               </button>
             </div>
 
-              <!-- Selected Coupon Display -->
-              <div v-if="selectedCoupons.length > 0" class="selected-coupon">
-                <div class="coupon-info">
-                  <div class="coupon-details">
-                    <span class="coupon-name">{{ selectedCoupons[0].tenPhieuGiamGia }}</span>
-                    <span class="coupon-value">
-                      <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                        -{{ selectedCoupons[0].giaTriGiamGia }}%
-                      </span>
-                      <span v-else>
-                        -{{ formatCurrency(selectedCoupons[0].giaTriGiamGia) }}
-                      </span>
+            <!-- Selected Coupon Display -->
+            <div v-if="selectedCoupons.length > 0" class="selected-coupon">
+              <div class="coupon-info">
+                <div class="coupon-details">
+                  <span class="coupon-name">{{
+                    selectedCoupons[0].tenPhieuGiamGia
+                  }}</span>
+                  <span class="coupon-value">
+                    <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
+                      -{{ selectedCoupons[0].giaTriGiamGia }}%
                     </span>
-                  </div>
-                  <button class="remove-coupon-btn" @click="removeSelectedCoupon(selectedCoupons[0].id)">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M18 6L6 18M6 6l12 12"/>
-                    </svg>
-                  </button>
+                    <span v-else>
+                      -{{ formatCurrency(selectedCoupons[0].giaTriGiamGia) }}
+                    </span>
+                  </span>
                 </div>
-              </div>
-
-              <!-- Auto Applied Notification -->
-              <div v-if="autoAppliedCoupon" class="auto-applied-notice">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 12l2 2 4-4"/>
-                  <circle cx="12" cy="12" r="10"/>
-                </svg>
-                <span>Đã tự động áp dụng phiếu giảm giá tốt nhất</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Payment Section -->
-          <div class="payment-section">
-            <h4 class="section-title">Thanh toán</h4>
-            
-            <!-- Payment Methods -->
-            <div class="payment-options">
-              <div class="payment-option" 
-                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'pay_now' }"
-                   @click="currentOrder.phuongThucThanhToan = 'pay_now'">
-                <div class="payment-option-icon">
-                  <img src="@/assets/Money.svg" alt="Cash Icon" width="18" height="18" />
-                </div>
-                <div class="payment-option-content">
-                  <span class="payment-option-title">Tiền mặt</span>
-                  <span class="payment-option-desc">Thanh toán trực tiếp</span>
-                </div>
-              </div>
-              
-              <div class="payment-option" 
-                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'bank_transfer' }"
-                   @click="currentOrder.phuongThucThanhToan = 'bank_transfer'">
-                <div class="payment-option-icon">
-                  <img src="@/assets/Banking.svg" alt="Banking Icon" width="18" height="18" />
-                </div>
-                <div class="payment-option-content">
-                  <span class="payment-option-title">Chuyển khoản</span>
-                  <span class="payment-option-desc">Thanh toán qua ngân hàng</span>
-                </div>
-              </div>
-              
-              <div class="payment-option" 
-                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'home_delivery' }"
-                   @click="currentOrder.phuongThucThanhToan = 'home_delivery'">
-                <div class="payment-option-icon">
-                  <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="18" height="18" />
-                </div>
-                <div class="payment-option-content">
-                  <span class="payment-option-title">Giao hàng tận nơi</span>
-                  <span class="payment-option-desc">Thanh toán khi nhận hàng</span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Bank Transfer Details -->
-            <div v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'" class="bank-transfer-info">
-              <div class="bank-info-card">
-                <div class="bank-card-header">
-                  <div class="bank-icon">
-                    <img src="@/assets/Banking.svg" alt="Banking Icon" width="24" height="24" />
-                  </div>
-                  <div class="bank-header-text">
-                    <h5 class="bank-title">Thông tin chuyển khoản</h5>
-                    <p class="bank-subtitle">Vui lòng chuyển khoản theo thông tin bên dưới</p>
-                  </div>
-                </div>
-                
-                <div class="bank-details">
-                  <div class="bank-detail-row">
-                    <span class="bank-label">Ngân hàng:</span>
-                    <span class="bank-value">Vietcombank (VCB)</span>
-                  </div>
-                  <div class="bank-detail-row">
-                    <span class="bank-label">Số tài khoản:</span>
-                    <div class="bank-account">
-                      <span class="bank-value">1234567890123</span>
-                      <button class="copy-btn" @click="copyToClipboard('1234567890123')" title="Sao chép số tài khoản">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="bank-detail-row">
-                    <span class="bank-label">Chủ tài khoản:</span>
-                    <span class="bank-value">CONG TY TNHH GEAR UP</span>
-                  </div>
-                  <div class="bank-detail-row">
-                    <span class="bank-label">Số tiền:</span>
-                    <span class="bank-value amount">{{ formatCurrency((currentOrder?.tongTien || 0) - (currentOrder?.discount || 0)) }}</span>
-                  </div>
-                  <div class="bank-detail-row">
-                    <span class="bank-label">Nội dung:</span>
-                    <div class="bank-account">
-                      <span class="bank-value">{{ `THANH TOAN DON HANG ${currentOrder?.tenDonHang || 'HD' + currentOrder?.id}` }}</span>
-                      <button class="copy-btn" @click="copyToClipboard(`THANH TOAN DON HANG ${currentOrder?.tenDonHang || 'HD' + currentOrder?.id}`)" title="Sao chép nội dung chuyển khoản">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="qr-code-section">
-                  <div class="qr-header">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="5" height="5"/>
-                      <rect x="3" y="16" width="5" height="5"/>
-                      <rect x="16" y="3" width="5" height="5"/>
-                      <path d="M21 16h-3v3M21 21v.01M12 7v3M12 15.01V15"/>
-                    </svg>
-                    <span class="qr-title">Quét mã QR để chuyển khoản</span>
-                  </div>
-                  
-                  <div class="qr-code-container">
-                    <div class="qr-placeholder">
-                      <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-                        <!-- QR Code placeholder pattern -->
-                        <rect width="120" height="120" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" rx="8"/>
-                        <rect x="10" y="10" width="20" height="20" fill="#1e293b" rx="2"/>
-                        <rect x="35" y="10" width="5" height="5" fill="#1e293b"/>
-                        <rect x="45" y="10" width="5" height="5" fill="#1e293b"/>
-                        <rect x="55" y="10" width="10" height="10" fill="#1e293b"/>
-                        <rect x="90" y="10" width="20" height="20" fill="#1e293b" rx="2"/>
-                        
-                        <rect x="15" y="15" width="10" height="10" fill="#ffffff" rx="1"/>
-                        <rect x="95" y="15" width="10" height="10" fill="#ffffff" rx="1"/>
-                        
-                        <rect x="10" y="40" width="5" height="5" fill="#1e293b"/>
-                        <rect x="20" y="40" width="10" height="5" fill="#1e293b"/>
-                        <rect x="35" y="40" width="5" height="10" fill="#1e293b"/>
-                        <rect x="50" y="40" width="15" height="5" fill="#1e293b"/>
-                        <rect x="80" y="40" width="5" height="10" fill="#1e293b"/>
-                        
-                        <rect x="10" y="60" width="10" height="5" fill="#1e293b"/>
-                        <rect x="30" y="60" width="5" height="10" fill="#1e293b"/>
-                        <rect x="45" y="60" width="5" height="5" fill="#1e293b"/>
-                        <rect x="60" y="60" width="10" height="10" fill="#1e293b"/>
-                        <rect x="85" y="60" width="10" height="5" fill="#1e293b"/>
-                        
-                        <rect x="10" y="90" width="20" height="20" fill="#1e293b" rx="2"/>
-                        <rect x="15" y="95" width="10" height="10" fill="#ffffff" rx="1"/>
-                        
-                        <rect x="40" y="80" width="5" height="5" fill="#1e293b"/>
-                        <rect x="50" y="80" width="5" height="10" fill="#1e293b"/>
-                        <rect x="65" y="80" width="10" height="5" fill="#1e293b"/>
-                        <rect x="85" y="80" width="5" height="15" fill="#1e293b"/>
-                        <rect x="100" y="80" width="10" height="10" fill="#1e293b"/>
-                      </svg>
-                    </div>
-                    <div class="qr-info">
-                      <p class="qr-description">Quét mã QR bằng app ngân hàng để chuyển khoản nhanh chóng</p>
-                      <div class="supported-banks">
-                        <span class="bank-tag">VCB</span>
-                        <span class="bank-tag">MB Bank</span>
-                        <span class="bank-tag">TPBank</span>
-                        <span class="bank-tag">+10 khác</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="transfer-note">
-                  <div class="note-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M12 16v-4M12 8h.01"/>
-                    </svg>
-                  </div>
-                  <div class="note-content">
-                    <p><strong>Lưu ý quan trọng:</strong></p>
-                    <ul>
-                      <li>Vui lòng chuyển đúng số tiền và nội dung chuyển khoản</li>
-                      <li>Đơn hàng sẽ được xử lý sau khi nhận được thanh toán</li>
-                      <li>Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ trợ</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Home Delivery Details -->
-            <div v-if="currentOrder?.phuongThucThanhToan === 'home_delivery'" class="delivery-info">
-              <div class="delivery-info-card">
-                <div class="delivery-card-header">
-                  <div class="delivery-icon">
-                    <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="24" height="24" />
-                  </div>
-                  <div class="delivery-header-text">
-                    <h5 class="delivery-title">Thông tin giao hàng</h5>
-                    <p class="delivery-subtitle">Thông tin địa chỉ và thời gian giao hàng</p>
-                  </div>
-                </div>
-                
-                <div class="delivery-form">
-                  <div class="form-group">
-                    <label class="form-label">Họ và tên người nhận:</label>
-                    <input type="text" class="form-input" :value="customerDisplayName" readonly placeholder="Tên khách hàng" />
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="form-label">Số điện thoại:</label>
-                    <input type="text" class="form-input" placeholder="Nhập số điện thoại người nhận" />
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="form-label">Địa chỉ giao hàng:</label>
-                    <textarea class="form-textarea" rows="3" placeholder="Nhập địa chỉ cụ thể để giao hàng"></textarea>
-                  </div>
-                  
-                  <div class="delivery-options">
-                    <div class="delivery-option-item">
-                      <label class="form-label">Đơn vị vận chuyển:</label>
-                      <select class="form-select" v-model="selectedShippingCarrier" @change="updateShippingFee">
-                        <option value="">Chọn đơn vị vận chuyển</option>
-                        <option value="ghn">Giao Hàng Nhanh (GHN)</option>
-                        <option value="ghtk">Giao Hàng Tiết Kiệm (GHTK)</option>
-                        <option value="vnpost">VNPost</option>
-                        <option value="jnt">J&T Express</option>
-                        <option value="grab">GrabExpress</option>
-                        <option value="shopee">Shopee Express</option>
-                      </select>
-                    </div>
-                    
-                    <div class="delivery-option-item">
-                      <label class="form-label">Loại dịch vụ:</label>
-                      <select class="form-select" v-model="selectedServiceType" @change="updateShippingFee" :disabled="!selectedShippingCarrier">
-                        <option value="">Chọn loại dịch vụ</option>
-                        <template v-if="selectedShippingCarrier === 'ghn'">
-                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 25.000Đ</option>
-                          <option value="express">Nhanh (1-2 ngày) - 35.000Đ</option>
-                          <option value="same_day">Trong ngày - 50.000Đ</option>
-                        </template>
-                        <template v-else-if="selectedShippingCarrier === 'ghtk'">
-                          <option value="standard">Tiêu chuẩn (2-4 ngày) - 22.000Đ</option>
-                          <option value="express">Nhanh (1-2 ngày) - 30.000Đ</option>
-                        </template>
-                        <template v-else-if="selectedShippingCarrier === 'vnpost'">
-                          <option value="standard">Tiêu chuẩn (3-5 ngày) - 20.000Đ</option>
-                          <option value="express">Nhanh (2-3 ngày) - 28.000Đ</option>
-                        </template>
-                        <template v-else-if="selectedShippingCarrier === 'jnt'">
-                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 24.000Đ</option>
-                          <option value="express">Nhanh (1-2 ngày) - 32.000Đ</option>
-                        </template>
-                        <template v-else-if="selectedShippingCarrier === 'grab'">
-                          <option value="standard">Standard (2-4h) - 40.000Đ</option>
-                          <option value="express">Express (1-2h) - 60.000Đ</option>
-                        </template>
-                        <template v-else-if="selectedShippingCarrier === 'shopee'">
-                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 23.000Đ</option>
-                          <option value="express">Nhanh (1-2 ngày) - 31.000Đ</option>
-                        </template>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div class="shipping-fee-summary">
-                    <div class="fee-breakdown">
-                      <div class="fee-item">
-                        <span class="fee-label">Phí giao hàng:</span>
-                        <span class="fee-value">{{ formatShippingFee() }}</span>
-                      </div>
-                      <div class="fee-item" v-if="isEligibleForFreeShipping()">
-                        <span class="fee-label text-green">Miễn phí giao hàng:</span>
-                        <span class="fee-value text-green">-{{ formatShippingFee() }}</span>
-                      </div>
-                      <div class="fee-total">
-                        <span class="total-label">Tổng phí vận chuyển:</span>
-                        <span class="total-value">{{ formatFinalShippingFee() }}</span>
-                      </div>
-                    </div>
-                    
-                    <div class="shipping-note" v-if="selectedShippingCarrier">
-                      <div class="carrier-info">
-                        <div class="carrier-logo">
-                          <span class="carrier-name">{{ getCarrierDisplayName() }}</span>
-                        </div>
-                        <div class="delivery-estimate">
-                          <span class="estimate-text">{{ getDeliveryEstimate() }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="delivery-note">
-                  <div class="note-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M12 16v-4M12 8h.01"/>
-                    </svg>
-                  </div>
-                  <div class="note-content">
-                    <p><strong>Lưu ý quan trọng:</strong></p>
-                    <ul>
-                      <li>Vui lòng kiểm tra kỹ sản phẩm trước khi thanh toán</li>
-                      <li>Thanh toán tiền mặt khi nhận hàng</li>
-                      <li>Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ trợ</li>
-                      <li>Khách hàng có thể trả hàng trong vòng 7 ngày</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Order Total -->
-            <div class="order-total">
-              <div class="total-summary">
-                <div class="total-row">
-                  <span class="total-label">Tổng tiền hàng:</span>
-                  <span class="total-amount">{{ formatCurrency(currentOrder?.tongTien || 0) }}</span>
-                </div>
-                <div class="total-row" v-if="currentOrder?.discount">
-                  <span class="total-label">Giảm giá:</span>
-                  <span class="total-amount discount-amount">-{{ formatCurrency(currentOrder.discount) }}</span>
-                </div>
-                <div class="total-divider"></div>
-                <div class="total-row final-row">
-                  <span class="final-label">Thành tiền:</span>
-                  <span class="final-amount">{{ formatCurrency((currentOrder?.tongTien || 0) - (currentOrder?.discount || 0)) }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Confirm Order Button -->
-            <button class="confirm-order-btn" @click="confirmOrder" 
-                    :disabled="!currentOrder || !currentOrder.danhSachSanPham?.length || !customerDisplayName.trim()">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 12l2 2 4-4"/>
-                <circle cx="12" cy="12" r="10"/>
-              </svg>
-              <span>Xác nhận đặt hàng</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modern Product Search Modal -->
-    <div v-if="showProductSearch" class="modal-overlay" @click="showProductSearch = false">
-      <div class="product-modal" @click.stop>
-        <div class="product-modal-header">
-          <h3 class="modal-title">Tìm kiếm sản phẩm</h3>
-          <p class="modal-subtitle">Chọn sản phẩm để thêm vào đơn hàng</p>
-          <button class="modal-close-btn" @click="showProductSearch = false">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="modal-body">
-          <!-- Clean Search Header -->
-          <div class="search-header">
-            <div class="main-search-container">
-              <div class="search-input-wrapper">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="M21 21l-4.35-4.35"></path>
-                </svg>
-                <input type="text" v-model="productSearchQuery" class="main-search-input" placeholder="Tìm theo tên sản phẩm, mã sản phẩm..." />
-              </div>
-              
-              <div class="price-filter-compact">
-                <span class="price-label">Khoảng giá:</span>
-                <div class="price-display">
-                  <span class="price-value">{{ formatCurrency(priceRange.min) }}</span>
-                  <input type="range" :min="priceRange.min" :max="priceRange.max" v-model="selectedPriceMax" class="price-slider" />
-                  <span class="price-value">{{ formatCurrency(priceRange.max) }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Clean Filter Section -->
-          <div class="filter-section">
-            <div class="filter-header">
-              <h4 class="filter-title">Bộ lọc sản phẩm</h4>
-              <button class="clear-filters-btn" @click="clearAllFilters">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/>
-                </svg>
-                Xóa bộ lọc
-              </button>
-            </div>
-            
-            <div class="filters-grid">
-              <div class="filter-item">
-                <label class="filter-label">Nhà sản xuất</label>
-                <select v-model="selectedNhaSanXuat" class="filter-select">
-                  <option value="">Tất cả nhà sản xuất</option>
-                  <option v-for="category in NhaSanXuats" :key="category.id" :value="category.id">
-                    {{ category.tenNhaSanXuat }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="filter-item">
-                <label class="filter-label">Xuất xứ</label>
-                <select v-model="selectedXuatXu" class="filter-select">
-                  <option value="">Tất cả xuất xứ</option>
-                  <option v-for="category in XuatXus" :key="category.id" :value="category.id">
-                    {{ category.tenXuatXu }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="filter-item">
-                <label class="filter-label">Chất liệu</label>
-                <select v-model="selectedChatLieu" class="filter-select">
-                  <option value="">Tất cả chất liệu</option>
-                  <option v-for="category in ChatLieus" :key="category.id" :value="category.id">
-                    {{ category.tenChatLieu }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="filter-item">
-                <label class="filter-label">Kích thước</label>
-                <select v-model="selectedSize" class="filter-select">
-                  <option value="">Tất cả kích thước</option>
-                  <option v-for="category in KichThuocs" :key="category.id" :value="category.id">
-                    {{ category.tenKichThuoc }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="filter-item">
-                <label class="filter-label">Đế giày</label>
-                <select v-model="selectedDeGiay" class="filter-select">
-                  <option value="">Tất cả loại đế</option>
-                  <option v-for="category in DeGiays" :key="category.id" :value="category.id">
-                    {{ category.tenDeGiay }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="filter-item">
-                <label class="filter-label">Màu sắc</label>
-                <select v-model="selectedMauSac" class="filter-select">
-                  <option value="">Tất cả màu sắc</option>
-                  <option v-for="category in MauSacs" :key="category.id" :value="category.id">
-                    {{ category.tenMauSac }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Redesigned Product Grid -->
-          <div class="product-grid">
-            <div v-for="product in filteredSearchProducts" :key="product.id" class="product-card">
-              <div class="product-discount-badge" v-if="product.giaTriGiamGia > 0">
-                <span class="discount-text">-{{ product.giaTriGiamGia }}%</span>
-              </div>
-
-              <div class="product-image-section" @click="openImageModal(product.id)">
-                <div class="product-image">
-                  <img v-if="product.anhSanPham && product.anhSanPham.length > 0" :src="product.anhSanPham[0].startsWith('http')
-                    ? product.anhSanPham[0]
-                    : IMAGE_BASE_URL + product.anhSanPham[0]
-                    " :alt="product.tenSanPham" @error="handleImageError" />
-                  <div v-else class="image-placeholder">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                      <polyline points="21,15 16,10 5,21"></polyline>
-                    </svg>
-                  </div>
-                </div>
-                <div class="image-overlay">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
+                <button
+                  class="remove-coupon-btn"
+                  @click="removeSelectedCoupon(selectedCoupons[0].id)"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
-                </div>
-              </div>
-
-              <div class="product-info-section">
-                <h4 class="product-name">{{ product.tenSanPham }}</h4>
-                <div class="product-details">
-                  <span class="product-code">{{ product.maSanPham }}</span>
-                  <span class="product-brand">{{ product.tenNhaSanXuat }}</span>
-                </div>
-                <div class="product-specs">
-                  <span class="spec">{{ product.tenMauSac }}</span>
-                  <span class="spec">{{ product.tenKichThuoc }}</span>
-                  <span class="spec">{{ product.tenChatLieu }}</span>
-                </div>
-                <div class="product-pricing">
-                  <span v-if="product.giaTriGiamGia > 0" class="original-price">{{ formatCurrency(product.giaBan)
-                  }}</span>
-                  <span class="current-price">{{
-                    formatCurrency(
-                      (product.giaBan / 100) * (100 - product.giaTriGiamGia)
-                    )
-                  }}</span>
-                </div>
-              </div>
-
-              <div class="product-actions">
-                <button class="add-to-cart-btn" @click="addProductToCart(product)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                  </svg>
-                  <span>Thêm vào giỏ</span>
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Modern Customer Search Modal -->
-    <div v-if="showCustomerSearch" class="modal-overlay" @click="showCustomerSearch = false">
-      <div class="customer-modal" @click.stop>
-        <div class="customer-modal-header">
-          <h3 class="modal-title">Tìm kiếm khách hàng</h3>
-          <button class="modal-close-btn" @click="showCustomerSearch = false">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="customer-modal-body">
-          <div class="customer-search-section">
-            <div class="search-input-container">
-              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="M21 21l-4.35-4.35"/>
-              </svg>
-              <input type="text" v-model="customerSearchQuery" class="customer-search-input"
-                placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email" />
-            </div>
-            <button class="add-customer-btn" @click="openAddCustomerForm">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M5 12h14"/>
-              </svg>
-              <span>THÊM KHÁCH HÀNG</span>
-            </button>
-          </div>
-
-          <div class="customer-table-container">
-            <div class="modern-table">
-              <div class="table-header">
-                <div class="header-cell">STT</div>
-                <div class="header-cell">EMAIL</div>
-                <div class="header-cell">HỌ TÊN</div>
-                <div class="header-cell">NGÀY SINH</div>
-                <div class="header-cell">SỐ ĐIỆN THOẠI</div>
-                <div class="header-cell">GIỚI TÍNH</div>
-                <div class="header-cell">TRẠNG THÁI</div>
-                <div class="header-cell">THAO TÁC</div>
+            <!-- Auto Applied Notification -->
+            <div v-if="autoAppliedCoupon" class="auto-applied-notice">
+              <div class="notice-icon">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M9 12l2 2 4-4" />
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
               </div>
-              <div class="table-body">
-                <div v-for="(customer, index) in filteredCustomers" :key="customer.id" class="table-row">
-                  <div class="table-cell">{{ index + 1 }}</div>
-                  <div class="table-cell">{{ customer.email }}</div>
-                  <div class="table-cell">
-                    <div class="customer-name">{{ customer.tenKhachHang }}</div>
+              <div class="notice-content">
+                <div class="notice-title">🎉 Phiếu giảm giá tự động</div>
+                <div class="notice-detail">
+                  <strong>{{ autoAppliedCoupon.tenPhieuGiamGia }}</strong>
+                  <span class="discount-info">
+                    <span v-if="autoAppliedCoupon.loaiPhieuGiamGia === false">
+                      -{{ autoAppliedCoupon.giaTriGiamGia }}%
+                    </span>
+                    <span v-else>
+                      -{{ formatCurrency(autoAppliedCoupon.giaTriGiamGia) }}
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <button
+                class="notice-close"
+                @click="autoAppliedCoupon = null"
+                title="Ẩn thông báo"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Gợi ý phiếu giảm giá tốt hơn -->
+          <div
+            v-if="showRecommendation && betterCoupons.length > 0"
+            class="recommendation-section-external"
+          >
+            <div class="recommendation-header">
+              <div class="recommendation-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                  />
+                </svg>
+              </div>
+              <h4 class="recommendation-title">
+                💡 Gợi ý phiếu giảm giá tốt hơn
+              </h4>
+            </div>
+            <p class="recommendation-subtitle">
+              Mua thêm để đạt được phiếu giảm giá có lợi hơn!
+            </p>
+
+            <div class="recommendation-list">
+              <div
+                v-for="(coupon, index) in betterCoupons"
+                :key="coupon.coupon.id"
+                class="recommendation-item-external"
+                @click="openCouponModal"
+              >
+                <div class="recommendation-info">
+                  <div class="recommendation-name">
+                    {{ coupon.coupon.tenPhieuGiamGia }}
                   </div>
-                  <div class="table-cell">{{ customer.ngaySinh || '1998-03-10' }}</div>
-                  <div class="table-cell">{{ customer.soDienThoai }}</div>
-                  <div class="table-cell">
-                    <span class="gender-badge">{{ customer.gioiTinh ? "Nam" : "Nữ" }}</span>
-                  </div>
-                  <div class="table-cell">
-                    <span class="status-badge active">
-                      {{ !customer.trangThai ? "Hoạt động" : "Không hoạt động" }}
+                  <div class="recommendation-details">
+                    <span class="needed-amount">
+                      Cần thêm: {{ formatCurrency(coupon.neededAmount) }}
+                    </span>
+                    <span class="potential-savings">
+                      Tiết kiệm: {{ formatCurrency(coupon.potentialSavings) }}
                     </span>
                   </div>
-                  <div class="table-cell">
-                    <button class="select-customer-btn" @click="selectCustomer(customer)">
-                      CHỌN
+                </div>
+                <div class="recommendation-benefit">
+                  <div class="benefit-amount">
+                    +{{ formatCurrency(coupon.potentialSavings) }}
+                  </div>
+                  <div class="benefit-label">Tiết kiệm</div>
+                </div>
+                <div class="click-hint">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Section -->
+        <div class="payment-section">
+          <h4 class="section-title">Thanh toán</h4>
+
+          <!-- Payment Methods -->
+          <div class="payment-options">
+            <div
+              class="payment-option"
+              :class="{
+                selected: currentOrder?.phuongThucThanhToan === 'pay_now',
+              }"
+              @click="currentOrder.phuongThucThanhToan = 'pay_now'"
+            >
+              <div class="payment-option-icon">
+                <img
+                  src="@/assets/Money.svg"
+                  alt="Cash Icon"
+                  width="18"
+                  height="18"
+                />
+              </div>
+              <div class="payment-option-content">
+                <span class="payment-option-title">Tiền mặt</span>
+                <span class="payment-option-desc">Thanh toán trực tiếp</span>
+              </div>
+            </div>
+
+            <div
+              class="payment-option"
+              :class="{
+                selected: currentOrder?.phuongThucThanhToan === 'bank_transfer',
+              }"
+              @click="currentOrder.phuongThucThanhToan = 'bank_transfer'"
+            >
+              <div class="payment-option-icon">
+                <img
+                  src="@/assets/Banking.svg"
+                  alt="Banking Icon"
+                  width="18"
+                  height="18"
+                />
+              </div>
+              <div class="payment-option-content">
+                <span class="payment-option-title">Chuyển khoản</span>
+                <span class="payment-option-desc"
+                  >Thanh toán qua ngân hàng</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="payment-option"
+              :class="{
+                selected: currentOrder?.phuongThucThanhToan === 'home_delivery',
+              }"
+              @click="selectHomeDelivery"
+            >
+              <div class="payment-option-icon">
+                <img
+                  src="@/assets/Shipping.svg"
+                  alt="Delivery Icon"
+                  width="18"
+                  height="18"
+                />
+              </div>
+              <div class="payment-option-content">
+                <span class="payment-option-title">Giao hàng tận nơi</span>
+                <span class="payment-option-desc"
+                  >Thanh toán khi nhận hàng</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Cash Payment Details -->
+          <div
+            v-if="currentOrder?.phuongThucThanhToan === 'pay_now'"
+            class="cash-payment-info"
+          >
+            <div class="cash-payment-card">
+              <div class="cash-payment-header">
+                <div class="cash-icon">
+                  <img
+                    src="@/assets/Money.svg"
+                    alt="Cash Icon"
+                    width="24"
+                    height="24"
+                  />
+                </div>
+                <div class="cash-header-text">
+                  <h5 class="cash-title">Thanh toán tiền mặt</h5>
+                  <p class="cash-subtitle">
+                    Nhập số tiền khách hàng đưa để tính tiền thừa
+                  </p>
+                </div>
+              </div>
+
+              <div class="cash-payment-form">
+                <div class="cash-input-group">
+                  <label class="cash-input-label">Tiền khách đưa:</label>
+                  <div class="cash-input-wrapper">
+                    <input
+                      type="number"
+                      class="cash-input"
+                      v-model.number="currentOrder.tienKhachTra"
+                      placeholder="Nhập số tiền khách đưa"
+                      min="0"
+                      step="1000"
+                      @input="calculateChange"
+                    />
+                    <span class="currency-unit">VNĐ</span>
+                  </div>
+                </div>
+
+                <div class="cash-calculation">
+                  <div class="calculation-row">
+                    <span class="calc-label">Tổng tiền cần thanh toán:</span>
+                    <span class="calc-amount">{{
+                      formatCurrency(currentOrder?.tongTienSauGiam || 0)
+                    }}</span>
+                  </div>
+                  <div class="calculation-row">
+                    <span class="calc-label">Tiền khách đưa:</span>
+                    <span class="calc-amount">{{
+                      formatCurrency(currentOrder?.tienKhachTra || 0)
+                    }}</span>
+                  </div>
+                  <div class="calculation-divider"></div>
+                  <div class="calculation-row final-row">
+                    <span class="calc-label final-label">
+                      <span
+                        v-if="
+                          (currentOrder?.tienKhachTra || 0) >=
+                          (currentOrder?.tongTienSauGiam || 0)
+                        "
+                      >
+                        Tiền thừa:
+                      </span>
+                      <span v-else class="text-red"> Còn thiếu: </span>
+                    </span>
+                    <span
+                      class="calc-amount final-amount"
+                      :class="{
+                        'text-green':
+                          (currentOrder?.tienKhachTra || 0) >=
+                          (currentOrder?.tongTienSauGiam || 0),
+                        'text-red':
+                          (currentOrder?.tienKhachTra || 0) <
+                          (currentOrder?.tongTienSauGiam || 0),
+                      }"
+                    >
+                      {{
+                        formatCurrency(
+                          Math.abs(
+                            (currentOrder?.tienKhachTra || 0) -
+                              (currentOrder?.tongTienSauGiam || 0)
+                          )
+                        )
+                      }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="cash-note">
+                  <div class="note-icon">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4M12 8h.01" />
+                    </svg>
+                  </div>
+                  <div class="note-content">
+                    <p><strong>Lưu ý:</strong></p>
+                    <ul>
+                      <li>Kiểm tra kỹ số tiền khách đưa trước khi nhập</li>
+                      <li>
+                        Thông báo rõ ràng số tiền thừa/thiếu cho khách hàng
+                      </li>
+                      <li>Bảo quản tiền mặt an toàn</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bank Transfer Details -->
+          <div
+            v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'"
+            class="bank-transfer-info"
+          >
+            <div class="bank-info-card">
+              <div class="bank-card-header">
+                <div class="bank-icon">
+                  <img
+                    src="@/assets/Banking.svg"
+                    alt="Banking Icon"
+                    width="24"
+                    height="24"
+                  />
+                </div>
+                <div class="bank-header-text">
+                  <h5 class="bank-title">Thông tin chuyển khoản</h5>
+                  <p class="bank-subtitle">
+                    Vui lòng chuyển khoản theo thông tin bên dưới
+                  </p>
+                </div>
+              </div>
+
+              <div class="bank-details">
+                <div class="bank-detail-row">
+                  <span class="bank-label">Ngân hàng:</span>
+                  <span class="bank-value">Vietcombank (VCB)</span>
+                </div>
+                <div class="bank-detail-row">
+                  <span class="bank-label">Số tài khoản:</span>
+                  <div class="bank-account">
+                    <span class="bank-value">1234567890123</span>
+                    <button
+                      class="copy-btn"
+                      @click="copyToClipboard('1234567890123')"
+                      title="Sao chép số tài khoản"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <rect
+                          x="9"
+                          y="9"
+                          width="13"
+                          height="13"
+                          rx="2"
+                          ry="2"
+                        />
+                        <path
+                          d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="bank-detail-row">
+                  <span class="bank-label">Chủ tài khoản:</span>
+                  <span class="bank-value">CONG TY TNHH GEAR UP</span>
+                </div>
+                <div class="bank-detail-row">
+                  <span class="bank-label">Số tiền:</span>
+                  <span class="bank-value amount">{{
+                    formatCurrency(
+                      (currentOrder?.tongTien || 0) -
+                        (currentOrder?.discount || 0)
+                    )
+                  }}</span>
+                </div>
+                <div class="bank-detail-row">
+                  <span class="bank-label">Nội dung:</span>
+                  <div class="bank-account">
+                    <span class="bank-value">{{
+                      `THANH TOAN DON HANG ${
+                        currentOrder?.tenDonHang || "HD" + currentOrder?.id
+                      }`
+                    }}</span>
+                    <button
+                      class="copy-btn"
+                      @click="
+                        copyToClipboard(
+                          `THANH TOAN DON HANG ${
+                            currentOrder?.tenDonHang || 'HD' + currentOrder?.id
+                          }`
+                        )
+                      "
+                      title="Sao chép nội dung chuyển khoản"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <rect
+                          x="9"
+                          y="9"
+                          width="13"
+                          height="13"
+                          rx="2"
+                          ry="2"
+                        />
+                        <path
+                          d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                        />
+                      </svg>
                     </button>
                   </div>
                 </div>
               </div>
+
+              <div class="qr-code-section">
+                <div class="qr-header">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect x="3" y="3" width="5" height="5" />
+                    <rect x="3" y="16" width="5" height="5" />
+                    <rect x="16" y="3" width="5" height="5" />
+                    <path d="M21 16h-3v3M21 21v.01M12 7v3M12 15.01V15" />
+                  </svg>
+                  <span class="qr-title">Quét mã QR để chuyển khoản</span>
+                </div>
+
+                <div class="qr-code-container">
+                  <div class="qr-placeholder">
+                    <svg
+                      width="120"
+                      height="120"
+                      viewBox="0 0 120 120"
+                      fill="none"
+                    >
+                      <!-- QR Code placeholder pattern -->
+                      <rect
+                        width="120"
+                        height="120"
+                        fill="#ffffff"
+                        stroke="#e2e8f0"
+                        stroke-width="2"
+                        rx="8"
+                      />
+                      <rect
+                        x="10"
+                        y="10"
+                        width="20"
+                        height="20"
+                        fill="#1e293b"
+                        rx="2"
+                      />
+                      <rect x="35" y="10" width="5" height="5" fill="#1e293b" />
+                      <rect x="45" y="10" width="5" height="5" fill="#1e293b" />
+                      <rect
+                        x="55"
+                        y="10"
+                        width="10"
+                        height="10"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="90"
+                        y="10"
+                        width="20"
+                        height="20"
+                        fill="#1e293b"
+                        rx="2"
+                      />
+
+                      <rect
+                        x="15"
+                        y="15"
+                        width="10"
+                        height="10"
+                        fill="#ffffff"
+                        rx="1"
+                      />
+                      <rect
+                        x="95"
+                        y="15"
+                        width="10"
+                        height="10"
+                        fill="#ffffff"
+                        rx="1"
+                      />
+
+                      <rect x="10" y="40" width="5" height="5" fill="#1e293b" />
+                      <rect
+                        x="20"
+                        y="40"
+                        width="10"
+                        height="5"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="35"
+                        y="40"
+                        width="5"
+                        height="10"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="50"
+                        y="40"
+                        width="15"
+                        height="5"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="80"
+                        y="40"
+                        width="5"
+                        height="10"
+                        fill="#1e293b"
+                      />
+
+                      <rect
+                        x="10"
+                        y="60"
+                        width="10"
+                        height="5"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="30"
+                        y="60"
+                        width="5"
+                        height="10"
+                        fill="#1e293b"
+                      />
+                      <rect x="45" y="60" width="5" height="5" fill="#1e293b" />
+                      <rect
+                        x="60"
+                        y="60"
+                        width="10"
+                        height="10"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="85"
+                        y="60"
+                        width="10"
+                        height="5"
+                        fill="#1e293b"
+                      />
+
+                      <rect
+                        x="10"
+                        y="90"
+                        width="20"
+                        height="20"
+                        fill="#1e293b"
+                        rx="2"
+                      />
+                      <rect
+                        x="15"
+                        y="95"
+                        width="10"
+                        height="10"
+                        fill="#ffffff"
+                        rx="1"
+                      />
+
+                      <rect x="40" y="80" width="5" height="5" fill="#1e293b" />
+                      <rect
+                        x="50"
+                        y="80"
+                        width="5"
+                        height="10"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="65"
+                        y="80"
+                        width="10"
+                        height="5"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="85"
+                        y="80"
+                        width="5"
+                        height="15"
+                        fill="#1e293b"
+                      />
+                      <rect
+                        x="100"
+                        y="80"
+                        width="10"
+                        height="10"
+                        fill="#1e293b"
+                      />
+                    </svg>
+                  </div>
+                  <div class="qr-info">
+                    <p class="qr-description">
+                      Quét mã QR bằng app ngân hàng để chuyển khoản nhanh chóng
+                    </p>
+                    <div class="supported-banks">
+                      <span class="bank-tag">VCB</span>
+                      <span class="bank-tag">MB Bank</span>
+                      <span class="bank-tag">TPBank</span>
+                      <span class="bank-tag">+10 khác</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="transfer-note">
+                <div class="note-icon">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4M12 8h.01" />
+                  </svg>
+                </div>
+                <div class="note-content">
+                  <p><strong>Lưu ý quan trọng:</strong></p>
+                  <ul>
+                    <li>
+                      Vui lòng chuyển đúng số tiền và nội dung chuyển khoản
+                    </li>
+                    <li>Đơn hàng sẽ được xử lý sau khi nhận được thanh toán</li>
+                    <li>
+                      Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ
+                      trợ
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Modern Add Customer Form -->
-          <div v-if="showAddCustomerForm" class="modern-add-customer-form">
-            <div class="add-form-header">
-              <h4 class="add-form-title">Thông tin cá nhân</h4>
-              <small class="add-form-subtitle">*Họ và tên</small>
-            </div>
-            <div class="add-form-content">
-              <div class="modern-form-group">
-                <input type="text" v-model="newCustomerForm.tenKhachHang" class="modern-form-input" 
-                       placeholder="Nhập họ và tên" required />
-              </div>
-
-              <div class="form-row">
-                <div class="modern-form-group">
-                  <label class="modern-form-label">*Email</label>
-                  <input type="email" v-model="newCustomerForm.email" class="modern-form-input" 
-                         placeholder="Nhập email" required />
+          <!-- Home Delivery Details -->
+          <div
+            v-if="currentOrder?.phuongThucThanhToan === 'home_delivery'"
+            class="delivery-info"
+          >
+            <div class="delivery-info-card">
+              <div class="delivery-card-header">
+                <div class="delivery-icon">
+                  <img
+                    src="@/assets/Shipping.svg"
+                    alt="Delivery Icon"
+                    width="24"
+                    height="24"
+                  />
                 </div>
-                <div class="modern-form-group">
-                  <label class="modern-form-label">*Số điện thoại</label>
-                  <input type="tel" v-model="newCustomerForm.soDienThoai" class="modern-form-input" 
-                         placeholder="Nhập số điện thoại" required />
+                <div class="delivery-header-text">
+                  <h5 class="delivery-title">Thông tin giao hàng</h5>
+                  <p class="delivery-subtitle">
+                    Thông tin địa chỉ và thời gian giao hàng
+                  </p>
                 </div>
               </div>
 
-              <div class="form-row">
-                <div class="modern-form-group">
-                  <label class="modern-form-label">*Ngày sinh</label>
-                  <input type="date" v-model="newCustomerForm.ngaySinh" class="modern-form-input" required />
-                </div>
-                <div class="modern-form-group">
-                  <label class="modern-form-label">*Giới tính</label>
-                  <select v-model="newCustomerForm.gioiTinh" class="modern-form-select">
-                    <option :value="true">Nam</option>
-                    <option :value="false">Nữ</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-section">
-                <h4>Thông tin tài khoản</h4>
+              <div class="delivery-form">
                 <div class="form-group">
-                  <label class="form-label">*Tài khoản</label>
-                  <input type="text" v-model="newCustomerForm.tenTaiKhoan" class="form-control" required />
+                  <label class="form-label">Họ và tên người nhận:</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    :value="customerDisplayName"
+                    readonly
+                    placeholder="Tên khách hàng"
+                  />
                 </div>
+
                 <div class="form-group">
-                  <label class="form-label">*Mật khẩu</label>
-                  <input type="password" v-model="newCustomerForm.matKhau" class="form-control" required />
+                  <label class="form-label">Số điện thoại:</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    v-model="deliveryAddress.soDienThoaiNguoiNhan"
+                    placeholder="Nhập số điện thoại người nhận"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Email:</label>
+                  <input
+                    type="email"
+                    class="form-input"
+                    v-model="deliveryAddress.emailNguoiNhan"
+                    placeholder="Nhập email người nhận"
+                  />
+                </div>
+
+                <!-- Địa chỉ chi tiết -->
+                <div class="address-section">
+                  <h6 class="address-title">Địa chỉ giao hàng</h6>
+
+                  <div class="address-row">
+                    <div class="form-group address-group">
+                      <label class="form-label">Tỉnh/Thành phố:</label>
+                      <select
+                        class="form-select"
+                        v-model="deliveryAddress.thanhPho"
+                        @change="onProvinceChange"
+                      >
+                        <option value="">Chọn tỉnh/thành phố</option>
+                        <option
+                          v-for="province in provinces"
+                          :key="province.code"
+                          :value="province.name"
+                        >
+                          {{ province.name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group address-group">
+                      <label class="form-label">Quận/Huyện:</label>
+                      <select
+                        class="form-select"
+                        v-model="deliveryAddress.quan"
+                        @change="onDistrictChange"
+                        :disabled="!deliveryAddress.thanhPho"
+                      >
+                        <option value="">Chọn quận/huyện</option>
+                        <option
+                          v-for="district in districts"
+                          :key="district.code"
+                          :value="district.name"
+                        >
+                          {{ district.name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group address-group">
+                      <label class="form-label">Xã/Phường:</label>
+                      <select
+                        class="form-select"
+                        v-model="deliveryAddress.phuong"
+                        :disabled="!deliveryAddress.quan"
+                      >
+                        <option value="">Chọn xã/phường</option>
+                        <option
+                          v-for="ward in wards"
+                          :key="ward.code"
+                          :value="ward.name"
+                        >
+                          {{ ward.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Địa chỉ cụ thể:</label>
+                    <input
+                      type="text"
+                      class="form-input"
+                      v-model="deliveryAddress.diaChiCuThe"
+                      placeholder="Số nhà, tên đường, khu vực..."
+                    />
+                  </div>
+
+                  <!-- Hiển thị địa chỉ đầy đủ -->
+                  <div class="address-preview" v-if="fullAddress">
+                    <label class="form-label">Địa chỉ đầy đủ:</label>
+                    <div class="address-display">{{ fullAddress }}</div>
+                  </div>
+                </div>
+
+                <div class="delivery-options">
+                  <div class="delivery-option-item">
+                    <label class="form-label">Đơn vị vận chuyển:</label>
+                    <select
+                      class="form-select"
+                      v-model="selectedShippingCarrier"
+                      @change="updateShippingFee"
+                    >
+                      <option value="">Chọn đơn vị vận chuyển</option>
+                      <option value="ghn">Giao Hàng Nhanh (GHN)</option>
+                      <option value="ghtk">Giao Hàng Tiết Kiệm (GHTK)</option>
+                      <option value="vnpost">VNPost</option>
+                      <option value="jnt">J&T Express</option>
+                      <option value="grab">GrabExpress</option>
+                      <option value="shopee">Shopee Express</option>
+                    </select>
+                  </div>
+
+                  <div class="delivery-option-item">
+                    <label class="form-label">Loại dịch vụ:</label>
+                    <select
+                      class="form-select"
+                      v-model="selectedServiceType"
+                      @change="updateShippingFee"
+                      :disabled="!selectedShippingCarrier"
+                    >
+                      <option value="">Chọn loại dịch vụ</option>
+                      <template v-if="selectedShippingCarrier === 'ghn'">
+                        <option value="standard">
+                          Tiêu chuẩn (2-3 ngày) - 25.000Đ
+                        </option>
+                        <option value="express">
+                          Nhanh (1-2 ngày) - 35.000Đ
+                        </option>
+                        <option value="same_day">Trong ngày - 50.000Đ</option>
+                      </template>
+                      <template v-else-if="selectedShippingCarrier === 'ghtk'">
+                        <option value="standard">
+                          Tiêu chuẩn (2-4 ngày) - 22.000Đ
+                        </option>
+                        <option value="express">
+                          Nhanh (1-2 ngày) - 30.000Đ
+                        </option>
+                      </template>
+                      <template
+                        v-else-if="selectedShippingCarrier === 'vnpost'"
+                      >
+                        <option value="standard">
+                          Tiêu chuẩn (3-5 ngày) - 20.000Đ
+                        </option>
+                        <option value="express">
+                          Nhanh (2-3 ngày) - 28.000Đ
+                        </option>
+                      </template>
+                      <template v-else-if="selectedShippingCarrier === 'jnt'">
+                        <option value="standard">
+                          Tiêu chuẩn (2-3 ngày) - 24.000Đ
+                        </option>
+                        <option value="express">
+                          Nhanh (1-2 ngày) - 32.000Đ
+                        </option>
+                      </template>
+                      <template v-else-if="selectedShippingCarrier === 'grab'">
+                        <option value="standard">
+                          Standard (2-4h) - 40.000Đ
+                        </option>
+                        <option value="express">
+                          Express (1-2h) - 60.000Đ
+                        </option>
+                      </template>
+                      <template
+                        v-else-if="selectedShippingCarrier === 'shopee'"
+                      >
+                        <option value="standard">
+                          Tiêu chuẩn (2-3 ngày) - 23.000Đ
+                        </option>
+                        <option value="express">
+                          Nhanh (1-2 ngày) - 31.000Đ
+                        </option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="shipping-fee-summary">
+                  <div class="fee-breakdown">
+                    <div class="fee-item">
+                      <span class="fee-label">Phí giao hàng:</span>
+                      <span class="fee-value">{{ formatShippingFee() }}</span>
+                    </div>
+                    <div class="fee-item" v-if="isEligibleForFreeShipping()">
+                      <span class="fee-label text-green"
+                        >Miễn phí giao hàng:</span
+                      >
+                      <span class="fee-value text-green"
+                        >-{{ formatShippingFee() }}</span
+                      >
+                    </div>
+                    <div class="fee-total">
+                      <span class="total-label">Tổng phí vận chuyển:</span>
+                      <span class="total-value">{{
+                        formatFinalShippingFee()
+                      }}</span>
+                    </div>
+                  </div>
+
+                  <div class="shipping-note" v-if="selectedShippingCarrier">
+                    <div class="carrier-info">
+                      <div class="carrier-logo">
+                        <span class="carrier-name">{{
+                          getCarrierDisplayName()
+                        }}</span>
+                      </div>
+                      <div class="delivery-estimate">
+                        <span class="estimate-text">{{
+                          getDeliveryEstimate()
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="form-section">
-                <div class="address-header">
-                  <h4>Địa chỉ</h4>
+              <div class="delivery-note">
+                <div class="note-icon">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4M12 8h.01" />
+                  </svg>
                 </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Tỉnh/thành phố</label>
-                    <input type="text" v-model="newCustomerForm.listDiaChi[0].thanhPho" class="form-control"
-                      placeholder="Nhập tên tỉnh/thành phố" required />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Quận/huyện</label>
-                    <input type="text" v-model="newCustomerForm.listDiaChi[0].quan" class="form-control"
-                      placeholder="Nhập tên quận/huyện" required />
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Xã/phường/thị trấn</label>
-                    <input type="text" v-model="newCustomerForm.listDiaChi[0].phuong" class="form-control"
-                      placeholder="Nhập tên xã/phường/thị trấn" required />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Địa chỉ cụ thể</label>
-                    <input type="text" v-model="newCustomerForm.listDiaChi[0].diaChiCuThe" class="form-control"
-                      required />
-                  </div>
+                <div class="note-content">
+                  <p><strong>Lưu ý quan trọng:</strong></p>
+                  <ul>
+                    <li>Vui lòng kiểm tra kỹ sản phẩm trước khi thanh toán</li>
+                    <li>Thanh toán tiền mặt khi nhận hàng</li>
+                    <li>
+                      Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ
+                      trợ
+                    </li>
+                    <li>Khách hàng có thể trả hàng trong vòng 7 ngày</li>
+                  </ul>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="form-actions">
-              <button class="btn btn-secondary" @click="cancelAddCustomer">
-                Hủy
-              </button>
-              <button class="btn btn-primary" @click="saveNewCustomer">
-                Thêm khách hàng
-              </button>
+          <!-- Order Total -->
+          <div class="order-total">
+            <div class="total-summary">
+              <div class="total-row">
+                <span class="total-label">Tổng tiền hàng:</span>
+                <span class="total-amount">{{
+                  formatCurrency(currentOrder?.tongTien || 0)
+                }}</span>
+              </div>
+              <div class="total-row" v-if="currentOrder?.discount">
+                <span class="total-label">Giảm giá:</span>
+                <span class="total-amount discount-amount"
+                  >-{{ formatCurrency(currentOrder.discount) }}</span
+                >
+              </div>
+              <div class="total-divider"></div>
+              <div class="total-row final-row">
+                <span class="final-label">Thành tiền:</span>
+                <span class="final-amount">{{
+                  formatCurrency(
+                    (currentOrder?.tongTien || 0) -
+                      (currentOrder?.discount || 0)
+                  )
+                }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirm Order Button -->
+          <button
+            class="confirm-order-btn"
+            @click="confirmOrder"
+            :disabled="
+              !currentOrder ||
+              !currentOrder.danhSachSanPham?.length ||
+              !customerDisplayName.trim()
+            "
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 12l2 2 4-4" />
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+            <span>Xác nhận đặt hàng</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Product Search Modal -->
+  <div
+    v-if="showProductSearch"
+    class="modal-overlay"
+    @click="showProductSearch = false"
+  >
+    <div class="product-modal" @click.stop>
+      <div class="product-modal-header">
+        <h3 class="modal-title">Tìm kiếm sản phẩm</h3>
+        <p class="modal-subtitle">Chọn sản phẩm để thêm vào đơn hàng</p>
+        <button class="modal-close-btn" @click="showProductSearch = false">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Clean Search Header -->
+        <div class="search-header">
+          <div class="main-search-container">
+            <div class="search-input-wrapper">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                class="search-icon"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+              </svg>
+              <input
+                type="text"
+                v-model="productSearchQuery"
+                class="main-search-input"
+                placeholder="Tìm theo tên sản phẩm, mã sản phẩm..."
+              />
+            </div>
+
+            <div class="price-filter-compact">
+              <span class="price-label">Khoảng giá:</span>
+              <div class="price-display">
+                <span class="price-value">{{
+                  formatCurrency(priceRange.min)
+                }}</span>
+                <input
+                  type="range"
+                  :min="priceRange.min"
+                  :max="priceRange.max"
+                  v-model="selectedPriceMax"
+                  class="price-slider"
+                />
+                <span class="price-value">{{
+                  formatCurrency(priceRange.max)
+                }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Image Modal -->
-      <div v-if="showImageModal" class="image-modal-overlay" @click="closeImageModal">
-        <div class="image-modal-content" @click.stop>
-          <button class="image-modal-close" @click="closeImageModal">✕</button>
-
-          <div class="image-modal-main">
-            <button v-if="currentProductImages.length > 1" class="nav-btn prev-btn" @click="prevImage">
-              ‹
-            </button>
-
-            <div class="image-modal-display">
-              <img :src="currentProductImages[selectedImageIndex]?.duongDanAnh" :alt="`Ảnh ${selectedImageIndex + 1}`"
-                class="modal-image" @error="handleImageError" />
-            </div>
-
-            <button v-if="currentProductImages.length > 1" class="nav-btn next-btn" @click="nextImage">
-              ›
+        <!-- Clean Filter Section -->
+        <div class="filter-section">
+          <div class="filter-header">
+            <h4 class="filter-title">Bộ lọc sản phẩm</h4>
+            <button class="clear-filters-btn" @click="clearAllFilters">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"
+                />
+              </svg>
+              Xóa bộ lọc
             </button>
           </div>
 
-          <div v-if="currentProductImages.length > 1" class="image-modal-thumbnails">
-            <div v-for="(image, index) in currentProductImages" :key="image.id"
-              :class="['thumbnail', { active: index === selectedImageIndex }]" @click="selectImage(index)">
-              <img :src="image.duongDanAnh" :alt="`Thumbnail ${index + 1}`" @error="handleImageError" />
+          <div class="filters-grid">
+            <div class="filter-item">
+              <label class="filter-label">Nhà sản xuất</label>
+              <select v-model="selectedNhaSanXuat" class="filter-select">
+                <option value="">Tất cả nhà sản xuất</option>
+                <option
+                  v-for="category in NhaSanXuats"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.tenNhaSanXuat }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label class="filter-label">Xuất xứ</label>
+              <select v-model="selectedXuatXu" class="filter-select">
+                <option value="">Tất cả xuất xứ</option>
+                <option
+                  v-for="category in XuatXus"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.tenXuatXu }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label class="filter-label">Chất liệu</label>
+              <select v-model="selectedChatLieu" class="filter-select">
+                <option value="">Tất cả chất liệu</option>
+                <option
+                  v-for="category in ChatLieus"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.tenChatLieu }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label class="filter-label">Kích thước</label>
+              <select v-model="selectedSize" class="filter-select">
+                <option value="">Tất cả kích thước</option>
+                <option
+                  v-for="category in KichThuocs"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.tenKichThuoc }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label class="filter-label">Đế giày</label>
+              <select v-model="selectedDeGiay" class="filter-select">
+                <option value="">Tất cả loại đế</option>
+                <option
+                  v-for="category in DeGiays"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.tenDeGiay }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label class="filter-label">Màu sắc</label>
+              <select v-model="selectedMauSac" class="filter-select">
+                <option value="">Tất cả màu sắc</option>
+                <option
+                  v-for="category in MauSacs"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.tenMauSac }}
+                </option>
+              </select>
             </div>
           </div>
+        </div>
 
-          <div class="image-modal-counter">
-            {{ selectedImageIndex + 1 }} / {{ currentProductImages.length }}
+        <!-- Redesigned Product Grid -->
+        <div class="product-grid">
+          <div
+            v-for="product in filteredSearchProducts"
+            :key="product.id"
+            class="product-card"
+          >
+            <div
+              class="product-discount-badge"
+              v-if="product.giaTriGiamGia > 0"
+            >
+              <span class="discount-text">-{{ product.giaTriGiamGia }}%</span>
+            </div>
+
+            <div
+              class="product-image-section"
+              @click="openImageModal(product.id)"
+            >
+              <div class="product-image">
+                <img
+                  v-if="product.anhSanPham && product.anhSanPham.length > 0"
+                  :src="
+                    product.anhSanPham[0].startsWith('http')
+                      ? product.anhSanPham[0]
+                      : IMAGE_BASE_URL + product.anhSanPham[0]
+                  "
+                  :alt="product.tenSanPham"
+                  @error="handleImageError"
+                />
+                <div v-else class="image-placeholder">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect
+                      x="3"
+                      y="3"
+                      width="18"
+                      height="18"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21,15 16,10 5,21"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="image-overlay">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </div>
+            </div>
+
+            <div class="product-info-section">
+              <h4 class="product-name">{{ product.tenSanPham }}</h4>
+
+              <!-- Stock Status Badge -->
+              <div class="stock-status">
+                <div
+                  class="stock-badge"
+                  :class="{
+                    'in-stock': product.soLuong > 10,
+                    'low-stock': product.soLuong > 0 && product.soLuong <= 10,
+                    'out-of-stock': !product.soLuong || product.soLuong <= 0,
+                  }"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                    />
+                  </svg>
+                  <span class="stock-text">
+                    {{
+                      product.soLuong > 0
+                        ? `Còn ${product.soLuong}`
+                        : "Hết hàng"
+                    }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="product-details">
+                <span class="product-code">{{ product.maSanPham }}</span>
+                <span class="product-brand">{{ product.tenNhaSanXuat }}</span>
+              </div>
+              <div class="product-specs">
+                <span class="spec">{{ product.tenMauSac }}</span>
+                <span class="spec">{{ product.tenKichThuoc }}</span>
+                <span class="spec">{{ product.tenChatLieu }}</span>
+              </div>
+              <div class="product-pricing">
+                <span v-if="product.giaTriGiamGia > 0" class="original-price">{{
+                  formatCurrency(product.giaBan)
+                }}</span>
+                <span class="current-price">{{
+                  formatCurrency(
+                    (product.giaBan / 100) * (100 - product.giaTriGiamGia)
+                  )
+                }}</span>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button
+                class="add-to-cart-btn"
+                :class="{
+                  disabled:
+                    !product.trangThai ||
+                    !product.soLuong ||
+                    product.soLuong <= 0,
+                }"
+                :disabled="
+                  !product.trangThai || !product.soLuong || product.soLuong <= 0
+                "
+                @click="addProductToCart(product)"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
+                  />
+                </svg>
+                <span>
+                  {{
+                    !product.trangThai
+                      ? "Ngưng bán"
+                      : !product.soLuong || product.soLuong <= 0
+                      ? "Hết hàng"
+                      : "Thêm vào giỏ"
+                  }}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Modern Coupon Selection Modal -->
-    <div v-if="showCouponModal" class="modal-overlay" @click="closeCouponModal">
-      <div class="coupon-selection-modal" @click.stop>
-        <div class="coupon-modal-header">
-          <div class="header-content">
-            <div class="header-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
-                <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
-                <circle cx="9" cy="12" r="1"/>
-                <circle cx="15" cy="12" r="1"/>
-              </svg>
-            </div>
-            <div class="header-text">
-              <h3 class="modal-title">Chọn phiếu giảm giá</h3>
-              <p class="modal-subtitle">Chọn phiếu giảm giá phù hợp cho đơn hàng của bạn</p>
-            </div>
-          </div>
-          <button class="modern-close-btn" @click="closeCouponModal">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
+  <!-- Modern Customer Search Modal -->
+  <div
+    v-if="showCustomerSearch"
+    class="modal-overlay"
+    @click="showCustomerSearch = false"
+  >
+    <div class="customer-modal" @click.stop>
+      <div class="customer-modal-header">
+        <h3 class="modal-title">Tìm kiếm khách hàng</h3>
+        <button class="modal-close-btn" @click="showCustomerSearch = false">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="customer-modal-body">
+        <div class="customer-search-section">
+          <div class="search-input-container">
+            <svg
+              class="search-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
             </svg>
+            <input
+              type="text"
+              v-model="customerSearchQuery"
+              class="customer-search-input"
+              placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email"
+            />
+          </div>
+          <button class="add-customer-btn" @click="openAddCustomerForm">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            <span>THÊM KHÁCH HÀNG</span>
           </button>
         </div>
 
-        <div class="coupon-modal-body">
-          <div class="order-info-card">
-            <div class="order-summary">
-              <span class="order-label">Tổng đơn hàng:</span>
-              <span class="order-amount">{{ formatCurrency(currentOrder?.tongTien || 0) }}</span>
+        <div class="customer-table-container">
+          <div class="modern-table">
+            <div class="table-header">
+              <div class="header-cell">STT</div>
+              <div class="header-cell">EMAIL</div>
+              <div class="header-cell">HỌ TÊN</div>
+              <div class="header-cell">NGÀY SINH</div>
+              <div class="header-cell">SỐ ĐIỆN THOẠI</div>
+              <div class="header-cell">GIỚI TÍNH</div>
+              <div class="header-cell">TRẠNG THÁI</div>
+              <div class="header-cell">THAO TÁC</div>
             </div>
-          </div>
-
-          <div class="coupon-grid">
-            <div v-for="coupon in availableCoupons" :key="coupon.id" 
-                 class="modern-coupon-card" 
-                 :class="{
-                   selected: isCouponSelected(coupon.id),
-                   disabled: !canApplyCoupon(coupon),
-                   percentage: coupon.loaiPhieuGiamGia === false,
-                   fixed: coupon.loaiPhieuGiamGia === true
-                 }" 
-                 @click="canApplyCoupon(coupon) ? toggleCouponSelection(coupon) : null">
-              
-              <div class="coupon-badge">
-                <div class="discount-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path v-if="coupon.loaiPhieuGiamGia === false" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    <path v-else d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-                  </svg>
+            <div class="table-body">
+              <div
+                v-for="(customer, index) in filteredCustomers"
+                :key="customer.id"
+                class="table-row"
+              >
+                <div class="table-cell">{{ index + 1 }}</div>
+                <div class="table-cell">{{ customer.email }}</div>
+                <div class="table-cell">
+                  <div class="customer-name">{{ customer.tenKhachHang }}</div>
                 </div>
-                <div class="discount-value">
-                  <span v-if="coupon.loaiPhieuGiamGia === false" class="percentage-discount">
-                    {{ coupon.giaTriGiamGia }}%
-                  </span>
-                  <span v-else class="fixed-discount">
-                    {{ Math.round(coupon.giaTriGiamGia / 1000) }}K
+                <div class="table-cell">
+                  {{ customer.ngaySinh || "1998-03-10" }}
+                </div>
+                <div class="table-cell">{{ customer.soDienThoai }}</div>
+                <div class="table-cell">
+                  <span class="gender-badge">{{
+                    customer.gioiTinh ? "Nam" : "Nữ"
+                  }}</span>
+                </div>
+                <div class="table-cell">
+                  <span class="status-badge active">
+                    {{ !customer.trangThai ? "Hoạt động" : "Không hoạt động" }}
                   </span>
                 </div>
-              </div>
-
-              <div class="coupon-content">
-                <h4 class="coupon-name">{{ coupon.tenPhieuGiamGia }}</h4>
-                
-                <div class="coupon-details">
-                  <div class="discount-info">
-                    <span v-if="coupon.loaiPhieuGiamGia === false" class="discount-text">
-                      Giảm {{ coupon.giaTriGiamGia }}% đơn hàng
-                    </span>
-                    <span v-else class="discount-text">
-                      Giảm {{ formatCurrency(coupon.giaTriGiamGia) }}
-                    </span>
-                    <div class="savings-amount">
-                      Tiết kiệm: {{ formatCurrency(calculateCouponDiscount(coupon)) }}
-                    </div>
-                  </div>
-                  
-                  <div v-if="coupon.donHangToiThieu" class="min-order-requirement">
-                    Đơn tối thiểu: {{ formatCurrency(coupon.donHangToiThieu) }}
-                  </div>
-                </div>
-
-                <div v-if="!canApplyCoupon(coupon)" class="unavailable-reason">
-                  <div class="reason-icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M15 9l-6 6M9 9l6 6"/>
-                    </svg>
-                  </div>
-                  <span v-if="coupon.donHangToiThieu && currentOrder.tongTien < coupon.donHangToiThieu">
-                    Chưa đủ giá trị tối thiểu
-                  </span>
-                  <span v-else-if="selectedCoupons.length > 0 && !selectedCoupons.some((c) => c.id === coupon.id)">
-                    Chỉ được chọn 1 phiếu
-                  </span>
-                  <span v-else>Phiếu không khả dụng</span>
+                <div class="table-cell">
+                  <button
+                    class="select-customer-btn"
+                    @click="selectCustomer(customer)"
+                  >
+                    CHỌN
+                  </button>
                 </div>
               </div>
-
-              <div class="coupon-selection">
-                <div class="custom-radio">
-                  <input type="radio" 
-                         :id="'coupon-' + coupon.id" 
-                         :name="'coupon-selection'" 
-                         :checked="isCouponSelected(coupon.id)" 
-                         :disabled="!canApplyCoupon(coupon)" 
-                         @change="toggleCouponSelection(coupon)" />
-                  <label :for="'coupon-' + coupon.id" class="radio-label"></label>
-                </div>
-              </div>
-            </div>
-
-            <div v-if="availableCoupons.length === 0" class="no-coupons-state">
-              <div class="empty-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
-                  <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
-                  <circle cx="9" cy="12" r="1"/>
-                  <circle cx="15" cy="12" r="1"/>
-                </svg>
-              </div>
-              <h4 class="empty-title">Chưa có phiếu giảm giá</h4>
-              <p class="empty-description">Hiện tại không có phiếu giảm giá nào khả dụng cho đơn hàng này.</p>
             </div>
           </div>
         </div>
 
-        <div class="coupon-modal-footer">
-          <div class="selection-summary">
-            <div class="selection-info">
-              <span v-if="selectedCoupons.length > 0" class="selected-text">
-                🎉 Đã chọn 1 phiếu giảm giá
-              </span>
-              <span v-else class="no-selection-text">
-                Chưa chọn phiếu nào
-              </span>
+        <!-- Modern Add Customer Form -->
+        <div v-if="showAddCustomerForm" class="modern-add-customer-form">
+          <div class="add-form-header">
+            <h4 class="add-form-title">Thông tin cá nhân</h4>
+            <small class="add-form-subtitle">*Họ và tên</small>
+          </div>
+          <div class="add-form-content">
+            <div class="modern-form-group">
+              <input
+                type="text"
+                v-model="newCustomerForm.tenKhachHang"
+                class="modern-form-input"
+                placeholder="Nhập họ và tên"
+                required
+              />
             </div>
-            <div v-if="selectedCoupons.length > 0" class="total-savings">
-              Tiết kiệm: {{ formatCurrency(calculateCouponDiscount(selectedCoupons[0])) }}
+
+            <div class="form-row">
+              <div class="modern-form-group">
+                <label class="modern-form-label">*Email</label>
+                <input
+                  type="email"
+                  v-model="newCustomerForm.email"
+                  class="modern-form-input"
+                  placeholder="Nhập email"
+                  required
+                />
+              </div>
+              <div class="modern-form-group">
+                <label class="modern-form-label">*Số điện thoại</label>
+                <input
+                  type="tel"
+                  v-model="newCustomerForm.soDienThoai"
+                  class="modern-form-input"
+                  placeholder="Nhập số điện thoại"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="modern-form-group">
+                <label class="modern-form-label">*Ngày sinh</label>
+                <input
+                  type="date"
+                  v-model="newCustomerForm.ngaySinh"
+                  class="modern-form-input"
+                  required
+                />
+              </div>
+              <div class="modern-form-group">
+                <label class="modern-form-label">*Giới tính</label>
+                <select
+                  v-model="newCustomerForm.gioiTinh"
+                  class="modern-form-select"
+                >
+                  <option :value="true">Nam</option>
+                  <option :value="false">Nữ</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4>Thông tin tài khoản</h4>
+              <div class="form-group">
+                <label class="form-label">*Tài khoản</label>
+                <input
+                  type="text"
+                  v-model="newCustomerForm.tenTaiKhoan"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Mật khẩu</label>
+                <input
+                  type="password"
+                  v-model="newCustomerForm.matKhau"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="address-header">
+                <h4>Địa chỉ</h4>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">*Tỉnh/thành phố</label>
+                  <input
+                    type="text"
+                    v-model="newCustomerForm.listDiaChi[0].thanhPho"
+                    class="form-control"
+                    placeholder="Nhập tên tỉnh/thành phố"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">*Quận/huyện</label>
+                  <input
+                    type="text"
+                    v-model="newCustomerForm.listDiaChi[0].quan"
+                    class="form-control"
+                    placeholder="Nhập tên quận/huyện"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">*Xã/phường/thị trấn</label>
+                  <input
+                    type="text"
+                    v-model="newCustomerForm.listDiaChi[0].phuong"
+                    class="form-control"
+                    placeholder="Nhập tên xã/phường/thị trấn"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">*Địa chỉ cụ thể</label>
+                  <input
+                    type="text"
+                    v-model="newCustomerForm.listDiaChi[0].diaChiCuThe"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div class="modal-actions">
-            <button class="cancel-btn" @click="closeCouponModal">
+
+          <div class="form-actions">
+            <button class="btn btn-secondary" @click="cancelAddCustomer">
               Hủy
             </button>
-            <button class="confirm-btn" @click="confirmCouponSelection" :disabled="selectedCoupons.length === 0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 6L9 17l-5-5"/>
-              </svg>
-              {{ selectedCoupons.length > 0 ? 'Xác nhận (1 phiếu)' : 'Xác nhận' }}
+            <button class="btn btn-primary" @click="saveNewCustomer">
+              Thêm khách hàng
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Image Modal -->
+    <div
+      v-if="showImageModal"
+      class="image-modal-overlay"
+      @click="closeImageModal"
+    >
+      <div class="image-modal-content" @click.stop>
+        <button class="image-modal-close" @click="closeImageModal">✕</button>
+
+        <div class="image-modal-main">
+          <button
+            v-if="currentProductImages.length > 1"
+            class="nav-btn prev-btn"
+            @click="prevImage"
+          >
+            ‹
+          </button>
+
+          <div class="image-modal-display">
+            <img
+              :src="currentProductImages[selectedImageIndex]?.duongDanAnh"
+              :alt="`Ảnh ${selectedImageIndex + 1}`"
+              class="modal-image"
+              @error="handleImageError"
+            />
+          </div>
+
+          <button
+            v-if="currentProductImages.length > 1"
+            class="nav-btn next-btn"
+            @click="nextImage"
+          >
+            ›
+          </button>
+        </div>
+
+        <div
+          v-if="currentProductImages.length > 1"
+          class="image-modal-thumbnails"
+        >
+          <div
+            v-for="(image, index) in currentProductImages"
+            :key="image.id"
+            :class="['thumbnail', { active: index === selectedImageIndex }]"
+            @click="selectImage(index)"
+          >
+            <img
+              :src="image.duongDanAnh"
+              :alt="`Thumbnail ${index + 1}`"
+              @error="handleImageError"
+            />
+          </div>
+        </div>
+
+        <div class="image-modal-counter">
+          {{ selectedImageIndex + 1 }} / {{ currentProductImages.length }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Coupon Selection Modal -->
+  <div v-if="showCouponModal" class="modal-overlay" @click="closeCouponModal">
+    <div class="coupon-selection-modal" @click.stop>
+      <div class="coupon-modal-header">
+        <div class="header-content">
+          <div class="header-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
+              <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2" />
+              <circle cx="9" cy="12" r="1" />
+              <circle cx="15" cy="12" r="1" />
+            </svg>
+          </div>
+          <div class="header-text">
+            <h3 class="modal-title">Chọn phiếu giảm giá</h3>
+            <p class="modal-subtitle">
+              Chọn phiếu giảm giá phù hợp cho đơn hàng của bạn
+            </p>
+          </div>
+        </div>
+        <button class="modern-close-btn" @click="closeCouponModal">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="coupon-modal-body">
+        <!-- Current Applied Voucher Section -->
+        <div
+          v-if="autoAppliedCoupon || selectedCoupons.length > 0"
+          class="current-voucher-section"
+        >
+          <div class="current-voucher-card">
+            <div class="current-voucher-header">
+              <div class="current-voucher-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="current-voucher-text">
+                <h4 class="current-voucher-title">
+                  Phiếu giảm giá đang áp dụng
+                </h4>
+                <p class="current-voucher-subtitle">
+                  Bạn có thể thay đổi hoặc hủy phiếu này
+                </p>
+              </div>
+            </div>
+
+            <div class="current-voucher-info">
+              <div class="current-voucher-details">
+                <div class="voucher-name">
+                  {{
+                    (autoAppliedCoupon || selectedCoupons[0])?.tenPhieuGiamGia
+                  }}
+                </div>
+                <div class="voucher-discount">
+                  <span
+                    v-if="
+                      (autoAppliedCoupon || selectedCoupons[0])
+                        ?.loaiPhieuGiamGia === false
+                    "
+                  >
+                    -{{
+                      (autoAppliedCoupon || selectedCoupons[0])?.giaTriGiamGia
+                    }}%
+                  </span>
+                  <span v-else>
+                    -{{
+                      formatCurrency(
+                        (autoAppliedCoupon || selectedCoupons[0])?.giaTriGiamGia
+                      )
+                    }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="voucher-status">
+                <div
+                  class="status-indicator"
+                  :class="{
+                    valid: canApplyCoupon(
+                      autoAppliedCoupon || selectedCoupons[0]
+                    ),
+                    invalid: !canApplyCoupon(
+                      autoAppliedCoupon || selectedCoupons[0]
+                    ),
+                  }"
+                >
+                  <span
+                    v-if="
+                      canApplyCoupon(autoAppliedCoupon || selectedCoupons[0])
+                    "
+                    class="status-text valid-text"
+                  >
+                    ✅ Có thể sử dụng
+                  </span>
+                  <span v-else class="status-text invalid-text">
+                    ❌ Không đủ điều kiện
+                  </span>
+                </div>
+              </div>
+
+              <div class="current-voucher-actions">
+                <button class="change-voucher-btn" @click="scrollToVoucherList">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                    />
+                    <path d="M9 15l3-3 3 3" />
+                    <path d="M12 3v12" />
+                  </svg>
+                  Thay đổi
+                </button>
+                <button
+                  class="remove-voucher-btn"
+                  @click="removeCurrentVoucher"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                    />
+                    <line x1="10" y1="11" x2="10" y2="17" />
+                    <line x1="14" y1="11" x2="14" y2="17" />
+                  </svg>
+                  Hủy phiếu
+                </button>
+              </div>
+            </div>
+
+            <!-- Validation Messages -->
+            <div
+              v-if="!canApplyCoupon(autoAppliedCoupon || selectedCoupons[0])"
+              class="validation-messages"
+            >
+              <div class="validation-item">
+                <div class="validation-icon">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8v4M12 16h.01" />
+                  </svg>
+                </div>
+                <div class="validation-text">
+                  <div
+                    v-if="
+                      currentOrder?.tongTien <
+                      (autoAppliedCoupon || selectedCoupons[0])?.hoaDonToiThieu
+                    "
+                  >
+                    Đơn hàng tối thiểu:
+                    {{
+                      formatCurrency(
+                        (autoAppliedCoupon || selectedCoupons[0])
+                          ?.hoaDonToiThieu
+                      )
+                    }}
+                    (Hiện tại:
+                    {{ formatCurrency(currentOrder?.tongTien || 0) }})
+                  </div>
+                  <div v-else>Phiếu giảm giá không còn hợp lệ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-info-card">
+          <div class="order-summary">
+            <span class="order-label">Tổng đơn hàng:</span>
+            <span class="order-amount">{{
+              formatCurrency(currentOrder?.tongTien || 0)
+            }}</span>
+          </div>
+        </div>
+
+        <div class="coupon-grid">
+          <div
+            v-for="coupon in availableCoupons"
+            :key="coupon.id"
+            class="modern-coupon-card"
+            :class="{
+              selected: isCouponSelected(coupon.id),
+              disabled: !canApplyCoupon(coupon),
+              percentage: coupon.loaiPhieuGiamGia === false,
+              fixed: coupon.loaiPhieuGiamGia === true,
+            }"
+            @click="
+              canApplyCoupon(coupon) ? toggleCouponSelection(coupon) : null
+            "
+          >
+            <div class="coupon-badge">
+              <div class="discount-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    v-if="coupon.loaiPhieuGiamGia === false"
+                    d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                  />
+                  <path
+                    v-else
+                    d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"
+                  />
+                </svg>
+              </div>
+              <div class="discount-value">
+                <span
+                  v-if="coupon.loaiPhieuGiamGia === false"
+                  class="percentage-discount"
+                >
+                  {{ coupon.giaTriGiamGia }}%
+                </span>
+                <span v-else class="fixed-discount">
+                  {{ Math.round(coupon.giaTriGiamGia / 1000) }}K
+                </span>
+              </div>
+            </div>
+
+            <div class="coupon-content">
+              <h4 class="coupon-name">{{ coupon.tenPhieuGiamGia }}</h4>
+
+              <div class="coupon-details">
+                <div class="discount-info">
+                  <span
+                    v-if="coupon.loaiPhieuGiamGia === false"
+                    class="discount-text"
+                  >
+                    Giảm {{ coupon.giaTriGiamGia }}% đơn hàng
+                  </span>
+                  <span v-else class="discount-text">
+                    Giảm {{ formatCurrency(coupon.giaTriGiamGia) }}
+                  </span>
+                  <div class="savings-amount">
+                    Tiết kiệm:
+                    {{ formatCurrency(calculateCouponDiscount(coupon)) }}
+                  </div>
+                </div>
+
+                <div v-if="coupon.hoaDonToiThieu" class="min-order-requirement">
+                  Đơn tối thiểu: {{ formatCurrency(coupon.hoaDonToiThieu) }}
+                </div>
+              </div>
+
+              <div v-if="!canApplyCoupon(coupon)" class="unavailable-reason">
+                <div class="reason-icon">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M15 9l-6 6M9 9l6 6" />
+                  </svg>
+                </div>
+                <span
+                  v-if="
+                    coupon.hoaDonToiThieu &&
+                    currentOrder.tongTien < coupon.hoaDonToiThieu
+                  "
+                >
+                  Chưa đủ giá trị tối thiểu
+                </span>
+                <span
+                  v-else-if="
+                    selectedCoupons.length > 0 &&
+                    !selectedCoupons.some((c) => c.id === coupon.id)
+                  "
+                >
+                  Chỉ được chọn 1 phiếu
+                </span>
+                <span v-else>Phiếu không khả dụng</span>
+              </div>
+            </div>
+
+            <div class="coupon-selection">
+              <div class="custom-radio">
+                <input
+                  type="radio"
+                  :id="'coupon-' + coupon.id"
+                  :name="'coupon-selection'"
+                  :checked="isCouponSelected(coupon.id)"
+                  :disabled="!canApplyCoupon(coupon)"
+                  @change="toggleCouponSelection(coupon)"
+                />
+                <label :for="'coupon-' + coupon.id" class="radio-label"></label>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="availableCoupons.length === 0" class="no-coupons-state">
+            <div class="empty-icon">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
+                <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2" />
+                <circle cx="9" cy="12" r="1" />
+                <circle cx="15" cy="12" r="1" />
+              </svg>
+            </div>
+            <h4 class="empty-title">Chưa có phiếu giảm giá</h4>
+            <p class="empty-description">
+              Hiện tại không có phiếu giảm giá nào khả dụng cho đơn hàng này.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="coupon-modal-footer">
+        <div class="selection-summary">
+          <div class="selection-info">
+            <span v-if="selectedCoupons.length > 0" class="selected-text">
+              🎉 Đã chọn 1 phiếu giảm giá
+            </span>
+            <span v-else class="no-selection-text"> Chưa chọn phiếu nào </span>
+          </div>
+          <div v-if="selectedCoupons.length > 0" class="total-savings">
+            Tiết kiệm:
+            {{ formatCurrency(calculateCouponDiscount(selectedCoupons[0])) }}
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="cancel-btn" @click="closeCouponModal">Hủy</button>
+          <button
+            class="confirm-btn"
+            @click="confirmCouponSelection"
+            :disabled="selectedCoupons.length === 0"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            {{ selectedCoupons.length > 0 ? "Xác nhận (1 phiếu)" : "Xác nhận" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Popup -->
+  <div
+    v-if="showNotification"
+    class="notification-overlay"
+    @click="showNotification = false"
+  >
+    <div class="notification-modal" @click.stop>
+      <div class="notification-content" :class="notificationType">
+        <div class="notification-icon">
+          <svg
+            v-if="notificationType === 'success'"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22,4 12,14.01 9,11.01" />
+          </svg>
+          <svg
+            v-else-if="notificationType === 'error'"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+          <svg
+            v-else-if="notificationType === 'warning'"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <svg
+            v-else
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
+          </svg>
+        </div>
+        <div class="notification-text">
+          {{ notificationMessage }}
+        </div>
+        <button class="notification-close" @click="showNotification = false">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 // SVG Icons
-import RefreshIcon from "@/assets/Reload.svg?url";
-import EditIcon from "@/assets/Edit.svg?url";
-import ViewIcon from "@/assets/View.svg?url";
-import PrintIcon from "@/assets/Print.svg?url";
 import PlusIcon from "@/assets/Plus.svg?url";
-import TrashIcon from "@/assets/Trash.svg?url";
-import SaveIcon from "@/assets/Save.svg?url";
-import CancelIcon from "@/assets/Cancel.svg?url";
-import ChevronLeftIcon from "@/assets/chevron-left.svg?url";
-import ChevronRightIcon from "@/assets/chevron-right.svg?url";
-import ChevronsLeftIcon from "@/assets/chevrons-left.svg?url";
-import ChevronsRightIcon from "@/assets/chevrons-right.svg?url";
-import ClipboardIcon from "@/assets/Clipboard.svg?url";
-import ExcelIcon from "@/assets/Excel.svg?url";
-import StatisticsIcon from "@/assets/Statistics.svg?url";
-import PhoneIcon from "@/assets/Phone.svg?url";
-import UsersIcon from "@/assets/Users.svg?url";
-import ProfileIcon from "@/assets/Profile.svg?url";
-import DashboardIcon from "@/assets/Dashboard.svg?url";
-import OrdersIcon from "@/assets/Orders.svg?url";
-import ProductsIcon from "@/assets/Shoes.svg?url";
-import ShoppingCartIcon from "@/assets/ShoppingCart.svg?url";
-import CreditCardIcon from "@/assets/CreditCard.svg?url";
-import RevenueIcon from "@/assets/Revenue.svg?url";
-import GrowthIcon from "@/assets/Growth.svg?url";
-import SettingsIcon from "@/assets/Settings.svg?url";
-import ExportIcon from "@/assets/Export.svg?url";
-import FindIcon from "@/assets/Find.svg?url";
 
-import { computed, onMounted, ref, watch } from "vue";
-import { fetchCreateHoaDon } from "../../services/BanHang/HoaDonService";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
+import {
+  getDistricts,
+  getProvinces,
+  getWards,
+} from "../../services/AddressService";
+import { fetchCreateHoaDonChiTiet } from "../../services/BanHang/HoaDonChiTietService";
 import {
   fetchActivePhieuGiamGiaForCustomer,
   fetchAllPhieuGiamGia,
 } from "../../services/GiamGia/PhieuGiamGiaService";
+import { fetchCreateDiaChiKhachHang } from "../../services/KhachHang/DiaChiKhachHangService";
 import {
   fetchAllKhachHang,
   fetchQuickAddKhachHang,
-  fetchUpdateKhachHang
+  fetchUpdateKhachHang,
 } from "../../services/KhachHang/KhachHangService";
-import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
+import {
+  fetchAllChiTietSanPham,
+  fetchChiTietSanPhamWithInventory,
+} from "../../services/SanPham/ChiTietSanPhamService";
 import { fetchAllChatLieu } from "../../services/ThuocTinh/ChatLieuService";
 import { fetchAllDeGiay } from "../../services/ThuocTinh/DeGiayService";
 import { fetchAllKichThuoc } from "../../services/ThuocTinh/KichThuocService";
@@ -1301,6 +2826,24 @@ const customerSuggestions = ref([]); // Danh sách gợi ý khách hàng
 const showCustomerDropdown = ref(false); // Hiển thị dropdown suggestions
 let searchTimeout = null; // Timeout for debouncing search
 
+// Notification popup
+const showNotification = ref(false);
+const notificationMessage = ref("");
+const notificationType = ref("info"); // success, error, warning, info
+
+// Function to show notification
+const showNotificationPopup = (message, type = "info") => {
+  notificationMessage.value = message;
+  notificationType.value = type;
+  showNotification.value = true;
+
+  // Auto hide after 5 seconds for success and info, 8 seconds for error and warning
+  const duration = type === "success" || type === "info" ? 5000 : 8000;
+  setTimeout(() => {
+    showNotification.value = false;
+  }, duration);
+};
+
 // Add customer form in modal
 const showAddCustomerForm = ref(false); // Hiển thị form thêm khách hàng
 const newCustomerForm = ref({
@@ -1343,6 +2886,17 @@ const availableCoupons = ref([]); // Danh sách phiếu giảm giá khả dụng
 const selectedCoupons = ref([]); // Danh sách phiếu giảm giá đã chọn
 const autoAppliedCoupon = ref(null); // Phiếu giảm giá được áp dụng tự động
 const showCouponModal = ref(false); // Hiển thị modal chọn phiếu giảm giá
+
+// Address management
+const provinces = ref([]);
+const districts = ref([]);
+const wards = ref([]);
+const selectedProvinceCode = ref("");
+const selectedDistrictCode = ref("");
+
+// Thông tin gợi ý phiếu giảm giá tốt hơn
+const betterCoupons = ref([]);
+const showRecommendation = ref(false);
 
 // Computed: Check if delivery address is complete
 const isAddressComplete = computed(() => {
@@ -1398,6 +2952,27 @@ watch(
   { deep: true }
 );
 
+// Watcher: Sync autoAppliedCoupon with selectedCoupons when modal is open
+watch(
+  [autoAppliedCoupon, showCouponModal],
+  ([newAutoApplied, modalOpen]) => {
+    // Chỉ đồng bộ khi popup đang mở và có voucher tự động
+    if (modalOpen && newAutoApplied) {
+      console.log(
+        `🔄 Đồng bộ voucher tự động trong popup: ${newAutoApplied.tenPhieuGiamGia}`
+      );
+
+      // Kiểm tra xem voucher tự động có khác với voucher hiện tại trong selectedCoupons không
+      const currentSelected = selectedCoupons.value[0];
+      if (!currentSelected || currentSelected.id !== newAutoApplied.id) {
+        selectedCoupons.value = [newAutoApplied];
+        console.log(`✅ Đã cập nhật selectedCoupons cho popup`);
+      }
+    }
+  },
+  { immediate: true }
+);
+
 // Computed: Calculate discount amount for a coupon
 const calculateCouponDiscount = (coupon) => {
   if (!currentOrder.value || !coupon) return 0;
@@ -1416,12 +2991,31 @@ const calculateCouponDiscount = (coupon) => {
 };
 
 // Computed: Get full delivery address
-const getFullAddress = computed(() => {
-  if (!isAddressComplete.value) return "";
+const fullAddress = computed(() => {
+  const addr = deliveryAddress.value;
+  if (!addr.diaChiCuThe || !addr.thanhPho) return "";
 
-  return `${deliveryAddress.value.tenNguoiNhan} - ${deliveryAddress.value.soDienThoaiNguoiNhan}
-${deliveryAddress.value.diaChiCuThe}, ${deliveryAddress.value.phuong}, ${deliveryAddress.value.quan}, ${deliveryAddress.value.thanhPho}`;
+  let address = addr.diaChiCuThe;
+  if (addr.phuong) address += `, ${addr.phuong}`;
+  if (addr.quan) address += `, ${addr.quan}`;
+  if (addr.thanhPho) address += `, ${addr.thanhPho}`;
+
+  return address;
 });
+
+// Function to calculate change for cash payment
+const calculateChange = () => {
+  if (!currentOrder.value) return;
+
+  // Ensure tienKhachTra is a number
+  if (typeof currentOrder.value.tienKhachTra !== "number") {
+    currentOrder.value.tienKhachTra =
+      parseFloat(currentOrder.value.tienKhachTra) || 0;
+  }
+
+  // Update order totals to ensure calculations are current
+  updateOrderTotals();
+};
 
 const selectedSize = ref("");
 const selectedDeGiay = ref("");
@@ -1598,13 +3192,13 @@ const fetchAll = async () => {
     await fetchKhachHang();
     await fetchPhieuGiamGia();
     await fetchChiTietSanPham();
-  } catch (error) { }
+  } catch (error) {}
 };
 const fetchCreateOrderDetail = async (id) => {
   try {
     let res3 = await fetchActivePhieuGiamGiaForCustomer(id);
     PhieuGiamGias.value = res3.data;
-  } catch (error) { }
+  } catch (error) {}
 };
 const fetchCreateOrder = async () => {
   try {
@@ -1623,41 +3217,113 @@ const fetchCreateOrder = async () => {
     let soDienThoaiNguoiNhan = order.soDienThoaiNguoiNhan;
     let emailNguoiNhan = order.emailNguoiNhan;
 
+    // Lấy địa chỉ mặc định từ khách hàng được chọn
+    let defaultCustomerAddress = "";
+    let defaultCustomerPhone = "";
+    let defaultCustomerEmail = "";
+
+    if (order.idKhachHang) {
+      const customer = KhachHangs.value.find((c) => c.id === order.idKhachHang);
+      if (customer) {
+        // Lấy địa chỉ đầu tiên từ listDiaChi làm địa chỉ mặc định
+        if (customer.listDiaChi && customer.listDiaChi.length > 0) {
+          const firstAddress = customer.listDiaChi[0];
+          if (firstAddress.diaChiCuThe || firstAddress.thanhPho) {
+            // Format địa chỉ theo chuẩn Việt Nam
+            const diaChiParts = [
+              firstAddress.diaChiCuThe,
+              firstAddress.phuong,
+              firstAddress.quan,
+              firstAddress.thanhPho,
+            ].filter((part) => part && part.trim() !== "");
+
+            defaultCustomerAddress = diaChiParts.join(", ");
+            console.log(
+              "🏠 Đã lấy địa chỉ mặc định từ khách hàng:",
+              defaultCustomerAddress
+            );
+          }
+        } else {
+          console.log("⚠️ Khách hàng không có địa chỉ nào trong hệ thống");
+        }
+        defaultCustomerPhone = customer.soDienThoai || "";
+        defaultCustomerEmail = customer.email || "";
+      }
+    }
+
     // If delivery is selected, use delivery address form data
     if (order.ghiChu === "delivery" && isAddressComplete.value) {
       tenNguoiNhan = deliveryAddress.value.tenNguoiNhan;
       soDienThoaiNguoiNhan = deliveryAddress.value.soDienThoaiNguoiNhan;
       emailNguoiNhan = deliveryAddress.value.emailNguoiNhan;
-      diaChiNhanHang = `${deliveryAddress.value.diaChiCuThe}, ${deliveryAddress.value.phuong}, ${deliveryAddress.value.quan}, ${deliveryAddress.value.thanhPho}`;
+
+      // Format địa chỉ đầy đủ theo chuẩn Việt Nam
+      const diaChiParts = [
+        deliveryAddress.value.diaChiCuThe,
+        deliveryAddress.value.phuong,
+        deliveryAddress.value.quan,
+        deliveryAddress.value.thanhPho,
+      ].filter((part) => part && part.trim() !== "");
+
+      diaChiNhanHang = diaChiParts.join(", ");
+      console.log("🚚 Đã tạo địa chỉ giao hàng từ form:", diaChiNhanHang);
+    } else if (order.idKhachHang && defaultCustomerAddress) {
+      // Ngay cả khi bán tại quầy, vẫn lấy địa chỉ khách hàng nếu có
+      diaChiNhanHang = defaultCustomerAddress;
+      tenNguoiNhan = customerDisplayName.value;
+      soDienThoaiNguoiNhan = defaultCustomerPhone;
+      emailNguoiNhan = defaultCustomerEmail;
+      console.log(
+        "🏪 Bán tại quầy - Sử dụng địa chỉ khách hàng:",
+        diaChiNhanHang
+      );
     }
 
-    // Tạo payload theo cấu trúc backend yêu cầu
+    // Tạo payload theo cấu trúc BanHangTaiQuayRequest
     const payload = {
+      // IDs
       idKhachHang: order.idKhachHang,
-      idNhanVien: 1,
+      idNhanVien: 1, // ID nhân viên hiện tại
       idPhuongThucThanhToan: getPaymentMethodId(order.phuongThucThanhToan),
-      idTrangThaiDonHang: 2,
+      idTrangThaiDonHang: 2, // Trạng thái đơn hàng: 2 = Đã xác nhận
+
+      // Danh sách sản phẩm
       danhSachSanPham: danhSachSanPhamMap, // HashMap<Integer, Integer>
-      phiVanChuyen: order.phiVanChuyen,
-      tongTien: order.tongTien,
-      tongTienSauGiam: order.tongTienSauGiam,
-      ghiChu: order.selectedService
-        ? `${order.ghiChu} - ${order.selectedService.name} (${order.selectedService.deliveryTime})`
-        : order.ghiChu,
+
+      // Thông tin tiền (bao gồm phí giao hàng)
+      phiVanChuyen: order.phiVanChuyen || 0,
+      tongTien: order.tongTien || 0,
+      tongTienSauGiam: order.tongTienSauGiam || 0, // Đã bao gồm phí giao hàng
+
+      // Thông tin giao hàng - Map với BanHangTaiQuayRequest
       tenNguoiNhan:
         tenNguoiNhan || order.tenNguoiNhan || customerDisplayName.value,
-      diaChiNhanHang: diaChiNhanHang || order.diaChiNhanHang || "",
+      diaChiNhanHang:
+        diaChiNhanHang || order.diaChiNhanHang || defaultCustomerAddress, // Format: "địa chỉ cụ thể, phường, quận, thành phố"
       soDienThoaiNguoiNhan:
-        soDienThoaiNguoiNhan || order.soDienThoaiNguoiNhan || "",
-      emailNguoiNhan: emailNguoiNhan || order.emailNguoiNhan || "",
-      ngayTao: order.ngayTao ? order.ngayTao.toISOString().split("T")[0] : null,
+        soDienThoaiNguoiNhan ||
+        order.soDienThoaiNguoiNhan ||
+        defaultCustomerPhone,
+      emailNguoiNhan:
+        emailNguoiNhan || order.emailNguoiNhan || defaultCustomerEmail,
+
+      // Thời gian
+      ngayTao: order.ngayTao
+        ? order.ngayTao.toISOString().split("T")[0]
+        : new Date().toISOString().split("T")[0],
       ngayThanhToan: order.ngayThanhToan
         ? order.ngayThanhToan.toISOString().split("T")[0]
-        : null,
-      trangThai: true,
-      deleted: false,
-      createAt: new Date(),
-      createBy: 1,
+        : new Date().toISOString().split("T")[0],
+
+      // Cấu hình
+      loaiDon: false, // 0 = Bán hàng tại quầy
+      trangThai: true, // true = Active
+      deleted: false, // false = Chưa xóa
+
+      // Ghi chú
+      ghiChu: order.selectedService
+        ? `${order.ghiChu} - ${order.selectedService.name} (${order.selectedService.deliveryTime})`
+        : order.ghiChu || "",
     };
 
     // Chỉ thêm idPhieuGiamGia nếu có giá trị
@@ -1665,9 +3331,12 @@ const fetchCreateOrder = async () => {
       payload.idPhieuGiamGia = selectedCoupons.value[0].id;
     }
 
-    // Validation cơ bản
+    // Validation theo BanHangTaiQuayRequest
     if (!payload.idKhachHang) {
       throw new Error("Thiếu thông tin khách hàng");
+    }
+    if (!payload.idNhanVien) {
+      throw new Error("Thiếu thông tin nhân viên");
     }
     if (
       !payload.danhSachSanPham ||
@@ -1675,9 +3344,118 @@ const fetchCreateOrder = async () => {
     ) {
       throw new Error("Giỏ hàng trống");
     }
+    if (payload.tongTien === null || payload.tongTien === undefined) {
+      throw new Error("Thiếu thông tin tổng tiền");
+    }
+    if (payload.loaiDon === null || payload.loaiDon === undefined) {
+      throw new Error("Thiếu thông tin loại đơn");
+    }
 
-    console.log("payload: ", payload);
-    await fetchCreateHoaDon(payload);
+    // Debug chi tiết payload trước khi gửi API
+    console.log("📤 ===== DEBUG PAYLOAD GỬI LÊN BACKEND =====");
+    console.log("📋 Thông tin cơ bản:");
+    console.log("- ID Khách hàng:", payload.idKhachHang);
+    console.log("- ID Nhân viên:", payload.idNhanVien);
+    console.log("- ID Phương thức thanh toán:", payload.idPhuongThucThanhToan);
+    console.log("- ID Trạng thái đơn hàng:", payload.idTrangThaiDonHang);
+
+    console.log("🛒 Danh sách sản phẩm:", payload.danhSachSanPham);
+
+    console.log("💰 Thông tin tiền:");
+    console.log("- Phí vận chuyển:", formatCurrency(payload.phiVanChuyen));
+    console.log("- Tổng tiền hàng:", formatCurrency(payload.tongTien));
+    console.log(
+      "- Tổng tiền sau giảm:",
+      formatCurrency(payload.tongTienSauGiam)
+    );
+    console.log(
+      "- Phí giao hàng đã bao gồm trong tổng tiền sau giảm:",
+      payload.tongTienSauGiam >= payload.tongTien ? "Có" : "Không"
+    );
+
+    console.log("📍 Thông tin giao hàng:");
+    console.log("- Tên người nhận:", payload.tenNguoiNhan);
+    console.log("- Địa chỉ nhận hàng:", payload.diaChiNhanHang);
+    console.log("- SĐT người nhận:", payload.soDienThoaiNguoiNhan);
+    console.log("- Email người nhận:", payload.emailNguoiNhan);
+
+    console.log("📅 Thời gian:");
+    console.log("- Ngày tạo:", payload.ngayTao);
+    console.log("- Ngày thanh toán:", payload.ngayThanhToan);
+
+    console.log("⚙️ Cấu hình:");
+    console.log("- Loại đơn:", payload.loaiDon ? "Giao hàng" : "Bán tại quầy");
+    console.log("- Trạng thái:", payload.trangThai ? "Active" : "Inactive");
+    console.log("- Deleted:", payload.deleted);
+
+    console.log("📝 Thông tin khác:");
+    console.log("- Ghi chú:", payload.ghiChu);
+    console.log("- ID Phiếu giảm giá:", payload.idPhieuGiamGia || "Không có");
+
+    console.log("🔍 Payload đầy đủ:", payload);
+    console.log("===========================================");
+    console.log("🔗 Mapping với BanHangTaiQuayRequest:");
+    console.log("- idKhachHang:", payload.idKhachHang);
+    console.log(
+      "- danhSachSanPham:",
+      Object.keys(payload.danhSachSanPham || {}).length,
+      "sản phẩm"
+    );
+    console.log("- diaChiNhanHang:", payload.diaChiNhanHang);
+    console.log("- loaiDon:", payload.loaiDon, "(false = bán hàng tại quầy)");
+
+    // Gửi API tạo hóa đơn
+    const response = await fetch(
+      "http://localhost:8080/api/hoa-don-management/add",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Không thể tạo hóa đơn");
+    }
+
+    const result = await response.json();
+    const hoaDonResponse = result.data;
+    const hoaDonId = hoaDonResponse.id;
+
+    console.log("✅ Đã tạo hóa đơn thành công với ID:", hoaDonId);
+
+    // Tạo chi tiết sản phẩm cho từng sản phẩm trong giỏ hàng
+    console.log("🔄 Bắt đầu tạo chi tiết sản phẩm...");
+    const orderItems = currentOrder.value.danhSachSanPham;
+
+    for (const item of orderItems) {
+      const hoaDonChiTietPayload = {
+        idHoaDon: hoaDonId,
+        idChiTietSanPham: item.id,
+        soLuong: item.soLuong,
+        giaBan: item.giaSauGiam || item.giaBan,
+        thanhTien: (item.giaSauGiam || item.giaBan) * item.soLuong,
+        trangThai: true,
+        deleted: false,
+        ghiChu: `Chi tiết sản phẩm: ${item.tenSanPham || "Sản phẩm"}`,
+      };
+
+      console.log("📦 Tạo chi tiết sản phẩm:", hoaDonChiTietPayload);
+
+      try {
+        await fetchCreateHoaDonChiTiet(hoaDonChiTietPayload);
+        console.log(
+          `✅ Đã tạo chi tiết sản phẩm cho ${item.tenSanPham || "Sản phẩm"}`
+        );
+      } catch (detailError) {
+        console.error("❌ Lỗi khi tạo chi tiết sản phẩm:", detailError);
+        // Không throw error để không dừng quá trình tạo hóa đơn
+      }
+    }
+
+    console.log("🎉 Hoàn thành tạo chi tiết sản phẩm cho hóa đơn:", hoaDonId);
   } catch (error) {
     console.error("Error fetching create order:", error);
   }
@@ -1785,8 +3563,24 @@ const getPaymentMethodId = (method) => {
   }
 };
 
-const switchOrder = (orderId) => {
+const switchOrder = async (orderId) => {
   currentOrderId.value = orderId;
+
+  // Khi chuyển đổi đơn hàng, load phiếu giảm giá cho khách hàng của đơn hàng mới
+  const order = currentOrder.value;
+  if (order && order.idKhachHang) {
+    await loadCouponsForCustomer(order.idKhachHang);
+
+    // Tự động áp dụng phiếu giảm giá tốt nhất cho đơn hàng mới
+    if (order.tongTien > 0) {
+      setTimeout(() => {
+        autoApplyBestCoupon();
+      }, 100);
+    }
+  } else {
+    // Nếu không có khách hàng, load tất cả phiếu giảm giá
+    await loadAllCoupons();
+  }
 };
 
 const closeOrder = (orderId) => {
@@ -1800,7 +3594,7 @@ const closeOrder = (orderId) => {
   }
 };
 
-const addProductToCart = (product) => {
+const addProductToCart = async (product) => {
   const order = currentOrder.value;
 
   if (!order) {
@@ -1812,75 +3606,226 @@ const addProductToCart = (product) => {
     order.danhSachSanPham = [];
   }
 
-  // Chỉ kiểm tra ID sản phẩm để xác định trùng, không kiểm tra số lượng
-  const existingItem = order.danhSachSanPham.find(
-    (item) => item.id === product.id
-  );
+  try {
+    // Kiểm tra số lượng còn lại trong kho
+    const chiTietSanPham = await fetchChiTietSanPhamWithInventory(product.id);
 
-  if (existingItem) {
-    // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng lên 1
-    existingItem.soLuong += 1;
-  } else {
-    // Nếu sản phẩm chưa có, thêm mới vào giỏ hàng
-    const newItem = {
-      id: product.id,
-      tenSanPham: product.tenSanPham,
-      giaBan: product.giaBan,
-      giaSauGiam:
-        product.giaTriGiamGia && product.giaTriGiamGia > 0
-          ? (product.giaBan / 100) * (100 - product.giaTriGiamGia)
-          : product.giaBan,
-      giaTriGiamGia: product.giaTriGiamGia,
-      tenKichThuoc: product.tenKichThuoc,
-      tenChatLieu: product.tenChatLieu,
-      tenDeGiay: product.tenDeGiay,
-      tenNhaSanXuat: product.tenNhaSanXuat,
-      tenXuatXu: product.tenXuatXu,
-      tenTrongLuong: product.tenTrongLuong,
-      tenMauSac: product.tenMauSac,
-      soLuong: 1,
-      deleted: false,
-      duongDanAnh:
-        product.anhSanPham && product.anhSanPham.length > 0
-          ? product.anhSanPham[0]
-          : null,
-      trangThai: product.trangThai,
-      selected: false,
-    };
-    order.danhSachSanPham.push(newItem);
+    // Kiểm tra sản phẩm có trạng thái active không
+    if (!chiTietSanPham.trangThai) {
+      showNotificationPopup(
+        "Sản phẩm này hiện không khả dụng để bán!",
+        "error"
+      );
+      return;
+    }
+
+    // Tính tổng số lượng đã có trong giỏ hàng
+    const existingItem = order.danhSachSanPham.find(
+      (item) => item.id === product.id
+    );
+
+    const currentQuantityInCart = existingItem ? existingItem.soLuong : 0;
+    const requestedQuantity = currentQuantityInCart + 1;
+
+    // Kiểm tra số lượng có đủ không
+    if (
+      chiTietSanPham.soLuong === null ||
+      chiTietSanPham.soLuong === undefined ||
+      chiTietSanPham.soLuong < requestedQuantity
+    ) {
+      showNotificationPopup(
+        `Không đủ số lượng sản phẩm "${product.tenSanPham}".\nCòn lại: ${
+          chiTietSanPham.soLuong || 0
+        }, yêu cầu: ${requestedQuantity}`,
+        "warning"
+      );
+      return;
+    }
+
+    if (existingItem) {
+      // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng lên 1
+      existingItem.soLuong += 1;
+    } else {
+      // Nếu sản phẩm chưa có, thêm mới vào giỏ hàng
+      const newItem = {
+        id: product.id,
+        tenSanPham: product.tenSanPham,
+        giaBan: product.giaBan,
+        giaSauGiam:
+          product.giaTriGiamGia && product.giaTriGiamGia > 0
+            ? (product.giaBan / 100) * (100 - product.giaTriGiamGia)
+            : product.giaBan,
+        giaTriGiamGia: product.giaTriGiamGia,
+        tenKichThuoc: product.tenKichThuoc,
+        tenChatLieu: product.tenChatLieu,
+        tenDeGiay: product.tenDeGiay,
+        tenNhaSanXuat: product.tenNhaSanXuat,
+        tenXuatXu: product.tenXuatXu,
+        tenTrongLuong: product.tenTrongLuong,
+        tenMauSac: product.tenMauSac,
+        soLuong: 1,
+        deleted: false,
+        duongDanAnh:
+          product.anhSanPham && product.anhSanPham.length > 0
+            ? product.anhSanPham[0]
+            : null,
+        trangThai: product.trangThai,
+        selected: false,
+      };
+      order.danhSachSanPham.push(newItem);
+    }
+
+    updateOrderTotals();
+
+    // Tự động áp dụng phiếu giảm giá tốt nhất sau khi thêm sản phẩm
+    setTimeout(() => {
+      autoApplyBestCoupon();
+    }, 100);
+
+    showProductSearch.value = false;
+  } catch (error) {
+    console.error("❌ Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+    showNotificationPopup(
+      "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại!",
+      "error"
+    );
   }
-
-  updateOrderTotals();
-
-  // Tự động áp dụng phiếu giảm giá tốt nhất sau khi thêm sản phẩm
-  setTimeout(() => {
-    autoApplyBestCoupon();
-  }, 100);
-
-  showProductSearch.value = false;
 };
 
-const updateQuantity = (item, change) => {
-  item.soLuong = Math.max(1, item.soLuong + change);
-  updateOrderTotals();
+const updateQuantity = async (item, change) => {
+  const newQuantity = Math.max(1, item.soLuong + change);
 
-  // Tự động áp dụng phiếu giảm giá tốt nhất sau khi thay đổi số lượng
-  setTimeout(() => {
-    autoApplyBestCoupon();
-  }, 100);
+  // Kiểm tra nếu số lượng không thay đổi thì không cần làm gì
+  if (newQuantity === item.soLuong) {
+    return;
+  }
+
+  try {
+    // Kiểm tra số lượng còn lại trong kho khi tăng số lượng
+    if (change > 0) {
+      const chiTietSanPham = await fetchChiTietSanPhamWithInventory(item.id);
+
+      // Kiểm tra sản phẩm có trạng thái active không
+      if (!chiTietSanPham.trangThai) {
+        showNotificationPopup(
+          "Sản phẩm này hiện không khả dụng để bán!",
+          "error"
+        );
+        return;
+      }
+
+      // Kiểm tra số lượng có đủ không
+      if (
+        chiTietSanPham.soLuong === null ||
+        chiTietSanPham.soLuong === undefined ||
+        chiTietSanPham.soLuong < newQuantity
+      ) {
+        showNotificationPopup(
+          `Không đủ số lượng sản phẩm "${item.tenSanPham}".\nCòn lại: ${
+            chiTietSanPham.soLuong || 0
+          }, yêu cầu: ${newQuantity}`,
+          "warning"
+        );
+        return;
+      }
+    }
+
+    item.soLuong = newQuantity;
+    updateOrderTotals();
+
+    // Tự động áp dụng phiếu giảm giá tốt nhất sau khi thay đổi số lượng
+    // Chỉ áp dụng nếu có thay đổi về tổng tiền
+    const order = currentOrder.value;
+    if (order && order.tongTien > 0) {
+      setTimeout(() => {
+        autoApplyBestCoupon();
+      }, 100);
+    }
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật số lượng:", error);
+    showNotificationPopup(
+      "Có lỗi xảy ra khi cập nhật số lượng. Vui lòng thử lại!",
+      "error"
+    );
+  }
+};
+
+// Function to validate inventory for all items in cart before creating order
+const validateCartInventory = async () => {
+  const order = currentOrder.value;
+  if (!order || !order.danhSachSanPham || order.danhSachSanPham.length === 0) {
+    return;
+  }
+
+  console.log(
+    "🔍 Đang validate số lượng cho",
+    order.danhSachSanPham.length,
+    "sản phẩm trong giỏ hàng"
+  );
+
+  for (const item of order.danhSachSanPham) {
+    try {
+      console.log(`🔍 Kiểm tra sản phẩm: ${item.tenSanPham} (ID: ${item.id})`);
+
+      // Lấy thông tin sản phẩm từ server
+      const chiTietSanPham = await fetchChiTietSanPhamWithInventory(item.id);
+
+      // Kiểm tra sản phẩm có tồn tại không
+      if (!chiTietSanPham) {
+        throw new Error(
+          `Không tìm thấy sản phẩm ${item.tenSanPham} trong hệ thống`
+        );
+      }
+
+      // Kiểm tra trạng thái sản phẩm
+      if (!chiTietSanPham.trangThai) {
+        throw new Error(
+          `Sản phẩm "${item.tenSanPham}" hiện không khả dụng để bán`
+        );
+      }
+
+      // Kiểm tra số lượng
+      const availableStock = chiTietSanPham.soLuong || 0;
+      if (availableStock < item.soLuong) {
+        throw new Error(
+          `Không đủ số lượng sản phẩm "${item.tenSanPham}".\n` +
+            `Yêu cầu: ${item.soLuong}, Còn lại: ${availableStock}`
+        );
+      }
+
+      console.log(
+        `✅ Sản phẩm "${item.tenSanPham}" - Còn: ${availableStock}, Yêu cầu: ${item.soLuong} ✓`
+      );
+    } catch (error) {
+      console.error(`❌ Lỗi validate sản phẩm ${item.tenSanPham}:`, error);
+      showNotificationPopup(error.message, "error");
+      throw error; // Re-throw to stop order creation
+    }
+  }
+
+  console.log("🎉 Tất cả sản phẩm trong giỏ hàng đã được validate thành công!");
 };
 
 const removeItem = (item) => {
   const order = currentOrder.value;
+  if (!order) return;
+
   const index = order.danhSachSanPham.findIndex((i) => i.id === item.id);
   if (index > -1) {
     order.danhSachSanPham.splice(index, 1);
     updateOrderTotals();
 
-    // Tự động áp dụng phiếu giảm giá tốt nhất sau khi xóa sản phẩm
-    setTimeout(() => {
-      autoApplyBestCoupon();
-    }, 100);
+    // Nếu xóa hết sản phẩm, reset phiếu giảm giá
+    if (order.danhSachSanPham.length === 0) {
+      selectedCoupons.value = [];
+      autoAppliedCoupon.value = null;
+      console.log("🚫 Đã xóa hết sản phẩm, reset phiếu giảm giá");
+    } else {
+      // Tự động áp dụng phiếu giảm giá tốt nhất sau khi xóa sản phẩm
+      setTimeout(() => {
+        autoApplyBestCoupon();
+      }, 100);
+    }
   }
 };
 
@@ -1897,23 +3842,31 @@ const updateOrderTotals = () => {
     0
   );
 
+  // Debug: Log chi tiết từng sản phẩm
+  console.log("🔍 CHI TIẾT TÍNH TỔNG TIỀN HÀNG GỐC:");
+  order.danhSachSanPham.forEach((item, index) => {
+    console.log(
+      `  ${index + 1}. ${item.tenSanPham}: ${formatCurrency(item.giaBan)} × ${
+        item.soLuong
+      } = ${formatCurrency(item.giaBan * item.soLuong)}`
+    );
+  });
+  console.log(`  → TỔNG TIỀN HÀNG GỐC: ${formatCurrency(tongTienGoc)}`);
+  console.log(
+    `  → CHECK FREE SHIP: ${tongTienGoc} >= 2000000 = ${
+      tongTienGoc >= 2000000 ? "✅ Đủ điều kiện" : "❌ Chưa đủ"
+    }`
+  );
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
   // Tính tiền hàng sau giảm giá sản phẩm (hiển thị)
   order.tongTien = order.danhSachSanPham.reduce(
     (sum, item) => sum + item.giaSauGiam * item.soLuong,
     0
   );
 
-  // Calculate shipping fee based on delivery type and selected service
-  if (order.ghiChu === "delivery" && order.selectedService) {
-    order.phiVanChuyen = order.selectedService.fee || 0;
-
-    // Miễn phí giao hàng nếu đơn hàng trên 3 triệu
-    if (order.tongTien >= 3000000) {
-      order.phiVanChuyen = 0;
-    }
-  } else {
-    order.phiVanChuyen = 0;
-  }
+  // Tạm thời set phí giao hàng = 0 để tính giảm giá trước
+  order.phiVanChuyen = 0;
 
   // Tính giảm giá từ các phiếu đã chọn (áp dụng lên tổng tiền sau giảm sản phẩm)
   let totalDiscount = 0;
@@ -1936,90 +3889,349 @@ const updateOrderTotals = () => {
   // Force update discount to ensure reactivity
   order.discount = finalDiscount;
 
-  // Tính tổng tiền sau giảm
-  order.tongTienSauGiam = order.tongTien - finalDiscount + order.phiVanChuyen;
-};
+  // Tính tổng tiền sau giảm giá (chưa bao gồm phí giao hàng)
+  const tongTienSauGiamChuaPhi = order.tongTien - finalDiscount;
 
-// Function tự động áp dụng phiếu giảm giá tốt nhất
-const autoApplyBestCoupon = () => {
-  const order = currentOrder.value;
-  if (
-    !order ||
-    !availableCoupons.value ||
-    availableCoupons.value.length === 0
-  ) {
-    return;
+  // Tính phí vận chuyển dựa trên tổng tiền hàng gốc (chưa giảm voucher)
+  const tongTienHangGoc = tongTienGoc; // tongTienGoc đã được tính ở trên
+
+  console.log("🔍 DEBUG PHÍ VẬN CHUYỂN:");
+  console.log(
+    "- Tổng tiền hàng gốc (chưa giảm):",
+    formatCurrency(tongTienHangGoc)
+  );
+  console.log(
+    "- Tổng tiền sau giảm voucher:",
+    formatCurrency(tongTienSauGiamChuaPhi)
+  );
+  console.log(
+    "- Đủ điều kiện miễn phí (tổng gốc >= 2tr):",
+    tongTienHangGoc >= 2000000 ? "✅ Có" : "❌ Không"
+  );
+
+  // Calculate shipping fee based on delivery type and selected service
+  if (order.ghiChu === "delivery") {
+    if (order.selectedService) {
+      order.phiVanChuyen = order.selectedService.fee || 0;
+      console.log(
+        "🚚 Phí giao hàng ban đầu:",
+        formatCurrency(order.phiVanChuyen)
+      );
+      console.log(
+        "🚚 Selected service fee:",
+        formatCurrency(order.selectedService.fee || 0)
+      );
+
+      // Miễn phí giao hàng nếu tổng tiền hàng gốc >= 2 triệu (CHƯA GIẢM VOUCHER)
+      console.log("🔍 CHECK MIỄN PHÍ TRONG updateOrderTotals:");
+      console.log("- tongTienHangGoc:", tongTienHangGoc);
+      console.log(
+        "- Condition: tongTienHangGoc >= 2000000 =",
+        tongTienHangGoc >= 2000000
+      );
+      console.log("- Giá trị so sánh: 2000000");
+      console.log("- Kết quả so sánh:", tongTienHangGoc >= 2000000);
+
+      if (tongTienHangGoc >= 2000000) {
+        order.phiVanChuyen = 0;
+        console.log("🎉 Tổng tiền hàng gốc trên 2 triệu - MIỄN PHÍ giao hàng!");
+      } else {
+        console.log(
+          "💰 Tổng tiền hàng gốc dưới 2 triệu - Áp dụng phí giao hàng:",
+          formatCurrency(order.phiVanChuyen)
+        );
+        console.log("   → tongTienHangGoc =", tongTienHangGoc, "< 2000000");
+      }
+    } else {
+      // Nếu chưa chọn dịch vụ cụ thể, set phí mặc định
+      order.phiVanChuyen = 0; // Sẽ được cập nhật khi chọn dịch vụ
+      console.log("📦 Chưa chọn dịch vụ giao hàng - Phí tạm thời: 0đ");
+    }
+  } else {
+    order.phiVanChuyen = 0;
+    console.log("🏪 Bán tại quầy - Không có phí giao hàng");
   }
 
-  // Đảm bảo availableCoupons.value là mảng trước khi lọc
-  const couponsArray = Array.isArray(availableCoupons.value)
-    ? availableCoupons.value
-    : [];
-  // Lọc các phiếu giảm giá hợp lệ
-  const validCoupons = couponsArray.filter((coupon) => {
+  console.log("🎯 KẾT QUẢ CUỐI CÙNG TRONG updateOrderTotals:");
+  console.log("- order.phiVanChuyen:", formatCurrency(order.phiVanChuyen));
+  console.log("- order.ghiChu:", order.ghiChu);
+  console.log(
+    "- order.selectedService:",
+    order.selectedService ? "Có" : "Không"
+  );
+
+  // Tính tổng tiền sau giảm (bao gồm phí giao hàng)
+  const tongTienSauGiam = tongTienSauGiamChuaPhi + order.phiVanChuyen;
+  order.tongTienSauGiam = tongTienSauGiam;
+
+  // Debug logging cho việc tính tổng tiền
+  console.log("💵 CHI TIẾT TÍNH TIỀN:");
+  console.log("- Tổng tiền hàng gốc:", formatCurrency(tongTienHangGoc));
+  console.log(
+    "- Tổng tiền hàng (sau giảm sản phẩm):",
+    formatCurrency(order.tongTien)
+  );
+  console.log("- Giảm giá voucher:", formatCurrency(finalDiscount));
+  console.log(
+    "- Tổng tiền sau giảm voucher:",
+    formatCurrency(tongTienSauGiamChuaPhi)
+  );
+  console.log("- Phí giao hàng:", formatCurrency(order.phiVanChuyen));
+  console.log(
+    "- Thành tiền (bao gồm phí ship):",
+    formatCurrency(tongTienSauGiam)
+  );
+  console.log(
+    "- Miễn phí giao hàng:",
+    tongTienHangGoc >= 2000000 ? "✅ Có" : "❌ Không"
+  );
+  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+};
+
+// Function tính toán lợi ích của phiếu giảm giá
+const calculateCouponBenefit = (coupon, orderTotal) => {
+  if (!coupon || !orderTotal || orderTotal <= 0)
+    return { discountAmount: 0, benefit: 0, priority: 0 };
+
+  let discountAmount = 0;
+  let priority = 0;
+
+  // Đảm bảo orderTotal là số
+  const total = Number(orderTotal) || 0;
+
+  if (coupon.loaiPhieuGiamGia === false) {
+    // Giảm theo phần trăm
+    const percentValue = Number(coupon.giaTriGiamGia) || 0;
+    discountAmount = Math.round((total * percentValue) / 100);
+    priority = percentValue; // Ưu tiên phần trăm cao hơn (10% > 5%)
+  } else if (coupon.loaiPhieuGiamGia === true) {
+    // Giảm số tiền cố định
+    discountAmount = Number(coupon.giaTriGiamGia) || 0;
+    priority = discountAmount / 1000; // Chuẩn hóa để so sánh với phần trăm (200k = priority 200)
+  }
+
+  // Đảm bảo giảm giá không vượt quá tổng tiền
+  discountAmount = Math.min(discountAmount, total);
+
+  // Tăng ưu tiên mạnh cho phiếu dành riêng cho khách hàng
+  if (
+    coupon.idKhachHang &&
+    coupon.idKhachHang === currentOrder.value?.idKhachHang
+  ) {
+    priority += 10000; // Bonus rất cao cho phiếu cá nhân (ưu tiên tuyệt đối)
+  }
+
+  return {
+    discountAmount,
+    benefit: discountAmount, // Số tiền giảm thực tế = benefit chính
+    priority,
+    coupon,
+  };
+};
+
+// Function tìm phiếu giảm giá tốt nhất có thể đạt được
+const findBestAvailableCoupon = (orderTotal) => {
+  if (!availableCoupons.value || availableCoupons.value.length === 0)
+    return null;
+
+  const validCoupons = availableCoupons.value.filter((coupon) => {
     // Kiểm tra trạng thái active
     if (coupon.trangThai !== true) return false;
 
-    // Kiểm tra giá trị đơn hàng tối thiểu
-    if (coupon.donHangToiThieu && order.tongTien < coupon.donHangToiThieu) {
+    // Kiểm tra yêu cầu tối thiểu
+    if (coupon.hoaDonToiThieu && orderTotal < coupon.hoaDonToiThieu)
+      return false;
+
+    // Kiểm tra khách hàng cụ thể
+    if (
+      coupon.idKhachHang &&
+      currentOrder.value?.idKhachHang &&
+      coupon.idKhachHang !== currentOrder.value.idKhachHang
+    )
+      return false;
+
+    // Kiểm tra ngày hết hạn
+    if (coupon.ngayKetThuc) {
+      const expiryDate = new Date(coupon.ngayKetThuc);
+      const now = new Date();
+      if (expiryDate < now) return false;
+    }
+
+    return true;
+  });
+
+  if (validCoupons.length === 0) return null;
+
+  // Tính lợi ích cho từng phiếu
+  const couponBenefits = validCoupons.map((coupon) =>
+    calculateCouponBenefit(coupon, orderTotal)
+  );
+
+  // Sắp xếp theo lợi ích thực tế giảm dần (ưu tiên giảm nhiều tiền nhất)
+  couponBenefits.sort((a, b) => {
+    // Ưu tiên phiếu giảm được nhiều tiền nhất trước
+    if (b.benefit !== a.benefit) {
+      return b.benefit - a.benefit;
+    }
+    // Nếu giảm bằng nhau thì ưu tiên phiếu cá nhân, sau đó ưu tiên cao hơn
+    if (b.priority !== a.priority) {
+      return b.priority - a.priority;
+    }
+    // Nếu vẫn bằng thì ưu tiên phiếu có hạn sử dụng gần hơn
+    const aExpiry = a.coupon.ngayKetThuc
+      ? new Date(a.coupon.ngayKetThuc)
+      : new Date(9999, 11, 31);
+    const bExpiry = b.coupon.ngayKetThuc
+      ? new Date(b.coupon.ngayKetThuc)
+      : new Date(9999, 11, 31);
+    return aExpiry - bExpiry; // Ưu tiên phiếu hết hạn sớm hơn
+  });
+
+  return couponBenefits[0];
+};
+
+// Function tìm phiếu giảm giá tốt hơn chưa đủ điều kiện
+const findBetterCoupons = (orderTotal) => {
+  if (!availableCoupons.value || availableCoupons.value.length === 0) return [];
+
+  const currentAppliedCoupon =
+    autoAppliedCoupon.value ||
+    (selectedCoupons.value.length > 0 ? selectedCoupons.value[0] : null);
+  const currentAppliedBenefit = currentAppliedCoupon
+    ? calculateCouponBenefit(currentAppliedCoupon, orderTotal).benefit
+    : 0;
+
+  const betterCoupons = availableCoupons.value.filter((coupon) => {
+    // Chỉ lấy phiếu chưa đủ điều kiện nhưng có lợi ích tốt hơn
+    if (coupon.trangThai !== true) return false;
+
+    // Kiểm tra ngày hết hạn
+    if (coupon.ngayKetThuc) {
+      const expiryDate = new Date(coupon.ngayKetThuc);
+      const now = new Date();
+      if (expiryDate < now) return false;
+    }
+
+    // Kiểm tra khách hàng cụ thể
+    if (
+      coupon.idKhachHang &&
+      currentOrder.value?.idKhachHang &&
+      coupon.idKhachHang !== currentOrder.value.idKhachHang
+    )
+      return false;
+
+    const minOrderValue = Number(coupon.hoaDonToiThieu) || 0;
+    if (!coupon.hoaDonToiThieu || orderTotal >= minOrderValue) {
       return false;
     }
 
-    // Kiểm tra có phải là khách hàng cụ thể không (nếu có)
-    if (
-      coupon.idKhachHang &&
-      order.idKhachHang &&
-      coupon.idKhachHang !== order.idKhachHang
-    ) {
+    const potentialBenefitIfQualified = calculateCouponBenefit(
+      coupon,
+      minOrderValue
+    ).benefit;
+
+    if (potentialBenefitIfQualified <= currentAppliedBenefit) {
       return false;
     }
 
     return true;
   });
 
-  if (validCoupons.length === 0) {
-    return;
-  }
-
-  // Tính toán lợi ích của từng phiếu
-  const couponBenefits = validCoupons.map((coupon) => {
-    let discountAmount = 0;
-    if (coupon.loaiPhieuGiamGia === false) {
-      // Giảm theo phần trăm
-      discountAmount = (order.tongTien * coupon.giaTriGiamGia) / 100;
-    } else if (coupon.loaiPhieuGiamGia === true) {
-      // Giảm số tiền cố định
-      discountAmount = coupon.giaTriGiamGia;
-    }
-
-    // Đảm bảo giảm giá không vượt quá tổng tiền
-    discountAmount = Math.min(discountAmount, order.tongTien);
-
+  // Tính lợi ích cho từng phiếu
+  const couponRecommendations = betterCoupons.map((coupon) => {
+    const minOrderValue = Number(coupon.hoaDonToiThieu) || 0;
+    const benefitAtMinOrder = calculateCouponBenefit(coupon, minOrderValue);
     return {
       coupon,
-      discountAmount,
-      benefit: discountAmount, // Lợi ích = số tiền giảm
+      neededAmount: minOrderValue - orderTotal,
+      potentialSavings: benefitAtMinOrder.discountAmount,
+      priority: benefitAtMinOrder.priority,
     };
   });
 
-  // Sắp xếp theo lợi ích giảm dần và chọn phiếu tốt nhất
-  couponBenefits.sort((a, b) => b.benefit - a.benefit);
-  const bestCoupon = couponBenefits[0]?.coupon;
+  // Sắp xếp: ưu tiên phiếu cần mua thêm ít nhất, sau đó ưu tiên lợi ích cao nhất
+  couponRecommendations.sort((a, b) => {
+    if (a.neededAmount !== b.neededAmount) {
+      return a.neededAmount - b.neededAmount; // Ít cần mua thêm nhất
+    }
+    return b.potentialSavings - a.potentialSavings; // Lợi ích cao nhất
+  });
 
-  if (bestCoupon) {
-    // Áp dụng phiếu giảm giá tốt nhất
-    selectedCoupons.value = [bestCoupon];
-    autoAppliedCoupon.value = bestCoupon; // Đánh dấu phiếu được áp dụng tự động
+  return couponRecommendations.slice(0, 1); // Chỉ lấy phiếu tốt nhất
+};
+
+// Function tự động áp dụng phiếu giảm giá tốt nhất
+const autoApplyBestCoupon = () => {
+  const order = currentOrder.value;
+  console.log(
+    `🔍 DEBUG autoApplyBestCoupon - Tổng tiền đơn hàng: ${order?.tongTien}đ`
+  );
+  console.log(
+    `🔍 DEBUG autoApplyBestCoupon - Số phiếu có sẵn: ${
+      availableCoupons.value?.length || 0
+    }`
+  );
+
+  if (
+    !order ||
+    !availableCoupons.value ||
+    availableCoupons.value.length === 0 ||
+    order.tongTien <= 0
+  ) {
     console.log(
-      `🎫 Tự động áp dụng phiếu giảm giá tốt nhất: ${bestCoupon.tenPhieuGiamGia
-      } (giảm ${couponBenefits[0].discountAmount.toLocaleString()}đ)`
+      `❌ autoApplyBestCoupon - Không thể áp dụng phiếu (order: ${!!order}, coupons: ${
+        availableCoupons.value?.length || 0
+      }, total: ${order?.tongTien}đ)`
     );
+    return;
+  }
 
-    // Cập nhật lại tổng tiền
-    updateOrderTotals();
+  const orderTotal = Number(order.tongTien) || 0;
+
+  // Tìm phiếu tốt nhất có thể áp dụng ngay
+  const bestAvailableCoupon = findBestAvailableCoupon(orderTotal);
+
+  // Tìm phiếu tốt hơn chưa đủ điều kiện để gợi ý
+  const betterCouponsList = findBetterCoupons(orderTotal);
+  betterCoupons.value = betterCouponsList;
+  showRecommendation.value = betterCouponsList.length > 0;
+
+  if (bestAvailableCoupon && bestAvailableCoupon.discountAmount > 0) {
+    // Kiểm tra xem có cần thay đổi phiếu hiện tại không
+    const currentCoupon = selectedCoupons.value[0];
+    const shouldChange =
+      !currentCoupon ||
+      currentCoupon.id !== bestAvailableCoupon.coupon.id ||
+      !autoAppliedCoupon.value;
+
+    if (shouldChange) {
+      // Áp dụng phiếu giảm giá tốt nhất
+      selectedCoupons.value = [bestAvailableCoupon.coupon];
+      autoAppliedCoupon.value = bestAvailableCoupon.coupon;
+
+      const discountType =
+        bestAvailableCoupon.coupon.loaiPhieuGiamGia === false ? "%" : "đ";
+      const discountValue =
+        bestAvailableCoupon.coupon.loaiPhieuGiamGia === false
+          ? bestAvailableCoupon.coupon.giaTriGiamGia
+          : Math.round(bestAvailableCoupon.coupon.giaTriGiamGia / 1000) + "K";
+
+      console.log(
+        `🎫 Tự động áp dụng phiếu giảm giá tốt nhất: ${bestAvailableCoupon.coupon.tenPhieuGiamGia} (${discountValue}${discountType})`
+      );
+      console.log(
+        `💰 Tiết kiệm: ${bestAvailableCoupon.discountAmount.toLocaleString()}đ`
+      );
+
+      // Cập nhật lại tổng tiền
+      updateOrderTotals();
+    }
   } else {
     // Không có phiếu phù hợp, reset auto applied coupon
-    autoAppliedCoupon.value = null;
+    if (autoAppliedCoupon.value) {
+      autoAppliedCoupon.value = null;
+      console.log("🚫 Không có phiếu giảm giá phù hợp");
+    }
   }
 };
 
@@ -2035,11 +4247,22 @@ const loadAllCoupons = async () => {
   try {
     console.log("Đang load phiếu giảm giá...");
     const coupons = await fetchAllPhieuGiamGia();
-    console.log("Dữ liệu phiếu giảm giá nhận được:", coupons);
+    console.log("🔍 DEBUG - Response gốc từ API:", coupons);
+    console.log("🔍 DEBUG - coupons.data:", coupons.data);
+    console.log("🔍 DEBUG - coupons.data.data:", coupons.data?.data);
+
     // Đảm bảo luôn là mảng - API trả về {data: {data: [...], message: "...", success: true}}
     const couponArray =
       coupons.data && coupons.data.data ? coupons.data.data : [];
     availableCoupons.value = Array.isArray(couponArray) ? couponArray : [];
+
+    console.log("🔍 DEBUG - Mảng phiếu cuối cùng:", availableCoupons.value);
+    console.log("🔍 DEBUG - Phiếu đầu tiên:", availableCoupons.value[0]);
+    console.log(
+      "🔍 DEBUG - Keys của phiếu đầu tiên:",
+      availableCoupons.value[0] ? Object.keys(availableCoupons.value[0]) : []
+    );
+
     console.log(
       "Đã load được",
       availableCoupons.value.length,
@@ -2048,6 +4271,50 @@ const loadAllCoupons = async () => {
   } catch (error) {
     console.error("Error loading all coupons:", error);
     availableCoupons.value = [];
+  }
+};
+
+// Load phiếu giảm giá cho khách hàng cụ thể
+const loadCouponsForCustomer = async (customerId) => {
+  try {
+    if (customerId && customerId > 0) {
+      console.log(`Đang load phiếu giảm giá cho khách hàng ID: ${customerId}`);
+      const response = await fetchActivePhieuGiamGiaForCustomer(customerId);
+
+      console.log("🔍 DEBUG - Response cho khách hàng:", response);
+      console.log("🔍 DEBUG - response.data:", response.data);
+      console.log("🔍 DEBUG - response.data.data:", response.data?.data);
+
+      // API trả về {data: {data: [...], message: "...", success: true}}
+      const couponArray =
+        response.data && response.data.data ? response.data.data : [];
+      availableCoupons.value = Array.isArray(couponArray) ? couponArray : [];
+
+      console.log(
+        "🔍 DEBUG - Mảng phiếu cho khách hàng:",
+        availableCoupons.value
+      );
+      console.log(
+        "🔍 DEBUG - Phiếu đầu tiên cho khách hàng:",
+        availableCoupons.value[0]
+      );
+      console.log(
+        "🔍 DEBUG - Keys của phiếu cho khách hàng:",
+        availableCoupons.value[0] ? Object.keys(availableCoupons.value[0]) : []
+      );
+
+      console.log(
+        `Đã load được ${availableCoupons.value.length} phiếu giảm giá cho khách hàng`
+      );
+    } else {
+      // Nếu không có khách hàng, load tất cả phiếu giảm giá active
+      console.log("Không có khách hàng, load tất cả phiếu giảm giá active");
+      await loadAllCoupons();
+    }
+  } catch (error) {
+    console.error("Lỗi khi load phiếu giảm giá cho khách hàng:", error);
+    // Fallback: load tất cả phiếu giảm giá
+    await loadAllCoupons();
   }
 };
 
@@ -2080,7 +4347,10 @@ const selectCustomer = async (customer) => {
     if (customer.isCreateNew) {
       await createNewCustomer(
         customer.tenKhachHang
-          .replace('<img :src="PlusIcon" alt="Plus" class="icon-sm" /> Tạo khách hàng mới: "', "")
+          .replace(
+            '<img :src="PlusIcon" alt="Plus" class="icon-sm" /> Tạo khách hàng mới: "',
+            ""
+          )
           .replace('"', "")
       );
       return;
@@ -2170,7 +4440,13 @@ const selectCustomer = async (customer) => {
 
     await fetchCreateOrderDetail(customer.id);
 
-    // Note: Coupons are already loaded globally, no need to load per customer
+    // Load phiếu giảm giá cho khách hàng cụ thể
+    await loadCouponsForCustomer(customer.id);
+
+    // Tự động áp dụng phiếu giảm giá tốt nhất cho khách hàng mới
+    setTimeout(() => {
+      autoApplyBestCoupon();
+    }, 100);
   }
   showCustomerSearch.value = false;
   showCustomerDropdown.value = false;
@@ -2196,13 +4472,13 @@ const createNewCustomer = async (customerName) => {
       // Include address details if available
       listDiaChi: deliveryAddress.value.diaChiCuThe
         ? [
-          {
-            diaChiCuThe: deliveryAddress.value.diaChiCuThe,
-            thanhPho: deliveryAddress.value.thanhPho,
-            quan: deliveryAddress.value.quan,
-            phuong: deliveryAddress.value.phuong,
-          },
-        ]
+            {
+              diaChiCuThe: deliveryAddress.value.diaChiCuThe,
+              thanhPho: deliveryAddress.value.thanhPho,
+              quan: deliveryAddress.value.quan,
+              phuong: deliveryAddress.value.phuong,
+            },
+          ]
         : [],
     };
 
@@ -2239,11 +4515,17 @@ const createNewCustomer = async (customerName) => {
       currentOrder.value.diaChiNhanHang =
         deliveryAddress.value.diaChiCuThe || "";
       customerDisplayName.value = customerName;
-      alert("Đã tạo khách hàng mới thành công! Thông tin địa chỉ đã được lưu.");
+      showNotificationPopup(
+        "Đã tạo khách hàng mới thành công! Thông tin địa chỉ đã được lưu.",
+        "success"
+      );
     }
   } catch (error) {
     console.error("Error creating new customer:", error);
-    alert("Có lỗi xảy ra khi tạo khách hàng mới. Vui lòng thử lại.");
+    showNotificationPopup(
+      "Có lỗi xảy ra khi tạo khách hàng mới. Vui lòng thử lại.",
+      "error"
+    );
   }
 };
 
@@ -2260,15 +4542,20 @@ const toggleCouponSelection = (coupon) => {
   if (index > -1) {
     // Remove coupon if already selected
     selectedCoupons.value.splice(index, 1);
+    console.log(`🗑️ Bỏ chọn voucher: ${coupon.tenPhieuGiamGia}`);
   } else {
     // Check if can apply coupon
-    if (!canApplyCoupon(coupon)) return;
+    if (!canApplyCoupon(coupon)) {
+      console.log(`❌ Không thể áp dụng voucher: ${coupon.tenPhieuGiamGia}`);
+      return;
+    }
 
     // Replace current coupon with new one (only allow one coupon at a time)
     selectedCoupons.value = [coupon]; // Replace with new coupon
 
     // Reset auto applied coupon khi người dùng chọn thủ công
     autoAppliedCoupon.value = null;
+    console.log(`🎫 Chọn voucher mới: ${coupon.tenPhieuGiamGia}`);
   }
 
   // Update current order's selected coupons (deprecated - using selectedCoupons.value directly)
@@ -2279,31 +4566,47 @@ const toggleCouponSelection = (coupon) => {
 };
 
 const canApplyCoupon = (coupon) => {
-  if (!currentOrder.value || !coupon) return false;
-
-  const orderTotal = currentOrder.value.tongTien || 0;
-
-  // Check minimum order value
-  if (coupon.donHangToiThieu && orderTotal < coupon.donHangToiThieu) {
+  if (!currentOrder.value || !coupon) {
+    console.log(`🔍 canApplyCoupon - Không có order hoặc coupon`);
     return false;
   }
 
-  // Check if coupon is already selected
+  const orderTotal = Number(currentOrder.value.tongTien) || 0;
+  const minOrderValue = Number(coupon.hoaDonToiThieu) || 0;
+
+  console.log(`🔍 canApplyCoupon - Phiếu: ${coupon.tenPhieuGiamGia}`);
+  console.log(`🔍 canApplyCoupon - Tổng tiền: ${orderTotal}đ`);
+  console.log(`🔍 canApplyCoupon - Yêu cầu tối thiểu: ${minOrderValue}đ`);
+  console.log(`🔍 canApplyCoupon - hoaDonToiThieu: ${coupon.hoaDonToiThieu}`);
+
+  // Check minimum order value
+  if (coupon.hoaDonToiThieu && orderTotal < minOrderValue) {
+    console.log(
+      `❌ canApplyCoupon - Không đủ điều kiện tối thiểu: ${orderTotal}đ < ${minOrderValue}đ`
+    );
+    return false;
+  }
+
+  // Check if coupon is already selected - nếu đã chọn rồi thì vẫn cho phép (để hiển thị trạng thái)
   const isAlreadySelected = selectedCoupons.value.some(
     (c) => c.id === coupon.id
   );
-  if (isAlreadySelected) return false;
 
-  // Only allow one coupon at a time
+  // Nếu đã chọn rồi thì vẫn cho phép (để hiển thị trạng thái hợp lệ)
+  if (isAlreadySelected) return true;
+
+  // Only allow one coupon at a time - chỉ áp dụng khi chưa có phiếu nào
   if (selectedCoupons.value.length > 0) {
     return false;
   }
 
   // Check if coupon is active (assuming trangThai indicates active status)
   if (coupon.trangThai !== true) {
+    console.log(`❌ canApplyCoupon - Phiếu không active: ${coupon.trangThai}`);
     return false;
   }
 
+  console.log(`✅ canApplyCoupon - Phiếu hợp lệ: ${coupon.tenPhieuGiamGia}`);
   return true;
 };
 
@@ -2320,15 +4623,33 @@ const removeSelectedCoupon = (couponId) => {
 
     updateOrderTotals();
 
-    // Tự động áp dụng phiếu khác nếu có sau khi xóa
-    setTimeout(() => {
-      autoApplyBestCoupon();
-    }, 100);
+    // Không tự động áp dụng phiếu khác khi người dùng xóa thủ công
+    // Chỉ áp dụng tự động khi thêm sản phẩm hoặc đổi khách hàng
   }
 };
 
 const isCouponSelected = (couponId) => {
-  return selectedCoupons.value.some((c) => c.id === couponId);
+  // Kiểm tra trong danh sách phiếu đã chọn thủ công
+  const isInSelectedCoupons = selectedCoupons.value.some(
+    (c) => c.id === couponId
+  );
+
+  // Kiểm tra trong phiếu được áp dụng tự động
+  const isAutoApplied =
+    autoAppliedCoupon.value && autoAppliedCoupon.value.id === couponId;
+
+  const result = isInSelectedCoupons || isAutoApplied;
+
+  // Debug log để theo dõi trạng thái
+  if (result) {
+    console.log(`✅ Voucher ${couponId} được chọn:`, {
+      inSelectedCoupons: isInSelectedCoupons,
+      autoApplied: isAutoApplied,
+      result: result,
+    });
+  }
+
+  return result;
 };
 
 const clearAllSelectedCoupons = () => {
@@ -2342,21 +4663,130 @@ const clearAllSelectedCoupons = () => {
 // Modal functions
 const openCouponModal = () => {
   if (availableCoupons.value.length > 0) {
-    showCouponModal.value = true;
+    // Đồng bộ hóa trạng thái phiếu giảm giá để hiển thị đúng trong popup
+    console.log("🔍 Mở popup voucher:");
+    console.log(
+      "- autoAppliedCoupon:",
+      autoAppliedCoupon.value ? autoAppliedCoupon.value.tenPhieuGiamGia : "null"
+    );
+    console.log("- selectedCoupons trước:", selectedCoupons.value.length);
+
+    if (autoAppliedCoupon.value) {
+      // Nếu có phiếu tự động, đảm bảo nó được hiển thị trong popup
+      selectedCoupons.value = [autoAppliedCoupon.value];
+      console.log(
+        `🎫 Đã set selectedCoupons cho voucher tự động: ${autoAppliedCoupon.value.tenPhieuGiamGia}`
+      );
+    } else if (selectedCoupons.value.length > 0) {
+      // Nếu có voucher thủ công được chọn
+      console.log(
+        `✅ Giữ voucher thủ công: ${selectedCoupons.value[0].tenPhieuGiamGia}`
+      );
+    } else {
+      // Nếu không có voucher nào
+      selectedCoupons.value = [];
+      console.log("📋 Không có voucher nào được chọn");
+    }
+
+    console.log("- selectedCoupons sau:", selectedCoupons.value.length);
+
+    // Đảm bảo UI được cập nhật trước khi hiển thị popup
+    nextTick(() => {
+      showCouponModal.value = true;
+      console.log("✅ Popup voucher đã được mở");
+    });
   }
 };
 
 const closeCouponModal = () => {
+  console.log("❌ Đóng popup voucher");
+
+  // Reset về trạng thái ban đầu khi người dùng hủy
+  if (autoAppliedCoupon.value) {
+    // Nếu có voucher tự động, khôi phục lại
+    selectedCoupons.value = [autoAppliedCoupon.value];
+    console.log(
+      `🔄 Khôi phục voucher tự động: ${autoAppliedCoupon.value.tenPhieuGiamGia}`
+    );
+  } else {
+    // Nếu không có voucher tự động, không chọn gì
+    selectedCoupons.value = [];
+    console.log("🔄 Không có voucher nào được chọn");
+  }
+
   showCouponModal.value = false;
 };
 
 const confirmCouponSelection = () => {
+  if (selectedCoupons.value.length === 0) {
+    // Người dùng không chọn voucher nào
+    autoAppliedCoupon.value = null;
+    console.log("📋 Người dùng không chọn voucher nào");
+  } else {
+    // Người dùng đã chọn voucher
+    const selectedCoupon = selectedCoupons.value[0];
+
+    // Kiểm tra xem voucher này có phải là voucher tự động ban đầu không
+    const isOriginalAutoApplied =
+      autoAppliedCoupon.value &&
+      autoAppliedCoupon.value.id === selectedCoupon.id;
+
+    if (isOriginalAutoApplied) {
+      // Giữ nguyên trạng thái tự động nếu người dùng giữ voucher gốc
+      console.log(
+        `🎫 Giữ nguyên voucher tự động: ${selectedCoupon.tenPhieuGiamGia}`
+      );
+    } else {
+      // Nếu người dùng chọn voucher khác, reset trạng thái tự động
+      autoAppliedCoupon.value = null;
+      console.log(
+        `✅ Người dùng chọn voucher thủ công: ${selectedCoupon.tenPhieuGiamGia}`
+      );
+    }
+  }
+
   // Update current order with selected coupons
   if (currentOrder.value) {
     // currentOrder.value.selectedCoupons = selectedCoupons.value; // deprecated
     updateOrderTotals();
   }
   showCouponModal.value = false;
+};
+
+// Scroll to voucher list section
+const scrollToVoucherList = () => {
+  const couponGrid = document.querySelector(".coupon-grid");
+  if (couponGrid) {
+    couponGrid.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    console.log("🔽 Cuộn đến danh sách voucher");
+  }
+};
+
+// Remove current applied voucher
+const removeCurrentVoucher = () => {
+  const currentVoucher =
+    autoAppliedCoupon.value ||
+    (selectedCoupons.value.length > 0 ? selectedCoupons.value[0] : null);
+
+  if (currentVoucher) {
+    console.log(`🗑️ Hủy voucher: ${currentVoucher.tenPhieuGiamGia}`);
+
+    // Reset trạng thái
+    selectedCoupons.value = [];
+    autoAppliedCoupon.value = null;
+
+    // Cập nhật tổng tiền
+    updateOrderTotals();
+
+    // Thông báo cho người dùng
+    showNotificationPopup(
+      `Đã hủy phiếu giảm giá: ${currentVoucher.tenPhieuGiamGia}`,
+      "info"
+    );
+  }
 };
 
 // Search customers as user types (optimized for real-time)
@@ -2431,22 +4861,22 @@ const searchCustomers = () => {
 const confirmOrder = async () => {
   const order = currentOrder.value;
   if (!order) {
-    alert("Không tìm thấy đơn hàng hiện tại");
+    showNotificationPopup("Không tìm thấy đơn hàng hiện tại", "error");
     return;
   }
 
   if (!order.danhSachSanPham || order.danhSachSanPham.length === 0) {
-    alert("Vui lòng thêm sản phẩm vào đơn hàng");
+    showNotificationPopup("Vui lòng thêm sản phẩm vào đơn hàng", "warning");
     return;
   }
 
   if (!customerDisplayName.value.trim()) {
-    alert("Vui lòng nhập thông tin khách hàng");
+    showNotificationPopup("Vui lòng nhập thông tin khách hàng", "warning");
     return;
   }
 
   if (!order.phuongThucThanhToan) {
-    alert("Vui lòng chọn phương thức thanh toán");
+    showNotificationPopup("Vui lòng chọn phương thức thanh toán", "warning");
     return;
   }
 
@@ -2499,7 +4929,7 @@ const confirmOrder = async () => {
         order.idKhachHang = customerId;
       } catch (error) {
         console.error("Error creating new customer:", error);
-        alert("Có lỗi khi tạo khách hàng mới");
+        showNotificationPopup("Có lỗi khi tạo khách hàng mới", "error");
         return;
       }
     }
@@ -2508,7 +4938,10 @@ const confirmOrder = async () => {
   // Validation cho giao hàng tận nơi
   if (order.ghiChu === "delivery") {
     if (!isAddressComplete.value) {
-      alert("Vui lòng nhập đầy đủ thông tin địa chỉ giao hàng");
+      showNotificationPopup(
+        "Vui lòng nhập đầy đủ thông tin địa chỉ giao hàng",
+        "warning"
+      );
       return;
     }
   }
@@ -2516,21 +4949,31 @@ const confirmOrder = async () => {
   // Validation cho từng phương thức thanh toán
   if (order.phuongThucThanhToan === "pay_now") {
     if (!order.tienKhachTra || order.tienKhachTra < 0) {
-      alert("Vui lòng nhập số tiền khách trả");
+      showNotificationPopup("Vui lòng nhập số tiền khách trả", "warning");
       return;
     }
     if (order.tienKhachTra < order.tongTienSauGiam) {
-      alert(
-        "Số tiền khách trả không đủ. Vui lòng thanh toán đủ hoặc chọn phương thức khác."
+      showNotificationPopup(
+        "Số tiền khách trả không đủ. Vui lòng thanh toán đủ hoặc chọn phương thức khác.",
+        "warning"
       );
       return;
     }
   }
 
+  // Validate số lượng sản phẩm trong kho trước khi tạo đơn hàng
+  console.log("🔍 Bắt đầu validate số lượng sản phẩm trong kho...");
+  await validateCartInventory();
+
   await fetchCreateOrder();
   await fetchAll();
 
-  alert("Đơn hàng đã được tạo thành công!");
+  // Save delivery address to customer if changed
+  if (order.phuongThucThanhToan === "home_delivery") {
+    await saveDeliveryAddressToCustomer();
+  }
+
+  showNotificationPopup("Đơn hàng đã được tạo thành công!", "success");
 
   // Reset current order
   if (order) {
@@ -2541,34 +4984,58 @@ const confirmOrder = async () => {
     order.idPhuongThucThanhToan = 0;
     order.phuongThucThanhToan = null;
     order.tienKhachTra = 0;
-    order.ghiChu = "pickup"; // Reset to default pickup
-    order.phiVanChuyen = 0;
-    order.tongTien = 0;
-    order.tongTienSauGiam = 0;
-    order.tenNguoiNhan = "";
-    order.diaChiNhanHang = "";
-    order.soDienThoaiNguoiNhan = "";
-    order.emailNguoiNhan = "";
-    order.ngayTao = new Date();
-    order.selectedService = null; // Reset selected delivery service
-
-    // Reset delivery address
-    deliveryAddress.value = {
-      tenNguoiNhan: "",
-      soDienThoaiNguoiNhan: "",
-      emailNguoiNhan: "",
-      diaChiCuThe: "",
-      thanhPho: "",
-      quan: "",
-      phuong: "",
-    };
-    order.ngayThanhToan = thanhToan(order.idPhuongThucThanhToan || 0);
-    order.trangThai = true;
-    order.deleted = false;
-    order.createAt = new Date();
-    order.createBy = 0;
-    updateOrderTotals();
   }
+
+  // Reset delivery address
+  deliveryAddress.value = {
+    tenNguoiNhan: "",
+    soDienThoaiNguoiNhan: "",
+    emailNguoiNhan: "",
+    diaChiCuThe: "",
+    thanhPho: "",
+    quan: "",
+    phuong: "",
+    // Original values for comparison
+    originalThanhPho: "",
+    originalQuan: "",
+    originalPhuong: "",
+    originalDiaChiCuThe: "",
+  };
+
+  // Reset customer display name
+  customerDisplayName.value = "";
+  order.ghiChu = "pickup"; // Reset to default pickup
+  order.phiVanChuyen = 0;
+  order.tongTien = 0;
+  order.tongTienSauGiam = 0;
+  order.tenNguoiNhan = "";
+  order.diaChiNhanHang = "";
+  order.soDienThoaiNguoiNhan = "";
+  order.emailNguoiNhan = "";
+  order.ngayTao = new Date();
+  order.selectedService = null; // Reset selected delivery service
+
+  // Reset delivery address
+  deliveryAddress.value = {
+    tenNguoiNhan: "",
+    soDienThoaiNguoiNhan: "",
+    emailNguoiNhan: "",
+    diaChiCuThe: "",
+    thanhPho: "",
+    quan: "",
+    phuong: "",
+    // Original values for comparison
+    originalThanhPho: "",
+    originalQuan: "",
+    originalPhuong: "",
+    originalDiaChiCuThe: "",
+  };
+  order.ngayThanhToan = thanhToan(order.idPhuongThucThanhToan || 0);
+  order.trangThai = true;
+  order.deleted = false;
+  order.createAt = new Date();
+  order.createBy = 0;
+  updateOrderTotals();
 
   // Reset customer display
   customerDisplayName.value = "";
@@ -2609,20 +5076,20 @@ const copyToClipboard = async (text) => {
   try {
     await navigator.clipboard.writeText(text);
     // You can add a toast notification here if needed
-    console.log('Đã sao chép:', text);
+    console.log("Đã sao chép:", text);
   } catch (error) {
-    console.error('Lỗi sao chép:', error);
+    console.error("Lỗi sao chép:", error);
     // Fallback method for older browsers
-    const textArea = document.createElement('textarea');
+    const textArea = document.createElement("textarea");
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
     try {
-      document.execCommand('copy');
-      console.log('Đã sao chép (fallback):', text);
+      document.execCommand("copy");
+      console.log("Đã sao chép (fallback):", text);
     } catch (fallbackError) {
-      console.error('Lỗi sao chép fallback:', fallbackError);
+      console.error("Lỗi sao chép fallback:", fallbackError);
     }
     document.body.removeChild(textArea);
   }
@@ -2631,23 +5098,23 @@ const copyToClipboard = async (text) => {
 // Refresh data function
 const refreshData = async () => {
   try {
-    console.log('Làm mới dữ liệu...');
+    console.log("Làm mới dữ liệu...");
     await fetchAll();
-    console.log('Đã làm mới dữ liệu thành công!');
+    console.log("Đã làm mới dữ liệu thành công!");
   } catch (error) {
-    console.error('Lỗi khi làm mới dữ liệu:', error);
+    console.error("Lỗi khi làm mới dữ liệu:", error);
   }
 };
 
 // Clear all filters function
 const clearAllFilters = () => {
-  selectedNhaSanXuat.value = '';
-  selectedXuatXu.value = '';
-  selectedChatLieu.value = '';
-  selectedSize.value = '';
-  selectedDeGiay.value = '';
-  selectedMauSac.value = '';
-  productSearchQuery.value = '';
+  selectedNhaSanXuat.value = "";
+  selectedXuatXu.value = "";
+  selectedChatLieu.value = "";
+  selectedSize.value = "";
+  selectedDeGiay.value = "";
+  selectedMauSac.value = "";
+  productSearchQuery.value = "";
 };
 
 // Shipping carrier utility functions
@@ -2658,16 +5125,16 @@ const getShippingFeeByCarrierAndService = (carrier, serviceType) => {
     vnpost: { standard: 20000, express: 28000 },
     jnt: { standard: 24000, express: 32000 },
     grab: { standard: 40000, express: 60000 },
-    shopee: { standard: 23000, express: 31000 }
+    shopee: { standard: 23000, express: 31000 },
   };
-  
+
   return feeMap[carrier]?.[serviceType] || 0;
 };
 
 const updateShippingFee = () => {
   if (selectedShippingCarrier.value && selectedServiceType.value) {
     shippingFee.value = getShippingFeeByCarrierAndService(
-      selectedShippingCarrier.value, 
+      selectedShippingCarrier.value,
       selectedServiceType.value
     );
   } else {
@@ -2680,8 +5147,40 @@ const formatShippingFee = () => {
 };
 
 const isEligibleForFreeShipping = () => {
-  const orderTotal = (currentOrder.value?.tongTien || 0) - (currentOrder.value?.discount || 0);
-  return orderTotal >= 500000 && shippingFee.value > 0;
+  // Sử dụng tổng tiền hàng gốc (chưa giảm voucher) để check miễn phí
+  const order = currentOrder.value;
+  if (!order || !order.danhSachSanPham) return false;
+
+  // Tính tổng tiền hàng gốc (chưa giảm voucher)
+  const tongTienHangGoc = order.danhSachSanPham.reduce(
+    (sum, item) => sum + item.giaBan * item.soLuong,
+    0
+  );
+
+  console.log("🚚 CHECK FREE SHIPPING (từ isEligibleForFreeShipping):");
+  console.log("- Tổng tiền hàng gốc:", formatCurrency(tongTienHangGoc));
+  console.log(
+    "- Đủ điều kiện miễn phí:",
+    tongTienHangGoc >= 2000000 ? "✅ Có" : "❌ Không"
+  );
+  console.log(
+    "- Kết quả function:",
+    tongTienHangGoc >= 2000000 ? "✅ TRUE" : "❌ FALSE"
+  );
+
+  // Debug chi tiết từng sản phẩm để so sánh
+  console.log("🔍 CHI TIẾT TỪNG SẢN PHẨM (từ isEligibleForFreeShipping):");
+  order.danhSachSanPham.forEach((item, index) => {
+    console.log(
+      `  ${index + 1}. ${item.tenSanPham}: ${formatCurrency(item.giaBan)} × ${
+        item.soLuong
+      } = ${formatCurrency(item.giaBan * item.soLuong)}`
+    );
+  });
+
+  // Chỉ check tổng tiền hàng gốc >= 2 triệu, không quan tâm đến shippingFee.value
+  // vì logic miễn phí được xử lý trong updateOrderTotals()
+  return tongTienHangGoc >= 2000000;
 };
 
 const formatFinalShippingFee = () => {
@@ -2696,24 +5195,30 @@ const getCarrierDisplayName = () => {
     vnpost: "VNPost",
     jnt: "J&T Express",
     grab: "GrabExpress",
-    shopee: "Shopee Express"
+    shopee: "Shopee Express",
   };
   return carrierNames[selectedShippingCarrier.value] || "";
 };
 
 const getDeliveryEstimate = () => {
   if (!selectedShippingCarrier.value || !selectedServiceType.value) return "";
-  
+
   const estimates = {
-    ghn: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày", same_day: "Giao trong ngày" },
+    ghn: {
+      standard: "Giao trong 2-3 ngày",
+      express: "Giao trong 1-2 ngày",
+      same_day: "Giao trong ngày",
+    },
     ghtk: { standard: "Giao trong 2-4 ngày", express: "Giao trong 1-2 ngày" },
     vnpost: { standard: "Giao trong 3-5 ngày", express: "Giao trong 2-3 ngày" },
     jnt: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày" },
     grab: { standard: "Giao trong 2-4 giờ", express: "Giao trong 1-2 giờ" },
-    shopee: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày" }
+    shopee: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày" },
   };
-  
-  return estimates[selectedShippingCarrier.value]?.[selectedServiceType.value] || "";
+
+  return (
+    estimates[selectedShippingCarrier.value]?.[selectedServiceType.value] || ""
+  );
 };
 
 // Open add customer form
@@ -2734,23 +5239,23 @@ const saveNewCustomer = async () => {
   try {
     // Validate required fields
     if (!newCustomerForm.value.tenKhachHang.trim()) {
-      alert("Vui lòng nhập họ và tên");
+      showNotificationPopup("Vui lòng nhập họ và tên", "warning");
       return;
     }
     if (!newCustomerForm.value.email.trim()) {
-      alert("Vui lòng nhập email");
+      showNotificationPopup("Vui lòng nhập email", "warning");
       return;
     }
     if (!newCustomerForm.value.soDienThoai.trim()) {
-      alert("Vui lòng nhập số điện thoại");
+      showNotificationPopup("Vui lòng nhập số điện thoại", "warning");
       return;
     }
     if (!newCustomerForm.value.tenTaiKhoan.trim()) {
-      alert("Vui lòng nhập tên tài khoản");
+      showNotificationPopup("Vui lòng nhập tên tài khoản", "warning");
       return;
     }
     if (!newCustomerForm.value.matKhau.trim()) {
-      alert("Vui lòng nhập mật khẩu");
+      showNotificationPopup("Vui lòng nhập mật khẩu", "warning");
       return;
     }
 
@@ -2766,13 +5271,13 @@ const saveNewCustomer = async () => {
 
     // Close form and show success message
     showAddCustomerForm.value = false;
-    alert("Thêm khách hàng thành công!");
+    showNotificationPopup("Thêm khách hàng thành công!", "success");
 
     // Reset form
     resetNewCustomerForm();
   } catch (error) {
     console.error("Error saving customer:", error);
-    alert("Có lỗi xảy ra khi thêm khách hàng");
+    showNotificationPopup("Có lỗi xảy ra khi thêm khách hàng", "error");
   }
 };
 
@@ -2804,6 +5309,9 @@ onMounted(async () => {
   // Load all coupons from API
   await loadAllCoupons();
 
+  // Load provinces data
+  await loadProvinces();
+
   // Tạo đơn hàng đầu tiên nếu chưa có
   if (tempOrder.value.length === 0) {
     createNewOrder();
@@ -2823,6 +5331,346 @@ onMounted(async () => {
 const IMAGE_BASE_URL = "http://localhost:8080/";
 
 // Images are now loaded directly from the product API response
+
+// Address functions
+const loadProvinces = async () => {
+  try {
+    provinces.value = await getProvinces();
+  } catch (error) {
+    console.error("Error loading provinces:", error);
+  }
+};
+
+// Function to normalize address names for better matching
+const normalizeAddressName = (name) => {
+  if (!name) return "";
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/^(tỉnh|thành phố|tp\.?)\s+/i, "") // Remove prefix
+    .replace(/^(quận|huyện|q\.?|h\.?)\s+/i, "") // Remove prefix
+    .replace(/^(phường|xã|thị trấn|tt\.?|p\.?)\s+/i, "") // Remove prefix
+    .replace(/\s+/g, " ") // Normalize spaces
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, ""); // Remove accents
+};
+
+// Function to find best match for address name
+const findBestAddressMatch = (searchName, addressList) => {
+  if (!searchName || !addressList || addressList.length === 0) return null;
+
+  const normalizedSearch = normalizeAddressName(searchName);
+
+  // First try exact match (after normalization)
+  let match = addressList.find((item) => {
+    const normalizedItem = normalizeAddressName(item.name);
+    return normalizedItem === normalizedSearch;
+  });
+
+  if (match) return match;
+
+  // Try partial match
+  match = addressList.find((item) => {
+    const normalizedItem = normalizeAddressName(item.name);
+    return (
+      normalizedItem.includes(normalizedSearch) ||
+      normalizedSearch.includes(normalizedItem)
+    );
+  });
+
+  if (match) return match;
+
+  // Try fuzzy match with original names
+  match = addressList.find((item) => {
+    const itemName = item.name.toLowerCase();
+    const search = searchName.toLowerCase();
+    return itemName.includes(search) || search.includes(itemName);
+  });
+
+  return match;
+};
+
+const onProvinceChange = async () => {
+  // Reset dependent fields
+  deliveryAddress.value.quan = "";
+  deliveryAddress.value.phuong = "";
+  districts.value = [];
+  wards.value = [];
+  selectedDistrictCode.value = "";
+
+  if (!deliveryAddress.value.thanhPho) return;
+
+  try {
+    // Find province code by name
+    const province = provinces.value.find(
+      (p) => p.name === deliveryAddress.value.thanhPho
+    );
+    if (province) {
+      selectedProvinceCode.value = province.code;
+      districts.value = await getDistricts(province.code);
+    }
+  } catch (error) {
+    console.error("Error loading districts:", error);
+  }
+};
+
+const onDistrictChange = async () => {
+  // Reset dependent fields
+  deliveryAddress.value.phuong = "";
+  wards.value = [];
+
+  if (!deliveryAddress.value.quan || !selectedProvinceCode.value) return;
+
+  try {
+    // Find district code by name
+    const district = districts.value.find(
+      (d) => d.name === deliveryAddress.value.quan
+    );
+    if (district) {
+      selectedDistrictCode.value = district.code;
+      wards.value = await getWards(selectedProvinceCode.value, district.code);
+    }
+  } catch (error) {
+    console.error("Error loading wards:", error);
+  }
+};
+
+// Function to populate delivery address from customer data
+const populateDeliveryAddress = () => {
+  if (!currentOrder.value?.idKhachHang) return;
+
+  const customer = KhachHangs.value.find(
+    (c) => c.id === currentOrder.value.idKhachHang
+  );
+  if (customer) {
+    // Map thông tin khách hàng làm thông tin người nhận mặc định
+    deliveryAddress.value.tenNguoiNhan = customer.tenKhachHang;
+    deliveryAddress.value.soDienThoaiNguoiNhan = customer.soDienThoai || "";
+    deliveryAddress.value.emailNguoiNhan = customer.email || "";
+
+    // Populate địa chỉ từ danh sách địa chỉ của khách hàng
+    if (customer.listDiaChi && customer.listDiaChi.length > 0) {
+      // Lấy địa chỉ đầu tiên làm địa chỉ mặc định
+      const defaultAddr = customer.listDiaChi[0];
+
+      // Map địa chỉ từ API khách hàng sang delivery address
+      deliveryAddress.value.diaChiCuThe = defaultAddr.diaChiCuThe || "";
+      deliveryAddress.value.thanhPho = defaultAddr.thanhPho || "";
+      deliveryAddress.value.quan = defaultAddr.quan || "";
+      deliveryAddress.value.phuong = defaultAddr.phuong || "";
+
+      // Khách hàng đã có địa chỉ, không cần lưu địa chỉ mới
+      // Chỉ set địa chỉ gốc để hiển thị
+      deliveryAddress.value.originalThanhPho = defaultAddr.thanhPho || "";
+      deliveryAddress.value.originalQuan = defaultAddr.quan || "";
+      deliveryAddress.value.originalPhuong = defaultAddr.phuong || "";
+      deliveryAddress.value.originalDiaChiCuThe = defaultAddr.diaChiCuThe || "";
+
+      console.log("📍 Đã mapping địa chỉ khách hàng làm địa chỉ người nhận:");
+      console.log("- Tên người nhận:", customer.tenKhachHang);
+      console.log("- SĐT người nhận:", customer.soDienThoai || "Không có");
+      console.log("- Email người nhận:", customer.email || "Không có");
+      console.log(
+        "- Địa chỉ:",
+        `${defaultAddr.diaChiCuThe || ""}, ${defaultAddr.phuong || ""}, ${
+          defaultAddr.quan || ""
+        }, ${defaultAddr.thanhPho || ""}`
+      );
+
+      // Trigger auto-select matching after a delay to ensure data is loaded
+      setTimeout(() => {
+        autoSelectMatchingAddress();
+      }, 500);
+    } else {
+      console.log(
+        "⚠️ Khách hàng chưa có địa chỉ nào, chỉ mapping thông tin cá nhân"
+      );
+    }
+  }
+};
+
+// Function to save delivery address back to customer if changed
+const saveDeliveryAddressToCustomer = async () => {
+  if (!currentOrder.value?.idKhachHang) return;
+
+  const customer = KhachHangs.value.find(
+    (c) => c.id === currentOrder.value.idKhachHang
+  );
+  if (!customer) return;
+
+  // Kiểm tra xem khách hàng đã có địa chỉ nào chưa
+  const hasExistingAddresses =
+    customer.listDiaChi && customer.listDiaChi.length > 0;
+
+  if (hasExistingAddresses) {
+    console.log(
+      "ℹ️ Khách hàng đã có địa chỉ trong hệ thống, không lưu địa chỉ mới"
+    );
+    console.log("- Số địa chỉ hiện có:", customer.listDiaChi.length);
+    console.log("- Địa chỉ đầu tiên:", customer.listDiaChi[0]);
+    return; // Không lưu địa chỉ mới cho khách hàng đã có địa chỉ
+  }
+
+  // Chỉ lưu địa chỉ mới cho khách hàng mới (chưa có địa chỉ)
+  console.log("🆕 Khách hàng mới chưa có địa chỉ, sẽ lưu địa chỉ giao hàng");
+
+  const deliveryAddr = deliveryAddress.value;
+
+  // Validate địa chỉ giao hàng
+  if (!deliveryAddr.thanhPho || !deliveryAddr.diaChiCuThe) {
+    console.log(
+      "⚠️ Địa chỉ giao hàng thiếu thông tin bắt buộc (thành phố hoặc địa chỉ cụ thể)"
+    );
+    return;
+  }
+
+  try {
+    // Validate required fields
+    if (!customer.id) {
+      console.error("Không tìm thấy ID khách hàng");
+      return;
+    }
+
+    // Create new address object matching DiaChiKhachHangRequest structure
+    const newAddress = {
+      idKhachHang: customer.id,
+      tenDiaChi: `Địa chỉ giao hàng - ${new Date().toLocaleDateString(
+        "vi-VN"
+      )}`,
+      diaChiCuThe: deliveryAddr.diaChiCuThe.trim(),
+      thanhPho: deliveryAddr.thanhPho.trim(),
+      quan: deliveryAddr.quan ? deliveryAddr.quan.trim() : "",
+      phuong: deliveryAddr.phuong ? deliveryAddr.phuong.trim() : "",
+      deleted: false,
+    };
+
+    console.log("🔄 Đang lưu địa chỉ mới:", newAddress);
+
+    // Save to backend
+    await fetchCreateDiaChiKhachHang(newAddress);
+
+    console.log(
+      "✅ Đã lưu địa chỉ giao hàng đầu tiên cho khách hàng:",
+      customer.tenKhachHang
+    );
+
+    // Update local customer data
+    if (!customer.listDiaChi) {
+      customer.listDiaChi = [];
+    }
+    customer.listDiaChi.unshift({
+      diaChiCuThe: deliveryAddr.diaChiCuThe,
+      thanhPho: deliveryAddr.thanhPho,
+      quan: deliveryAddr.quan,
+      phuong: deliveryAddr.phuong,
+    });
+
+    // Update original values to reflect the saved address
+    deliveryAddr.originalThanhPho = deliveryAddr.thanhPho;
+    deliveryAddr.originalQuan = deliveryAddr.quan;
+    deliveryAddr.originalPhuong = deliveryAddr.phuong;
+    deliveryAddr.originalDiaChiCuThe = deliveryAddr.diaChiCuThe;
+
+    console.log("📍 Đã cập nhật địa chỉ gốc sau khi lưu thành công");
+
+    // Cập nhật địa chỉ gốc trong customer data để đồng bộ
+    if (customer.listDiaChi && customer.listDiaChi.length > 0) {
+      const latestAddress = customer.listDiaChi[customer.listDiaChi.length - 1];
+      deliveryAddr.originalThanhPho = latestAddress.thanhPho || "";
+      deliveryAddr.originalQuan = latestAddress.quan || "";
+      deliveryAddr.originalPhuong = latestAddress.phuong || "";
+      deliveryAddr.originalDiaChiCuThe = latestAddress.diaChiCuThe || "";
+    }
+  } catch (error) {
+    console.error("❌ Lỗi khi lưu địa chỉ giao hàng:", error);
+    // Don't show alert to avoid interrupting user flow
+    // User can continue with order creation even if address save fails
+  }
+};
+
+// Function to auto-select matching address from dropdown
+const autoSelectMatchingAddress = async () => {
+  if (!deliveryAddress.value.thanhPho) return;
+
+  try {
+    // Wait for provinces to load if not loaded yet
+    if (provinces.value.length === 0) {
+      await loadProvinces();
+    }
+
+    // Use improved matching function
+    const matchingProvince = findBestAddressMatch(
+      deliveryAddress.value.thanhPho,
+      provinces.value
+    );
+
+    if (matchingProvince) {
+      selectedProvinceCode.value = matchingProvince.code;
+      // Update the display name to match the official name
+      deliveryAddress.value.thanhPho = matchingProvince.name;
+      console.log("✅ Tìm thấy tỉnh/thành phố:", matchingProvince.name);
+
+      // Load districts for this province
+      const districtData = await getDistricts(matchingProvince.code);
+      districts.value = districtData;
+
+      // Find and select matching district
+      if (deliveryAddress.value.quan) {
+        const matchingDistrict = findBestAddressMatch(
+          deliveryAddress.value.quan,
+          districtData
+        );
+
+        if (matchingDistrict) {
+          selectedDistrictCode.value = matchingDistrict.code;
+          deliveryAddress.value.quan = matchingDistrict.name;
+          console.log("✅ Tìm thấy quận/huyện:", matchingDistrict.name);
+
+          // Load wards for this district
+          const wardData = await getWards(
+            matchingProvince.code,
+            matchingDistrict.code
+          );
+          wards.value = wardData;
+
+          // Find and select matching ward
+          if (deliveryAddress.value.phuong) {
+            const matchingWard = findBestAddressMatch(
+              deliveryAddress.value.phuong,
+              wardData
+            );
+
+            if (matchingWard) {
+              deliveryAddress.value.phuong = matchingWard.name;
+              console.log("✅ Tìm thấy xã/phường:", matchingWard.name);
+            }
+          }
+        }
+      }
+    } else {
+      console.warn(
+        "Không tìm thấy tỉnh/thành phố khớp:",
+        deliveryAddress.value.thanhPho
+      );
+      console.log(
+        "Danh sách tỉnh có sẵn:",
+        provinces.value.map((p) => p.name)
+      );
+    }
+  } catch (error) {
+    console.error("Lỗi khi tự động chọn địa chỉ:", error);
+  }
+};
+
+// Function to handle home delivery selection
+const selectHomeDelivery = () => {
+  currentOrder.value.phuongThucThanhToan = "home_delivery";
+  // Populate delivery address when user selects home delivery
+  populateDeliveryAddress();
+
+  // Cập nhật lại tổng tiền để tính phí giao hàng
+  updateOrderTotals();
+};
 
 // Methods for image modal
 const openImageModal = (productId) => {
@@ -2903,3 +5751,4 @@ const handleImageError = (event) => {
   height: 32px;
 }
 </style>
+

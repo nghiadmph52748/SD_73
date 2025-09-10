@@ -406,6 +406,7 @@
           </div>
         </div>
       </div>
+      </div>
       <!-- Edit Order Modal -->
             <div
               v-if="showEditModal"
@@ -544,8 +545,7 @@
           </button>
         </div>
       </div>
-    </div>
- 
+    
 
     <!-- Order Detail Modal -->
     <div
@@ -815,12 +815,12 @@
 
 <script setup>
 
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js'
-import ActionButton from "@/components/ui/NutHanhDong.vue";
 import ButtonGroup from "@/components/ui/NhomNut.vue";
-import axios from "axios"
+import ActionButton from "@/components/ui/NutHanhDong.vue";
+import axios from "axios";
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js';
 
 
 
