@@ -49,7 +49,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="false"
+              value="true"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -59,7 +59,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="true"
+              value="false"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -101,8 +101,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="false"
-                    v-model="newChatLieu.deleted"
+                    :value="true"
+                    v-model="newChatLieu.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -110,8 +110,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="true"
-                    v-model="newChatLieu.deleted"
+                    :value="false"
+                    v-model="newChatLieu.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -157,7 +157,7 @@
       <tr v-for="(value, i) in paginatedChatLieus" :key="value.id">
         <td>{{ startIndex + i + 1 }}</td>
         <td>{{ value.tenChatLieu }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
+        <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
         <td>
           <button
             v-on:click="fetchDetail(value)"
@@ -252,8 +252,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedChatLieu.deleted"
+                    :value="true"
+                    v-model="selectedChatLieu.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -261,8 +261,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedChatLieu.deleted"
+                    :value="false"
+                    v-model="selectedChatLieu.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -348,7 +348,7 @@ const searchQuery = ref("");
 const statusFilter = ref("");
 const newChatLieu = ref({
   tenChatLieu: "",
-  deleted: false,
+  trangThai: true,
 });
 const selectedChatLieu = ref({});
 const uploading = ref(false);
@@ -379,7 +379,7 @@ const filteredChatLieus = computed(() => {
 
   if (statusFilter.value !== "") {
     filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
+      (item) => item.trangThai === (statusFilter.value === "true")
     );
   }
 
@@ -428,7 +428,7 @@ const fetchCreate = async () => {
     // Reset form
     newChatLieu.value = {
       tenChatLieu: "",
-      deleted: false,
+      trangThai: true,
     };
 
     await fetchAll();
@@ -539,7 +539,7 @@ const closeAddForm = () => {
   showAddForm.value = false;
   newChatLieu.value = {
     tenChatLieu: "",
-    deleted: false,
+    trangThai: true,
   };
   errorMessage.value = null;
   successMessage.value = null;

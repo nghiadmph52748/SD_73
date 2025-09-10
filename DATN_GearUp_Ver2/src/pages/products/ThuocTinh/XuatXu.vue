@@ -50,7 +50,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="false"
+              value="true"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -60,7 +60,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="true"
+              value="false"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -101,8 +101,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="false"
-                    v-model="newXuatXu.deleted"
+                    :value="true"
+                    v-model="newXuatXu.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -110,8 +110,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="true"
-                    v-model="newXuatXu.deleted"
+                    :value="false"
+                    v-model="newXuatXu.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -157,7 +157,7 @@
       <tr v-for="(value, i) in paginatedXuatXus" :key="i">
         <td>{{ startIndex + i + 1 }}</td>
         <td>{{ value.tenXuatXu }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
+        <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
         <td>
           <button
             v-on:click="fetchDetail(value)"
@@ -241,8 +241,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedXuatXu.deleted"
+                    :value="true"
+                    v-model="selectedXuatXu.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -250,8 +250,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedXuatXu.deleted"
+                    :value="false"
+                    v-model="selectedXuatXu.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -333,7 +333,7 @@ const XuatXus = ref([]);
 const showAddForm = ref(false);
 const newXuatXu = ref({
   tenXuatXu: "",
-  deleted: false,
+  trangThai: true,
 });
 const selectedXuatXu = ref({});
 const showEditForm = ref(false);
@@ -371,7 +371,7 @@ const filteredXuatXus = computed(() => {
 
   if (statusFilter.value !== "") {
     filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
+      (item) => item.trangThai === (statusFilter.value === "true")
     );
   }
 
@@ -421,7 +421,7 @@ const fetchCreate = async () => {
     // Reset form
     newXuatXu.value = {
       tenXuatXu: "",
-      deleted: false,
+      trangThai: true,
     };
 
     await fetchAll();
@@ -529,7 +529,7 @@ const closeAddForm = () => {
   showAddForm.value = false;
   newXuatXu.value = {
     tenXuatXu: "",
-    deleted: false,
+    trangThai: true,
   };
   errorMessage.value = null;
   successMessage.value = null;

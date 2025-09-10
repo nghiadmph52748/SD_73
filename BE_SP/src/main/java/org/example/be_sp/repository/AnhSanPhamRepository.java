@@ -14,4 +14,8 @@ public interface AnhSanPhamRepository extends JpaRepository<AnhSanPham, Integer>
     List<AnhSanPham> findAllByDeletedFalse(Boolean deleted);
 
     AnhSanPham findAnhSanPhamById(Integer id);
+
+    boolean existsByDuongDanAnh(String duongDanAnh);
+
+    AnhSanPham findByDuongDanAnh(String duongDanAnh);
 }

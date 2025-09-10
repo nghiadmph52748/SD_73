@@ -49,7 +49,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="false"
+              value="true"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -59,7 +59,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="true"
+              value="false"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -100,8 +100,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="false"
-                    v-model="newKichThuoc.deleted"
+                    :value="true"
+                    v-model="newKichThuoc.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -109,8 +109,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="true"
-                    v-model="newKichThuoc.deleted"
+                    :value="false"
+                    v-model="newKichThuoc.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -156,7 +156,7 @@
       <tr v-for="(value, i) in paginatedKichThuocs" :key="value.id">
         <td>{{ startIndex + i + 1 }}</td>
         <td>{{ value.tenKichThuoc }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
+        <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
         <td>
           <button
             v-on:click="fetchDetail(value)"
@@ -250,8 +250,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedKichThuoc.deleted"
+                    :value="true"
+                    v-model="selectedKichThuoc.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -259,8 +259,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedKichThuoc.deleted"
+                    :value="false"
+                    v-model="selectedKichThuoc.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -346,7 +346,7 @@ const searchQuery = ref("");
 const statusFilter = ref("");
 const newKichThuoc = ref({
   tenKichThuoc: "",
-  deleted: false,
+  trangThai: true,
 });
 const selectedKichThuoc = ref({});
 const uploading = ref(false);
@@ -377,7 +377,7 @@ const filteredKichThuocs = computed(() => {
 
   if (statusFilter.value !== "") {
     filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
+      (item) => item.trangThai === (statusFilter.value === "true")
     );
   }
 
@@ -426,7 +426,7 @@ const fetchCreate = async () => {
     // Reset form
     newKichThuoc.value = {
       tenKichThuoc: "",
-      deleted: false,
+      trangThai: true,
     };
 
     await fetchAll();

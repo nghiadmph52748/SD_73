@@ -862,7 +862,7 @@ import {
 } from "../../../services/SanPham/SanPhamService";
 import {
   fetchAllAnhSanPham,
-  fetchCreateAnhSanPham,
+  fetchCreateAnhSanPhamFromCloud,
 } from "../../../services/ThuocTinh/AnhSanPhamService";
 import {
   fetchAllChatLieu,
@@ -2016,16 +2016,49 @@ const addVariantsToExistingProduct = async (existingProductId) => {
               }
             });
 
+            const failedUploads = [];
             uploadResults.forEach((result) => {
-              if (result.success && result.anhSanPhamId) {
-                anhIdsToLink.push(result.anhSanPhamId);
+              if (result.success) {
+                if (result.anhSanPhamIds && Array.isArray(result.anhSanPhamIds)) {
+                  // Backend trả về list ID (multiple images)
+                  result.anhSanPhamIds.forEach(id => anhIdsToLink.push(id));
+                  console.log(`✅ ${result.anhSanPhamIds.length} ảnh từ ${result.originalAnh.name} sẽ được link với sản phẩm`);
+                } else if (result.anhSanPhamId) {
+                  // Backward compatibility - single ID hoặc temp ID
+                  anhIdsToLink.push(result.anhSanPhamId);
+                  console.log(`✅ Ảnh ${result.originalAnh.name} sẽ được link với sản phẩm`);
+                } else {
+                  console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID`);
+                  failedUploads.push(result.originalAnh.name);
+                }
+              } else if (!result.success) {
+                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thất bại: ${result.error}`);
+                failedUploads.push(result.originalAnh.name);
+              } else {
+                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID để link`);
+                failedUploads.push(result.originalAnh.name);
               }
             });
 
+            // Thông báo cho user về ảnh upload thất bại
+            if (failedUploads.length > 0) {
+              console.warn(`🚨 ${failedUploads.length} ảnh không thể upload:`, failedUploads.join(", "));
+            }
+
             if (anhIdsToLink.length > 0) {
+              // Chỉ gửi ID thực (số nguyên), loại bỏ temp ID string
+              const realAnhIdsToLink = anhIdsToLink.filter(id => typeof id === 'number' || (typeof id === 'string' && !id.startsWith('temp_')));
+
+              console.log("📤 Gửi link với ID thực:", realAnhIdsToLink);
+
+              if (realAnhIdsToLink.length === 0) {
+                console.warn("⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này");
+                return;
+              }
+
               const chiTietSanPhamAnhData = {
                 idChiTietSanPham: createdVariant.id,
-                idAnhSanPhamList: anhIdsToLink,
+                idAnhSanPhamList: realAnhIdsToLink, // Chỉ gửi ID thực
                 trangThai: true,
                 deleted: false,
                 createAt: new Date().toISOString().split("T")[0],
@@ -2327,36 +2360,66 @@ const saveProduct = async () => {
             });
 
             // Xử lý kết quả upload
+            const failedUploads = [];
             uploadResults.forEach((result) => {
-              if (result.success && result.anhSanPhamId) {
-                anhIdsToLink.push(result.anhSanPhamId);
+              if (result.success) {
+                if (result.anhSanPhamIds && Array.isArray(result.anhSanPhamIds)) {
+                  // Backend trả về list ID (multiple images)
+                  result.anhSanPhamIds.forEach(id => anhIdsToLink.push(id));
+                  console.log(`✅ ${result.anhSanPhamIds.length} ảnh từ ${result.originalAnh.name} sẽ được link với sản phẩm`);
+                } else if (result.anhSanPhamId) {
+                  // Backward compatibility - single ID hoặc temp ID
+                  anhIdsToLink.push(result.anhSanPhamId);
+                  console.log(`✅ Ảnh ${result.originalAnh.name} sẽ được link với sản phẩm`);
+                } else {
+                  console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID`);
+                  failedUploads.push(result.originalAnh.name);
+                }
+              } else if (!result.success) {
+                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thất bại: ${result.error}`);
+                failedUploads.push(result.originalAnh.name);
               } else {
-                console.warn(
-                  `Bỏ qua ảnh ${result.originalAnh.name}: ${result.error}`
-                );
+                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID để link`);
+                failedUploads.push(result.originalAnh.name);
               }
             });
+
+            // Thông báo cho user về ảnh upload thất bại
+            if (failedUploads.length > 0) {
+              console.warn(`🚨 ${failedUploads.length} ảnh không thể upload:`, failedUploads.join(", "));
+              // Có thể hiển thị toast notification ở đây
+            }
 
             // Tạo liên kết cho tất cả ảnh thành công
             if (anhIdsToLink.length > 0) {
               try {
+                // Chỉ gửi ID thực (số nguyên), loại bỏ temp ID string
+                const realAnhIdsToLink = anhIdsToLink.filter(id => typeof id === 'number' || (typeof id === 'string' && !id.startsWith('temp_')));
+
+                console.log("📤 Gửi link với ID thực:", realAnhIdsToLink);
+
+                if (realAnhIdsToLink.length === 0) {
+                  console.warn("⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này");
+                  return;
+                }
+
                 // Validate dữ liệu trước khi gửi
                 if (!createdVariant.id) {
                   throw new Error(
                     `ID chi tiết sản phẩm không hợp lệ: ${createdVariant.id}`
                   );
                 }
-                if (!Array.isArray(anhIdsToLink) || anhIdsToLink.length === 0) {
+                if (!Array.isArray(realAnhIdsToLink) || realAnhIdsToLink.length === 0) {
                   throw new Error(
                     `Danh sách ID ảnh không hợp lệ: ${JSON.stringify(
-                      anhIdsToLink
+                      realAnhIdsToLink
                     )}`
                   );
                 }
 
                 const chiTietSanPhamAnhData = {
                   idChiTietSanPham: createdVariant.id,
-                  idAnhSanPhamList: anhIdsToLink, // Sử dụng array thay vì single value
+                  idAnhSanPhamList: realAnhIdsToLink, // Chỉ gửi ID thực
                   trangThai: true,
                   deleted: false,
                   createAt: new Date().toISOString().split("T")[0],
@@ -2750,19 +2813,53 @@ const uploadMultipleImages = async (images) => {
 
         formData.append("moTa", anh.name || "Ảnh sản phẩm");
 
-        const uploadResponse = await fetchCreateAnhSanPham(formData);
+        const uploadResponse = await fetchCreateAnhSanPhamFromCloud(formData);
 
-        if (uploadResponse.success && uploadResponse.data) {
+        console.log("📤 Upload response:", uploadResponse);
+
+        // Kiểm tra response format từ API backend
+        // Backend trả về: { data: [id1, id2, ...], message: "..." }
+        if (uploadResponse && uploadResponse.message && uploadResponse.message.includes("thành công")) {
+          // Upload thành công, backend trả về list ID
+          if (uploadResponse.data && Array.isArray(uploadResponse.data) && uploadResponse.data.length > 0) {
+            console.log("✅ Upload ảnh thành công:", uploadResponse.message, "- ID list:", uploadResponse.data);
+            return {
+              success: true,
+              anhSanPhamIds: uploadResponse.data, // List ID từ backend
+              originalAnh: anh,
+            };
+          } else {
+            // Fallback: nếu không có data hoặc data rỗng, tạo temp ID
+            console.warn("⚠️ Backend không trả về ID, tạo temp ID");
+            const tempId = `temp_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+            console.log("✅ Upload ảnh thành công:", uploadResponse.message, "- Tạo temp ID:", tempId);
+            return {
+              success: true,
+              anhSanPhamId: tempId, // ID tạm thời
+              originalAnh: anh,
+            };
+          }
+        } else if (uploadResponse && uploadResponse.message) {
+          // Có message nhưng không phải success
+          console.error("<!-- icon: close --> Upload ảnh thất bại:", uploadResponse.message);
           return {
-            success: true,
-            anhSanPhamId: uploadResponse.data,
+            success: false,
+            error: uploadResponse.message,
+            originalAnh: anh,
+          };
+        } else if (uploadResponse && typeof uploadResponse === 'object') {
+          // Response object nhưng không có message
+          console.warn("⚠️ Upload response không có message:", uploadResponse);
+          return {
+            success: false,
+            error: "Response không có message",
             originalAnh: anh,
           };
         } else {
-          console.error("<!-- icon: close --> Upload ảnh thất bại:", uploadResponse);
+          console.error("<!-- icon: close --> Upload ảnh thất bại - Response không hợp lệ:", uploadResponse);
           return {
             success: false,
-            error: "Upload thất bại",
+            error: "Response không hợp lệ",
             originalAnh: anh,
           };
         }

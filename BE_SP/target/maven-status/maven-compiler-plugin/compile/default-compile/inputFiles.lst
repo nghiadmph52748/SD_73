@@ -25,6 +25,7 @@ D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\controller\SanPha
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\controller\ThongTinHoaDonController.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\controller\TrangThaiDonHangController.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\controller\TrongLuongController.java
+D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\controller\uploadImage\UploadImageController.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\controller\XuatXuController.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\entity\AnhSanPham.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\entity\ChatLieu.java
@@ -55,6 +56,7 @@ D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\exception\ApiExce
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\exception\GlobalExceptionHandler.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\model\DiaChi.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\AnhSanPhamRequest.java
+D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\AnhSanPhamUploadCloud.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\BanHangTaiQuayRequest.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\ChatLieuRequest.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\model\request\ChiTietDotGiamGiaRequest.java
@@ -157,6 +159,7 @@ D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\service\SanPhamSe
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\service\ThongTinHoaDonService.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\service\TrangThaiDonHangService.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\service\TrongLuongService.java
+D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\service\upload\UploadImageToCloudinary.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\service\XuatXuService.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\util\GenericCrudService.java
 D:\LDPlayer\backup\SD_73\BE_SP\src\main\java\org\example\be_sp\util\MapperUtils.java

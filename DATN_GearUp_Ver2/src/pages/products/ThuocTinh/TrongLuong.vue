@@ -50,7 +50,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="false"
+              value="true"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -60,7 +60,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="true"
+              value="false"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -102,8 +102,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="false"
-                    v-model="newTrongLuong.deleted"
+                    :value="true"
+                    v-model="newTrongLuong.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -111,8 +111,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="true"
-                    v-model="newTrongLuong.deleted"
+                    :value="false"
+                    v-model="newTrongLuong.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -158,7 +158,7 @@
       <tr v-for="(value, i) in paginatedTrongLuongs" :key="value.id">
         <td>{{ startIndex + i + 1 }}</td>
         <td>{{ value.tenTrongLuong }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
+        <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
         <td>
           <button
             v-on:click="fetchDetail(value)"
@@ -253,8 +253,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedTrongLuong.deleted"
+                    :value="true"
+                    v-model="selectedTrongLuong.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -262,8 +262,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedTrongLuong.deleted"
+                    :value="false"
+                    v-model="selectedTrongLuong.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -344,7 +344,7 @@ import {
 const TrongLuongs = ref([]);
 const newTrongLuong = ref({
   tenTrongLuong: "",
-  deleted: false,
+  trangThai: true,
 });
 const selectedTrongLuong = ref({});
 
@@ -386,7 +386,7 @@ const filteredTrongLuongs = computed(() => {
   // Lọc theo trạng thái
   if (statusFilter.value !== "") {
     filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
+      (item) => item.trangThai === (statusFilter.value === "true")
     );
   }
 
@@ -425,7 +425,7 @@ const fetchCreate = async () => {
     // Reset form
     newTrongLuong.value = {
       tenTrongLuong: "",
-      deleted: false,
+      trangThai: true,
     };
 
     await fetchAll();
@@ -491,7 +491,7 @@ const closeAddForm = () => {
   // Reset form
   newTrongLuong.value = {
     tenTrongLuong: "",
-    deleted: false,
+    trangThai: true,
   };
   errorMessage.value = null;
   successMessage.value = null;

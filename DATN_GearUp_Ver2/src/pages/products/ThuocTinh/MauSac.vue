@@ -52,7 +52,7 @@
           <input
             type="radio"
             name="statusFilter"
-            value="false"
+            value="true"
             v-model="statusFilter"
             @change="handleFilter"
           />
@@ -62,7 +62,7 @@
           <input
             type="radio"
             name="statusFilter"
-            value="true"
+            value="false"
             v-model="statusFilter"
             @change="handleFilter"
           />
@@ -102,8 +102,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="false"
-                    v-model="newMauSac.deleted"
+                    :value="true"
+                    v-model="newMauSac.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -111,8 +111,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="true"
-                    v-model="newMauSac.deleted"
+                    :value="false"
+                    v-model="newMauSac.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -158,7 +158,7 @@
       <tr v-for="(value, i) in paginatedMauSacs" :key="value.id">
         <td>{{ startIndex + i + 1 }}</td>
         <td>{{ value.tenMauSac }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
+        <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
         <td>
           <button
             v-on:click="fetchDetail(value)"
@@ -252,8 +252,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedMauSac.deleted"
+                    :value="true"
+                    v-model="selectedMauSac.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -261,8 +261,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedMauSac.deleted"
+                    :value="false"
+                    v-model="selectedMauSac.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -348,7 +348,7 @@ const searchQuery = ref("");
 const statusFilter = ref("");
 const newMauSac = ref({
   tenMauSac: "",
-  deleted: false,
+  trangThai: true,
 });
 const selectedMauSac = ref({});
 const uploading = ref(false);
@@ -380,7 +380,7 @@ const filteredMauSacs = computed(() => {
 
   if (statusFilter.value !== "") {
     filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
+      (item) => item.trangThai === (statusFilter.value === "true")
     );
   }
 
@@ -429,7 +429,7 @@ const fetchCreate = async () => {
     // Reset form
     newMauSac.value = {
       tenMauSac: "",
-      deleted: false,
+      trangThai: true,
     };
 
     await fetchMauSacs();
@@ -536,7 +536,7 @@ const closeAddForm = () => {
   showAddForm.value = false;
   newMauSac.value = {
     tenMauSac: "",
-    deleted: false,
+    trangThai: true,
   };
   errorMessage.value = null;
   successMessage.value = null;

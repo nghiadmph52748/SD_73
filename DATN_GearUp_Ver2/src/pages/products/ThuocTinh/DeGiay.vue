@@ -49,7 +49,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="false"
+              value="true"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -59,7 +59,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="true"
+              value="false"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -100,8 +100,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="false"
-                    v-model="newDeGiay.deleted"
+                    :value="true"
+                    v-model="newDeGiay.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -109,8 +109,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="true"
-                    v-model="newDeGiay.deleted"
+                    :value="false"
+                    v-model="newDeGiay.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -156,7 +156,7 @@
       <tr v-for="(value, i) in paginatedDeGiays" :key="value.id">
         <td>{{ startIndex + i + 1 }}</td>
         <td>{{ value.tenDeGiay }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
+        <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
         <td>
           <button
             v-on:click="fetchDetail(value)"
@@ -250,8 +250,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedDeGiay.deleted"
+                    :value="true"
+                    v-model="selectedDeGiay.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -259,8 +259,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedDeGiay.deleted"
+                    :value="false"
+                    v-model="selectedDeGiay.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -346,7 +346,7 @@ const searchQuery = ref("");
 const statusFilter = ref("");
 const newDeGiay = ref({
   tenDeGiay: "",
-  deleted: false,
+  trangThai: true,
 });
 const selectedDeGiay = ref({});
 const uploading = ref(false);
@@ -377,7 +377,7 @@ const filteredDeGiays = computed(() => {
 
   if (statusFilter.value !== "") {
     filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
+      (item) => item.trangThai === (statusFilter.value === "true")
     );
   }
 
@@ -426,7 +426,7 @@ const fetchCreate = async () => {
     // Reset form
     newDeGiay.value = {
       tenDeGiay: "",
-      deleted: false,
+      trangThai: true,
     };
 
     await fetchAll();
@@ -534,7 +534,7 @@ const closeAddForm = () => {
   showAddForm.value = false;
   newDeGiay.value = {
     tenDeGiay: "",
-    deleted: false,
+    trangThai: true,
   };
   errorMessage.value = null;
   successMessage.value = null;

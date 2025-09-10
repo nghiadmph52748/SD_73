@@ -50,7 +50,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="false"
+              value="true"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -60,7 +60,7 @@
             <input
               type="radio"
               name="statusFilter"
-              value="true"
+              value="false"
               v-model="statusFilter"
               @change="handleFilter"
             />
@@ -101,8 +101,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="false"
-                    v-model="newNSX.deleted"
+                    :value="true"
+                    v-model="newNSX.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -110,8 +110,8 @@
                   <input
                     type="radio"
                     name="Trạng thái"
-                    :value="true"
-                    v-model="newNSX.deleted"
+                    :value="false"
+                    v-model="newNSX.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -157,7 +157,7 @@
       <tr v-for="(value, i) in paginatedNhaSanXuats" :key="i">
         <td>{{ startIndex + i + 1 }}</td>
         <td>{{ value.tenNhaSanXuat }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
+        <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
         <td>
           <button
             v-on:click="fetchDetail(value)"
@@ -251,8 +251,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedNSX.deleted"
+                    :value="true"
+                    v-model="selectedNSX.trangThai"
                   />
                   <span>Hoạt động</span>
                 </label>
@@ -260,8 +260,8 @@
                   <input
                     type="radio"
                     name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedNSX.deleted"
+                    :value="false"
+                    v-model="selectedNSX.trangThai"
                   />
                   <span>Không hoạt động</span>
                 </label>
@@ -343,7 +343,7 @@ const showEditForm = ref(false);
 const showAddForm = ref(false);
 const newNSX = ref({
   tenNhaSanXuat: "",
-  deleted: false,
+  trangThai: true,
 });
 const NhaSanXuats = ref([]);
 const selectedNSX = ref({});
@@ -381,7 +381,7 @@ const filteredNhaSanXuats = computed(() => {
 
   if (statusFilter.value !== "") {
     filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
+      (item) => item.trangThai === (statusFilter.value === "true")
     );
   }
 
@@ -431,7 +431,7 @@ const fetchCreate = async () => {
     // Reset form
     newNSX.value = {
       tenNhaSanXuat: "",
-      deleted: false,
+      trangThai: true,
     };
 
     await fetchAll();
@@ -540,7 +540,7 @@ const closeAddForm = () => {
   showAddForm.value = false;
   newNSX.value = {
     tenNhaSanXuat: "",
-    deleted: false,
+    trangThai: true,
   };
   errorMessage.value = null;
   successMessage.value = null;

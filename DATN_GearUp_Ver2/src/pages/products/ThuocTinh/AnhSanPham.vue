@@ -1,514 +1,579 @@
 <template>
   <div class="anh-san-pham-page">
-  <!-- Font Awesome for icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-  <div class="breadcrumb-nav">
-    <RouterLink :to="`/products`" class="product-link">
-      <span class="product-text">Sản phẩm</span>
-    </RouterLink>
-    <span class="breadcrumb-separator"> / </span>
-    <router-link :to="`/products/anh-san-pham`" class="product-link">
-      <span class="product-text">Ảnh sản phẩm</span>
-    </router-link>
-  </div>
-
-  <!-- Search và Filter -->
-  <div class="search-filter-section">
-    <div class="search-box">
-      <div class="search-input-group">
-        <label><i class="fas fa-search"></i> Tìm kiếm:</label>
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Tìm theo loại ảnh hoặc mô tả..."
-          @input="handleSearch"
-        />
-      </div>
-      <div class="action-group">
-        <button
-          @click="fetchAll"
-          class="btn-refresh"
-          style="margin-right: 10px"
-        >
-          <i class="fas fa-sync-alt"></i> Làm mới
-        </button>
-        <button @click="showAddForm = true" class="btn-export">
-          <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" /> Thêm Hình Ảnh Mới
-        </button>
-      </div>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <div class="breadcrumb-nav">
+      <RouterLink :to="`/products`" class="product-link">
+        <span class="product-text">Sản phẩm</span>
+      </RouterLink>
+      <span class="breadcrumb-separator"> / </span>
+      <router-link :to="`/products/anh-san-pham`" class="product-link">
+        <span class="product-text">Ảnh sản phẩm</span>
+      </router-link>
     </div>
-    <div class="filter-group">
-      <label><i class="fas fa-filter"></i> Lọc theo trạng thái:</label>
-      <div class="radio-filter">
-        <label class="radio-label">
-          <input
-            type="radio"
-            name="statusFilter"
-            value=""
-            v-model="statusFilter"
-            @change="handleFilter"
-          />
-          <span>Tất cả</span>
-        </label>
-        <label class="radio-label">
-          <input
-            type="radio"
-            name="statusFilter"
-            value="false"
-            v-model="statusFilter"
-            @change="handleFilter"
-          />
-          <span>Hoạt động</span>
-        </label>
-        <label class="radio-label">
-          <input
-            type="radio"
-            name="statusFilter"
-            value="true"
-            v-model="statusFilter"
-            @change="handleFilter"
-          />
-          <span>Không hoạt động</span>
-        </label>
-      </div>
-    </div>
-  </div>
 
-  <!-- Modal thêm mới -->
-  <div v-if="showAddForm" class="modal-overlay" @click="closeAddForm">
-    <div class="modal-content add-modal" @click.stop>
-      <div class="modal-header add-header">
-        <h3><img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" /> Thêm Hình Ảnh Sản Phẩm Mới</h3>
-        <button @click="closeAddForm" class="modal-close">
-          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
-        </button>
+    <!-- Search và Filter -->
+    <div class="search-filter-section">
+      <div class="search-box">
+        <div class="search-input-group">
+          <label><i class="fas fa-search"></i> Tìm kiếm:</label>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Tìm theo loại ảnh hoặc mô tả..."
+            @input="handleSearch"
+          />
+        </div>
+        <div class="action-group">
+          <button
+            @click="fetchAll"
+            class="btn-refresh"
+            style="margin-right: 10px"
+          >
+            <i class="fas fa-sync-alt"></i> Làm mới
+          </button>
+          <button @click="showAddForm = true" class="btn-export">
+            <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" />
+            Thêm Hình Ảnh Mới
+          </button>
+        </div>
       </div>
-      <div class="modal-body">
-        <form @submit.prevent="fetchCreate">
-          <div class="detail-row">
-            <div class="detail-label">Chọn ảnh từ máy:</div>
-            <div class="detail-value">
-              <input
-                type="file"
-                ref="fileInput"
-                @change="handleFileChange"
-                accept="image/*"
-                required
-                class="detail-file-input"
-              />
-              <img
-                v-if="previewUrl"
-                :src="previewUrl"
-                alt="Preview ảnh"
-                class="detail-preview-image"
-              />
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">Loại ảnh:</div>
-            <div class="detail-value">
-              <input
-                v-model="newAnhSanPham.loaiAnh"
-                type="text"
-                required
-                class="detail-input"
-              />
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">Mô tả:</div>
-            <div class="detail-value">
-              <input
-                v-model="newAnhSanPham.moTa"
-                type="text"
-                class="detail-input"
-              />
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">Trạng thái:</div>
-            <div class="detail-value">
-              <div class="radio-group">
-                <label class="radio-label">
-                  <input
-                    type="radio"
-                    name="Trạng thái"
-                    :value="false"
-                    v-model="newAnhSanPham.deleted"
-                  />
-                  <span>Hoạt động</span>
-                </label>
-                <label class="radio-label">
-                  <input
-                    type="radio"
-                    name="Trạng thái"
-                    :value="true"
-                    v-model="newAnhSanPham.deleted"
-                  />
-                  <span>Không hoạt động</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Error và Success Message -->
-          <div v-if="errorMessage" class="detail-error">
-            <p>{{ errorMessage }}</p>
-          </div>
-          <div v-if="successMessage" class="detail-success">
-            <p>{{ successMessage }}</p>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer add-footer">
-        <button type="button" @click="closeAddForm" class="btn btn-secondary">
-          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" /> Hủy bỏ
-        </button>
-        <button
-          @click="fetchCreate"
-          :disabled="uploading"
-          class="btn btn-primary"
-        >
-          <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" />
-          {{ uploading ? "Đang thêm..." : "Thêm Mới" }}
-        </button>
-      </div>
-    </div>
-  </div>
-  <!-- Form chỉnh sửa (mới thêm) -->
-  <div class="edit-form" v-if="showEditForm">
-    <h3>Chỉnh Sửa Hình Ảnh Sản Phẩm</h3>
-    <form @submit.prevent="fetchUpdate">
-      <div>
-        <label>Ảnh hiện tại:</label>
-        <img
-          v-if="selectedAnhSanPham.duongDanAnh"
-          :src="getImageUrl(selectedAnhSanPham.duongDanAnh)"
-          alt="Ảnh hiện tại"
-          style="width: 100px; height: auto"
-          @error="handleImageError"
-        />
-      </div>
-      <div>
-        <label>Chọn ảnh mới (nếu muốn thay đổi):</label>
-        <input
-          type="file"
-          ref="editFileInput"
-          @change="handleEditFileChange"
-          accept="image/*"
-        />
-        <img
-          v-if="editPreviewUrl"
-          :src="editPreviewUrl"
-          alt="Preview mới"
-          style="width: 100px; height: auto; margin-top: 10px"
-        />
-      </div>
-      <div>
-        <label>Loại ảnh:</label>
-        <input v-model="selectedAnhSanPham.loaiAnh" type="text" required />
-      </div>
-      <div>
-        <label>Mô tả:</label>
-        <input v-model="selectedAnhSanPham.moTa" type="text" />
-      </div>
-      <div>
-        <label for="">Trạng thái</label>
-        <div class="radio-group">
+      <div class="filter-group">
+        <label><i class="fas fa-filter"></i> Lọc theo trạng thái:</label>
+        <div class="radio-filter">
           <label class="radio-label">
             <input
               type="radio"
-              name="editTrạng thái"
-              :value="false"
-              v-model="selectedAnhSanPham.deleted"
+              name="statusFilter"
+              value=""
+              v-model="statusFilter"
+              @change="handleFilter"
+            />
+            <span>Tất cả</span>
+          </label>
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="statusFilter"
+              value="false"
+              v-model="statusFilter"
+              @change="handleFilter"
             />
             <span>Hoạt động</span>
           </label>
           <label class="radio-label">
             <input
               type="radio"
-              name="editTrạng thái"
-              :value="true"
-              v-model="selectedAnhSanPham.deleted"
+              name="statusFilter"
+              value="true"
+              v-model="statusFilter"
+              @change="handleFilter"
             />
             <span>Không hoạt động</span>
           </label>
         </div>
       </div>
-      <div class="edit-popup-actions">
-        <button type="submit" :disabled="uploading" class="btn btn-success">
-          <img src="../../../assets/Save.svg" alt="Save" class="icon-svg" />
-          {{ uploading ? "Đang cập nhật..." : "Cập Nhật" }}
-        </button>
-        <button type="button" @click="closeEditForm" class="btn btn-secondary">
-          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" /> Đóng
-        </button>
+    </div>
+
+    <!-- Modal thêm mới -->
+    <div v-if="showAddForm" class="modal-overlay" @click="closeAddForm">
+      <div class="modal-content add-modal" @click.stop>
+        <div class="modal-header add-header">
+          <h3>
+            <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" />
+            Thêm Hình Ảnh Sản Phẩm Mới
+          </h3>
+          <button @click="closeAddForm" class="modal-close">
+            <img
+              src="../../../assets/Cancel.svg"
+              alt="Close"
+              class="icon-svg"
+            />
+          </button>
+        </div>
+        <div class="modal-body">
+          <form @submit.prevent="fetchCreate">
+            <div class="detail-row">
+              <div class="detail-label">Chọn ảnh từ máy:</div>
+              <div class="detail-value">
+                <input
+                  type="file"
+                  ref="fileInput"
+                  @change="handleFileChange"
+                  accept="image/*"
+                  required
+                  class="detail-file-input"
+                />
+                <img
+                  v-if="previewUrl"
+                  :src="previewUrl"
+                  alt="Preview ảnh"
+                  class="detail-preview-image"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Loại ảnh:</div>
+              <div class="detail-value">
+                <input
+                  v-model="newAnhSanPham.loaiAnh"
+                  type="text"
+                  required
+                  class="detail-input"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Mô tả:</div>
+              <div class="detail-value">
+                <input
+                  v-model="newAnhSanPham.moTa"
+                  type="text"
+                  class="detail-input"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Trạng thái:</div>
+              <div class="detail-value">
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input
+                      type="radio"
+                      name="Trạng thái"
+                      :value="false"
+                      v-model="newAnhSanPham.deleted"
+                    />
+                    <span>Hoạt động</span>
+                  </label>
+                  <label class="radio-label">
+                    <input
+                      type="radio"
+                      name="Trạng thái"
+                      :value="true"
+                      v-model="newAnhSanPham.deleted"
+                    />
+                    <span>Không hoạt động</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error và Success Message -->
+            <div v-if="errorMessage" class="detail-error">
+              <p>{{ errorMessage }}</p>
+            </div>
+            <div v-if="successMessage" class="detail-success">
+              <p>{{ successMessage }}</p>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer add-footer">
+          <button type="button" @click="closeAddForm" class="btn btn-secondary">
+            <img
+              src="../../../assets/Cancel.svg"
+              alt="Close"
+              class="icon-svg"
+            />
+            Hủy bỏ
+          </button>
+          <button
+            @click="fetchCreate"
+            :disabled="uploading"
+            class="btn btn-primary"
+          >
+            <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" />
+            {{ uploading ? "Đang thêm..." : "Thêm Mới" }}
+          </button>
+        </div>
       </div>
-      <p v-if="editErrorMessage" style="color: red">{{ editErrorMessage }}</p>
-      <p v-if="editSuccessMessage" style="color: green">
-        {{ editSuccessMessage }}
-      </p>
-    </form>
-  </div>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>STT</th>
-        <th>Ảnh</th>
-        <th>Loại ảnh</th>
-        <th>Mô tả</th>
-        <th>Trạng thái</th>
-        <th>Thao tác</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Hiển thị message khi không có dữ liệu -->
-      <tr v-if="paginatedAnhSanPhams.length === 0">
-        <td colspan="5" style="text-align: center; padding: 40px; color: #666">
-          <i
-            class="fas fa-info-circle"
-            style="font-size: 24px; margin-bottom: 10px"
-          ></i>
-          <br />
-          <strong>Không có dữ liệu</strong>
-          <br />
-          <small>Chưa có ảnh sản phẩm nào được tải lên</small>
-        </td>
-      </tr>
-      <tr v-for="(value, i) in paginatedAnhSanPhams" :key="value.id">
-        <td>{{ startIndex + i + 1 }}</td>
-        <td>
+    </div>
+    <!-- Form chỉnh sửa (mới thêm) -->
+    <div class="edit-form" v-if="showEditForm">
+      <h3>Chỉnh Sửa Hình Ảnh Sản Phẩm</h3>
+      <form @submit.prevent="fetchUpdate">
+        <div>
+          <label>Ảnh hiện tại:</label>
           <img
-            :src="getImageUrl(value.duongDanAnh)"
-            alt="Ảnh sản phẩm"
+            v-if="selectedAnhSanPham.duongDanAnh"
+            :src="getImageUrl(selectedAnhSanPham.duongDanAnh)"
+            alt="Ảnh hiện tại"
             style="width: 100px; height: auto"
             @error="handleImageError"
           />
-        </td>
-        <td>{{ value.loaiAnh }}</td>
-        <td>{{ value.moTa }}</td>
-        <td>{{ value.deleted ? "Không hoạt động" : "Hoạt động" }}</td>
-        <td>
-          <div class="table-actions">
-            <button
-              v-on:click="fetchDetail(value)"
-              class="btn btn-detail btn-icon btn-sm"
-              title="Xem chi tiết"
-            >
-              Chi tiết
-            </button>
-            <button
-              v-on:click="fetchDelete(value.id)"
-              class="btn btn-delete btn-icon btn-sm"
-              :disabled="uploading"
-              title="Xóa"
-            >
-              Xóa
-            </button>
+        </div>
+        <div>
+          <label>Chọn ảnh mới (nếu muốn thay đổi):</label>
+          <input
+            type="file"
+            ref="editFileInput"
+            @change="handleEditFileChange"
+            accept="image/*"
+          />
+          <img
+            v-if="editPreviewUrl"
+            :src="editPreviewUrl"
+            alt="Preview mới"
+            style="width: 100px; height: auto; margin-top: 10px"
+          />
+        </div>
+        <div>
+          <label>Loại ảnh:</label>
+          <input v-model="selectedAnhSanPham.loaiAnh" type="text" required />
+        </div>
+        <div>
+          <label>Mô tả:</label>
+          <input v-model="selectedAnhSanPham.moTa" type="text" />
+        </div>
+        <div>
+          <label for="">Trạng thái</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input
+                type="radio"
+                name="editTrạng thái"
+                :value="true"
+                v-model="selectedAnhSanPham.trangThai"
+              />
+              <span>Hoạt động</span>
+            </label>
+            <label class="radio-label">
+              <input
+                type="radio"
+                name="editTrạng thái"
+                :value="false"
+                v-model="selectedAnhSanPham.trangThai"
+              />
+              <span>Không hoạt động</span>
+            </label>
           </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Pagination -->
-  <div class="pagination-wrapper">
-    <div class="pagination-info">
-      Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của {{ totalItems }} ảnh
-      sản phẩm
+        </div>
+        <div class="edit-popup-actions">
+          <button type="submit" :disabled="uploading" class="btn btn-success">
+            <img src="../../../assets/Save.svg" alt="Save" class="icon-svg" />
+            {{ uploading ? "Đang cập nhật..." : "Cập Nhật" }}
+          </button>
+          <button
+            type="button"
+            @click="closeEditForm"
+            class="btn btn-secondary"
+          >
+            <img
+              src="../../../assets/Cancel.svg"
+              alt="Close"
+              class="icon-svg"
+            />
+            Đóng
+          </button>
+        </div>
+        <p v-if="editErrorMessage" style="color: red">{{ editErrorMessage }}</p>
+        <p v-if="editSuccessMessage" style="color: green">
+          {{ editSuccessMessage }}
+        </p>
+      </form>
     </div>
-    <div class="pagination">
-      <button
-        class="pagination-btn"
-        @click="goToPreviousPage"
-        :disabled="currentPage === 1"
-      >
-        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          ></path>
-        </svg>
-        Trước
-      </button>
-      <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-      <button
-        class="pagination-btn"
-        @click="goToNextPage"
-        :disabled="currentPage === totalPages"
-      >
-        Sau
-        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          ></path>
-        </svg>
-      </button>
-    </div>
-  </div>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Ảnh</th>
+          <th>Loại ảnh</th>
+          <th>Mô tả</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Hiển thị message khi không có dữ liệu -->
+        <tr v-if="paginatedAnhSanPhams.length === 0">
+          <td
+            colspan="5"
+            style="text-align: center; padding: 40px; color: #666"
+          >
+            <i
+              class="fas fa-info-circle"
+              style="font-size: 24px; margin-bottom: 10px"
+            ></i>
+            <br />
+            <strong>Không có dữ liệu</strong>
+            <br />
+            <small>Chưa có ảnh sản phẩm nào được tải lên</small>
+          </td>
+        </tr>
+        <tr v-for="(value, i) in paginatedAnhSanPhams" :key="value.id">
+          <td>{{ startIndex + i + 1 }}</td>
+          <td>
+            <img
+              :src="getImageUrl(value.duongDanAnh)"
+              alt="Ảnh sản phẩm"
+              style="width: 100px; height: auto"
+              @error="handleImageError"
+            />
+          </td>
+          <td>{{ value.loaiAnh }}</td>
+          <td>{{ value.moTa }}</td>
+          <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
+          <td>
+            <div class="table-actions">
+              <button
+                v-on:click="fetchDetail(value)"
+                class="btn btn-detail btn-icon btn-sm"
+                title="Xem chi tiết"
+              >
+                Chi tiết
+              </button>
+              <button
+                v-on:click="fetchDelete(value.id)"
+                class="btn btn-delete btn-icon btn-sm"
+                :disabled="uploading"
+                title="Xóa"
+              >
+                Xóa
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-  <!-- Popup Detail Modal -->
-  <div v-if="showDetailModal" class="modal-overlay" @click="closeDetailModal">
-    <div class="modal-content" @click.stop>
-      <div class="modal-header">
-        <h3>Chỉnh Sửa Hình Ảnh Sản Phẩm</h3>
-        <button class="modal-close" @click="closeDetailModal">
-          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
+    <!-- Pagination -->
+    <div class="pagination-wrapper">
+      <div class="pagination-info">
+        Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của {{ totalItems }} ảnh
+        sản phẩm
+      </div>
+      <div class="pagination">
+        <button
+          class="pagination-btn"
+          @click="goToPreviousPage"
+          :disabled="currentPage === 1"
+        >
+          <svg
+            class="icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+          Trước
+        </button>
+        <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+        <button
+          class="pagination-btn"
+          @click="goToNextPage"
+          :disabled="currentPage === totalPages"
+        >
+          Sau
+          <svg
+            class="icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
         </button>
       </div>
-      <div class="modal-body">
-        <!-- Edit Mode -->
-        <div>
-          <div class="detail-row">
-            <div class="detail-label">Ảnh hiện tại:</div>
-            <div class="detail-value">
-              <img
-                :src="getImageUrl(selectedAnhSanPham.duongDanAnh)"
-                alt="Ảnh hiện tại"
-                class="detail-image"
-                @error="handleImageError"
-              />
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">Chọn ảnh mới:</div>
-            <div class="detail-value">
-              <input
-                type="file"
-                ref="editFileInput"
-                @change="handleEditFileChange"
-                accept="image/*"
-                class="detail-file-input"
-              />
-              <img
-                v-if="editPreviewUrl"
-                :src="editPreviewUrl"
-                alt="Preview mới"
-                class="detail-preview-image"
-              />
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">Loại ảnh:</div>
-            <div class="detail-value">
-              <input
-                v-model="selectedAnhSanPham.loaiAnh"
-                type="text"
-                required
-                class="detail-input"
-              />
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">Mô tả:</div>
-            <div class="detail-value">
-              <input
-                v-model="selectedAnhSanPham.moTa"
-                type="text"
-                class="detail-input"
-              />
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">Trạng thái:</div>
-            <div class="detail-value">
-              <div class="radio-group">
-                <label class="radio-label">
-                  <input
-                    type="radio"
-                    name="detailTrạng thái"
-                    :value="false"
-                    v-model="selectedAnhSanPham.deleted"
-                  />
-                  <span>Hoạt động</span>
-                </label>
-                <label class="radio-label">
-                  <input
-                    type="radio"
-                    name="detailTrạng thái"
-                    :value="true"
-                    v-model="selectedAnhSanPham.deleted"
-                  />
-                  <span>Không hoạt động</span>
-                </label>
+    </div>
+
+    <!-- Popup Detail Modal -->
+    <div v-if="showDetailModal" class="modal-overlay" @click="closeDetailModal">
+      <div class="modal-content" @click.stop>
+        <div class="modal-header">
+          <h3>Chỉnh Sửa Hình Ảnh Sản Phẩm</h3>
+          <button class="modal-close" @click="closeDetailModal">
+            <img
+              src="../../../assets/Cancel.svg"
+              alt="Close"
+              class="icon-svg"
+            />
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Edit Mode -->
+          <div>
+            <div class="detail-row">
+              <div class="detail-label">Ảnh hiện tại:</div>
+              <div class="detail-value">
+                <img
+                  :src="getImageUrl(selectedAnhSanPham.duongDanAnh)"
+                  alt="Ảnh hiện tại"
+                  class="detail-image"
+                  @error="handleImageError"
+                />
               </div>
             </div>
-          </div>
+            <div class="detail-row">
+              <div class="detail-label">Chọn ảnh mới:</div>
+              <div class="detail-value">
+                <input
+                  type="file"
+                  ref="editFileInput"
+                  @change="handleEditFileChange"
+                  accept="image/*"
+                  class="detail-file-input"
+                />
+                <img
+                  v-if="editPreviewUrl"
+                  :src="editPreviewUrl"
+                  alt="Preview mới"
+                  class="detail-preview-image"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Loại ảnh:</div>
+              <div class="detail-value">
+                <input
+                  v-model="selectedAnhSanPham.loaiAnh"
+                  type="text"
+                  required
+                  class="detail-input"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Mô tả:</div>
+              <div class="detail-value">
+                <input
+                  v-model="selectedAnhSanPham.moTa"
+                  type="text"
+                  class="detail-input"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Trạng thái:</div>
+              <div class="detail-value">
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input
+                      type="radio"
+                      name="detailTrạng thái"
+                      :value="true"
+                      v-model="selectedAnhSanPham.trangThai"
+                    />
+                    <span>Hoạt động</span>
+                  </label>
+                  <label class="radio-label">
+                    <input
+                      type="radio"
+                      name="detailTrạng thái"
+                      :value="false"
+                      v-model="selectedAnhSanPham.trangThai"
+                    />
+                    <span>Không hoạt động</span>
+                  </label>
+                </div>
+              </div>
+            </div>
 
-          <!-- Error Message -->
-          <div v-if="editErrorMessage" class="detail-error">
-            <p style="color: red">{{ editErrorMessage }}</p>
+            <!-- Error Message -->
+            <div v-if="editErrorMessage" class="detail-error">
+              <p style="color: red">{{ editErrorMessage }}</p>
+            </div>
           </div>
         </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-success"
+            @click="saveChanges"
+            :disabled="uploading"
+          >
+            <img src="../../../assets/Save.svg" alt="Save" class="icon-svg" />
+            {{ uploading ? "Đang cập nhật..." : "Lưu thay đổi" }}
+          </button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button
-          class="btn btn-success"
-          @click="saveChanges"
-          :disabled="uploading"
-        >
-          <img src="../../../assets/Save.svg" alt="Save" class="icon-svg" />
-          {{ uploading ? "Đang cập nhật..." : "Lưu thay đổi" }}
-        </button>
+    </div>
+
+    <!-- Modal Xác nhận Xóa -->
+    <div v-if="showDeleteModal" class="modal-overlay" @click="closeDeleteModal">
+      <div class="modal-content delete-modal" @click.stop>
+        <div class="modal-header delete-header">
+          <h3>
+            <img
+              src="../../../assets/Warning.svg"
+              alt="Warning"
+              class="icon-svg"
+            />
+            Xác nhận xóa
+          </h3>
+          <button class="modal-close" @click="closeDeleteModal">
+            <img
+              src="../../../assets/Cancel.svg"
+              alt="Close"
+              class="icon-svg"
+            />
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="delete-content">
+            <div class="delete-icon">
+              <img
+                src="../../../assets/Trash.svg"
+                alt="Delete"
+                class="icon-svg"
+              />
+            </div>
+            <h4>Bạn có chắc chắn muốn xóa?</h4>
+            <p class="delete-message">
+              Bạn sắp xóa <strong>"{{ deleteItemName }}"</strong>. Hành động này
+              không thể hoàn tác.
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer delete-footer">
+          <button
+            class="btn btn-secondary"
+            @click="closeDeleteModal"
+            :disabled="uploading"
+          >
+            <img
+              src="../../../assets/Cancel.svg"
+              alt="Close"
+              class="icon-svg"
+            />
+            Hủy bỏ
+          </button>
+          <button
+            class="btn btn-delete"
+            @click="confirmDelete"
+            :disabled="uploading"
+          >
+            <img
+              src="../../../assets/Trash.svg"
+              alt="Delete"
+              class="icon-svg"
+            />
+            {{ uploading ? "Đang xóa..." : "Xóa" }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Modal Xác nhận Xóa -->
-  <div v-if="showDeleteModal" class="modal-overlay" @click="closeDeleteModal">
-    <div class="modal-content delete-modal" @click.stop>
-      <div class="modal-header delete-header">
-        <h3><img src="../../../assets/Warning.svg" alt="Warning" class="icon-svg" /> Xác nhận xóa</h3>
-        <button class="modal-close" @click="closeDeleteModal">
-          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="delete-content">
-          <div class="delete-icon">
-            <img src="../../../assets/Trash.svg" alt="Delete" class="icon-svg" />
-          </div>
-          <h4>Bạn có chắc chắn muốn xóa?</h4>
-          <p class="delete-message">
-            Bạn sắp xóa <strong>"{{ deleteItemName }}"</strong>. Hành động này
-            không thể hoàn tác.
-          </p>
-        </div>
-      </div>
-      <div class="modal-footer delete-footer">
-        <button
-          class="btn btn-secondary"
-          @click="closeDeleteModal"
-          :disabled="uploading"
-        >
-          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" /> Hủy bỏ
-        </button>
-        <button
-          class="btn btn-delete"
-          @click="confirmDelete"
-          :disabled="uploading"
-        >
-          <img src="../../../assets/Trash.svg" alt="Delete" class="icon-svg" /> {{ uploading ? "Đang xóa..." : "Xóa" }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import {
   fetchAllAnhSanPham,
-  fetchCreateAnhSanPham,
+  fetchCreateAnhSanPhamFromCloud,
+  fetchUpdateAnhSanPhamFromCloud,
   fetchUpdateAnhSanPham,
   fetchUpdateStatusAnhSanPham,
 } from "../../../services/ThuocTinh/AnhSanPhamService";
@@ -518,6 +583,7 @@ const newAnhSanPham = ref({
   loaiAnh: "",
   moTa: "",
   deleted: false,
+  trangThai: true,
 });
 const showDetailModal = ref(false);
 const selectedAnhSanPham = ref({});
@@ -554,25 +620,19 @@ const pageSize = ref(10);
 const fileInput = ref(null);
 const editFileInput = ref(null);
 
-// Computed properties cho tìm kiếm, lọc và phân trang
 const filteredAnhSanPhams = computed(() => {
-  // Đảm bảo AnhSanPhams.value là array trước khi spread
   let filtered = Array.isArray(AnhSanPhams.value) ? [...AnhSanPhams.value] : [];
-
-  // Tìm kiếm theo loại ảnh hoặc mô tả
+  if (statusFilter.value === "false") {
+    filtered = filtered.filter((item) => item.trangThai === true);
+  } else if (statusFilter.value === "true") {
+    filtered = filtered.filter((item) => item.trangThai === false);
+  }
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase();
     filtered = filtered.filter(
       (item) =>
         item.loaiAnh?.toLowerCase().includes(query) ||
         item.moTa?.toLowerCase().includes(query)
-    );
-  }
-
-  // Lọc theo trạng thái
-  if (statusFilter.value !== "") {
-    filtered = filtered.filter(
-      (item) => item.deleted === (statusFilter.value === "true")
     );
   }
 
@@ -659,14 +719,16 @@ const fetchCreate = async () => {
     formData.append("loaiAnh", newAnhSanPham.value.loaiAnh);
     formData.append("moTa", newAnhSanPham.value.moTa || "");
     formData.append("deleted", newAnhSanPham.value.deleted || false);
+    formData.append("trangThai", newAnhSanPham.value.trangThai || true);
 
-    await fetchCreateAnhSanPham(formData);
+    await fetchCreateAnhSanPhamFromCloud(formData);
 
     // Reset form
     newAnhSanPham.value = {
       loaiAnh: "",
       moTa: "",
       deleted: false,
+      trangThai: true,
     };
     file.value = null;
     previewUrl.value = null;
@@ -698,24 +760,6 @@ const fetchDetail = (value) => {
   showDetailModal.value = true;
 };
 
-const openEditForm = (value) => {
-  selectedAnhSanPham.value = { ...value };
-  showEditForm.value = true;
-};
-
-const startEditing = () => {
-  isEditing.value = true;
-  editFile.value = null;
-  editPreviewUrl.value = null;
-};
-
-const cancelEditing = () => {
-  selectedAnhSanPham.value = { ...originalData.value };
-  editFile.value = null;
-  editPreviewUrl.value = null;
-  editErrorMessage.value = null;
-};
-
 const saveChanges = async () => {
   uploading.value = true;
   editErrorMessage.value = null;
@@ -728,19 +772,25 @@ const saveChanges = async () => {
       formData.append("loaiAnh", selectedAnhSanPham.value.loaiAnh);
       formData.append("moTa", selectedAnhSanPham.value.moTa || "");
       formData.append("deleted", selectedAnhSanPham.value.deleted || false);
-
-      await fetchUpdateAnhSanPham(selectedAnhSanPham.value.id, formData);
+      formData.append("trangThai", selectedAnhSanPham.value.trangThai);
+      console.log(formData);
+      await fetchUpdateAnhSanPhamFromCloud(
+        selectedAnhSanPham.value.id,
+        formData
+      );
     } else {
-      // Nếu không có file mới, chỉ cập nhật thông tin
-      // Tạo một file rỗng để backend không báo lỗi
-      const emptyFile = new Blob([""], { type: "image/png" });
-      const formData = new FormData();
-      formData.append("file", emptyFile, "empty.png");
-      formData.append("loaiAnh", selectedAnhSanPham.value.loaiAnh);
-      formData.append("moTa", selectedAnhSanPham.value.moTa || "");
-      formData.append("deleted", selectedAnhSanPham.value.deleted || false);
-
-      await fetchUpdateAnhSanPham(selectedAnhSanPham.value.id, formData);
+      console.log(selectedAnhSanPham.value);
+      // Nếu không có file mới, chỉ cập nhật thông tin bằng JSON
+      const updateData = {
+        duongDanAnh: selectedAnhSanPham.value.duongDanAnh,
+        loaiAnh: selectedAnhSanPham.value.loaiAnh,
+        moTa: selectedAnhSanPham.value.moTa || "",
+        deleted: selectedAnhSanPham.value.deleted || false,
+        trangThai: selectedAnhSanPham.value.trangThai,
+        updateBy: 1,
+      };
+      console.log(updateData);
+      await fetchUpdateAnhSanPham(selectedAnhSanPham.value.id, updateData);
     }
 
     await fetchAll();
@@ -769,19 +819,24 @@ const fetchUpdate = async () => {
       formData.append("loaiAnh", selectedAnhSanPham.value.loaiAnh);
       formData.append("moTa", selectedAnhSanPham.value.moTa || "");
       formData.append("deleted", selectedAnhSanPham.value.deleted || false);
+      formData.append("trangThai", selectedAnhSanPham.value.trangThai || true);
 
-      await fetchUpdateAnhSanPham(selectedAnhSanPham.value.id, formData);
+      await fetchUpdateAnhSanPhamFromCloud(
+        selectedAnhSanPham.value.id,
+        formData
+      );
     } else {
-      // Nếu không có file mới, chỉ cập nhật thông tin
-      // Tạo một file rỗng để backend không báo lỗi
-      const emptyFile = new Blob([""], { type: "image/png" });
-      const formData = new FormData();
-      formData.append("file", emptyFile, "empty.png");
-      formData.append("loaiAnh", selectedAnhSanPham.value.loaiAnh);
-      formData.append("moTa", selectedAnhSanPham.value.moTa || "");
-      formData.append("deleted", selectedAnhSanPham.value.deleted || false);
+      // Nếu không có file mới, chỉ cập nhật thông tin bằng JSON
+      const updateData = {
+        duongDanAnh: selectedAnhSanPham.value.duongDanAnh,
+        loaiAnh: selectedAnhSanPham.value.loaiAnh,
+        moTa: selectedAnhSanPham.value.moTa || "",
+        deleted: selectedAnhSanPham.value.deleted || false,
+        trangThai: selectedAnhSanPham.value.trangThai || true,
+        updateBy: 1,
+      };
 
-      await fetchUpdateAnhSanPham(selectedAnhSanPham.value.id, formData);
+      await fetchUpdateAnhSanPham(selectedAnhSanPham.value.id, updateData);
     }
 
     await fetchAll();
@@ -847,6 +902,7 @@ const closeAddForm = () => {
     loaiAnh: "",
     moTa: "",
     deleted: false,
+    trangThai: true,
   };
   file.value = null;
   previewUrl.value = null;
@@ -891,29 +947,6 @@ const closeDetailModal = () => {
   editPreviewUrl.value = null;
   editErrorMessage.value = null;
 };
-
-const editFromDetail = () => {
-  showDetailModal.value = false; // Đóng popup detail
-  openEditForm(selectedAnhSanPham.value); // Mở form edit
-};
-
-// Format date function
-const formatDate = (dateString) => {
-  if (!dateString) return null;
-  try {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("vi-VN", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch (error) {
-    return dateString;
-  }
-};
-
 // Clear success messages after 3 seconds
 const clearSuccessMessage = () => {
   setTimeout(() => {

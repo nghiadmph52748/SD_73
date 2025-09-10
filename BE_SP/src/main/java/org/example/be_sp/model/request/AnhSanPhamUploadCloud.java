@@ -1,19 +1,19 @@
 package org.example.be_sp.model.request;
 
-
 import java.time.LocalDate;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
-@Getter
-@Setter
-@AllArgsConstructor
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @NoArgsConstructor
-public class AnhSanPhamRequest {
-    String duongDanAnh;
+@AllArgsConstructor
+public class AnhSanPhamUploadCloud {
+    Integer id;
+    MultipartFile[] duongDanAnh;
     String loaiAnh;
     String moTa;
     Boolean trangThai;

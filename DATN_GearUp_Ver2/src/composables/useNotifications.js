@@ -36,7 +36,7 @@ export function useNotifications() {
 
   // Add notification manually based on frontend actions
   const addNotification = (notification) => {
-    const id = Date.now() + Math.random()
+    const id = `temp_${Date.now()}_${Math.floor(Math.random() * 1000)}`
     const newNotification = {
       id,
       timestamp: new Date(),
