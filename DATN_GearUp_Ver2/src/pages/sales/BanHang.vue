@@ -1,420 +1,281 @@
 <template>
   <div class="pos-system">
-    <!-- Modern Header -->
-    <div class="page-header">
-      <div class="header-content">
-        <div class="header-text">
-          <h1 class="page-title">Hệ thống bán hàng</h1>
-          <p class="page-subtitle">Quản lý đơn hàng và thanh toán trực tiếp</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn-refresh" @click="refreshData">
-            <span class="btn-icon">🔄</span>
-            Làm mới
-          </button>
-          <button class="btn-export" @click="showProductSearch = true">
-            <span class="btn-icon">🔍</span>
-            Tìm sản phẩm
-          </button>
-          <button class="btn-export" @click="createNewOrder">
-            <span class="btn-icon">➕</span>
-            Tạo đơn hàng
-          </button>
-        </div>
-      </div>
+    <!-- Simple Action Bar -->
+    <div class="simple-action-bar">
+      <button class="action-btn secondary-btn" @click="refreshData" title="Làm mới dữ liệu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23,4 23,10 17,10"></polyline>
+          <polyline points="1,20 1,14 7,14"></polyline>
+          <path d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"></path>
+        </svg>
+        <span>Làm mới</span>
+      </button>
+      <button class="action-btn secondary-btn" @click="showProductSearch = true" title="Tìm kiếm sản phẩm">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M21 21l-4.35-4.35"></path>
+        </svg>
+        <span>Tìm sản phẩm</span>
+      </button>
+      <button class="action-btn primary-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14"></path>
+        </svg>
+        <span>Tạo đơn hàng mới</span>
+      </button>
     </div>
 
     <!-- Modern Order Tabs -->
-    <div class="modern-tabs-container">
-      <div class="order-tabs">
-        <div
-          v-for="order in tempOrder"
-          :key="order.id"
-          :class="['modern-tab', { active: currentOrderId === order.id }]"
-          @click="switchOrder(order.id)"
-        >
-          <div class="tab-content">
-            <div class="tab-icon">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M19 7h-2V6a2 2 0 00-2-2h-4a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h6l2.29 2.29c.39.39 1.02.39 1.41 0L16 12h3a2 2 0 002-2V9a2 2 0 00-2-2z"
-                />
-              </svg>
-            </div>
-            <span class="tab-text">{{ order.tenDonHang }}</span>
-            <div class="tab-indicator"></div>
-          </div>
-          <button
-            v-if="tempOrder.length > 1"
-            class="modern-close-btn"
-            @click.stop="closeOrder(order.id)"
-            title="Đóng đơn hàng"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-              />
-            </svg>
-          </button>
-        </div>
-        <button
-          class="add-tab-btn"
-          @click="createNewOrder"
-          title="Thêm đơn hàng mới"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="pos-content">
-      <!-- Modern Product Section -->
-      <div class="modern-product-section">
-        <div class="modern-section-header">
-          <div class="header-title-group">
-            <div class="section-icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M19 7h-2V6a2 2 0 00-2-2h-4a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h6l2.29 2.29c.39.39 1.02.39 1.41 0L16 12h3a2 2 0 002-2V9a2 2 0 00-2-2z"
-                />
-              </svg>
-            </div>
-            <div class="title-text">
-              <h3 class="section-title">Giỏ hàng</h3>
-              <p class="section-subtitle">Quản lý sản phẩm trong đơn hàng</p>
-            </div>
-          </div>
-          <div class="section-actions">
-            <button
-              class="action-btn secondary"
-              @click="showProductSearch = true"
-            >
-              <div class="btn-icon">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
-                  />
-                </svg>
+    <div class="order-tabs">
+      <div class="tabs-wrapper">
+        <div class="tabs-scroll">
+          <div v-for="order in tempOrder" :key="order.id" 
+               :class="['order-tab', { active: currentOrderId === order.id }]"
+               @click="switchOrder(order.id)">
+            <div class="tab-main">
+              <div class="tab-indicator"></div>
+              <div class="tab-content">
+                <div class="tab-title">{{ order.tenDonHang }}</div>
+                <div class="tab-meta">{{ order.danhSachSanPham?.length || 0 }} sản phẩm</div>
               </div>
-              <span>Quét QR</span>
-            </button>
-            <button
-              class="action-btn primary"
-              @click="showProductSearch = true"
-            >
-              <div class="btn-icon">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                </svg>
-              </div>
-              <span>Thêm SP</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Modern Cart Items -->
-        <div
-          class="modern-cart-items"
-          v-if="currentOrder && currentOrder.danhSachSanPham.length > 0"
-        >
-          <div
-            v-for="item in currentOrder.danhSachSanPham"
-            :key="item.id"
-            class="modern-cart-item"
-          >
-            <div class="discount-badge" v-if="item.giaTriGiamGia > 0">
-              <span class="discount-text">{{ item.giaTriGiamGia }}% OFF</span>
-            </div>
-
-            <div class="item-checkbox">
-              <label class="modern-checkbox">
-                <input type="checkbox" v-model="item.selected" />
-                <span class="checkmark"></span>
-              </label>
-            </div>
-
-            <div class="item-image">
-              <div class="image-container">
-                <img
-                  v-if="item.duongDanAnh"
-                  :src="
-                    item.duongDanAnh.startsWith('http')
-                      ? item.duongDanAnh
-                      : IMAGE_BASE_URL + item.duongDanAnh
-                  "
-                  :alt="item.tenSanPham"
-                />
-                <div v-else class="placeholder-image">
-                  <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M20,6H16V4A2,2 0 0,0 14,2H10A2,2 0 0,0 8,4V6H4A1,1 0 0,0 3,7V8A1,1 0 0,0 4,9H5V19A3,3 0 0,0 8,22H16A3,3 0 0,0 19,19V9H20A1,1 0 0,0 21,8V7A1,1 0 0,0 20,6M10,4H14V6H10V4M17,19A1,1 0 0,1 16,20H8A1,1 0 0,1 7,19V9H17V19Z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div class="item-details">
-              <div class="item-header">
-                <h4 class="item-name">{{ item.tenSanPham }}</h4>
-                <div class="item-meta">
-                  <span class="item-size">{{ item.tenKichThuoc }}</span>
-                  <span class="item-size">Màu {{ item.tenMauSac }}</span>
-                  <span class="item-size">{{ item.tenTrongLuong }}</span>
-                  <span class="item-size">{{ item.tenDeGiay }}</span>
-                  <span class="item-size">{{ item.tenNhaSanXuat }}</span>
-                  <span class="item-size">{{ item.tenXuatXu }}</span>
-                  <span class="item-size">{{ item.tenChatLieu }}</span>
-                </div>
-              </div>
-              <div class="item-pricing">
-                <span v-if="item.giaTriGiamGia > 0" class="original-price">{{
-                  formatCurrency(item.giaBan)
-                }}</span>
-                <span class="current-price">{{
-                  formatCurrency(item.giaSauGiam)
-                }}</span>
-              </div>
-            </div>
-
-            <div class="item-controls">
-              <div class="quantity-section">
-                <div class="quantity-controls">
-                  <button
-                    @click="updateQuantity(item, -1)"
-                    class="modern-qty-btn minus"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M19 13H5v-2h14v2z" />
-                    </svg>
-                  </button>
-                  <div class="quantity-display">{{ item.soLuong }}</div>
-                  <button
-                    @click="updateQuantity(item, 1)"
-                    class="modern-qty-btn plus"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="item-total">
-                  {{ formatCurrency(item.giaSauGiam * item.soLuong) }}
-                </div>
-              </div>
-              <button
-                @click="removeItem(item)"
-                class="modern-remove-btn"
-                title="Xóa sản phẩm"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-                  />
+              <button v-if="tempOrder.length > 1" 
+                      class="tab-close" 
+                      @click.stop="closeOrder(order.id)"
+                      title="Đóng đơn hàng">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
               </button>
             </div>
           </div>
         </div>
+        <button class="new-tab-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+      </div>
+    </div>
 
-        <!-- Modern Empty State -->
-        <div v-else class="modern-empty-cart">
-          <div class="empty-animation">
-            <div class="empty-icon">
-              <svg
-                width="80"
-                height="80"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5H5.21L4.27,3H1M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z"
-                />
+    <div class="main-content">
+      <!-- Modern Cart Section -->
+      <div class="modern-cart-section">
+        <div class="cart-header">
+          <div class="cart-header-left">
+            <div class="cart-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/> 
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
               </svg>
             </div>
-            <div class="empty-circles">
-              <div class="circle circle-1"></div>
-              <div class="circle circle-2"></div>
-              <div class="circle circle-3"></div>
+            <div class="cart-info">
+              <h2 class="cart-title">Giỏ hàng</h2>
+              <p class="cart-subtitle">{{ currentOrder?.danhSachSanPham?.length || 0 }} sản phẩm</p>
             </div>
           </div>
-          <div class="empty-content">
-            <h3 class="empty-title">Giỏ hàng trống</h3>
-            <p class="empty-subtitle">Thêm sản phẩm để bắt đầu tạo đơn hàng</p>
-            <button
-              class="modern-btn btn-primary"
-              @click="showProductSearch = true"
-            >
-              <div class="btn-icon">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                </svg>
+          <div class="cart-header-actions">
+            <button class="cart-action-btn secondary-btn" @click="showProductSearch = true" title="Quét QR code">
+              <img src="@/assets/QR.svg" alt="QR Code" width="18" height="18" />
+            </button>
+            <button class="cart-action-btn primary-btn" @click="showProductSearch = true" title="Thêm sản phẩm">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span>Thêm sản phẩm</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modern Cart Items -->
+        <div class="modern-cart-items" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
+          <div v-for="item in currentOrder.danhSachSanPham" :key="item.id" class="modern-cart-item">
+            <div class="cart-item-content">
+              <div class="item-checkbox-wrapper">
+                <input type="checkbox" v-model="item.selected" class="modern-checkbox" id="item-{{ item.id }}" />
+                <label :for="'item-' + item.id" class="checkbox-label"></label>
               </div>
+              
+              <div class="item-image-wrapper">
+                <div class="item-image">
+                  <img v-if="item.duongDanAnh" 
+                       :src="item.duongDanAnh.startsWith('http') ? item.duongDanAnh : IMAGE_BASE_URL + item.duongDanAnh" 
+                       :alt="item.tenSanPham" 
+                       class="product-image" />
+                  <div v-else class="image-placeholder">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-details-wrapper">
+                <div class="item-main-info">
+                  <h3 class="product-title">{{ item.tenSanPham }}</h3>
+                  <div class="product-attributes">
+                    <span class="attribute">{{ item.tenKichThuoc }}</span>
+                    <span class="attribute-separator">•</span>
+                    <span class="attribute">{{ item.tenMauSac }}</span>
+                    <span class="attribute-separator">•</span>
+                    <span class="attribute">{{ item.tenNhaSanXuat }}</span>
+                  </div>
+                </div>
+                
+                <div class="item-price-info">
+                  <div class="price-wrapper">
+                    <span v-if="item.giaTriGiamGia > 0" class="original-price">
+                      {{ formatCurrency(item.giaBan) }}
+                    </span>
+                    <span class="current-price">
+                      {{ formatCurrency(item.giaSauGiam) }}
+                    </span>
+                  </div>
+                  <span v-if="item.giaTriGiamGia > 0" class="discount-tag">
+                    -{{ item.giaTriGiamGia }}%
+                  </span>
+                </div>
+              </div>
+
+              <div class="item-actions">
+                <div class="quantity-controls">
+                  <button @click="updateQuantity(item, -1)" class="quantity-btn" :disabled="item.soLuong <= 1">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14"/>
+                    </svg>
+                  </button>
+                  <span class="quantity-display">{{ item.soLuong }}</span>
+                  <button @click="updateQuantity(item, 1)" class="quantity-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                  </button>
+                </div>
+                
+                <div class="item-total-price">
+                  {{ formatCurrency(item.giaSauGiam * item.soLuong) }}
+                </div>
+                
+                <button @click="removeItem(item)" class="remove-item-btn" title="Xóa khỏi giỏ hàng">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modern Empty State -->
+        <div v-else class="modern-empty-state">
+          <div class="empty-state-content">
+            <div class="empty-illustration">
+              <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/> 
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              </svg>
+            </div>
+            <div class="empty-text">
+              <h3 class="empty-title">Giỏ hàng trống</h3>
+              <p class="empty-description">Chưa có sản phẩm nào trong giỏ hàng. Hãy thêm sản phẩm để bắt đầu tạo đơn hàng.</p>
+            </div>
+            <button class="add-first-product-btn" @click="showProductSearch = true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
               <span>Thêm sản phẩm đầu tiên</span>
             </button>
           </div>
         </div>
 
         <!-- Modern Total Section -->
-        <div class="modern-total-section" v-if="currentOrder">
-          <div class="total-background"></div>
-          <div class="total-content">
-            <div class="total-icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M12,1L8,5H11V14H13V5H16M18,23H6A2,2 0 0,1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z"
-                />
-              </svg>
+        <div class="modern-total-section" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
+          <div class="total-summary-card">
+            <div class="total-row">
+              <span class="total-label">Tổng tiền hàng:</span>
+              <span class="total-value">{{ formatCurrency(currentOrder.tongTien || 0) }}</span>
             </div>
-            <div class="total-info">
-              <span class="total-label">Tổng tiền hàng</span>
-              <span class="total-amount">{{
-                formatCurrency(currentOrder.tongTien || 0)
-              }}</span>
+            <div class="total-row" v-if="currentOrder.discount && currentOrder.discount > 0">
+              <span class="total-label discount-label">Giảm giá:</span>
+              <span class="total-value discount-value">-{{ formatCurrency(currentOrder.discount) }}</span>
+            </div>
+            <div class="total-divider"></div>
+            <div class="total-row final-total">
+              <span class="final-label">Thành tiền:</span>
+              <span class="final-value">{{ formatCurrency((currentOrder.tongTien || 0) - (currentOrder.discount || 0)) }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Modern Customer Section -->
-      <div class="modern-customer-section">
-        <div class="modern-section-header">
-          <div class="header-title-group">
-            <div class="section-icon customer">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
-                />
+      <!-- Clean Customer Section -->
+      <div class="clean-customer-section">
+        <div class="customer-section-header">
+          <div class="customer-header-content">
+            <div class="customer-icon-wrapper">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>
-            <div class="title-text">
-              <h3 class="section-title">Khách hàng & Thanh toán</h3>
-              <p class="section-subtitle">
-                Thông tin khách hàng và xử lý thanh toán
-              </p>
+            <div class="customer-header-text">
+              <h3 class="customer-section-title">Khách hàng & Thanh toán</h3>
+              <p class="customer-section-subtitle">Thông tin khách hàng và xử lý thanh toán</p>
             </div>
           </div>
-          <button class="action-btn primary" @click="showCustomerSearch = true">
-            <div class="btn-icon">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path
-                  d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
-                />
-              </svg>
-            </div>
-            <span>Chọn KH</span>
+          <button class="find-customer-btn" @click="showCustomerSearch = true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+            <span>Tìm khách hàng</span>
           </button>
         </div>
 
-        <div class="customer-form" v-if="currentOrder">
+        <div class="clean-customer-form" v-if="currentOrder">
           <!-- Customer Info Section -->
           <div class="customer-info-section">
-            <div class="form-group">
-              <label class="form-label">Tên Khách hàng</label>
-              <div class="customer-input-container">
-                <input
-                  type="text"
-                  v-model="customerDisplayName"
-                  @input="searchCustomers"
-                  @focus="showCustomerDropdown = true"
-                  class="form-control"
-                  placeholder="Nhập tên hoặc email khách hàng để tìm kiếm"
-                  autocomplete="off"
-                />
-                <button
-                  v-if="customerDisplayName"
-                  class="btn-clear-input"
-                  @click="clearCustomerInput"
-                  title="Xóa nội dung"
-                >
-                  ✕
-                </button>
+            <h4 class="section-title">Thông tin khách hàng</h4>
+            
+            <div class="customer-input-group">
+              <label class="customer-label">Tên khách hàng</label>
+              <div class="customer-input-wrapper">
+                <div class="customer-input-container">
+                  <svg class="customer-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <input type="text" v-model="customerDisplayName" @input="searchCustomers"
+                    @focus="showCustomerDropdown = true" class="customer-input"
+                    placeholder="Nhập tên hoặc email khách hàng" autocomplete="off" />
+                  <button v-if="customerDisplayName" class="clear-customer-input" @click="clearCustomerInput"
+                    title="Xóa nội dung">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
 
-                <!-- Customer Suggestions Dropdown -->
-                <div
-                  v-if="customerSuggestions.length > 0 && showCustomerDropdown"
-                  class="customer-suggestions"
-                >
-                  <div
-                    v-for="customer in customerSuggestions"
-                    :key="customer.id"
-                    :class="[
-                      'customer-suggestion-item',
-                      { 'create-new-customer': customer.isCreateNew },
-                    ]"
-                    @click="selectCustomerFromSuggestions(customer)"
-                  >
-                    <div class="customer-info">
-                      <strong>{{ customer.tenKhachHang }}</strong>
-                      <small v-if="!customer.isCreateNew"
-                        >{{ customer.email }} |
-                        {{ customer.soDienThoai }}</small
-                      >
-                      <small v-else class="create-new-hint">
-                        📝 Nhấn để tạo khách hàng mới
-                      </small>
+                <!-- Customer Suggestions -->
+                <div v-if="customerSuggestions.length > 0 && showCustomerDropdown" class="customer-suggestions">
+                  <div v-for="customer in customerSuggestions" :key="customer.id" 
+                       :class="['customer-suggestion', { 'create-new': customer.isCreateNew }]"
+                       @click="selectCustomerFromSuggestions(customer)">
+                    <div class="suggestion-content">
+                      <div class="suggestion-info" v-if="!customer.isCreateNew">
+                        <span class="suggestion-name">{{ customer.tenKhachHang }}</span>
+                        <span class="suggestion-details">{{ customer.email }} • {{ customer.soDienThoai }}</span>
+                      </div>
+                      <div class="suggestion-info create-new-info" v-else>
+                        <div class="create-new-row">
+                          <img :src="PlusIcon" alt="Plus" class="plus-icon" />
+                          <span class="create-new-text">{{ customer.displayName }}</span>
+                        </div>
+                        <span class="create-new-hint">Nhấn để tạo khách hàng mới</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -424,816 +285,550 @@
 
           <!-- Discount Section -->
           <div class="discount-section">
-            <h4 class="subsection-title">💰 Giảm giá & Khuyến mãi</h4>
-
-            <!-- Available Coupons -->
-            <div class="form-group">
-              <label class="form-label">Phiếu giảm giá khả dụng</label>
-              <div class="coupon-selector">
-                <!-- Main Coupon Select Button -->
-                <button
-                  class="btn btn-outline coupon-select-btn"
-                  @click="openCouponModal"
-                  :disabled="availableCoupons.length === 0"
-                >
-                  <span v-if="availableCoupons.length > 0">
-                    <span v-if="selectedCoupons.length > 0">
-                      🎫 Đã chọn phiếu giảm giá
-                      <span v-if="autoAppliedCoupon" class="auto-indicator"
-                        >(🤖 Tự động)</span
-                      >
-                    </span>
-                    <span v-else>🎫 Chọn phiếu giảm giá</span>
-                  </span>
-                  <span v-else> 🎫 Chọn phiếu giảm giá (Đang tải...) </span>
-                </button>
-
-                <!-- Info Message -->
-                <div v-if="availableCoupons.length === 0" class="info-message">
-                  <small class="text-muted">
-                    📝 Đang tải danh sách phiếu giảm giá...
-                  </small>
+            <h4 class="section-title">Giảm giá & Khuyến mãi</h4>
+            
+            <div class="coupon-selector">
+              <button class="select-coupon-btn" @click="openCouponModal"
+                :disabled="availableCoupons.length === 0">
+                <div class="coupon-btn-inner">
+                  <div class="coupon-btn-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
+                      <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
+                      <circle cx="9" cy="12" r="1"/>
+                      <circle cx="15" cy="12" r="1"/>
+                    </svg>
+                  </div>
+                  <div class="coupon-btn-text">
+                    <span v-if="selectedCoupons.length > 0">Chọn phiếu giảm giá</span>
+                    <span v-else-if="availableCoupons.length > 0">Chọn phiếu giảm giá</span>
+                    <span v-else>Đang tải phiếu giảm giá...</span>
+                  </div>
+                  <svg class="coupon-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                  </svg>
                 </div>
-              </div>
+              </button>
             </div>
 
-            <!-- Auto Applied Notification -->
-            <div v-if="autoAppliedCoupon" class="auto-applied-notification">
-              <small class="text-info">
-                🤖 Đã tự động áp dụng phiếu giảm giá tốt nhất cho đơn hàng của
-                bạn!
-              </small>
-            </div>
-
-            <!-- Selected Coupons Display -->
-            <div class="form-group" v-if="selectedCoupons.length > 0">
-              <label class="form-label">Phiếu giảm giá đã chọn</label>
-              <div class="selected-coupons">
-                <div class="selected-coupon-item">
-                  <div class="coupon-summary">
-                    <div class="coupon-header">
-                      <span class="coupon-name">{{
-                        selectedCoupons[0].tenPhieuGiamGia
-                      }}</span>
-                      <span
-                        v-if="
-                          autoAppliedCoupon &&
-                          autoAppliedCoupon.id === selectedCoupons[0].id
-                        "
-                        class="auto-applied-badge"
-                      >
-                        🤖 Tự động
-                      </span>
-                    </div>
+              <!-- Selected Coupon Display -->
+              <div v-if="selectedCoupons.length > 0" class="selected-coupon">
+                <div class="coupon-info">
+                  <div class="coupon-details">
+                    <span class="coupon-name">{{ selectedCoupons[0].tenPhieuGiamGia }}</span>
                     <span class="coupon-value">
-                      <span
-                        v-if="selectedCoupons[0].loaiPhieuGiamGia === false"
-                      >
-                        -{{ selectedCoupons[0].giaTriGiamGia }}% (-{{
-                          calculateCouponDiscount(
-                            selectedCoupons[0]
-                          ).toLocaleString()
-                        }}đ)
+                      <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
+                        -{{ selectedCoupons[0].giaTriGiamGia }}%
                       </span>
-                      <span
-                        v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true"
-                      >
-                        -{{
-                          selectedCoupons[0].giaTriGiamGia.toLocaleString()
-                        }}đ
+                      <span v-else>
+                        -{{ formatCurrency(selectedCoupons[0].giaTriGiamGia) }}
                       </span>
                     </span>
                   </div>
-                  <div class="coupon-actions">
-                    <button
-                      class="btn-change-coupon"
-                      @click="openCouponModal"
-                      title="Thay đổi phiếu giảm giá"
-                    >
-                      🔄
-                    </button>
-                    <button
-                      class="btn-remove-coupon"
-                      @click="removeSelectedCoupon(selectedCoupons[0].id)"
-                      title="Xóa phiếu giảm giá"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Tổng giảm giá</label>
-              <div class="discount-display">
-                <span class="discount-amount"
-                  >{{
-                    currentOrder.discount
-                      ? currentOrder.discount.toLocaleString()
-                      : "0"
-                  }}đ</span
-                >
-                <small
-                  class="discount-breakdown"
-                  v-if="selectedCoupons.length > 0"
-                >
-                  (Từ phiếu giảm giá)
-                </small>
-                <div v-if="selectedCoupons.length > 0" class="discount-details">
-                  <small class="discount-detail">
-                    {{ selectedCoupons[0].tenPhieuGiamGia }}:
-                    <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                      -{{
-                        calculateCouponDiscount(
-                          selectedCoupons[0]
-                        ).toLocaleString()
-                      }}đ
-                    </span>
-                    <span
-                      v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true"
-                    >
-                      -{{ selectedCoupons[0].giaTriGiamGia.toLocaleString() }}đ
-                    </span>
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Shipping Section -->
-          <div class="shipping-section">
-            <h4 class="subsection-title">🚚 Giao hàng</h4>
-            <div class="delivery-toggle" v-if="currentOrder">
-              <label class="toggle-option">
-                <input
-                  type="radio"
-                  value="pickup"
-                  v-model="currentOrder.ghiChu"
-                  checked
-                />
-                <span>Nhận tại cửa hàng</span>
-              </label>
-              <label class="toggle-option">
-                <input
-                  type="radio"
-                  value="delivery"
-                  v-model="currentOrder.ghiChu"
-                />
-                <span>Giao hàng tận nơi</span>
-              </label>
-            </div>
-
-            <div
-              class="shipping-info"
-              v-if="currentOrder && currentOrder.ghiChu === 'delivery'"
-            >
-              <div class="delivery-service-selector">
-                <label class="form-label">Đơn vị vận chuyển:</label>
-                <div class="delivery-service-toggle">
-                  <button
-                    v-for="service in deliveryServices"
-                    :key="service.code"
-                    :class="[
-                      'service-btn',
-                      {
-                        active:
-                          currentOrder?.selectedService?.code === service.code,
-                      },
-                    ]"
-                    @click="selectDeliveryService(service)"
-                  >
-                    <div class="service-logo">
-                      <span
-                        class="service-text"
-                        :style="{ color: service.color }"
-                        >{{ service.name }}</span
-                      >
-                    </div>
-                    <div class="service-info">
-                      <div class="service-time">{{ service.deliveryTime }}</div>
-                      <div class="service-fee">
-                        {{ formatCurrency(service.fee) }}
-                      </div>
-                    </div>
+                  <button class="remove-coupon-btn" @click="removeSelectedCoupon(selectedCoupons[0].id)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
                   </button>
                 </div>
               </div>
 
-              <div
-                class="selected-service-info"
-                v-if="currentOrder?.selectedService"
-              >
-                <div class="shipping-method">
-                  <span
-                    >🚚 Đơn vị: {{ currentOrder.selectedService.name }}</span
-                  >
-                </div>
-                <div class="estimated-delivery">
-                  <span
-                    >📅 Thời gian:
-                    {{ currentOrder.selectedService.deliveryTime }}</span
-                  >
-                </div>
-                <div class="shipping-fee">
-                  <span
-                    >💰 Phí vận chuyển:
-                    {{
-                      formatCurrency(currentOrder.selectedService.fee || 0)
-                    }}</span
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- Delivery Address Section -->
-            <div
-              v-if="currentOrder && currentOrder.ghiChu === 'delivery'"
-              class="delivery-address-section"
-            >
-              <h5 class="address-title">📍 Địa chỉ giao hàng</h5>
-
-              <div class="address-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Họ tên người nhận</label>
-                    <input
-                      type="text"
-                      v-model="deliveryAddress.tenNguoiNhan"
-                      class="form-control"
-                      placeholder="Nhập họ tên người nhận"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Số điện thoại người nhận</label>
-                    <input
-                      type="tel"
-                      v-model="deliveryAddress.soDienThoaiNguoiNhan"
-                      class="form-control"
-                      placeholder="Nhập số điện thoại"
-                    />
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">Email người nhận (tùy chọn)</label>
-                  <input
-                    type="email"
-                    v-model="deliveryAddress.emailNguoiNhan"
-                    class="form-control"
-                    placeholder="Nhập email người nhận"
-                  />
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Tỉnh/Thành phố</label>
-                    <input
-                      type="text"
-                      v-model="deliveryAddress.thanhPho"
-                      class="form-control"
-                      placeholder="Nhập tỉnh/thành phố"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Quận/Huyện</label>
-                    <input
-                      type="text"
-                      v-model="deliveryAddress.quan"
-                      class="form-control"
-                      placeholder="Nhập quận/huyện"
-                    />
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Xã/Phường</label>
-                    <input
-                      type="text"
-                      v-model="deliveryAddress.phuong"
-                      class="form-control"
-                      placeholder="Nhập xã/phường"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Địa chỉ cụ thể</label>
-                    <input
-                      type="text"
-                      v-model="deliveryAddress.diaChiCuThe"
-                      class="form-control"
-                      placeholder="Nhập địa chỉ cụ thể"
-                    />
-                  </div>
-                </div>
-
-                <div class="address-preview" v-if="isAddressComplete">
-                  <strong>📍 Địa chỉ đầy đủ:</strong>
-                  <p>{{ getFullAddress }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Price Summary -->
-          <div class="price-summary-section">
-            <h4 class="subsection-title">📊 Tổng kết đơn hàng</h4>
-            <div class="price-breakdown" v-if="currentOrder">
-              <div class="price-row">
-                <span>Tiền hàng</span>
-                <span>{{ formatCurrency(currentOrder.tongTien || 0) }}</span>
-              </div>
-              <div class="price-row">
-                <span>Phí vận chuyển</span>
-                <span
-                  v-if="
-                    currentOrder.tongTien >= 3000000 &&
-                    currentOrder.ghiChu === 'delivery'
-                  "
-                >
-                  <span class="free-shipping">Miễn phí 🚚</span>
-                </span>
-                <span v-else>
-                  {{ formatCurrency(currentOrder.phiVanChuyen || 0) }}
-                </span>
-              </div>
-              <!-- Thông báo miễn phí giao hàng -->
-              <div
-                v-if="currentOrder.ghiChu === 'delivery'"
-                class="shipping-notice"
-              >
-                <small
-                  v-if="currentOrder.tongTien >= 3000000"
-                  class="text-success"
-                >
-                  🎉 Đơn hàng đủ điều kiện miễn phí giao hàng!
-                </small>
-                <small v-else class="text-muted">
-                  💡 Mua thêm
-                  {{ formatCurrency(3000000 - currentOrder.tongTien) }} để được
-                  miễn phí giao hàng
-                </small>
-              </div>
-              <!-- Coupon Discount Breakdown -->
-              <div
-                v-if="selectedCoupons.length > 0"
-                class="coupon-discount-breakdown"
-              >
-                <div class="price-row coupon-discount">
-                  <span>
-                    {{ selectedCoupons[0].tenPhieuGiamGia }}
-                    <small v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                      ({{ selectedCoupons[0].giaTriGiamGia }}%)
-                    </small>
-                    <small
-                      v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true"
-                    >
-                      ({{ selectedCoupons[0].giaTriGiamGia.toLocaleString() }}đ)
-                    </small>
-                  </span>
-                  <span class="discount">
-                    <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
-                      -{{
-                        calculateCouponDiscount(
-                          selectedCoupons[0]
-                        ).toLocaleString()
-                      }}đ
-                    </span>
-                    <span
-                      v-else-if="selectedCoupons[0].loaiPhieuGiamGia === true"
-                    >
-                      -{{ selectedCoupons[0].giaTriGiamGia.toLocaleString() }}đ
-                    </span>
-                  </span>
-                </div>
-
-                <!-- Total Discount Row -->
-                <div class="price-row discount-total">
-                  <span><strong>Tổng giảm giá</strong></span>
-                  <span class="discount"
-                    >-{{ formatCurrency(currentOrder.discount || 0) }}</span
-                  >
-                </div>
-              </div>
-              <div class="price-row total">
-                <span>Tổng số tiền</span>
-                <span class="total-amount">{{
-                  formatCurrency(currentOrder.tongTienSauGiam || 0)
-                }}</span>
+              <!-- Auto Applied Notification -->
+              <div v-if="autoAppliedCoupon" class="auto-applied-notice">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4"/>
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <span>Đã tự động áp dụng phiếu giảm giá tốt nhất</span>
               </div>
             </div>
           </div>
 
           <!-- Payment Section -->
           <div class="payment-section">
-            <h4 class="subsection-title">💳 Thanh toán</h4>
-
-            <!-- Payment Method Selection -->
-            <div class="payment-method-selection" v-if="currentOrder">
-              <label class="form-label">Phương thức thanh toán</label>
-              <div class="payment-options">
-                <div class="payment-option">
-                  <input
-                    type="radio"
-                    id="pay_now"
-                    value="pay_now"
-                    v-model="currentOrder.phuongThucThanhToan"
-                  />
-                  <label for="pay_now">💰 Trả ngay</label>
+            <h4 class="section-title">Thanh toán</h4>
+            
+            <!-- Payment Methods -->
+            <div class="payment-options">
+              <div class="payment-option" 
+                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'pay_now' }"
+                   @click="currentOrder.phuongThucThanhToan = 'pay_now'">
+                <div class="payment-option-icon">
+                  <img src="@/assets/Money.svg" alt="Cash Icon" width="18" height="18" />
                 </div>
-                <div class="payment-option">
-                  <input
-                    type="radio"
-                    id="bank_transfer"
-                    value="bank_transfer"
-                    v-model="currentOrder.phuongThucThanhToan"
-                  />
-                  <label for="bank_transfer">🏦 Chuyển khoản</label>
+                <div class="payment-option-content">
+                  <span class="payment-option-title">Tiền mặt</span>
+                  <span class="payment-option-desc">Thanh toán trực tiếp</span>
                 </div>
-                <div
-                  class="payment-option"
-                  v-if="
-                    currentOrder.ghiChu &&
-                    currentOrder.ghiChu.includes('delivery')
-                  "
-                >
-                  <input
-                    type="radio"
-                    id="cod"
-                    value="cod"
-                    v-model="currentOrder.phuongThucThanhToan"
-                  />
-                  <label for="cod">🚚 Thanh toán khi nhận hàng</label>
+              </div>
+              
+              <div class="payment-option" 
+                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'bank_transfer' }"
+                   @click="currentOrder.phuongThucThanhToan = 'bank_transfer'">
+                <div class="payment-option-icon">
+                  <img src="@/assets/Banking.svg" alt="Banking Icon" width="18" height="18" />
+                </div>
+                <div class="payment-option-content">
+                  <span class="payment-option-title">Chuyển khoản</span>
+                  <span class="payment-option-desc">Thanh toán qua ngân hàng</span>
+                </div>
+              </div>
+              
+              <div class="payment-option" 
+                   :class="{ selected: currentOrder?.phuongThucThanhToan === 'home_delivery' }"
+                   @click="currentOrder.phuongThucThanhToan = 'home_delivery'">
+                <div class="payment-option-icon">
+                  <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="18" height="18" />
+                </div>
+                <div class="payment-option-content">
+                  <span class="payment-option-title">Giao hàng tận nơi</span>
+                  <span class="payment-option-desc">Thanh toán khi nhận hàng</span>
                 </div>
               </div>
             </div>
-
-            <!-- Pay Now Input -->
-            <div
-              class="payment-method"
-              v-if="currentOrder?.phuongThucThanhToan === 'pay_now'"
-            >
-              <label class="form-label">Số tiền khách trả</label>
-              <div class="payment-amount">
-                <input
-                  type="number"
-                  v-model="currentOrder.tienKhachTra"
-                  class="form-control"
-                  placeholder="Nhập số tiền khách thanh toán"
-                  min="0"
-                  :max="currentOrder.tongTienSauGiam"
-                />
-              </div>
-            </div>
-
-            <!-- Bank Transfer QR Code -->
-            <div
-              class="bank-transfer-section"
-              v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'"
-            >
-              <div class="qr-code-container">
-                <h5>🏦 Thông tin chuyển khoản</h5>
-                <div class="bank-info">
-                  <p><strong>Ngân hàng:</strong> Vietcombank</p>
-                  <p><strong>Số tài khoản:</strong> 1234567890</p>
-                  <p><strong>Chủ tài khoản:</strong> GEAR UP STORE</p>
-                  <p>
-                    <strong>Số tiền:</strong>
-                    {{ formatCurrency(currentOrder.tongTienSauGiam) }}
-                  </p>
-                  <p><strong>Nội dung:</strong> HD{{ Date.now() }}</p>
-                </div>
-                <div class="qr-placeholder">
-                  <div class="qr-code">
-                    📱<br />QR Code<br />{{
-                      formatCurrency(currentOrder.tongTienSauGiam)
-                    }}
+            
+            <!-- Bank Transfer Details -->
+            <div v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'" class="bank-transfer-info">
+              <div class="bank-info-card">
+                <div class="bank-card-header">
+                  <div class="bank-icon">
+                    <img src="@/assets/Banking.svg" alt="Banking Icon" width="24" height="24" />
                   </div>
-                  <p class="qr-note">Quét mã QR để chuyển khoản</p>
+                  <div class="bank-header-text">
+                    <h5 class="bank-title">Thông tin chuyển khoản</h5>
+                    <p class="bank-subtitle">Vui lòng chuyển khoản theo thông tin bên dưới</p>
+                  </div>
+                </div>
+                
+                <div class="bank-details">
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Ngân hàng:</span>
+                    <span class="bank-value">Vietcombank (VCB)</span>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Số tài khoản:</span>
+                    <div class="bank-account">
+                      <span class="bank-value">1234567890123</span>
+                      <button class="copy-btn" @click="copyToClipboard('1234567890123')" title="Sao chép số tài khoản">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Chủ tài khoản:</span>
+                    <span class="bank-value">CONG TY TNHH GEAR UP</span>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Số tiền:</span>
+                    <span class="bank-value amount">{{ formatCurrency((currentOrder?.tongTien || 0) - (currentOrder?.discount || 0)) }}</span>
+                  </div>
+                  <div class="bank-detail-row">
+                    <span class="bank-label">Nội dung:</span>
+                    <div class="bank-account">
+                      <span class="bank-value">{{ `THANH TOAN DON HANG ${currentOrder?.tenDonHang || 'HD' + currentOrder?.id}` }}</span>
+                      <button class="copy-btn" @click="copyToClipboard(`THANH TOAN DON HANG ${currentOrder?.tenDonHang || 'HD' + currentOrder?.id}`)" title="Sao chép nội dung chuyển khoản">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="qr-code-section">
+                  <div class="qr-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="5" height="5"/>
+                      <rect x="3" y="16" width="5" height="5"/>
+                      <rect x="16" y="3" width="5" height="5"/>
+                      <path d="M21 16h-3v3M21 21v.01M12 7v3M12 15.01V15"/>
+                    </svg>
+                    <span class="qr-title">Quét mã QR để chuyển khoản</span>
+                  </div>
+                  
+                  <div class="qr-code-container">
+                    <div class="qr-placeholder">
+                      <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <!-- QR Code placeholder pattern -->
+                        <rect width="120" height="120" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" rx="8"/>
+                        <rect x="10" y="10" width="20" height="20" fill="#1e293b" rx="2"/>
+                        <rect x="35" y="10" width="5" height="5" fill="#1e293b"/>
+                        <rect x="45" y="10" width="5" height="5" fill="#1e293b"/>
+                        <rect x="55" y="10" width="10" height="10" fill="#1e293b"/>
+                        <rect x="90" y="10" width="20" height="20" fill="#1e293b" rx="2"/>
+                        
+                        <rect x="15" y="15" width="10" height="10" fill="#ffffff" rx="1"/>
+                        <rect x="95" y="15" width="10" height="10" fill="#ffffff" rx="1"/>
+                        
+                        <rect x="10" y="40" width="5" height="5" fill="#1e293b"/>
+                        <rect x="20" y="40" width="10" height="5" fill="#1e293b"/>
+                        <rect x="35" y="40" width="5" height="10" fill="#1e293b"/>
+                        <rect x="50" y="40" width="15" height="5" fill="#1e293b"/>
+                        <rect x="80" y="40" width="5" height="10" fill="#1e293b"/>
+                        
+                        <rect x="10" y="60" width="10" height="5" fill="#1e293b"/>
+                        <rect x="30" y="60" width="5" height="10" fill="#1e293b"/>
+                        <rect x="45" y="60" width="5" height="5" fill="#1e293b"/>
+                        <rect x="60" y="60" width="10" height="10" fill="#1e293b"/>
+                        <rect x="85" y="60" width="10" height="5" fill="#1e293b"/>
+                        
+                        <rect x="10" y="90" width="20" height="20" fill="#1e293b" rx="2"/>
+                        <rect x="15" y="95" width="10" height="10" fill="#ffffff" rx="1"/>
+                        
+                        <rect x="40" y="80" width="5" height="5" fill="#1e293b"/>
+                        <rect x="50" y="80" width="5" height="10" fill="#1e293b"/>
+                        <rect x="65" y="80" width="10" height="5" fill="#1e293b"/>
+                        <rect x="85" y="80" width="5" height="15" fill="#1e293b"/>
+                        <rect x="100" y="80" width="10" height="10" fill="#1e293b"/>
+                      </svg>
+                    </div>
+                    <div class="qr-info">
+                      <p class="qr-description">Quét mã QR bằng app ngân hàng để chuyển khoản nhanh chóng</p>
+                      <div class="supported-banks">
+                        <span class="bank-tag">VCB</span>
+                        <span class="bank-tag">MB Bank</span>
+                        <span class="bank-tag">TPBank</span>
+                        <span class="bank-tag">+10 khác</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="transfer-note">
+                  <div class="note-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                  </div>
+                  <div class="note-content">
+                    <p><strong>Lưu ý quan trọng:</strong></p>
+                    <ul>
+                      <li>Vui lòng chuyển đúng số tiền và nội dung chuyển khoản</li>
+                      <li>Đơn hàng sẽ được xử lý sau khi nhận được thanh toán</li>
+                      <li>Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ trợ</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- COD Info -->
-            <div
-              class="cod-info"
-              v-if="currentOrder?.phuongThucThanhToan === 'cod'"
-            >
-              <div class="cod-notice">
-                <h5>🚚 Thanh toán khi nhận hàng</h5>
-                <p>
-                  Khách hàng sẽ thanh toán khi nhận được hàng tại địa chỉ giao
-                  hàng.
-                </p>
-                <p>
-                  <strong>Số tiền cần thanh toán:</strong>
-                  {{ formatCurrency(currentOrder.tongTienSauGiam) }}
-                </p>
+            <!-- Home Delivery Details -->
+            <div v-if="currentOrder?.phuongThucThanhToan === 'home_delivery'" class="delivery-info">
+              <div class="delivery-info-card">
+                <div class="delivery-card-header">
+                  <div class="delivery-icon">
+                    <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="24" height="24" />
+                  </div>
+                  <div class="delivery-header-text">
+                    <h5 class="delivery-title">Thông tin giao hàng</h5>
+                    <p class="delivery-subtitle">Thông tin địa chỉ và thời gian giao hàng</p>
+                  </div>
+                </div>
+                
+                <div class="delivery-form">
+                  <div class="form-group">
+                    <label class="form-label">Họ và tên người nhận:</label>
+                    <input type="text" class="form-input" :value="customerDisplayName" readonly placeholder="Tên khách hàng" />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Số điện thoại:</label>
+                    <input type="text" class="form-input" placeholder="Nhập số điện thoại người nhận" />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Địa chỉ giao hàng:</label>
+                    <textarea class="form-textarea" rows="3" placeholder="Nhập địa chỉ cụ thể để giao hàng"></textarea>
+                  </div>
+                  
+                  <div class="delivery-options">
+                    <div class="delivery-option-item">
+                      <label class="form-label">Đơn vị vận chuyển:</label>
+                      <select class="form-select" v-model="selectedShippingCarrier" @change="updateShippingFee">
+                        <option value="">Chọn đơn vị vận chuyển</option>
+                        <option value="ghn">Giao Hàng Nhanh (GHN)</option>
+                        <option value="ghtk">Giao Hàng Tiết Kiệm (GHTK)</option>
+                        <option value="vnpost">VNPost</option>
+                        <option value="jnt">J&T Express</option>
+                        <option value="grab">GrabExpress</option>
+                        <option value="shopee">Shopee Express</option>
+                      </select>
+                    </div>
+                    
+                    <div class="delivery-option-item">
+                      <label class="form-label">Loại dịch vụ:</label>
+                      <select class="form-select" v-model="selectedServiceType" @change="updateShippingFee" :disabled="!selectedShippingCarrier">
+                        <option value="">Chọn loại dịch vụ</option>
+                        <template v-if="selectedShippingCarrier === 'ghn'">
+                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 25.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 35.000Đ</option>
+                          <option value="same_day">Trong ngày - 50.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'ghtk'">
+                          <option value="standard">Tiêu chuẩn (2-4 ngày) - 22.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 30.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'vnpost'">
+                          <option value="standard">Tiêu chuẩn (3-5 ngày) - 20.000Đ</option>
+                          <option value="express">Nhanh (2-3 ngày) - 28.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'jnt'">
+                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 24.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 32.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'grab'">
+                          <option value="standard">Standard (2-4h) - 40.000Đ</option>
+                          <option value="express">Express (1-2h) - 60.000Đ</option>
+                        </template>
+                        <template v-else-if="selectedShippingCarrier === 'shopee'">
+                          <option value="standard">Tiêu chuẩn (2-3 ngày) - 23.000Đ</option>
+                          <option value="express">Nhanh (1-2 ngày) - 31.000Đ</option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="shipping-fee-summary">
+                    <div class="fee-breakdown">
+                      <div class="fee-item">
+                        <span class="fee-label">Phí giao hàng:</span>
+                        <span class="fee-value">{{ formatShippingFee() }}</span>
+                      </div>
+                      <div class="fee-item" v-if="isEligibleForFreeShipping()">
+                        <span class="fee-label text-green">Miễn phí giao hàng:</span>
+                        <span class="fee-value text-green">-{{ formatShippingFee() }}</span>
+                      </div>
+                      <div class="fee-total">
+                        <span class="total-label">Tổng phí vận chuyển:</span>
+                        <span class="total-value">{{ formatFinalShippingFee() }}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="shipping-note" v-if="selectedShippingCarrier">
+                      <div class="carrier-info">
+                        <div class="carrier-logo">
+                          <span class="carrier-name">{{ getCarrierDisplayName() }}</span>
+                        </div>
+                        <div class="delivery-estimate">
+                          <span class="estimate-text">{{ getDeliveryEstimate() }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="delivery-note">
+                  <div class="note-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                  </div>
+                  <div class="note-content">
+                    <p><strong>Lưu ý quan trọng:</strong></p>
+                    <ul>
+                      <li>Vui lòng kiểm tra kỹ sản phẩm trước khi thanh toán</li>
+                      <li>Thanh toán tiền mặt khi nhận hàng</li>
+                      <li>Liên hệ hotline: <strong>1900-xxx-xxx</strong> nếu cần hỗ trợ</li>
+                      <li>Khách hàng có thể trả hàng trong vòng 7 ngày</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Payment Status -->
-            <div
-              class="payment-details"
-              v-if="currentOrder?.phuongThucThanhToan === 'pay_now'"
-            >
-              <div class="detail-row">
-                <span>Số tiền cần trả</span>
-                <span class="amount">{{
-                  formatCurrency(currentOrder?.tongTienSauGiam || 0)
-                }}</span>
-              </div>
-              <div class="detail-row">
-                <span>Khách đã trả</span>
-                <span class="amount paid">{{
-                  formatCurrency(currentOrder?.tienKhachTra || 0)
-                }}</span>
-              </div>
-              <div class="detail-row">
-                <span>Tiền thiếu/Trả lại</span>
-                <span
-                  :class="[
-                    'amount',
-                    (currentOrder?.tienKhachTra || 0) -
-                      (currentOrder?.tongTienSauGiam || 0) >=
-                    0
-                      ? 'surplus'
-                      : 'deficit',
-                  ]"
-                >
-                  {{
-                    formatCurrency(
-                      Math.abs(
-                        (currentOrder?.tienKhachTra || 0) -
-                          (currentOrder?.tongTienSauGiam || 0)
-                      )
-                    )
-                  }}
-                </span>
+            <!-- Order Total -->
+            <div class="order-total">
+              <div class="total-summary">
+                <div class="total-row">
+                  <span class="total-label">Tổng tiền hàng:</span>
+                  <span class="total-amount">{{ formatCurrency(currentOrder?.tongTien || 0) }}</span>
+                </div>
+                <div class="total-row" v-if="currentOrder?.discount">
+                  <span class="total-label">Giảm giá:</span>
+                  <span class="total-amount discount-amount">-{{ formatCurrency(currentOrder.discount) }}</span>
+                </div>
+                <div class="total-divider"></div>
+                <div class="total-row final-row">
+                  <span class="final-label">Thành tiền:</span>
+                  <span class="final-amount">{{ formatCurrency((currentOrder?.tongTien || 0) - (currentOrder?.discount || 0)) }}</span>
+                </div>
               </div>
             </div>
 
-            <!-- Transfer Status -->
-            <div
-              class="payment-details"
-              v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'"
-            >
-              <div class="detail-row">
-                <span>Trạng thái</span>
-                <span class="status pending">⏳ Chờ chuyển khoản</span>
-              </div>
-              <div class="detail-row">
-                <span>Số tiền cần chuyển</span>
-                <span class="amount">{{
-                  formatCurrency(currentOrder?.tongTienSauGiam || 0)
-                }}</span>
-              </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-              <button
-                class="btn btn-primary btn-lg w-100"
-                @click="confirmOrder"
-              >
-                XÁC NHẬN ĐẶT HÀNG
-              </button>
-            </div>
+            <!-- Confirm Order Button -->
+            <button class="confirm-order-btn" @click="confirmOrder" 
+                    :disabled="!currentOrder || !currentOrder.danhSachSanPham?.length || !customerDisplayName.trim()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4"/>
+                <circle cx="12" cy="12" r="10"/>
+              </svg>
+              <span>Xác nhận đặt hàng</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Product Search Modal -->
-    <div
-      v-if="showProductSearch"
-      class="modal-overlay"
-      @click="showProductSearch = false"
-    >
-      <div class="modal-content large" @click.stop>
-        <div class="modal-header">
-          <h3>Tìm kiếm sản phẩm</h3>
-          <button class="modal-close" @click="showProductSearch = false">
-            ✕
+    <!-- Modern Product Search Modal -->
+    <div v-if="showProductSearch" class="modal-overlay" @click="showProductSearch = false">
+      <div class="product-modal" @click.stop>
+        <div class="product-modal-header">
+          <h3 class="modal-title">Tìm kiếm sản phẩm</h3>
+          <p class="modal-subtitle">Chọn sản phẩm để thêm vào đơn hàng</p>
+          <button class="modal-close-btn" @click="showProductSearch = false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
           </button>
         </div>
 
         <div class="modal-body">
-          <!-- Search and Filter -->
-          <div
-            class="search-section"
-            style="display: flex; gap: 20px; align-items: center"
-          >
-            <div class="search-bar">
-              <input
-                type="text"
-                v-model="productSearchQuery"
-                class="form-control"
-                style="width: 400px"
-                placeholder="Tìm theo tên sản phẩm, mã và thuộc tính sản phẩm"
-              />
-            </div>
-
-            <div class="price-range" style="margin-left: auto">
-              <span>{{ formatCurrency(priceRange.min) }}</span>
-              <input
-                type="range"
-                :min="priceRange.min"
-                :max="priceRange.max"
-                v-model="selectedPriceMax"
-                class="price-slider"
-              />
-              <span>{{ formatCurrency(priceRange.max) }}</span>
+          <!-- Clean Search Header -->
+          <div class="search-header">
+            <div class="main-search-container">
+              <div class="search-input-wrapper">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                <input type="text" v-model="productSearchQuery" class="main-search-input" placeholder="Tìm theo tên sản phẩm, mã sản phẩm..." />
+              </div>
+              
+              <div class="price-filter-compact">
+                <span class="price-label">Khoảng giá:</span>
+                <div class="price-display">
+                  <span class="price-value">{{ formatCurrency(priceRange.min) }}</span>
+                  <input type="range" :min="priceRange.min" :max="priceRange.max" v-model="selectedPriceMax" class="price-slider" />
+                  <span class="price-value">{{ formatCurrency(priceRange.max) }}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div
-            class="filter-row"
-            style="
-              display: flex;
-              gap: 19.2px;
-              margin-top: 15px;
-              flex-wrap: wrap;
-              align-items: center;
-            "
-          >
-            <select
-              v-model="selectedNhaSanXuat"
-              class="form-control"
-              style="width: 165px"
-            >
-              <option value="">Nhà sản xuất: Tất cả</option>
-              <option
-                v-for="category in NhaSanXuats"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ category.tenNhaSanXuat }}
-              </option>
-            </select>
+          <!-- Clean Filter Section -->
+          <div class="filter-section">
+            <div class="filter-header">
+              <h4 class="filter-title">Bộ lọc sản phẩm</h4>
+              <button class="clear-filters-btn" @click="clearAllFilters">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/>
+                </svg>
+                Xóa bộ lọc
+              </button>
+            </div>
+            
+            <div class="filters-grid">
+              <div class="filter-item">
+                <label class="filter-label">Nhà sản xuất</label>
+                <select v-model="selectedNhaSanXuat" class="filter-select">
+                  <option value="">Tất cả nhà sản xuất</option>
+                  <option v-for="category in NhaSanXuats" :key="category.id" :value="category.id">
+                    {{ category.tenNhaSanXuat }}
+                  </option>
+                </select>
+              </div>
 
-            <select
-              v-model="selectedXuatXu"
-              class="form-control"
-              style="width: 165px"
-            >
-              <option value="">Xuất xứ: Tất cả</option>
-              <option
-                v-for="category in XuatXus"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ category.tenXuatXu }}
-              </option>
-            </select>
+              <div class="filter-item">
+                <label class="filter-label">Xuất xứ</label>
+                <select v-model="selectedXuatXu" class="filter-select">
+                  <option value="">Tất cả xuất xứ</option>
+                  <option v-for="category in XuatXus" :key="category.id" :value="category.id">
+                    {{ category.tenXuatXu }}
+                  </option>
+                </select>
+              </div>
 
-            <select
-              v-model="selectedChatLieu"
-              class="form-control"
-              style="width: 165px"
-            >
-              <option value="">Chất liệu: Tất cả</option>
-              <option
-                v-for="category in ChatLieus"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ category.tenChatLieu }}
-              </option>
-            </select>
+              <div class="filter-item">
+                <label class="filter-label">Chất liệu</label>
+                <select v-model="selectedChatLieu" class="filter-select">
+                  <option value="">Tất cả chất liệu</option>
+                  <option v-for="category in ChatLieus" :key="category.id" :value="category.id">
+                    {{ category.tenChatLieu }}
+                  </option>
+                </select>
+              </div>
 
-            <select
-              v-model="selectedSize"
-              class="form-control"
-              style="width: 165px"
-            >
-              <option value="">Size: Tất cả</option>
-              <option
-                v-for="category in KichThuocs"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ category.tenKichThuoc }}
-              </option>
-            </select>
+              <div class="filter-item">
+                <label class="filter-label">Kích thước</label>
+                <select v-model="selectedSize" class="filter-select">
+                  <option value="">Tất cả kích thước</option>
+                  <option v-for="category in KichThuocs" :key="category.id" :value="category.id">
+                    {{ category.tenKichThuoc }}
+                  </option>
+                </select>
+              </div>
 
-            <select
-              v-model="selectedDeGiay"
-              class="form-control"
-              style="width: 165px"
-            >
-              <option value="">Đế giày: Tất cả</option>
-              <option
-                v-for="category in DeGiays"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ category.tenDeGiay }}
-              </option>
-            </select>
+              <div class="filter-item">
+                <label class="filter-label">Đế giày</label>
+                <select v-model="selectedDeGiay" class="filter-select">
+                  <option value="">Tất cả loại đế</option>
+                  <option v-for="category in DeGiays" :key="category.id" :value="category.id">
+                    {{ category.tenDeGiay }}
+                  </option>
+                </select>
+              </div>
 
-            <select
-              v-model="selectedMauSac"
-              class="form-control"
-              style="width: 165px"
-            >
-              <option value="">Màu sắc: Tất cả</option>
-              <option
-                v-for="category in MauSacs"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ category.tenMauSac }}
-              </option>
-            </select>
+              <div class="filter-item">
+                <label class="filter-label">Màu sắc</label>
+                <select v-model="selectedMauSac" class="filter-select">
+                  <option value="">Tất cả màu sắc</option>
+                  <option v-for="category in MauSacs" :key="category.id" :value="category.id">
+                    {{ category.tenMauSac }}
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
 
-          <!-- Product Grid -->
+          <!-- Redesigned Product Grid -->
           <div class="product-grid">
-            <div
-              v-for="product in filteredSearchProducts"
-              :key="product.id"
-              class="product-card"
-            >
-              <div class="discount-label" v-if="product.giaSauGiamGia > 0">
-                {{ product.giaTriGiamGia }}% OFF
+            <div v-for="product in filteredSearchProducts" :key="product.id" class="product-card">
+              <div class="product-discount-badge" v-if="product.giaTriGiamGia > 0">
+                <span class="discount-text">-{{ product.giaTriGiamGia }}%</span>
               </div>
-              <div class="product-image" @click="openImageModal(product.id)">
-                <!-- Carousel cho nhiều ảnh -->
-                <div
-                  v-if="product.anhSanPham && product.anhSanPham.length > 1"
-                  class="image-carousel"
-                >
-                  <div
-                    v-for="(imageUrl, index) in product.anhSanPham"
-                    :key="`carousel-${product.id}-${index}`"
-                    :class="['carousel-image', { active: index === 0 }]"
-                  >
-                    <img
-                      :src="
-                        imageUrl.startsWith('http')
-                          ? imageUrl
-                          : IMAGE_BASE_URL + imageUrl
-                      "
-                      :alt="`${product.tenSanPham} - ${index + 1}`"
-                      @error="
-                        (e) => {
-                          console.error(
-                            '❌ Carousel image error:',
-                            imageUrl,
-                            e
-                          );
-                          handleImageError(e);
-                        }
-                      "
-                    />
-                  </div>
 
-                  <!-- Indicators -->
-                  <div class="carousel-indicators">
-                    <span
-                      v-for="(imageUrl, index) in product.anhSanPham"
-                      :key="`indicator-${product.id}-${index}`"
-                      :class="['indicator', { active: index === 0 }]"
-                    ></span>
+              <div class="product-image-section" @click="openImageModal(product.id)">
+                <div class="product-image">
+                  <img v-if="product.anhSanPham && product.anhSanPham.length > 0" :src="product.anhSanPham[0].startsWith('http')
+                    ? product.anhSanPham[0]
+                    : IMAGE_BASE_URL + product.anhSanPham[0]
+                    " :alt="product.tenSanPham" @error="handleImageError" />
+                  <div v-else class="image-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21,15 16,10 5,21"></polyline>
+                    </svg>
                   </div>
                 </div>
-
-                <!-- Ảnh đơn -->
-                <div v-else class="single-image">
-                  <img
-                    v-if="product.anhSanPham && product.anhSanPham.length > 0"
-                    :src="
-                      product.anhSanPham[0].startsWith('http')
-                        ? product.anhSanPham[0]
-                        : IMAGE_BASE_URL + product.anhSanPham[0]
-                    "
-                    :alt="product.tenSanPham"
-                    @error="
-                      (e) => {
-                        handleImageError(e);
-                      }
-                    "
-                  />
-                  <div v-else class="placeholder-image">👟</div>
+                <div class="image-overlay">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
                 </div>
               </div>
-              <div class="product-info">
-                <h4>{{ product.tenSanPham }}</h4>
-                <p class="product-details">
-                  {{ product.maSanPham }} | {{ product.tenDeGiay }} |
-                  {{ product.tenNhaSanXuat }}
-                </p>
-                <p class="product-specs">
-                  {{ product.tenMauSac }} | {{ product.tenChatLieu }} | Size:
-                  {{ product.tenKichThuoc }}
-                </p>
-                <div class="product-price">
-                  <span
-                    v-if="product.giaTriGiamGia > 0"
-                    class="original-price"
-                    >{{ formatCurrency(product.giaBan) }}</span
-                  >
+
+              <div class="product-info-section">
+                <h4 class="product-name">{{ product.tenSanPham }}</h4>
+                <div class="product-details">
+                  <span class="product-code">{{ product.maSanPham }}</span>
+                  <span class="product-brand">{{ product.tenNhaSanXuat }}</span>
+                </div>
+                <div class="product-specs">
+                  <span class="spec">{{ product.tenMauSac }}</span>
+                  <span class="spec">{{ product.tenKichThuoc }}</span>
+                  <span class="spec">{{ product.tenChatLieu }}</span>
+                </div>
+                <div class="product-pricing">
+                  <span v-if="product.giaTriGiamGia > 0" class="original-price">{{ formatCurrency(product.giaBan)
+                  }}</span>
                   <span class="current-price">{{
                     formatCurrency(
                       (product.giaBan / 100) * (100 - product.giaTriGiamGia)
@@ -1241,12 +836,14 @@
                   }}</span>
                 </div>
               </div>
+
               <div class="product-actions">
-                <button
-                  class="btn btn-primary btn-sm"
-                  @click="addProductToCart(product)"
-                >
-                  CHỌN
+                <button class="add-to-cart-btn" @click="addProductToCart(product)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+                  </svg>
+                  <span>Thêm vào giỏ</span>
                 </button>
               </div>
             </div>
@@ -1255,132 +852,111 @@
       </div>
     </div>
 
-    <!-- Customer Search Modal -->
-    <div
-      v-if="showCustomerSearch"
-      class="modal-overlay"
-      @click="showCustomerSearch = false"
-    >
-      <div class="modal-content customer-modal" @click.stop>
-        <div class="modal-header">
-          <h3>Tìm kiếm khách hàng</h3>
-          <button class="modal-close" @click="showCustomerSearch = false">
-            ✕
+    <!-- Modern Customer Search Modal -->
+    <div v-if="showCustomerSearch" class="modal-overlay" @click="showCustomerSearch = false">
+      <div class="customer-modal" @click.stop>
+        <div class="customer-modal-header">
+          <h3 class="modal-title">Tìm kiếm khách hàng</h3>
+          <button class="modal-close-btn" @click="showCustomerSearch = false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
           </button>
         </div>
 
-        <div class="modal-body">
-          <div class="search-section">
-            <input
-              type="text"
-              v-model="customerSearchQuery"
-              class="form-control"
-              placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email"
-            />
-            <button class="btn btn-primary" @click="openAddCustomerForm">
-              ➕ THÊM KHÁCH HÀNG
+        <div class="customer-modal-body">
+          <div class="customer-search-section">
+            <div class="search-input-container">
+              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <input type="text" v-model="customerSearchQuery" class="customer-search-input"
+                placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email" />
+            </div>
+            <button class="add-customer-btn" @click="openAddCustomerForm">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span>THÊM KHÁCH HÀNG</span>
             </button>
           </div>
 
-          <div class="customer-list">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Email</th>
-                  <th>Họ tên</th>
-                  <th>Ngày sinh</th>
-                  <th>Số điện thoại</th>
-                  <th>Giới tính</th>
-                  <th>Trạng thái</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(customer, index) in filteredCustomers"
-                  :key="customer.id"
-                >
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ customer.email }}</td>
-                  <td>{{ customer.tenKhachHang }}</td>
-                  <td>{{ customer.ngaySinh }}</td>
-                  <td>{{ customer.soDienThoai }}</td>
-                  <td>{{ customer.gioiTinh ? "Nam" : "Nữ" }}</td>
-                  <td>
-                    <span class="badge badge-success">{{
-                      !customer.trangThai ? "Hoạt động" : "Không hoạt động"
-                    }}</span>
-                  </td>
-                  <td>
-                    <button
-                      class="btn btn-primary btn-sm"
-                      @click="selectCustomer(customer)"
-                    >
+          <div class="customer-table-container">
+            <div class="modern-table">
+              <div class="table-header">
+                <div class="header-cell">STT</div>
+                <div class="header-cell">EMAIL</div>
+                <div class="header-cell">HỌ TÊN</div>
+                <div class="header-cell">NGÀY SINH</div>
+                <div class="header-cell">SỐ ĐIỆN THOẠI</div>
+                <div class="header-cell">GIỚI TÍNH</div>
+                <div class="header-cell">TRẠNG THÁI</div>
+                <div class="header-cell">THAO TÁC</div>
+              </div>
+              <div class="table-body">
+                <div v-for="(customer, index) in filteredCustomers" :key="customer.id" class="table-row">
+                  <div class="table-cell">{{ index + 1 }}</div>
+                  <div class="table-cell">{{ customer.email }}</div>
+                  <div class="table-cell">
+                    <div class="customer-name">{{ customer.tenKhachHang }}</div>
+                  </div>
+                  <div class="table-cell">{{ customer.ngaySinh || '1998-03-10' }}</div>
+                  <div class="table-cell">{{ customer.soDienThoai }}</div>
+                  <div class="table-cell">
+                    <span class="gender-badge">{{ customer.gioiTinh ? "Nam" : "Nữ" }}</span>
+                  </div>
+                  <div class="table-cell">
+                    <span class="status-badge active">
+                      {{ !customer.trangThai ? "Hoạt động" : "Không hoạt động" }}
+                    </span>
+                  </div>
+                  <div class="table-cell">
+                    <button class="select-customer-btn" @click="selectCustomer(customer)">
                       CHỌN
                     </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Add Customer Form -->
-          <div v-if="showAddCustomerForm" class="add-customer-form">
-            <div class="form-sections">
-              <div class="form-section">
-                <h4>Thông tin cá nhân</h4>
-                <div class="form-group">
-                  <label class="form-label">*Họ và tên</label>
-                  <input
-                    type="text"
-                    v-model="newCustomerForm.tenKhachHang"
-                    class="form-control"
-                    required
-                  />
-                </div>
+          <!-- Modern Add Customer Form -->
+          <div v-if="showAddCustomerForm" class="modern-add-customer-form">
+            <div class="add-form-header">
+              <h4 class="add-form-title">Thông tin cá nhân</h4>
+              <small class="add-form-subtitle">*Họ và tên</small>
+            </div>
+            <div class="add-form-content">
+              <div class="modern-form-group">
+                <input type="text" v-model="newCustomerForm.tenKhachHang" class="modern-form-input" 
+                       placeholder="Nhập họ và tên" required />
+              </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Email</label>
-                    <input
-                      type="email"
-                      v-model="newCustomerForm.email"
-                      class="form-control"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Số điện thoại</label>
-                    <input
-                      type="tel"
-                      v-model="newCustomerForm.soDienThoai"
-                      class="form-control"
-                      required
-                    />
-                  </div>
+              <div class="form-row">
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Email</label>
+                  <input type="email" v-model="newCustomerForm.email" class="modern-form-input" 
+                         placeholder="Nhập email" required />
                 </div>
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Số điện thoại</label>
+                  <input type="tel" v-model="newCustomerForm.soDienThoai" class="modern-form-input" 
+                         placeholder="Nhập số điện thoại" required />
+                </div>
+              </div>
 
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Ngày sinh</label>
-                    <input
-                      type="date"
-                      v-model="newCustomerForm.ngaySinh"
-                      class="form-control"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">*Giới tính</label>
-                    <select
-                      v-model="newCustomerForm.gioiTinh"
-                      class="form-control"
-                    >
-                      <option :value="true">Nam</option>
-                      <option :value="false">Nữ</option>
-                    </select>
-                  </div>
+              <div class="form-row">
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Ngày sinh</label>
+                  <input type="date" v-model="newCustomerForm.ngaySinh" class="modern-form-input" required />
+                </div>
+                <div class="modern-form-group">
+                  <label class="modern-form-label">*Giới tính</label>
+                  <select v-model="newCustomerForm.gioiTinh" class="modern-form-select">
+                    <option :value="true">Nam</option>
+                    <option :value="false">Nữ</option>
+                  </select>
                 </div>
               </div>
 
@@ -1388,21 +964,11 @@
                 <h4>Thông tin tài khoản</h4>
                 <div class="form-group">
                   <label class="form-label">*Tài khoản</label>
-                  <input
-                    type="text"
-                    v-model="newCustomerForm.tenTaiKhoan"
-                    class="form-control"
-                    required
-                  />
+                  <input type="text" v-model="newCustomerForm.tenTaiKhoan" class="form-control" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label">*Mật khẩu</label>
-                  <input
-                    type="password"
-                    v-model="newCustomerForm.matKhau"
-                    class="form-control"
-                    required
-                  />
+                  <input type="password" v-model="newCustomerForm.matKhau" class="form-control" required />
                 </div>
               </div>
 
@@ -1414,45 +980,26 @@
                 <div class="form-row">
                   <div class="form-group">
                     <label class="form-label">*Tỉnh/thành phố</label>
-                    <input
-                      type="text"
-                      v-model="newCustomerForm.listDiaChi[0].thanhPho"
-                      class="form-control"
-                      placeholder="Nhập tên tỉnh/thành phố"
-                      required
-                    />
+                    <input type="text" v-model="newCustomerForm.listDiaChi[0].thanhPho" class="form-control"
+                      placeholder="Nhập tên tỉnh/thành phố" required />
                   </div>
                   <div class="form-group">
                     <label class="form-label">*Quận/huyện</label>
-                    <input
-                      type="text"
-                      v-model="newCustomerForm.listDiaChi[0].quan"
-                      class="form-control"
-                      placeholder="Nhập tên quận/huyện"
-                      required
-                    />
+                    <input type="text" v-model="newCustomerForm.listDiaChi[0].quan" class="form-control"
+                      placeholder="Nhập tên quận/huyện" required />
                   </div>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group">
                     <label class="form-label">*Xã/phường/thị trấn</label>
-                    <input
-                      type="text"
-                      v-model="newCustomerForm.listDiaChi[0].phuong"
-                      class="form-control"
-                      placeholder="Nhập tên xã/phường/thị trấn"
-                      required
-                    />
+                    <input type="text" v-model="newCustomerForm.listDiaChi[0].phuong" class="form-control"
+                      placeholder="Nhập tên xã/phường/thị trấn" required />
                   </div>
                   <div class="form-group">
                     <label class="form-label">*Địa chỉ cụ thể</label>
-                    <input
-                      type="text"
-                      v-model="newCustomerForm.listDiaChi[0].diaChiCuThe"
-                      class="form-control"
-                      required
-                    />
+                    <input type="text" v-model="newCustomerForm.listDiaChi[0].diaChiCuThe" class="form-control"
+                      required />
                   </div>
                 </div>
               </div>
@@ -1471,56 +1018,29 @@
       </div>
 
       <!-- Image Modal -->
-      <div
-        v-if="showImageModal"
-        class="image-modal-overlay"
-        @click="closeImageModal"
-      >
+      <div v-if="showImageModal" class="image-modal-overlay" @click="closeImageModal">
         <div class="image-modal-content" @click.stop>
           <button class="image-modal-close" @click="closeImageModal">✕</button>
 
           <div class="image-modal-main">
-            <button
-              v-if="currentProductImages.length > 1"
-              class="nav-btn prev-btn"
-              @click="prevImage"
-            >
+            <button v-if="currentProductImages.length > 1" class="nav-btn prev-btn" @click="prevImage">
               ‹
             </button>
 
             <div class="image-modal-display">
-              <img
-                :src="currentProductImages[selectedImageIndex]?.duongDanAnh"
-                :alt="`Ảnh ${selectedImageIndex + 1}`"
-                class="modal-image"
-                @error="handleImageError"
-              />
+              <img :src="currentProductImages[selectedImageIndex]?.duongDanAnh" :alt="`Ảnh ${selectedImageIndex + 1}`"
+                class="modal-image" @error="handleImageError" />
             </div>
 
-            <button
-              v-if="currentProductImages.length > 1"
-              class="nav-btn next-btn"
-              @click="nextImage"
-            >
+            <button v-if="currentProductImages.length > 1" class="nav-btn next-btn" @click="nextImage">
               ›
             </button>
           </div>
 
-          <div
-            v-if="currentProductImages.length > 1"
-            class="image-modal-thumbnails"
-          >
-            <div
-              v-for="(image, index) in currentProductImages"
-              :key="image.id"
-              :class="['thumbnail', { active: index === selectedImageIndex }]"
-              @click="selectImage(index)"
-            >
-              <img
-                :src="image.duongDanAnh"
-                :alt="`Thumbnail ${index + 1}`"
-                @error="handleImageError"
-              />
+          <div v-if="currentProductImages.length > 1" class="image-modal-thumbnails">
+            <div v-for="(image, index) in currentProductImages" :key="image.id"
+              :class="['thumbnail', { active: index === selectedImageIndex }]" @click="selectImage(index)">
+              <img :src="image.duongDanAnh" :alt="`Thumbnail ${index + 1}`" @error="handleImageError" />
             </div>
           </div>
 
@@ -1531,114 +1051,205 @@
       </div>
     </div>
 
-    <!-- Coupon Selection Modal -->
+    <!-- Modern Coupon Selection Modal -->
     <div v-if="showCouponModal" class="modal-overlay" @click="closeCouponModal">
-      <div class="modal-content coupon-modal" @click.stop>
-        <div class="modal-header">
-          <h3>🎫 Chọn phiếu giảm giá</h3>
-          <button class="modal-close-btn" @click="closeCouponModal">✕</button>
+      <div class="coupon-selection-modal" @click.stop>
+        <div class="coupon-modal-header">
+          <div class="header-content">
+            <div class="header-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
+                <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
+                <circle cx="9" cy="12" r="1"/>
+                <circle cx="15" cy="12" r="1"/>
+              </svg>
+            </div>
+            <div class="header-text">
+              <h3 class="modal-title">Chọn phiếu giảm giá</h3>
+              <p class="modal-subtitle">Chọn phiếu giảm giá phù hợp cho đơn hàng của bạn</p>
+            </div>
+          </div>
+          <button class="modern-close-btn" @click="closeCouponModal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
 
-        <div class="modal-body">
-          <div class="coupon-list">
-            <div
-              v-for="coupon in availableCoupons"
-              :key="coupon.id"
-              class="coupon-modal-item"
-              :class="{
-                selected: isCouponSelected(coupon.id),
-                disabled: !canApplyCoupon(coupon),
-              }"
-              @click="
-                canApplyCoupon(coupon) ? toggleCouponSelection(coupon) : null
-              "
-            >
-              <div class="coupon-modal-info">
-                <div class="coupon-modal-name">
-                  {{ coupon.tenPhieuGiamGia }}
-                </div>
-                <div class="coupon-modal-details">
-                  <span v-if="coupon.loaiPhieuGiamGia === false">
-                    Giảm {{ coupon.giaTriGiamGia }}% (sẽ trừ:
-                    {{ calculateCouponDiscount(coupon).toLocaleString() }}đ)
-                  </span>
-                  <span v-else-if="coupon.loaiPhieuGiamGia === true">
-                    Giảm {{ coupon.giaTriGiamGia.toLocaleString() }}đ
-                  </span>
-                  <span v-if="coupon.donHangToiThieu" class="min-order">
-                    • Đơn tối thiểu:
-                    {{ coupon.donHangToiThieu.toLocaleString() }}đ
-                  </span>
-                </div>
-                <div v-if="!canApplyCoupon(coupon)" class="coupon-reason">
-                  <small
-                    v-if="
-                      coupon.donHangToiThieu &&
-                      currentOrder.tongTien < coupon.donHangToiThieu
-                    "
-                  >
-                    💰 Đơn hàng chưa đủ giá trị tối thiểu
-                  </small>
-                  <small
-                    v-else-if="
-                      selectedCoupons.length > 0 &&
-                      !selectedCoupons.some((c) => c.id === coupon.id)
-                    "
-                  >
-                    ⚠️ Đã chọn phiếu khác, chỉ được dùng 1 phiếu
-                  </small>
-                  <small v-else> ⚠️ Phiếu không khả dụng </small>
-                </div>
-              </div>
-              <div class="coupon-modal-checkbox">
-                <input
-                  type="checkbox"
-                  :checked="isCouponSelected(coupon.id)"
-                  :disabled="!canApplyCoupon(coupon)"
-                  @change="toggleCouponSelection(coupon)"
-                />
-              </div>
-            </div>
-
-            <div
-              v-if="availableCoupons.length === 0"
-              class="no-coupons-available"
-            >
-              <p>📝 Không có phiếu giảm giá nào khả dụng</p>
+        <div class="coupon-modal-body">
+          <div class="order-info-card">
+            <div class="order-summary">
+              <span class="order-label">Tổng đơn hàng:</span>
+              <span class="order-amount">{{ formatCurrency(currentOrder?.tongTien || 0) }}</span>
             </div>
           </div>
 
-          <div class="modal-footer">
-            <div class="selected-count">
-              <span v-if="selectedCoupons.length > 0"> Đã chọn: 1 phiếu </span>
-              <span v-else> Chưa chọn phiếu nào </span>
+          <div class="coupon-grid">
+            <div v-for="coupon in availableCoupons" :key="coupon.id" 
+                 class="modern-coupon-card" 
+                 :class="{
+                   selected: isCouponSelected(coupon.id),
+                   disabled: !canApplyCoupon(coupon),
+                   percentage: coupon.loaiPhieuGiamGia === false,
+                   fixed: coupon.loaiPhieuGiamGia === true
+                 }" 
+                 @click="canApplyCoupon(coupon) ? toggleCouponSelection(coupon) : null">
+              
+              <div class="coupon-badge">
+                <div class="discount-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path v-if="coupon.loaiPhieuGiamGia === false" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    <path v-else d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                  </svg>
+                </div>
+                <div class="discount-value">
+                  <span v-if="coupon.loaiPhieuGiamGia === false" class="percentage-discount">
+                    {{ coupon.giaTriGiamGia }}%
+                  </span>
+                  <span v-else class="fixed-discount">
+                    {{ Math.round(coupon.giaTriGiamGia / 1000) }}K
+                  </span>
+                </div>
+              </div>
+
+              <div class="coupon-content">
+                <h4 class="coupon-name">{{ coupon.tenPhieuGiamGia }}</h4>
+                
+                <div class="coupon-details">
+                  <div class="discount-info">
+                    <span v-if="coupon.loaiPhieuGiamGia === false" class="discount-text">
+                      Giảm {{ coupon.giaTriGiamGia }}% đơn hàng
+                    </span>
+                    <span v-else class="discount-text">
+                      Giảm {{ formatCurrency(coupon.giaTriGiamGia) }}
+                    </span>
+                    <div class="savings-amount">
+                      Tiết kiệm: {{ formatCurrency(calculateCouponDiscount(coupon)) }}
+                    </div>
+                  </div>
+                  
+                  <div v-if="coupon.donHangToiThieu" class="min-order-requirement">
+                    Đơn tối thiểu: {{ formatCurrency(coupon.donHangToiThieu) }}
+                  </div>
+                </div>
+
+                <div v-if="!canApplyCoupon(coupon)" class="unavailable-reason">
+                  <div class="reason-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M15 9l-6 6M9 9l6 6"/>
+                    </svg>
+                  </div>
+                  <span v-if="coupon.donHangToiThieu && currentOrder.tongTien < coupon.donHangToiThieu">
+                    Chưa đủ giá trị tối thiểu
+                  </span>
+                  <span v-else-if="selectedCoupons.length > 0 && !selectedCoupons.some((c) => c.id === coupon.id)">
+                    Chỉ được chọn 1 phiếu
+                  </span>
+                  <span v-else>Phiếu không khả dụng</span>
+                </div>
+              </div>
+
+              <div class="coupon-selection">
+                <div class="custom-radio">
+                  <input type="radio" 
+                         :id="'coupon-' + coupon.id" 
+                         :name="'coupon-selection'" 
+                         :checked="isCouponSelected(coupon.id)" 
+                         :disabled="!canApplyCoupon(coupon)" 
+                         @change="toggleCouponSelection(coupon)" />
+                  <label :for="'coupon-' + coupon.id" class="radio-label"></label>
+                </div>
+              </div>
             </div>
-            <div class="modal-actions">
-              <button class="btn btn-outline" @click="closeCouponModal">
-                Hủy
-              </button>
-              <button class="btn btn-primary" @click="confirmCouponSelection">
-                {{ selectedCoupons.length > 0 ? "Xác nhận (1)" : "Xác nhận" }}
-              </button>
+
+            <div v-if="availableCoupons.length === 0" class="no-coupons-state">
+              <div class="empty-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2"/>
+                  <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2"/>
+                  <circle cx="9" cy="12" r="1"/>
+                  <circle cx="15" cy="12" r="1"/>
+                </svg>
+              </div>
+              <h4 class="empty-title">Chưa có phiếu giảm giá</h4>
+              <p class="empty-description">Hiện tại không có phiếu giảm giá nào khả dụng cho đơn hàng này.</p>
             </div>
+          </div>
+        </div>
+
+        <div class="coupon-modal-footer">
+          <div class="selection-summary">
+            <div class="selection-info">
+              <span v-if="selectedCoupons.length > 0" class="selected-text">
+                🎉 Đã chọn 1 phiếu giảm giá
+              </span>
+              <span v-else class="no-selection-text">
+                Chưa chọn phiếu nào
+              </span>
+            </div>
+            <div v-if="selectedCoupons.length > 0" class="total-savings">
+              Tiết kiệm: {{ formatCurrency(calculateCouponDiscount(selectedCoupons[0])) }}
+            </div>
+          </div>
+          
+          <div class="modal-actions">
+            <button class="cancel-btn" @click="closeCouponModal">
+              Hủy
+            </button>
+            <button class="confirm-btn" @click="confirmCouponSelection" :disabled="selectedCoupons.length === 0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+              {{ selectedCoupons.length > 0 ? 'Xác nhận (1 phiếu)' : 'Xác nhận' }}
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
+// SVG Icons
+import RefreshIcon from "@/assets/Reload.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import ViewIcon from "@/assets/View.svg?url";
+import PrintIcon from "@/assets/Print.svg?url";
+import PlusIcon from "@/assets/Plus.svg?url";
+import TrashIcon from "@/assets/Trash.svg?url";
+import SaveIcon from "@/assets/Save.svg?url";
+import CancelIcon from "@/assets/Cancel.svg?url";
+import ChevronLeftIcon from "@/assets/chevron-left.svg?url";
+import ChevronRightIcon from "@/assets/chevron-right.svg?url";
+import ChevronsLeftIcon from "@/assets/chevrons-left.svg?url";
+import ChevronsRightIcon from "@/assets/chevrons-right.svg?url";
+import ClipboardIcon from "@/assets/Clipboard.svg?url";
+import ExcelIcon from "@/assets/Excel.svg?url";
+import StatisticsIcon from "@/assets/Statistics.svg?url";
+import PhoneIcon from "@/assets/Phone.svg?url";
+import UsersIcon from "@/assets/Users.svg?url";
+import ProfileIcon from "@/assets/Profile.svg?url";
+import DashboardIcon from "@/assets/Dashboard.svg?url";
+import OrdersIcon from "@/assets/Orders.svg?url";
+import ProductsIcon from "@/assets/Shoes.svg?url";
+import ShoppingCartIcon from "@/assets/ShoppingCart.svg?url";
+import CreditCardIcon from "@/assets/CreditCard.svg?url";
+import RevenueIcon from "@/assets/Revenue.svg?url";
+import GrowthIcon from "@/assets/Growth.svg?url";
+import SettingsIcon from "@/assets/Settings.svg?url";
+import ExportIcon from "@/assets/Export.svg?url";
+import FindIcon from "@/assets/Find.svg?url";
+
 import { computed, onMounted, ref, watch } from "vue";
 import { fetchCreateHoaDon } from "../../services/BanHang/HoaDonService";
 import {
-    fetchActivePhieuGiamGiaForCustomer,
-    fetchAllPhieuGiamGia,
+  fetchActivePhieuGiamGiaForCustomer,
+  fetchAllPhieuGiamGia,
 } from "../../services/GiamGia/PhieuGiamGiaService";
 import {
-    fetchAllKhachHang,
-    fetchQuickAddKhachHang,
-    fetchUpdateKhachHang
+  fetchAllKhachHang,
+  fetchQuickAddKhachHang,
+  fetchUpdateKhachHang
 } from "../../services/KhachHang/KhachHangService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { fetchAllChatLieu } from "../../services/ThuocTinh/ChatLieuService";
@@ -1818,6 +1429,11 @@ const selectedMauSac = ref("");
 const selectedKichThuoc = ref("");
 const selectedPriceMax = ref(10000000);
 
+// Shipping carrier variables
+const selectedShippingCarrier = ref("");
+const selectedServiceType = ref("");
+const shippingFee = ref(0);
+
 const priceRange = ref({
   min: 100000,
   max: 10000000,
@@ -1982,13 +1598,13 @@ const fetchAll = async () => {
     await fetchKhachHang();
     await fetchPhieuGiamGia();
     await fetchChiTietSanPham();
-  } catch (error) {}
+  } catch (error) { }
 };
 const fetchCreateOrderDetail = async (id) => {
   try {
     let res3 = await fetchActivePhieuGiamGiaForCustomer(id);
     PhieuGiamGias.value = res3.data;
-  } catch (error) {}
+  } catch (error) { }
 };
 const fetchCreateOrder = async () => {
   try {
@@ -2395,8 +2011,7 @@ const autoApplyBestCoupon = () => {
     selectedCoupons.value = [bestCoupon];
     autoAppliedCoupon.value = bestCoupon; // Đánh dấu phiếu được áp dụng tự động
     console.log(
-      `🎫 Tự động áp dụng phiếu giảm giá tốt nhất: ${
-        bestCoupon.tenPhieuGiamGia
+      `🎫 Tự động áp dụng phiếu giảm giá tốt nhất: ${bestCoupon.tenPhieuGiamGia
       } (giảm ${couponBenefits[0].discountAmount.toLocaleString()}đ)`
     );
 
@@ -2465,7 +2080,7 @@ const selectCustomer = async (customer) => {
     if (customer.isCreateNew) {
       await createNewCustomer(
         customer.tenKhachHang
-          .replace('➕ Tạo khách hàng mới: "', "")
+          .replace('<img :src="PlusIcon" alt="Plus" class="icon-sm" /> Tạo khách hàng mới: "', "")
           .replace('"', "")
       );
       return;
@@ -2581,13 +2196,13 @@ const createNewCustomer = async (customerName) => {
       // Include address details if available
       listDiaChi: deliveryAddress.value.diaChiCuThe
         ? [
-            {
-              diaChiCuThe: deliveryAddress.value.diaChiCuThe,
-              thanhPho: deliveryAddress.value.thanhPho,
-              quan: deliveryAddress.value.quan,
-              phuong: deliveryAddress.value.phuong,
-            },
-          ]
+          {
+            diaChiCuThe: deliveryAddress.value.diaChiCuThe,
+            thanhPho: deliveryAddress.value.thanhPho,
+            quan: deliveryAddress.value.quan,
+            phuong: deliveryAddress.value.phuong,
+          },
+        ]
         : [],
     };
 
@@ -2785,7 +2400,8 @@ const searchCustomers = () => {
         // Add "Create new customer" option if not already in suggestions
         const createNewOption = {
           id: "create_new",
-          tenKhachHang: `➕ Tạo khách hàng mới: "${query}"`,
+          tenKhachHang: "Tạo khách hàng mới",
+          displayName: `Tạo khách hàng mới: "${query}"`,
           email: "",
           soDienThoai: "",
           isCreateNew: true,
@@ -2796,7 +2412,8 @@ const searchCustomers = () => {
         customerSuggestions.value = [
           {
             id: "create_new",
-            tenKhachHang: `➕ Tạo khách hàng mới: "${query}"`,
+            tenKhachHang: "Tạo khách hàng mới",
+            displayName: `Tạo khách hàng mới: "${query}"`,
             email: "",
             soDienThoai: "",
             isCreateNew: true,
@@ -2985,20 +2602,118 @@ const clearCustomerInput = () => {
     clearTimeout(searchTimeout);
     searchTimeout = null;
   }
-  // Also clear customer selection and delivery address
-  if (currentOrder.value) {
-    currentOrder.value.idKhachHang = null;
+};
+
+// Copy to clipboard function
+const copyToClipboard = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    // You can add a toast notification here if needed
+    console.log('Đã sao chép:', text);
+  } catch (error) {
+    console.error('Lỗi sao chép:', error);
+    // Fallback method for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      console.log('Đã sao chép (fallback):', text);
+    } catch (fallbackError) {
+      console.error('Lỗi sao chép fallback:', fallbackError);
+    }
+    document.body.removeChild(textArea);
   }
-  // Clear delivery address
-  deliveryAddress.value = {
-    tenNguoiNhan: "",
-    soDienThoaiNguoiNhan: "",
-    emailNguoiNhan: "",
-    diaChiCuThe: "",
-    thanhPho: "",
-    quan: "",
-    phuong: "",
+};
+
+// Refresh data function
+const refreshData = async () => {
+  try {
+    console.log('Làm mới dữ liệu...');
+    await fetchAll();
+    console.log('Đã làm mới dữ liệu thành công!');
+  } catch (error) {
+    console.error('Lỗi khi làm mới dữ liệu:', error);
+  }
+};
+
+// Clear all filters function
+const clearAllFilters = () => {
+  selectedNhaSanXuat.value = '';
+  selectedXuatXu.value = '';
+  selectedChatLieu.value = '';
+  selectedSize.value = '';
+  selectedDeGiay.value = '';
+  selectedMauSac.value = '';
+  productSearchQuery.value = '';
+};
+
+// Shipping carrier utility functions
+const getShippingFeeByCarrierAndService = (carrier, serviceType) => {
+  const feeMap = {
+    ghn: { standard: 25000, express: 35000, same_day: 50000 },
+    ghtk: { standard: 22000, express: 30000 },
+    vnpost: { standard: 20000, express: 28000 },
+    jnt: { standard: 24000, express: 32000 },
+    grab: { standard: 40000, express: 60000 },
+    shopee: { standard: 23000, express: 31000 }
   };
+  
+  return feeMap[carrier]?.[serviceType] || 0;
+};
+
+const updateShippingFee = () => {
+  if (selectedShippingCarrier.value && selectedServiceType.value) {
+    shippingFee.value = getShippingFeeByCarrierAndService(
+      selectedShippingCarrier.value, 
+      selectedServiceType.value
+    );
+  } else {
+    shippingFee.value = 0;
+  }
+};
+
+const formatShippingFee = () => {
+  return shippingFee.value > 0 ? formatCurrency(shippingFee.value) : "0 VNĐ";
+};
+
+const isEligibleForFreeShipping = () => {
+  const orderTotal = (currentOrder.value?.tongTien || 0) - (currentOrder.value?.discount || 0);
+  return orderTotal >= 500000 && shippingFee.value > 0;
+};
+
+const formatFinalShippingFee = () => {
+  const finalFee = isEligibleForFreeShipping() ? 0 : shippingFee.value;
+  return finalFee > 0 ? formatCurrency(finalFee) : "Miễn phí";
+};
+
+const getCarrierDisplayName = () => {
+  const carrierNames = {
+    ghn: "Giao Hàng Nhanh",
+    ghtk: "Giao Hàng Tiết Kiệm",
+    vnpost: "VNPost",
+    jnt: "J&T Express",
+    grab: "GrabExpress",
+    shopee: "Shopee Express"
+  };
+  return carrierNames[selectedShippingCarrier.value] || "";
+};
+
+const getDeliveryEstimate = () => {
+  if (!selectedShippingCarrier.value || !selectedServiceType.value) return "";
+  
+  const estimates = {
+    ghn: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày", same_day: "Giao trong ngày" },
+    ghtk: { standard: "Giao trong 2-4 ngày", express: "Giao trong 1-2 ngày" },
+    vnpost: { standard: "Giao trong 3-5 ngày", express: "Giao trong 2-3 ngày" },
+    jnt: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày" },
+    grab: { standard: "Giao trong 2-4 giờ", express: "Giao trong 1-2 giờ" },
+    shopee: { standard: "Giao trong 2-3 ngày", express: "Giao trong 1-2 ngày" }
+  };
+  
+  return estimates[selectedShippingCarrier.value]?.[selectedServiceType.value] || "";
 };
 
 // Open add customer form
@@ -3159,2896 +2874,32 @@ const handleImageError = (event) => {
 </script>
 
 <style scoped>
-.pos-system {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Modern Header */
-/* pos-header now uses global page-header styling */
-
-/* header-content, page-title, page-subtitle, header-actions now use global CSS */
-
-/* Modern buttons now use global btn-export styling */
-
-/* btn-icon now uses global CSS */
-
-/* Modern Order Tabs */
-.modern-tabs-container {
-  margin-bottom: 2rem;
-  padding: 0.5rem;
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-}
-
-.order-tabs {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.modern-tab {
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.tab-content {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1.25rem;
-  background: white;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.modern-tab:hover .tab-content {
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  border-color: #0ea5e9;
-  transform: translateY(-1px);
-}
-
-.modern-tab.active .tab-content {
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  color: white;
-  border-color: #4ade80;
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
-}
-
-.tab-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.modern-tab.active .tab-icon {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-.tab-text {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #374151;
-  transition: color 0.3s ease;
-}
-
-.modern-tab.active .tab-text {
-  color: white;
-}
-
-.tab-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #4ade80, #22c55e);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.modern-tab.active .tab-indicator {
-  transform: scaleX(1);
-}
-
-.modern-close-btn {
-  position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  width: 24px;
-  height: 24px;
-  background: rgba(0, 0, 0, 0.1);
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  opacity: 0;
-}
-
-.modern-tab:hover .modern-close-btn {
-  opacity: 1;
-}
-
-.modern-close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
-.add-tab-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.3);
-  margin-left: 0.5rem;
-}
-
-.add-tab-btn:hover {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.4);
-}
-
-/* POS Content */
-.pos-content {
-  display: grid;
-  grid-template-columns: 1.8fr 1fr;
-  gap: 2rem;
-  min-height: calc(100vh - 280px);
-  max-height: calc(100vh - 280px);
-}
-
-/* Modern Product Section */
-.modern-product-section {
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  border-radius: 20px;
-  padding: 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.modern-product-section:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-}
-
-.modern-section-header {
-  padding: 1.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(
-    135deg,
-    rgba(74, 222, 128, 0.03),
-    rgba(34, 197, 94, 0.03)
-  );
-  border-bottom: 1px solid rgba(74, 222, 128, 0.1);
-  position: relative;
-}
-
-.header-title-group {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.section-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
-  transition: all 0.3s ease;
-}
-
-.section-icon.customer {
-  background: linear-gradient(135deg, #4ade80, #16a34a);
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
-}
-
-.section-icon:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
-}
-
-.section-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 0.25rem 0;
-  letter-spacing: -0.025em;
-}
-
-.section-subtitle {
-  font-size: 0.875rem;
-  color: #64748b;
-  margin: 0;
-  font-weight: 500;
-}
-
-.section-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.action-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1.25rem 1rem;
-  border-radius: 12px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-
-.action-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: left 0.6s ease;
-}
-
-.action-btn:hover::before {
-  left: 100%;
-}
-
-.action-btn.primary {
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  color: white;
-  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.3);
-}
-
-.action-btn.primary:hover {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.4);
-}
-
-.action-btn.secondary {
-  background: rgba(71, 85, 105, 0.1);
-  color: #475569;
-  border-color: rgba(71, 85, 105, 0.2);
-}
-
-.action-btn.secondary:hover {
-  background: rgba(71, 85, 105, 0.2);
-  border-color: rgba(71, 85, 105, 0.3);
-  transform: translateY(-2px);
-}
-
-/* Modern Cart Items */
-.modern-cart-items {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.modern-cart-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.9),
-    rgba(248, 250, 252, 0.9)
-  );
-  border: 2px solid rgba(226, 232, 240, 0.8);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-  animation: slideInUp 0.3s ease;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.modern-cart-item:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 1),
-    rgba(248, 250, 252, 1)
-  );
-  border-color: rgba(74, 222, 128, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-}
-
-.discount-badge {
-  position: absolute;
-  top: -8px;
-  left: 60px;
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-  z-index: 10;
-}
-
-.discount-text {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.modern-checkbox {
-  position: relative;
-  cursor: pointer;
-  display: block;
-  width: 24px;
-  height: 24px;
-}
-
-.modern-checkbox input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 24px;
-  width: 24px;
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  border: 2px solid #e2e8f0;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.checkmark::after {
-  content: "";
-  position: absolute;
-  display: none;
-  left: 7px;
-  top: 3px;
-  width: 6px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-.modern-checkbox input:checked ~ .checkmark {
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  border-color: #4ade80;
-  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.3);
-}
-
-.modern-checkbox input:checked ~ .checkmark::after {
-  display: block;
-}
-
-.image-container {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.image-container:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.placeholder-image {
-  color: #94a3b8;
-  transition: color 0.3s ease;
-}
-
-.modern-cart-item:hover .placeholder-image {
-  color: #4ade80;
-}
-
-.item-details {
-  flex: 1;
-  min-width: 0;
-}
-
-.item-header {
-  margin-bottom: 0.5rem;
-}
-
-.item-name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0 0 0.25rem 0;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.item-meta {
-  display: flex;
-  gap: 0.75rem;
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
-.item-size {
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  padding: 0.125rem 0.5rem;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.item-pricing {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.original-price {
-  text-decoration: line-through;
-  color: red !important;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.current-price {
-  color: #059669;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.item-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  flex-shrink: 0;
-}
-
-.quantity-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 0.25rem;
-  gap: 0.25rem;
-}
-
-.modern-qty-btn {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: white;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  color: #64748b;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.modern-qty-btn:hover {
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  color: white;
-  transform: scale(1.1);
-}
-
-.modern-qty-btn.minus:hover {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-}
-
-.quantity-display {
-  min-width: 32px;
-  text-align: center;
-  font-weight: 700;
-  color: #1e293b;
-  font-size: 1rem;
-}
-
-.item-total {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #059669;
-  text-align: center;
-  background: linear-gradient(
-    135deg,
-    rgba(5, 150, 105, 0.1),
-    rgba(16, 185, 129, 0.1)
-  );
-  padding: 0.25rem 0.75rem;
-  border-radius: 8px;
-  border: 1px solid rgba(5, 150, 105, 0.2);
-}
-
-.modern-remove-btn {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.1),
-    rgba(220, 38, 38, 0.1)
-  );
-  border: 2px solid rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.modern-remove-btn:hover {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  border-color: #dc2626;
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-}
-
-/* Modern Empty State */
-.modern-empty-cart {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 2rem;
-  text-align: center;
-}
-
-.empty-animation {
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.empty-icon {
-  color: #cbd5e1;
-  animation: float 3s ease-in-out infinite;
-  position: relative;
-  z-index: 2;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-.empty-circles {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-}
-
-.circle {
-  position: absolute;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-  opacity: 0.3;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.circle-1 {
-  width: 120px;
-  height: 120px;
-  top: -60px;
-  left: -60px;
-  animation-delay: 0s;
-}
-
-.circle-2 {
-  width: 80px;
-  height: 80px;
-  top: -40px;
-  left: -40px;
-  animation-delay: 0.5s;
-}
-
-.circle-3 {
-  width: 40px;
-  height: 40px;
-  top: -20px;
-  left: -20px;
-  animation-delay: 1s;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.1;
-  }
-}
-
-.empty-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #374151;
-  margin: 0 0 0.5rem 0;
-}
-
-.empty-subtitle {
-  font-size: 1rem;
-  color: #6b7280;
-  margin: 0 0 1.5rem 0;
-  line-height: 1.5;
-}
-
-/* Modern Total Section */
-.modern-total-section {
-  position: relative;
-  padding: 1.5rem 2rem;
-  background: linear-gradient(
-    135deg,
-    rgba(74, 222, 128, 0.05),
-    rgba(34, 197, 94, 0.05)
-  );
-  border-top: 1px solid rgba(74, 222, 128, 0.1);
-}
-
-.total-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, #ffffff, #ffffff), #e0e7ff);
-  opacity: 0.5;
-}
-
-.total-content {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.total-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #4ade80, #22c55e);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
-}
-
-.total-info {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.total-label {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #374151;
-}
-
-.total-amount {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #059669;
-  background: linear-gradient(135deg, #059669, #047857);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Modern Customer Section */
-.modern-customer-section {
-  background: linear-gradient(135deg, #ffffff, #ffffff));
-  border-radius: 20px;
-  padding: 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  height: 100%;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-}
-
-.modern-customer-section:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-}
-
-/* Customer Form Sections */
-.customer-form {
-  padding: 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  flex: 1;
-}
-
-.customer-info-section,
-.discount-section,
-.price-summary-section {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.8),
-    rgba(248, 250, 252, 0.8)
-  );
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  border-radius: 16px;
-  padding: 1.5rem;
-}
-
-.subsection-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #374151;
-  margin: 0 0 1rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .pos-content {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    max-height: none;
-    gap: 1.5rem;
-  }
-
-  .modern-product-section,
-  .modern-customer-section {
-    height: auto;
-    min-height: 500px;
-  }
-}
-
-@media (max-width: 768px) {
-  .pos-title {
-    font-size: 2rem;
-  }
-
-  .header-content {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
-
-  .header-actions {
-    justify-content: center;
-  }
-
-  .modern-tabs-container {
-    padding: 0.25rem;
-  }
-
-  .order-tabs {
-    flex-wrap: wrap;
-    gap: 0.25rem;
-  }
-
-  .modern-tab .tab-content {
-    padding: 0.75rem 1rem;
-    gap: 0.5rem;
-  }
-
-  .tab-text {
-    font-size: 0.8125rem;
-  }
-
-  .modern-section-header {
-    padding: 1rem 1.5rem;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
-
-  .section-actions {
-    justify-content: center;
-  }
-
-  .modern-cart-items {
-    padding: 1rem 1.5rem;
-  }
-
-  .modern-cart-item {
-    flex-direction: column;
-    text-align: center;
-    padding: 1rem;
-  }
-
-  .item-controls {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  .quantity-section {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .modern-empty-cart {
-    padding: 2rem 1rem;
-  }
-
-  .empty-title {
-    font-size: 1.25rem;
-  }
-
-  .modern-total-section {
-    padding: 1rem 1.5rem;
-  }
-
-  .total-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.75rem;
-  }
-
-  .total-info {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-}
-
-/* Modern Button Styles */
-.modern-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  box-sizing: border-box;
-  backdrop-filter: blur(10px);
-}
-
-.modern-btn.btn-primary {
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.modern-btn.btn-primary:hover {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
-}
-
-.modern-btn.btn-primary:active {
-  transform: translateY(0);
-}
-
-.modern-btn .btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modern-btn .btn-icon svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
-@media (max-width: 480px) {
-  /* Responsive styles now handled by global CSS */
-
-  .header-actions {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .modern-btn {
-    padding: 0.875rem 1.5rem;
-    font-size: 0.8125rem;
-  }
-
-  .order-tabs {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .add-tab-btn {
-    width: 100%;
-    height: 40px;
-    margin-left: 0;
-    margin-top: 0.5rem;
-  }
-
-  .modern-section-header {
-    padding: 1rem;
-  }
-
-  .section-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .section-title {
-    font-size: 1.125rem;
-  }
-
-  .action-btn {
-    padding: 0.625rem 0.875rem;
-    font-size: 0.8125rem;
-  }
-
-  .modern-cart-items {
-    padding: 0.75rem 1rem;
-  }
-
-  .modern-cart-item {
-    padding: 0.875rem;
-  }
-
-  .quantity-controls {
-    padding: 0.125rem;
-  }
-
-  .modern-qty-btn {
-    width: 28px;
-    height: 28px;
-  }
-
-  .empty-animation {
-    margin-bottom: 1.5rem;
-  }
-
-  .empty-icon svg {
-    width: 60px;
-    height: 60px;
-  }
-
-  .circle-1 {
-    width: 100px;
-    height: 100px;
-    top: -50px;
-    left: -50px;
-  }
-
-  .circle-2 {
-    width: 70px;
-    height: 70px;
-    top: -35px;
-    left: -35px;
-  }
-
-  .circle-3 {
-    width: 35px;
-    height: 35px;
-    top: -17.5px;
-    left: -17.5px;
-  }
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.section-header h3 {
-  margin: 0;
-  color: var(--secondary-color);
-}
-
-.product-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Cart Items */
-.cart-items {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 1rem;
-}
-
-.cart-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.discount-badge {
-  position: absolute;
-  top: -8px;
-  left: 60px;
-  background-color: var(--success-color);
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-.item-checkbox {
-  flex-shrink: 0;
-}
-
-.item-image {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.item-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.placeholder-image {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--light-gray);
-  font-size: 1.5rem;
-}
-
-.item-details {
-  flex: 1;
-}
-
-.item-details h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
-  color: var(--secondary-color);
-}
-
-.item-price {
-  margin: 0.25rem 0;
-}
-
-.original-price {
-  text-decoration: line-through;
-  color: var(--medium-gray);
-  margin-right: 0.5rem;
-}
-
-.current-price {
-  color: #4ade80;
-  font-weight: bold;
-}
-
-.item-size,
-.item-sku {
-  margin: 0.25rem 0;
-  font-size: 0.875rem;
-  color: var(--medium-gray);
-}
-
-.item-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-}
-
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.qty-btn {
-  width: 30px;
-  height: 30px;
-  border: 1px solid var(--border-color);
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qty-btn:hover {
-  background-color: var(--light-gray);
-}
-
-.quantity {
-  font-weight: bold;
-  min-width: 30px;
-  text-align: center;
-}
-
-.item-total {
-  font-weight: bold;
-  color: #4ade80;
-}
-
-.remove-btn {
-  background: none;
-  border: none;
-  color: var(--danger-color);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-}
-
-.remove-btn:hover {
-  background-color: rgba(231, 76, 60, 0.1);
-}
-
-/* Empty Cart */
-.empty-cart {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: var(--medium-gray);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.empty-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-/* Total Section */
-.total-section {
-  border-top: 2px solid var(--border-color);
-  padding-top: 1rem;
-  margin-top: 1rem;
-}
-
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.125rem;
-  font-weight: bold;
-}
-
-.total-amount {
-  color: #4ade80;
-}
-
-/* Customer Section */
-.customer-section {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-  height: 100%;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.customer-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  flex: 1;
-}
-
-.coupon-input {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.coupon-input input {
-  flex: 1;
-}
-
-/* Shipping Section */
-.shipping-section {
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-}
-
-.shipping-section h4 {
-  margin: 0 0 1rem 0;
-  color: var(--secondary-color);
-}
-
-.delivery-toggle {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.toggle-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
-}
-
-.toggle-option:hover {
-  background-color: var(--light-gray);
-}
-
-.shipping-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  font-size: 0.875rem;
-}
-
-.delivery-service-selector {
-  margin-bottom: 1rem;
-}
-
-.delivery-service-toggle {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.service-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.75rem 0.5rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-}
-
-.service-btn:hover {
-  border-color: #4ade80;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.service-btn.active {
-  border-color: #4ade80;
-  background-color: rgba(74, 222, 128, 0.05);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-}
-
-.service-logo {
-  margin-bottom: 0.25rem;
-}
-
-.service-text {
-  font-weight: bold;
-  font-size: 0.875rem;
-  white-space: nowrap;
-}
-
-.service-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: var(--medium-gray);
-}
-
-.service-time {
-  font-weight: 500;
-}
-
-.service-fee {
-  color: var(--success-color);
-  font-weight: 600;
-}
-
-.selected-service-info {
-  background-color: var(--gray-50);
-  padding: 0.75rem;
-  border-radius: 6px;
-  border-left: 4px solid #4ade80;
-}
-
-.selected-service-info > div {
-  margin-bottom: 0.25rem;
-  font-size: 0.875rem;
-}
-
-.selected-service-info > div:last-child {
-  margin-bottom: 0;
-}
-
-/* Price Breakdown */
-.price-breakdown {
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-}
-
-.price-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.price-row.total {
-  border-top: 1px solid var(--border-color);
-  padding-top: 0.5rem;
-  margin-top: 0.5rem;
-  font-weight: bold;
-  font-size: 1.125rem;
-}
-
-.free-shipping {
-  color: var(--success-color);
-  font-weight: bold;
-  font-size: 0.95rem;
-}
-
-.discount {
-  color: var(--success-color);
-}
-
-/* Payment Section */
-.payment-section {
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-}
-
-/* Payment Method Selection */
-.payment-method-selection {
-  margin-bottom: 1.5rem;
-}
-
-.payment-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.payment-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: white;
-  transition: all 0.2s ease;
-}
-
-.payment-option:hover {
-  border-color: var(--primary-color);
-  background: rgba(74, 222, 128, 0.05);
-}
-
-.payment-option input[type="radio"] {
-  margin: 0;
-  width: 18px;
-  height: 18px;
-}
-
-.payment-option label {
-  cursor: pointer;
-  font-weight: 500;
-  color: var(--text-color);
-}
-
-/* Bank Transfer Section */
-.bank-transfer-section {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 2px solid #e3f2fd;
-  border-radius: 8px;
-  background: #ffffff;
-}
-
-.qr-code-container {
-  text-align: center;
-}
-
-.bank-info {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-}
-
-.bank-info p {
-  margin: 0.25rem 0;
-  color: var(--text-color);
-}
-
-.qr-placeholder {
-  display: inline-block;
-  padding: 1rem;
-  background: white;
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-}
-
-.qr-code {
-  font-size: 2rem;
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
-}
-
-.qr-note {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-/* COD Info */
-.cod-info {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 2px solid #fff3cd;
-  border-radius: 8px;
-  background: #fffbf0;
-}
-
-.cod-notice h5 {
-  margin: 0 0 0.5rem 0;
-  color: #856404;
-}
-
-.cod-notice p {
-  margin: 0.25rem 0;
-  color: #856404;
-}
-
-/* Payment Status */
-.status.pending {
-  color: #856404;
-  font-weight: 600;
-}
-
-.amount.paid {
-  color: var(--success-color);
-}
-
-.amount.surplus {
-  color: var(--success-color);
-}
-
-.amount.deficit {
-  color: var(--danger-color);
-}
-
-.payment-method {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.payment-amount input {
-  width: 120px;
-  text-align: right;
-}
-
-.payment-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.amount.deficit {
-  color: var(--danger-color);
-  font-weight: bold;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.modal-content.large {
-  max-width: 1200px;
-}
-
-.modal-content.customer-modal {
-  max-width: 1200px;
-  width: 92vw;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: var(--secondary-color);
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-}
-
-.modal-close:hover {
-  background-color: var(--light-gray);
-}
-
-.modal-body {
-  padding: 1.5rem;
-}
-
-/* Product Search Modal */
-.search-section {
-  margin-bottom: 2rem;
-}
-
-.search-bar {
-  margin-bottom: 1rem;
-}
-
-.price-range {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--border-color);
-  padding: 1rem;
-  border-radius: 12px;
-}
-
-.price-slider {
-  flex: 1;
-}
-
-.filter-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-}
-
-/* Product Grid */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  max-height: 500px;
-  overflow-y: auto;
-  margin: 1rem 0 0 0;
-}
-
-.product-card {
-  position: relative;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  padding: 1rem;
-  transition: all 0.3s ease;
-}
-
-.product-card:hover {
-  border-color: #4ade80;
-  transform: translateY(-2px);
-}
-
-.discount-label {
-  position: absolute;
-  top: -8px;
-  left: 8px;
-  background-color: var(--success-color);
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-.product-card .product-image {
-  width: 100%;
-  height: 200px;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 1rem;
-}
-
-.product-info h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
-  color: var(--secondary-color);
-}
-
-.product-details,
-.product-specs {
-  font-size: 0.875rem;
-  color: black;
-  margin: 0.25rem 0;
-}
-
-.product-price {
-  margin: 0.5rem 0;
-}
-
-.product-actions {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-/* Customer Search */
-.customer-modal .search-section {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  align-items: center;
-}
-
-.customer-modal .search-section input {
-  flex: 1;
-  min-width: 0;
-}
-
-.customer-list {
-  max-height: 500px;
-  overflow-y: auto;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-}
-
-.customer-modal .table {
-  width: 100%;
-  table-layout: fixed;
-  margin-bottom: 0;
-  font-size: 0.9rem;
-}
-
-.customer-modal .table th:nth-child(1) {
-  width: 60px;
-} /* STT */
-.customer-modal .table th:nth-child(2) {
-  width: 25%;
-} /* Email */
-.customer-modal .table th:nth-child(3) {
-  width: 20%;
-} /* Họ tên */
-.customer-modal .table th:nth-child(4) {
-  width: 15%;
-} /* Ngày sinh */
-.customer-modal .table th:nth-child(5) {
-  width: 15%;
-} /* SĐT */
-.customer-modal .table th:nth-child(6) {
-  width: 10%;
-} /* Giới tính */
-.customer-modal .table th:nth-child(7) {
-  width: 10%;
-} /* Trạng thái */
-.customer-modal .table th:nth-child(8) {
-  width: 100px;
-} /* Thao tác */
-
-.customer-modal .table th {
-  background-color: var(--gray-100);
-  color: var(--secondary-color);
-  font-weight: 600;
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 2px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.customer-modal .table td {
-  padding: 0.875rem 1rem;
-  border-bottom: 1px solid var(--border-light);
-  vertical-align: middle;
-}
-
-.customer-modal .table tbody tr:hover {
-  background-color: var(--gray-50);
-}
-
-.customer-modal .table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .pos-content {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    max-height: none;
-  }
-
-  .product-section,
-  .customer-section {
-    height: auto;
-    min-height: 400px;
-  }
-
-  .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  /* pos-header responsive styles now handled by global page-header CSS */
-
-  .order-tabs {
-    flex-wrap: wrap;
-  }
-
-  .section-header {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
-
-  .product-actions {
-    flex-direction: column;
-  }
-
-  .cart-item {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .item-controls {
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .filter-row {
-    grid-template-columns: 1fr;
-  }
-
-  .search-section {
-    flex-direction: column;
-  }
-
-  .modal-overlay {
-    padding: 1rem;
-  }
-
-  .customer-modal {
-    width: 95vw;
-    max-width: none;
-  }
-
-  .customer-modal .search-section {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .customer-modal .table {
-    font-size: 0.8rem;
-  }
-
-  .customer-modal .table th,
-  .customer-modal .table td {
-    padding: 0.5rem;
-  }
-
-  /* Hide some columns on mobile for customer table */
-  .customer-modal .table th:nth-child(4),
-  .customer-modal .table td:nth-child(4),
-  .customer-modal .table th:nth-child(6),
-  .customer-modal .table td:nth-child(6) {
-    display: none;
-  }
-
-  .delivery-toggle {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .delivery-service-toggle {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-  }
-
-  .service-btn {
-    padding: 0.5rem 0.25rem;
-  }
-
-  .service-text {
-    font-size: 0.75rem;
-  }
-}
-
-/* Image Carousel Styles */
-.image-carousel {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.carousel-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  min-width: 200px;
-  min-height: 200px;
-  object-fit: cover;
-  object-position: center;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.carousel-image.active {
-  opacity: 1;
-}
-
-.carousel-indicators {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-}
-
-.indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transition: background 0.3s ease;
-}
-
-.indicator.active {
-  background: #007bff;
-}
-
-/* Single image */
-.single-image {
-  width: 100%;
-  height: 200px;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.single-image img {
-  width: 100%;
-  height: 100%;
-  min-width: 200px;
-  min-height: 200px;
-  object-fit: cover;
-  object-position: center;
-}
-
-/* Image Modal Styles */
-.image-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: modalFadeIn 0.3s ease;
-}
-
-.image-modal-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.image-modal-close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 10;
-  transition: background 0.3s ease;
-}
-
-.image-modal-close:hover {
-  background: rgba(0, 0, 0, 0.9);
-}
-
-.image-modal-main {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  background: #000;
-}
-
-.image-modal-display {
-  max-width: 90vw;
-  max-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-image {
-  max-width: 100%;
-  max-height: 100%;
-  min-width: 300px;
-  min-height: 300px;
-  object-fit: contain;
-  object-position: center;
-  border-radius: 8px;
-}
-
-.nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 5;
-  transition: all 0.3s ease;
-}
-
-.nav-btn:hover {
-  background: rgba(0, 0, 0, 0.9);
-  transform: translateY(-50%) scale(1.1);
-}
-
-.prev-btn {
-  left: 20px;
-}
-
-.next-btn {
-  right: 20px;
-}
-
-.image-modal-thumbnails {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 15px;
-  background: #ffffff;
-  border-top: 1px solid #dee2e6;
-  overflow-x: auto;
-}
-
-.thumbnail {
-  width: 70px;
-  height: 70px;
-  border-radius: 6px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border 0.3s ease;
-}
-
-.thumbnail:hover {
-  border-color: #007bff;
-}
-
-.thumbnail.active {
-  border-color: #007bff;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-}
-
-.thumbnail img {
-  width: 100%;
-  height: 100%;
-  min-width: 70px;
-  min-height: 70px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.image-modal-counter {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 14px;
-  z-index: 10;
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .image-modal-display {
-    max-width: 95vw;
-    max-height: 60vh;
-  }
-
-  .image-modal-thumbnails {
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .thumbnail {
-    width: 60px;
-    height: 60px;
-  }
-
-  .nav-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
-
-  .prev-btn {
-    left: 10px;
-  }
-
-  .next-btn {
-    right: 10px;
-  }
-}
+/* Import redesigned CSS file cho Bán Hàng */
+@import "../../styles/cssBanHang/banHang.css";
 
-/* Customer Input Enhancements */
-.customer-input-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+/* SVG Icon Styles */
+.icon-xs {
+  width: 12px;
+  height: 12px;
 }
 
-.customer-input-container .form-control {
-  padding-right: 35px; /* Tạo khoảng trống cho nút X */
+.icon-sm {
+  width: 16px;
+  height: 16px;
 }
 
-.btn-clear-input {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 14px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 50%;
+.icon-md {
   width: 20px;
   height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  z-index: 5;
 }
 
-.btn-clear-input:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: var(--text-color);
-}
-
-/* Customer Suggestions Dropdown */
-.customer-suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  width: 100%;
-  background: white;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
-  max-height: 250px;
-  overflow-y: auto;
-  margin-top: 2px;
-  animation: dropdownFadeIn 0.15s ease-out;
-}
-
-@keyframes dropdownFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.customer-suggestion-item {
-  padding: 0.75rem;
-  cursor: pointer;
-  border-bottom: 1px solid var(--border-color);
-  transition: background-color 0.2s ease;
-}
-
-.customer-suggestion-item:last-child {
-  border-bottom: none;
-}
-
-.customer-suggestion-item:hover {
-  background-color: rgba(74, 222, 128, 0.05);
-}
-
-.create-new-customer {
-  background-color: rgba(59, 130, 246, 0.05);
-  border-left: 3px solid #3b82f6;
-}
-
-.create-new-customer:hover {
-  background-color: rgba(59, 130, 246, 0.1);
-}
-
-.create-new-hint {
-  color: #3b82f6;
-  font-weight: 500;
-}
-
-.customer-info strong {
-  display: block;
-  color: var(--text-color);
-  margin-bottom: 0.25rem;
-}
-
-.customer-info small {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-}
-
-/* Add Customer Form Styling */
-.add-customer-form {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.form-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.form-section h4 {
-  margin: 0 0 1rem 0;
-  color: var(--secondary-color);
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.address-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.address-header h4 {
-  margin: 0;
-}
-
-/* Delivery Address Section */
-.delivery-address-section {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-}
-
-.address-title {
-  margin: 0 0 1rem 0;
-  color: var(--secondary-color);
-  font-size: 1.125rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.address-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.address-preview {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
-}
-
-.address-preview strong {
-  color: var(--secondary-color);
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.address-preview p {
-  margin: 0;
-  color: var(--text-color);
-  font-size: 0.9rem;
-  line-height: 1.4;
-  white-space: pre-line;
-}
-
-/* Hide suggestions when clicking outside */
-.customer-suggestions::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 20px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid white;
-}
-
-.customer-suggestions::after {
-  content: "";
-  position: absolute;
-  top: -9px;
-  left: 20px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 9px solid var(--border-color);
-}
-
-/* Coupon Selector Styles */
-.coupon-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.clear-coupons-btn {
-  width: 100%;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.clear-coupons-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-}
-
-.coupon-select-btn {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.coupon-select-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
-
-.coupon-select-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: var(--text-muted);
-}
-
-/* Selected Coupons Display */
-.selected-coupons {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.no-customer-message {
-  padding: 0.75rem;
-  background: var(--warning-light);
-  border: 1px solid var(--warning-color);
-  border-radius: 6px;
-  text-align: center;
-}
-
-.no-customer-message small {
-  color: var(--warning-color);
-  font-style: italic;
-}
-
-.no-coupons-message {
-  padding: 0.75rem;
-  background: var(--info-light);
-  border: 1px solid var(--info-color);
-  border-radius: 6px;
-  text-align: center;
-}
-
-.no-coupons-message small {
-  color: var(--info-color);
-  font-style: italic;
-}
-
-.info-message {
-  padding: 0.75rem;
-  background: var(--info-light);
-  border: 1px solid var(--info-color);
-  border-radius: 6px;
-  text-align: center;
-}
-
-.info-message small {
-  color: var(--info-color);
-  font-style: italic;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
-  width: 90%;
-  max-height: 80vh;
-  overflow: hidden;
-  animation: modalFadeIn 0.3s ease-out;
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.coupon-modal {
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border-color);
-  background: var(--primary-light);
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: var(--primary-color);
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.modal-close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--text-muted);
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.modal-close-btn:hover {
-  background: var(--error-light);
-  color: var(--error-color);
-}
-
-.modal-body {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.coupon-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  max-height: 400px;
-}
-
-.coupon-modal-item {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  margin-bottom: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.coupon-modal-item:hover:not(.disabled) {
-  border-color: var(--primary-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.coupon-modal-item.selected {
-  border-color: var(--primary-color);
-  background: var(--primary-light);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
-}
-
-.coupon-modal-item.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: var(--disabled-bg);
-}
-
-.coupon-modal-info {
-  flex: 1;
-}
-
-.coupon-modal-name {
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-}
-
-.coupon-modal-details {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.min-order {
-  display: block;
-  margin-top: 0.25rem;
-  color: var(--warning-color);
-  font-weight: 500;
-}
-
-.coupon-modal-checkbox {
-  margin-left: 1rem;
-}
-
-.coupon-modal-checkbox input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  accent-color: var(--primary-color);
-}
-
-.no-coupons-available {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: var(--text-muted);
-}
-
-.no-coupons-available p {
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.modal-footer {
-  border-top: 1px solid var(--border-color);
-  padding: 1.5rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--background-light);
-}
-
-.selected-count {
-  font-weight: 500;
-  color: var(--primary-color);
-  font-size: 0.9rem;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.modal-actions .btn {
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-}
-
-.selected-coupon-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem;
-  background: var(--primary-light);
-  border: 1px solid var(--primary-color);
-  border-radius: 6px;
-}
-
-.coupon-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  flex: 1;
-}
-
-.coupon-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-content: space-between;
-}
-
-.coupon-summary .coupon-name {
-  font-weight: 500;
-  color: var(--text-color);
-}
-
-.auto-applied-badge {
-  background: var(--info-color);
-  color: white;
-  padding: 0.125rem 0.375rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.auto-indicator {
-  color: var(--info-color);
-  font-weight: 500;
-  font-size: 0.85em;
-}
-
-.auto-applied-notification {
-  background: var(--info-light);
-  border: 1px solid var(--info-color);
-  border-radius: 6px;
-  padding: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.auto-applied-notification small {
-  color: var(--info-color);
-  font-style: italic;
-}
-
-.coupon-summary .coupon-value {
-  color: var(--success-color);
-  font-weight: 600;
-}
-
-.coupon-actions {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.btn-change-coupon,
-.btn-remove-coupon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 50%;
+.icon-lg {
   width: 24px;
   height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
 }
 
-.btn-change-coupon {
-  color: var(--primary-color);
-}
-
-.btn-change-coupon:hover {
-  background: var(--primary-light);
-}
-
-.btn-remove-coupon {
-  color: var(--error-color);
-}
-
-.btn-remove-coupon:hover {
-  background: var(--error-light);
-}
-
-/* Coupon Discount Breakdown */
-.coupon-discount-breakdown {
-  border: 1px solid var(--border-light);
-  border-radius: 6px;
-  margin: 0.5rem 0;
-  background: var(--background-light);
-}
-
-.coupon-discount {
-  background: rgba(255, 193, 7, 0.05);
-  border-bottom: 1px solid var(--border-light);
-}
-
-.coupon-discount:last-child {
-  border-bottom: none;
-}
-
-.coupon-discount small {
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  margin-left: 0.25rem;
-}
-
-.discount-total {
-  background: var(--success-light);
-  border-top: 2px solid var(--success-color);
-  font-weight: 600;
-}
-
-.discount-total .discount {
-  color: var(--success-color);
-  font-weight: 700;
-}
-
-/* Discount Display */
-.discount-display {
-  padding: 0.75rem;
-  background: var(--success-light);
-  border: 1px solid var(--success-color);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.discount-amount {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--success-color);
-}
-
-.discount-breakdown {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
-.discount-details {
-  margin-top: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.discount-detail {
-  color: var(--success-color);
-  font-weight: 500;
+.icon-xl {
+  width: 32px;
+  height: 32px;
 }
 </style>

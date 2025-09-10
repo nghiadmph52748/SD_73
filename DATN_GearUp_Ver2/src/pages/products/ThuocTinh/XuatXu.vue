@@ -1,4 +1,5 @@
 <template>
+  <div class="xuat-xu-page">
   <!-- Font Awesome for icons -->
   <link
     rel="stylesheet"
@@ -76,7 +77,7 @@
       <div class="modal-header add-header">
         <h3><i class="fas"></i> Thêm Xuất Xứ Mới</h3>
         <button @click="closeAddForm" class="modal-close">
-          <i class="fas fa-times"></i>
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
         </button>
       </div>
       <div class="modal-body">
@@ -215,7 +216,7 @@
       <div class="modal-header">
         <h3>Chỉnh Sửa Xuất Xứ</h3>
         <button class="modal-close" @click="closeDetailModal">
-          <i class="fas fa-times"></i>
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
         </button>
       </div>
       <div class="modal-body">
@@ -270,7 +271,7 @@
           @click="fetchUpdate"
           :disabled="uploading"
         >
-          <i class="fas fa-save"></i>
+          <img src="../../../assets/Save.svg" alt="Save" class="icon-svg" />
           {{ uploading ? "Đang cập nhật..." : "Lưu thay đổi" }}
         </button>
       </div>
@@ -281,15 +282,15 @@
   <div v-if="showDeleteModal" class="modal-overlay" @click="closeDeleteModal">
     <div class="modal-content delete-modal" @click.stop>
       <div class="modal-header delete-header">
-        <h3><i class="fas fa-exclamation-triangle"></i> Xác nhận xóa</h3>
+        <h3><img src="../../../assets/Warning.svg" alt="Warning" class="icon-svg" /> Xác nhận xóa</h3>
         <button class="modal-close" @click="closeDeleteModal">
-          <i class="fas fa-times"></i>
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
         </button>
       </div>
       <div class="modal-body">
         <div class="delete-content">
           <div class="delete-icon">
-            <i class="fas fa-trash-alt"></i>
+            <img src="../../../assets/Trash.svg" alt="Delete" class="icon-svg" />
           </div>
           <h4>Bạn có chắc chắn muốn xóa?</h4>
           <p class="delete-message">
@@ -304,58 +305,19 @@
           @click="closeDeleteModal"
           :disabled="uploading"
         >
-          <i class="fas fa-times"></i> Hủy bỏ
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" /> Hủy bỏ
         </button>
         <button
           class="btn btn-delete"
           @click="confirmDelete"
           :disabled="uploading"
         >
-          <i class="fas fa-trash"></i> {{ uploading ? "Đang xóa..." : "Xóa" }}
+          <img src="../../../assets/Trash.svg" alt="Delete" class="icon-svg" /> {{ uploading ? "Đang xóa..." : "Xóa" }}
         </button>
       </div>
     </div>
   </div>
-
-  <!-- Modal Xác nhận Xóa -->
-  <div v-if="showDeleteModal" class="modal-overlay" @click="closeDeleteModal">
-    <div class="modal-content delete-modal" @click.stop>
-      <div class="modal-header delete-header">
-        <h3><i class="fas fa-exclamation-triangle"></i> Xác nhận xóa</h3>
-        <button class="modal-close" @click="closeDeleteModal">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="delete-content">
-          <div class="delete-icon">
-            <i class="fas fa-trash-alt"></i>
-          </div>
-          <h4>Bạn có chắc chắn muốn xóa?</h4>
-          <p class="delete-message">
-            Bạn sắp xóa <strong>"{{ deleteItemName }}"</strong>. Hành động này
-            không thể hoàn tác.
-          </p>
-        </div>
-      </div>
-      <div class="modal-footer delete-footer">
-        <button
-          class="btn btn-secondary"
-          @click="closeDeleteModal"
-          :disabled="uploading"
-        >
-          <i class="fas fa-times"></i> Hủy bỏ
-        </button>
-        <button
-          class="btn btn-delete"
-          @click="confirmDelete"
-          :disabled="uploading"
-        >
-          <i class="fas fa-trash"></i> {{ uploading ? "Đang xóa..." : "Xóa" }}
-        </button>
-      </div>
-    </div>
-  </div>
+</div>
 </template>
 
 <script setup>
@@ -621,5 +583,4 @@ onMounted(fetchAll);
 <style scoped>
 /* CSS đã được chuyển vào productsUnified.css */
 @import "../../../styles/cssSanPham/productsUnified.css";
-@import "../../../styles/cssSanPham/quanLySanPham.css";
 </style>

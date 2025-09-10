@@ -1,4 +1,5 @@
 <template>
+  <div class="kich-thuoc-page">
   <!-- Font Awesome for icons -->
   <link
     rel="stylesheet"
@@ -28,7 +29,7 @@
       </div>
       <div class="action-group">
         <button @click="showAddForm = true" class="btn-export">
-          <i class="fas fa-plus"></i> Thêm Kích Thước Mới
+          <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" /> Thêm Kích Thước Mới
         </button>
       </div>
       <div class="filter-group">
@@ -73,9 +74,9 @@
   <div v-if="showAddForm" class="modal-overlay" @click="closeAddForm">
     <div class="modal-content add-modal" @click.stop>
       <div class="modal-header add-header">
-        <h3><i class="fas fa-plus"></i> Thêm Kích Thước Mới</h3>
+        <h3><img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" /> Thêm Kích Thước Mới</h3>
         <button @click="closeAddForm" class="modal-close">
-          <i class="fas fa-times"></i>
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
         </button>
       </div>
       <div class="modal-body">
@@ -128,14 +129,14 @@
       </div>
       <div class="modal-footer add-footer">
         <button type="button" @click="closeAddForm" class="btn btn-secondary">
-          <i class="fas fa-times"></i> Hủy bỏ
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" /> Hủy bỏ
         </button>
         <button
           @click="fetchCreate"
           :disabled="uploading"
           class="btn btn-primary"
         >
-          <i class="fas fa-plus"></i>
+          <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" />
           {{ uploading ? "Đang thêm..." : "Thêm Mới" }}
         </button>
       </div>
@@ -224,7 +225,7 @@
       <div class="modal-header">
         <h3>Chỉnh Sửa Kích Thước</h3>
         <button class="modal-close" @click="closeDetailModal">
-          <i class="fas fa-times"></i>
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
         </button>
       </div>
       <div class="modal-body">
@@ -279,7 +280,7 @@
           @click="fetchUpdate"
           :disabled="uploading"
         >
-          <i class="fas fa-save"></i>
+          <img src="../../../assets/Save.svg" alt="Save" class="icon-svg" />
           {{ uploading ? "Đang cập nhật..." : "Lưu thay đổi" }}
         </button>
       </div>
@@ -290,15 +291,15 @@
   <div v-if="showDeleteModal" class="modal-overlay" @click="closeDeleteModal">
     <div class="modal-content delete-modal" @click.stop>
       <div class="modal-header delete-header">
-        <h3><i class="fas fa-exclamation-triangle"></i> Xác nhận xóa</h3>
+        <h3><img src="../../../assets/Warning.svg" alt="Warning" class="icon-svg" /> Xác nhận xóa</h3>
         <button class="modal-close" @click="closeDeleteModal">
-          <i class="fas fa-times"></i>
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" />
         </button>
       </div>
       <div class="modal-body">
         <div class="delete-content">
           <div class="delete-icon">
-            <i class="fas fa-trash-alt"></i>
+            <img src="../../../assets/Trash.svg" alt="Delete" class="icon-svg" />
           </div>
           <h4>Bạn có chắc chắn muốn xóa?</h4>
           <p class="delete-message">
@@ -313,58 +314,19 @@
           @click="closeDeleteModal"
           :disabled="uploading"
         >
-          <i class="fas fa-times"></i> Hủy bỏ
+          <img src="../../../assets/Cancel.svg" alt="Close" class="icon-svg" /> Hủy bỏ
         </button>
         <button
           class="btn btn-delete"
           @click="confirmDelete"
           :disabled="uploading"
         >
-          <i class="fas fa-trash"></i> {{ uploading ? "Đang xóa..." : "Xóa" }}
+          <img src="../../../assets/Trash.svg" alt="Delete" class="icon-svg" /> {{ uploading ? "Đang xóa..." : "Xóa" }}
         </button>
       </div>
     </div>
   </div>
-
-  <!-- Modal Xác nhận Xóa -->
-  <div v-if="showDeleteModal" class="modal-overlay" @click="closeDeleteModal">
-    <div class="modal-content delete-modal" @click.stop>
-      <div class="modal-header delete-header">
-        <h3><i class="fas fa-exclamation-triangle"></i> Xác nhận xóa</h3>
-        <button class="modal-close" @click="closeDeleteModal">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="delete-content">
-          <div class="delete-icon">
-            <i class="fas fa-trash-alt"></i>
-          </div>
-          <h4>Bạn có chắc chắn muốn xóa?</h4>
-          <p class="delete-message">
-            Bạn sắp xóa <strong>"{{ deleteItemName }}"</strong>. Hành động này
-            không thể hoàn tác.
-          </p>
-        </div>
-      </div>
-      <div class="modal-footer delete-footer">
-        <button
-          class="btn btn-secondary"
-          @click="closeDeleteModal"
-          :disabled="uploading"
-        >
-          <i class="fas fa-times"></i> Hủy bỏ
-        </button>
-        <button
-          class="btn btn-delete"
-          @click="confirmDelete"
-          :disabled="uploading"
-        >
-          <i class="fas fa-trash"></i> {{ uploading ? "Đang xóa..." : "Xóa" }}
-        </button>
-      </div>
-    </div>
-  </div>
+</div>
 </template>
 
 <script setup>
@@ -629,5 +591,4 @@ onMounted(fetchAll);
 <style scoped>
 /* CSS đã được chuyển vào productsUnified.css */
 @import "../../../styles/cssSanPham/productsUnified.css";
-@import "../../../styles/cssSanPham/quanLySanPham.css";
 </style>

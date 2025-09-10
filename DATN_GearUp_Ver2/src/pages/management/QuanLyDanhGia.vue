@@ -9,15 +9,15 @@
         </div>
         <div class="header-actions">
           <button class="btn-refresh" @click="refreshData">
-            <span class="btn-icon">🔄</span>
+            <span class="btn-icon"><!-- icon: refresh --></span>
             Làm mới
           </button>
           <button class="btn-export" @click="exportReviews">
-            <span class="btn-icon">📊</span>
+            <span class="btn-icon"><!-- icon: chart --></span>
             Xuất báo cáo
           </button>
           <button class="btn-export" @click="exportToExcel">
-            <span class="btn-icon">📗</span>
+            <span class="btn-icon"><!-- icon: excel --></span>
             Xuất Excel
           </button>
         </div>
@@ -89,7 +89,7 @@
                 <div class="product-info">
                   <div class="product-image">
                     <img v-if="review.san_pham.hinh_anh" :src="review.san_pham.hinh_anh" :alt="review.san_pham.ten_san_pham">
-                    <div v-else class="placeholder-image">👟</div>
+                    <div v-else class="placeholder-image"><!-- icon: product --></div>
                   </div>
                   <div class="product-details">
                     <div class="product-name">{{ review.san_pham.ten_san_pham }}</div>
@@ -137,21 +137,21 @@
                     @click="viewFullReview(review)"
                     title="Xem chi tiết"
                   >
-                    👁️
+                    <!-- icon: view -->
                   </button>
                   <button 
                     :class="['btn', 'btn-sm', review.trang_thai ? 'btn-warning' : 'btn-success']"
                     @click="toggleReviewStatus(review)"
                     :title="review.trang_thai ? 'Ẩn đánh giá' : 'Hiển thị đánh giá'"
                   >
-                    {{ review.trang_thai ? '🙈' : '👁️' }}
+                    {{ review.trang_thai ? '🙈' : '<!-- icon: view -->' }}
                   </button>
                   <button 
                     class="btn-export" 
                     @click="deleteReview(review)"
                     title="Xóa đánh giá"
                   >
-                    🗑️
+                    <!-- icon: delete -->
                   </button>
                 </div>
               </td>
@@ -205,7 +205,7 @@
                   <img v-if="selectedReview.san_pham.hinh_anh" 
                        :src="selectedReview.san_pham.hinh_anh" 
                        :alt="selectedReview.san_pham.ten_san_pham">
-                  <div v-else class="placeholder-image">👟</div>
+                  <div v-else class="placeholder-image"><!-- icon: product --></div>
                 </div>
                 <div class="product-info-detail">
                   <h5>{{ selectedReview.san_pham.ten_san_pham }}</h5>
@@ -223,7 +223,7 @@
                   <img v-if="selectedReview.nguoi_dung.anh_dai_dien" 
                        :src="selectedReview.nguoi_dung.anh_dai_dien" 
                        :alt="selectedReview.nguoi_dung.ho_ten">
-                  <div v-else class="placeholder-avatar">👤</div>
+                  <div v-else class="placeholder-avatar"><!-- icon: user --></div>
                 </div>
                 <div class="customer-info-detail">
                   <h5>{{ selectedReview.nguoi_dung.ho_ten }}</h5>
@@ -269,11 +269,11 @@
                 {{ selectedReview.trang_thai ? 'Ẩn đánh giá' : 'Hiển thị đánh giá' }}
               </button>
               <button class="btn-export" @click="deleteReview(selectedReview)">
-                <span class="btn-icon">🗑️</span>
+                <span class="btn-icon"><!-- icon: delete --></span>
                 Xóa đánh giá
               </button>
               <button class="btn-export" @click="showDetailModal = false">
-                <span class="btn-icon">❌</span>
+                <span class="btn-icon"><!-- icon: close --></span>
                 Đóng
               </button>
             </div>
@@ -292,15 +292,15 @@
         
         <div class="modal-body">
           <p>Bạn có chắc chắn muốn xóa đánh giá này?</p>
-          <p class="text-warning">⚠️ Hành động này không thể hoàn tác!</p>
+          <p class="text-warning"><!-- icon: warning --> Hành động này không thể hoàn tác!</p>
           
           <div class="modal-actions">
             <button class="btn-export" @click="showDeleteModal = false">
-              <span class="btn-icon">❌</span>
+              <span class="btn-icon"><!-- icon: close --></span>
               Hủy
             </button>
             <button class="btn-export" @click="confirmDelete">
-              <span class="btn-icon">🗑️</span>
+              <span class="btn-icon"><!-- icon: delete --></span>
               Xóa
             </button>
           </div>
@@ -493,10 +493,10 @@ const exportToExcel = () => {
       status: item.trang_thai ? 'Hiển thị' : 'Ẩn'
     }))
     
-    alert('✅ Xuất file Excel thành công!')
+    alert('<!-- icon: check --> Xuất file Excel thành công!')
   } catch (error) {
     console.error('Error exporting to Excel:', error)
-    alert('❌ Có lỗi xảy ra khi xuất file Excel')
+    alert('<!-- icon: close --> Có lỗi xảy ra khi xuất file Excel')
   }
 }
 
@@ -511,470 +511,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Import base styles from OrderManagement.vue */
-.reviews-management {
-  max-width: 1600px;
-  margin: 0 auto;
-}
-
-/* page-header styles are now defined in globals.css */
-
-/* Filter Section */
-.filter-section {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow);
-}
-
-.filter-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: end;
-  flex-wrap: wrap;
-}
-
-.search-box {
-  flex: 1;
-  min-width: 250px;
-}
-
-.filter-group {
-  display: flex;
-  gap: 1rem;
-}
-
-.date-filters {
-  display: flex;
-  gap: 1rem;
-}
-
-.date-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.date-group label {
-  font-size: 0.875rem;
-  color: var(--medium-gray);
-  font-weight: 500;
-}
-
-.date-group input {
-  min-width: 150px;
-}
-
-/* Table Styles */
-.table th {
-  background-color: #4ade80;
-  color: white;
-  font-weight: 600;
-  padding: 1rem;
-  text-align: center;
-}
-
-.table td {
-  padding: 1rem;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.product-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  text-align: left;
-}
-
-.product-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.placeholder-image {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--light-gray);
-  font-size: 1.5rem;
-}
-
-.product-name {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-.product-code {
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-.customer-info {
-  text-align: left;
-}
-
-.customer-name {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-.customer-email {
-  color: var(--medium-gray);
-  font-size: 0.875rem;
-}
-
-.rating {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.stars {
-  display: flex;
-}
-
-.star {
-  font-size: 1.2rem;
-}
-
-.star.filled {
-  color: #ffc107;
-}
-
-.star.empty {
-  color: #e9ecef;
-}
-
-.rating-number {
-  font-size: 0.875rem;
-  color: var(--medium-gray);
-}
-
-.review-content {
-  text-align: left;
-  max-width: 200px;
-}
-
-.review-content p {
-  margin: 0;
-  color: var(--secondary-color);
-}
-
-.btn-link {
-  background: none;
-  border: none;
-  color: #4ade80;
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-/* Pagination */
-.pagination-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.page-info {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.modal-content.large {
-  max-width: 800px;
-}
-
-.modal-content.small {
-  max-width: 400px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: var(--secondary-color);
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-}
-
-.modal-close:hover {
-  background-color: var(--light-gray);
-}
-
-.modal-body {
-  padding: 1.5rem;
-}
-
-/* Review Detail */
-.review-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.section {
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.5rem;
-}
-
-.section h4 {
-  margin: 0 0 1rem 0;
-  color: var(--secondary-color);
-  font-size: 1.125rem;
-}
-
-.product-detail {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.product-image-large {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.product-image-large img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.product-info-detail h5 {
-  margin: 0 0 0.5rem 0;
-  color: var(--secondary-color);
-}
-
-.product-info-detail p {
-  margin: 0.25rem 0;
-  color: var(--medium-gray);
-}
-
-.customer-detail {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.customer-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.customer-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.placeholder-avatar {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--light-gray);
-  font-size: 2rem;
-}
-
-.customer-info-detail h5 {
-  margin: 0 0 0.5rem 0;
-  color: var(--secondary-color);
-}
-
-.customer-info-detail p {
-  margin: 0.25rem 0;
-  color: var(--medium-gray);
-}
-
-.review-content-full {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.rating-large {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.stars-large {
-  display: flex;
-}
-
-.stars-large .star {
-  font-size: 1.5rem;
-}
-
-.rating-text {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-.review-text p {
-  margin: 0;
-  color: var(--secondary-color);
-  line-height: 1.6;
-}
-
-.review-meta p {
-  margin: 0.5rem 0;
-  color: var(--medium-gray);
-}
-
-.text-warning {
-  color: var(--warning-color);
-  font-size: 0.875rem;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .filter-controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .filter-group {
-    flex-direction: column;
-  }
-  
-  .date-filters {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 768px) {
-  /* page-header responsive styles are handled in globals.css */
-  
-  .table {
-    font-size: 0.875rem;
-  }
-  
-  .table th,
-  .table td {
-    padding: 0.5rem;
-  }
-  
-  .product-info {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .action-buttons {
-    flex-direction: column;
-  }
-  
-  .pagination-wrapper {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .modal-overlay {
-    padding: 1rem;
-  }
-  
-  .modal-actions {
-    flex-direction: column;
-  }
-  
-  .product-detail,
-  .customer-detail {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .rating-large {
-    flex-direction: column;
-    text-align: center;
-  }
-}
+/* Import external CSS file */
+@import '../../styles/cssQuanLy/quanLyDanhGia.css';
 </style>

@@ -111,7 +111,7 @@ const routes = [
   { path: '/orders', redirect: '/sales/orders' },
   { path: '/pos', redirect: '/sales/pos' },
   { path: '/employees', redirect: '/users/nhan-vien' },
-  { path: '/customers', redirect: '/users/customers' },
+  { path: '/customers', redirect: '/users/khach-hang' },
   { path: '/discounts', redirect: '/marketing/discounts' },
   { path: '/returns', redirect: '/sales/returns' },
   { path: '/reviews', redirect: '/customers/reviews' }

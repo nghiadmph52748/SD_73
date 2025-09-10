@@ -37,17 +37,17 @@
       <!-- Tiêu đề và đường kẻ ngang -->
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
         <div style="font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 6px;">
-          📋 Danh sách nhân viên
+          <img :src="ClipboardIcon" alt="Clipboard" class="icon-sm" /> Danh sách nhân viên
         </div>
       </div>
       <hr style="margin-top: 0; margin-bottom: 15px;" />
 
       <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
     <button class="custom-button" @click="showAddModal = true">
-      <i class="fas fa-plus-circle"></i> Thêm nhân viên
+      <img :src="PlusIcon" alt="Plus" class="icon-sm" /> Thêm nhân viên
     </button>
     <button class="custom-button" @click="exportToExcel">
-      <i class="fas fa-download"></i> Download template
+      <img :src="ExcelIcon" alt="Excel" class="icon-sm" /> Download template
     </button>
     </div>
 
@@ -87,7 +87,7 @@
                       :src="'http://localhost:8080' + employee.anhNhanVien"
                       :alt="employee.tenNhanVien"
                     />
-                    <div v-else class="placeholder-avatar">👤</div>
+                    <div v-else class="placeholder-avatar"><img :src="ProfileIcon" alt="User" class="icon-sm" /></div>
                   </div>
                 </td>
                 <td data-label="Mã nhân viên" class="employee-code">
@@ -127,10 +127,10 @@
                     <td data-label="Thao tác">
                    <ButtonGroup spacing="xs" class="action-buttons">
                      <button class="btn-detail" @click="viewEmployee(employee)">
-                       <span class="btn-icon">👁️</span>
+                       <span class="btn-icon"><img :src="ViewIcon" alt="View" class="icon-sm" /></span>
                      </button>
                      <button class="btn-update" @click="editEmployee(employee)">
-                       <span class="btn-icon">✏️</span>
+                       <span class="btn-icon"><img :src="EditIcon" alt="Edit" class="icon-sm" /></span>
                        
                      </button>
                    </ButtonGroup>
@@ -187,7 +187,7 @@
                 <div class="avatar-preview">
                   <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar" />
                   <div v-else class="placeholder-avatar large">
-                    📷
+                    
                     <span>Chọn ảnh</span>
                   </div>
                 </div>
@@ -377,7 +377,7 @@
                 <div class="avatar-preview">
                   <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar" />
                   <div v-else class="placeholder-avatar large">
-                    📷
+                    
                     <span>Chọn ảnh</span>
                   </div>
                 </div>
@@ -574,7 +574,7 @@
                   :src="'http://localhost:8080' + selectedEmployee.anhNhanVien"
                   alt="Ảnh nhân viên"
                 />
-                <div v-else class="placeholder-avatar large">👤</div>
+                <div v-else class="placeholder-avatar large"><img :src="ProfileIcon" alt="User" class="icon-sm" /></div>
               </div>
               <h4 class="employee-name-title">{{ selectedEmployee.tenNhanVien }}</h4>
             </div>
@@ -654,6 +654,36 @@
 </template>
 
 <script setup>
+// SVG Icons
+import RefreshIcon from "@/assets/Reload.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import ViewIcon from "@/assets/View.svg?url";
+import PrintIcon from "@/assets/Print.svg?url";
+import PlusIcon from "@/assets/Plus.svg?url";
+import TrashIcon from "@/assets/Trash.svg?url";
+import SaveIcon from "@/assets/Save.svg?url";
+import CancelIcon from "@/assets/Cancel.svg?url";
+import ChevronLeftIcon from "@/assets/chevron-left.svg?url";
+import ChevronRightIcon from "@/assets/chevron-right.svg?url";
+import ChevronsLeftIcon from "@/assets/chevrons-left.svg?url";
+import ChevronsRightIcon from "@/assets/chevrons-right.svg?url";
+import ClipboardIcon from "@/assets/Clipboard.svg?url";
+import ExcelIcon from "@/assets/Excel.svg?url";
+import StatisticsIcon from "@/assets/Statistics.svg?url";
+import PhoneIcon from "@/assets/Phone.svg?url";
+import UsersIcon from "@/assets/Users.svg?url";
+import ProfileIcon from "@/assets/Profile.svg?url";
+import DashboardIcon from "@/assets/Dashboard.svg?url";
+import OrdersIcon from "@/assets/Orders.svg?url";
+import ProductsIcon from "@/assets/Shoes.svg?url";
+import ShoppingCartIcon from "@/assets/ShoppingCart.svg?url";
+import CreditCardIcon from "@/assets/CreditCard.svg?url";
+import RevenueIcon from "@/assets/Revenue.svg?url";
+import GrowthIcon from "@/assets/Growth.svg?url";
+import SettingsIcon from "@/assets/Settings.svg?url";
+import ExportIcon from "@/assets/Export.svg?url";
+import FindIcon from "@/assets/Find.svg?url";
+
 import ButtonGroup from "@/components/ui/NhomNut.vue";
 import { computed, onMounted, ref } from "vue";
 import * as XLSX from "xlsx";
@@ -935,1036 +965,44 @@ onMounted(() => {
 
 
 <style scoped>
-.action-buttons-section .btn {
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
+/* Import external CSS file */
+@import '../../styles/cssQuanLy/nhanVien.css';
+
+/* SVG Icon Styles */
+.icon-xs {
+  width: 12px;
+  height: 12px;
 }
 
-.btn-primary {
-  background-color: #1f3e72;
-  color: white;
+.icon-sm {
+  width: 16px;
+  height: 16px;
 }
 
-.btn-secondary {
-  background-color: #0f0d24;
-  color: white;
+.icon-md {
+  width: 20px;
+  height: 20px;
 }
 
-.custom-button {
-  background-color: #1e2d50;  /* Màu xanh đậm */
-  color: #ffffff;
-  border: 1px solid #1e2d50;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-weight: 500;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
+.icon-lg {
+  width: 24px;
+  height: 24px;
 }
 
-.custom-button:hover {
-  background-color: #24365e;  /* Hover sáng hơn nhẹ */
-  border-color: #24365e;
-  transform: translateY(-1px);
-}
-
-.custom-button i {
-  font-size: 16px;
-}
-
-.employee-management {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-.bright-input {
-  background-color: #ffffff;      /* nền trắng */
-  border: 2px solid #dce1e6;      /* viền xanh sáng */
-  color: #000000;                 /* chữ đen */
-  font-weight: 500;
-  transition: 0.3s ease;
-}
-
-.bright-input:focus {
-  outline: none;
-  border-color: #eef1f3;         /* viền khi focus */
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-}
-/* page-header styles are now defined in globals.css */
-
-/* Filter Section */
-.filter-section {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow);
-}
-
-.search-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-.search-box {
-  flex: 1;
-  min-width: 300px;
-}
-.avatar {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-.badge-active {
-  background-color: #d1fae5;
-  color: #065f46;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-.badge-inactive {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background-color: #ffffff;
-  box-sizing: border-box;
-}
-
-.search-box input:focus {
-  outline: none;
-  border-color: #4ade80;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
-  transform: translateY(-1px);
-}
-
-.search-box input::placeholder {
-  color: #9ca3af;
-  font-style: italic;
-}
-
-.filter-controls {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: nowrap;
-}
-
-.filter-controls select {
-  min-width: 150px;
-  padding: 12px 16px;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 14px;
-  background-color: #ffffff;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.filter-controls select:focus {
-  outline: none;
-  border-color: #4ade80;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
-  transform: translateY(-1px);
-}
-
-.filter-controls select:hover {
-  border-color: #d1d5db;
-  background-color: #ffffff;
-}
-
-/* Table Styles */
-.card {
-  margin: 0;
-  padding: 0;
-  border: none;
-  box-shadow: var(--shadow);
-  border-radius: 12px;
-  background: white;
-}
-
-.card-body {
-  padding: 0.5rem;
-  margin: 0;
-}
-
-.table-responsive {
-  border-radius: 8px;
-  position: relative;
-  width: 100%;
-  overflow: visible;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0;
-  border-spacing: 0;
-  position: relative;
-  table-layout: fixed; /* Fixed layout to control widths */
-  border-spacing: 0 8px; /* khoảng cách giữa các dòng */
-}
-
-.table th {
-  background-color: #bacbc0;
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 0.25rem;
-  text-align: center;
-  font-size: 0.7rem;
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-/* Optimize column widths to fit all columns without overflow */
-.table th:nth-child(1) {
-  width: 4%;
-} /* STT */
-.table th:nth-child(2) {
-  width: 5%;
-} /* Ảnh */
-.table th:nth-child(3) {
-  width: 9%;
-} /* Mã NV */
-.table th:nth-child(4) {
-  width: 14%;
-} /* Tên */
-.table th:nth-child(5) {
-  width: 14%;
-} /* Email */
-.table th:nth-child(6) {
-  width: 9%;
-} /* SĐT */
-.table th:nth-child(7) {
-  width: 7%;
-} /* Ngày sinh */
-.table th:nth-child(8) {
-  width: 8%;
-} /* CCCD */
-.table th:nth-child(9) {
-  width: 13%;
-} /* Địa chỉ */
-.table th:nth-child(10) {
-  width: 7%;
-} /* Chức vụ */
-.table th:nth-child(11) {
-  width: 8%;
-} /* Trạng thái */
-.table th:nth-child(12) {
-  width: 12%;
-} /* Thao tác */
-
-.table td {
-  padding: 0.5rem 0.25rem;
-  text-align: center;
-  vertical-align: middle;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 0.7rem;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  line-height: 1.2;
-}
-
-.employee-avatar {
+.icon-xl {
   width: 32px;
   height: 32px;
-  margin: 0 auto;
-  border-radius: 50%;
-  overflow: hidden;
 }
 
-.employee-avatar.large {
-  width: 100px;
-  height: 100px;
-}
-
-.employee-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.placeholder-avatar {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--light-gray);
-  font-size: 1.5rem;
-  flex-direction: column;
-}
-
-.placeholder-avatar.large {
-  font-size: 2rem;
-}
-
-.placeholder-avatar span {
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-}
-
-.employee-code {
-  font-weight: 600;
-  color: #4ade80;
-}
-
-.employee-name {
-  font-weight: 500;
-  text-align: left;
-}
-
-
-/* Compact action buttons */
-/* Giả sử phần chứa 2 nút có class .action-buttons hoặc tương tự */
-.action-buttons {
-    display: flex;
-  justify-content: center; /* Căn giữa theo chiều ngang */
-  align-items: center;     /* Căn giữa theo chiều dọc nếu cần */
-  gap: 0.25rem;            /* Khoảng cách giữa 2 nút */
-}
-
-.btn-export {
-  background-color: white;
-  color: #7ccd8f;
-  border: 2px solid #fdfffe;
-  padding: 15px 26px;
-  border-radius: 8px;
-  font-weight: 500;
+/* Button icon alignment */
+.custom-button {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
 }
-.btn-export:hover {
-  background-color: #46b460;
-  color: rgb(246, 246, 246);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
-}
-
-
-.btn-detail {
- font-size: 0.75rem !important;
-  padding: 0.375rem 0.5rem !important;
-  margin: 0.125rem !important;
-  white-space: nowrap !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.25rem !important;
- background: linear-gradient(135deg, #6c5f5f 0%, #5c8ca0 100%) !important; /* tím nhạt */
-  color: white !important;
-  border: none !important;
-  border-radius: 6px !important;
-  font-weight: 500 !important;
-  transition: all 0.3s ease !important;
-  cursor: pointer !important;
-   box-shadow: 0 2px 4px rgba(167, 139, 250, 0.3) !important;
-}
-
-.btn-detail:hover {
-   background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
-  transform: scale(1.1) !important;
-   box-shadow: 0 4px 8px rgba(124, 58, 237, 0.4) !important;
-}
-
-.btn-update {
-   font-size: 0.75rem !important;
-  padding: 0.375rem 0.5rem !important;
-  margin: 0.125rem !important;
-  white-space: nowrap !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.25rem !important;
-   background: linear-gradient(135deg, #6c5f5f 0%, #5c8ca0 100%) !important; /* tím nhạt */
-  color: white !important;
-  border: none !important;
-  border-radius: 6px !important;
-  font-weight: 500 !important;
-  transition: all 0.3s ease !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 4px rgba(167, 139, 250, 0.3) !important;
-}
-
-.btn-update:hover {
- background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
-  transform: scale(1.1) !important;
-  box-shadow: 0 4px 8px rgba(124, 58, 237, 0.4) !important;
-}
-.btn-detail:active {
-  transform: scale(0.95) !important;
-  box-shadow: 0 1px 3px rgba(34, 197, 94, 0.4) !important;
-}
-
-.btn-update:active {
-  transform: scale(0.95) !important;
-  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.4) !important;
-}
-.btn-detail, .btn-update {
-  min-width: 50px !important;
-}
-
-
-.btn-icon {
-  font-size: 0.875rem !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-/* Pagination */
-.pagination-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.page-info {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-.btn-cancel {
-  background: white;
-  color: #374151;
-  border: 2px solid #d1d5db;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.btn-cancel:hover {
-  background: #ffffff;
-  border-color: #9ca3af;
-  transform: scale(1.05);
-}
-
-
-.btn-submit {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.2);
-}
-
-.btn-submit:hover {
-  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(34, 197, 94, 0.3);
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  overflow-x: hidden; /* Ẩn scroll ngang toàn bộ */
-  overflow-y: auto;   /* Cho phép scroll dọc nếu modal cao quá */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-
-.modal-content {
- background-color: #fff;
-  border-radius: 8px;
-  max-width: 700px; /* Giới hạn chiều ngang modal */
-  width: 100%;
-  max-height: 80vh; /* Giới hạn chiều cao modal */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Ẩn tất cả cuộn bên ngoài modal */
-  box-sizing: border-box;
-}
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px 30px;
-  word-break: break-word; /* Ngắt dòng nếu quá dài */
-  overflow-wrap: break-word;
-}
-
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 2px solid rgba(74, 222, 128, 0.2);
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  border-radius: 16px 16px 0 0;
-  margin: -2px -2px 0 -2px;
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.modal-close {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  font-size: 1.25rem;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  color: white;
-}
-
-.modal-close:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
-}
-
-.modal-body {
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
-  max-height: 60vh;    /* Giới hạn chiều cao để bật scroll */
-  overflow-y: auto;    /* Bật scroll dọc khi nội dung vượt quá */
-  box-sizing: border-box;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #ffffff, #ffffff) 0%, #ecfdf5 100%);
-  border-top: 2px solid rgba(74, 222, 128, 0.2);
-  border-radius: 0 0 16px 16px;
-}
-
-/* Form Sections */
-.form-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.form-section h4 {
-  margin: 0 0 1rem 0;
-  color: var(--secondary-color);
-  font-size: 1.125rem;
-}
-
-.avatar-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.avatar-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid var(--border-color);
-  cursor: pointer;
-}
-
-.avatar-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.file-input {
-  max-width: 200px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.radio-group {
-  display: flex;
-  gap: 1rem;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-/* Employee Detail */
-.employee-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-.employee-avatar-section {
-   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.employee-name-title {
-   margin-top: 1rem;
-  font-size: 1.75rem;
-  font-weight: bold;
-  text-align: center;
-}
-
-.employee-info {
-  width: 100%;
-  
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.info-item {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.info-item label {
-   font-weight: 600;
-  color: #6b7280;
-  font-size: 0.875rem;
-  margin-bottom: 0.25rem;
-}
-
-.info-value {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #111827;
-}
-
-.status-badge {
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.status-active {
-    background: #dcfce7;
-  color: #166534;
-}
-
-.status-inactive {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-/* Detail Modal Specific Styles */
-.detail-modal {
-   max-width: 90vw !important;  /* rộng 90% màn hình */
-  width: 90vw !important;
-}
-
-.detail-header {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-}
-
-.detail-body {
-  padding: 2rem;
-  max-height: 80vh;   /* tránh tràn màn hình */
-  overflow-y: auto;
-}
-
-.employee-avatar.large {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  border: 4px solid #22c55e;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-}
-
-/* Edit Modal Specific Styles */
-.edit-modal {
-  max-width: 900px;
-}
-
-.edit-header {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.edit-body {
-  background: #ffffff;
-  padding: 2rem;
-}
-
-.edit-footer {
-  background: linear-gradient(135deg, #ffffff, #ffffff) 0%, #ecfdf5 100%);
-  border-top: 2px solid rgba(16, 185, 129, 0.2);
-}
-
-.section-title {
-  color: #059669;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  padding: 0.75rem;
-  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-  border-radius: 8px;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.edit-input {
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background-color: white;
-}
-
-.edit-input:focus {
-  outline: none;
-  border-color: #10b981;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-  transform: translateY(-1px);
-}
-
-.edit-input:hover {
-  border-color: #d1d5db;
-  background-color: #ffffff;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #374151;
-  font-size: 0.875rem;
-}
-
-.form-control {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Add Modal Specific Styles */
-.add-modal {
-  max-width: 900px;
-}
-
-.add-header {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-}
-
-.add-body {
-  background: #ffffff;
-  padding: 2rem;
-}
-
-.add-footer {
-  background: linear-gradient(135deg, #ffffff, #ffffff) 0%, #dbeafe 100%);
-  border-top: 2px solid rgba(59, 130, 246, 0.2);
-}
-
-.add-input {
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background-color: white;
-}
-
-.add-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  transform: translateY(-1px);
-}
-
-.add-input:hover {
-  border-color: #d1d5db;
-  background-color: #ffffff;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .employee-management {
-    padding: 0 1rem;
-  }
-}
-@media (max-width: 768px) {
-  .detail-modal {
-    max-width: 95vw;
-    padding: 1rem;
-  }
-}
-
-
-@media (max-width: 1024px) {
-  .search-controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-box {
-    min-width: auto;
-  }
-
-  .table {
-    font-size: 0.875rem;
-  }
-
-  .table th,
-  .table td {
-    padding: 0.75rem 0.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  /* page-header responsive styles are handled in globals.css */
-
-  .search-controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-controls {
-    flex-direction: column;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .pagination-wrapper {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .modal-overlay {
-    padding: 1rem;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .detail-body {
-    padding: 1rem;
-  }
-
-  .edit-body {
-    padding: 1rem;
-  }
-
-  .add-body {
-    padding: 1rem;
-  }
-
-  .employee-avatar.large {
-    width: 80px;
-    height: 80px;
-  }
-
-  .employee-name-title {
-    font-size: 1.25rem;
-  }
 
-  .section-title {
-    font-size: 1.125rem;
-    padding: 0.5rem;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .table {
-    font-size: 0.875rem;
-  }
-
-  .table th,
-  .table td {
-    padding: 0.5rem 0.25rem;
-  }
-
-  /* Hide some columns on tablet to save space */
-  .table th:nth-child(2),  /* Ảnh */
-  .table td:nth-child(2),
-  .table th:nth-child(7),  /* Ngày sinh */
-  .table td:nth-child(7),
-  .table th:nth-child(8),  /* CCCD */
-  .table td:nth-child(8) {
-    display: none;
-  }
+.custom-button img {
+  flex-shrink: 0;
 }
-
-@media (max-width: 480px) {
-  /* Convert table to card layout only on small mobile */
-  .table {
-    border: 0;
-    min-width: auto;
-  }
-
-  .table thead {
-    display: none;
-  }
-
-  .table tr {
-    display: block;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .table td {
-    display: block;
-    text-align: left;
-    border: none;
-    padding: 0.5rem 0;
-    position: relative;
-    border-bottom: 1px solid #ffffff;
-  }
-
-  .table td:last-child {
-    border-bottom: none;
-  }
-
-  .table td::before {
-    content: attr(data-label) ": ";
-    font-weight: bold;
-    color: #374151;
-    display: inline-block;
-    min-width: 120px;
-  }
-
-  .table td[data-label="Ảnh"] {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
 
-  .table td[data-label="Ảnh"]::before {
-    display: none;
-  }
-
-  .table td[data-label="Thao tác"] {
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  .table td[data-label="Thao tác"]::before {
-    display: none;
-  }
-
-  .employee-management {
-    padding: 0 0.5rem;
-  }
-
-  .filter-section {
-    padding: 1rem;
-  }
-
-  .card {
-    margin: 0 -0.5rem;
-    border-radius: 0;
-  }
-
-  /* Smaller cards and compact layout */
-  .table tr {
-    padding: 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .table td {
-    padding: 0.25rem 0;
-    font-size: 0.875rem;
-  }
-
-  .table td::before {
-    min-width: 100px;
-    font-size: 0.8rem;
-  }
-
-  /* Make action buttons smaller on mobile */
-  .btn-export {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    margin: 0.125rem;
-  }
-
-  
-
-  .employee-avatar {
-    width: 60px;
-    height: 60px;
-  }
-  
-}
 </style>

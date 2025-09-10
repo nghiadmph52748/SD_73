@@ -9,19 +9,19 @@
         </div>
         <div class="header-actions">
           <button class="btn-refresh" @click="refreshData">
-            <span class="btn-icon">🔄</span>
+            <span class="btn-icon"><!-- icon: refresh --></span>
             Làm mới
           </button>
           <button class="btn-export" @click="exportData">
-            <span class="btn-icon">📊</span>
+            <span class="btn-icon"><!-- icon: chart --></span>
             Xuất báo cáo
           </button>
           <button class="btn-export" @click="exportSizesToExcel">
-            <span class="btn-icon">📗</span>
+            <span class="btn-icon"><!-- icon: excel --></span>
             Xuất Excel
           </button>
           <button class="btn-export" @click="showAddModal = true">
-            <span class="btn-icon">➕</span>
+            <span class="btn-icon"><!-- icon: plus --></span>
             Thêm đế giày
           </button>
         </div>
@@ -33,7 +33,7 @@
       <div class="filter-card">
         <div class="filter-header">
           <div class="filter-title">
-            <span class="filter-icon">👟</span>
+            <span class="filter-icon"><!-- icon: product --></span>
             <h3>Tìm kiếm kích cỡ</h3>
           </div>
           <div class="filter-stats">
@@ -44,7 +44,7 @@
         <div class="filter-content">
           <div class="search-section">
             <div class="input-group">
-              <span class="input-icon">🔍</span>
+              <span class="input-icon"><!-- icon: search --></span>
               <input
                 v-model="searchQuery"
                 type="text"
@@ -68,7 +68,7 @@
                 <option value="rubber">🔧 Cao su</option>
                 <option value="eva">✨ EVA</option>
                 <option value="pu">💎 PU</option>
-                <option value="tpr">⚙️ TPR</option>
+                <option value="tpr"><!-- icon: settings --> TPR</option>
               </select>
             </div>
 
@@ -79,18 +79,18 @@
               </label>
               <select v-model="statusFilter" class="form-select">
                 <option value="">Tất cả trạng thái</option>
-                <option value="active">✅ Hoạt động</option>
-                <option value="inactive">❌ Ngừng hoạt động</option>
+                <option value="active"><!-- icon: check --> Hoạt động</option>
+                <option value="inactive"><!-- icon: close --> Ngừng hoạt động</option>
               </select>
             </div>
             
             <div class="filter-actions">
               <button @click="clearFilters" class="btn btn-outline">
-                <span class="btn-icon">🔄</span>
+                <span class="btn-icon"><!-- icon: refresh --></span>
                 Đặt lại
               </button>
               <button @click="applyFilters" class="btn btn-primary">
-                <span class="btn-icon">🔍</span>
+                <span class="btn-icon"><!-- icon: search --></span>
                 Áp dụng
               </button>
             </div>
@@ -142,11 +142,11 @@
               <td>
                 <ButtonGroup spacing="xs">
                   <button class="btn btn-secondary" @click="editSize(size)">
-                    <span class="btn-icon">✏️</span>
+                    <span class="btn-icon"><!-- icon: edit --></span>
                     Sửa
                   </button>
                   <button class="btn btn-danger" @click="deleteSize(size.id)">
-                    <span class="btn-icon">🗑️</span>
+                    <span class="btn-icon"><!-- icon: delete --></span>
                     Xóa
                   </button>
                 </ButtonGroup>
@@ -250,11 +250,11 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" @click="closeModals">
-            <span class="btn-icon">❌</span>
+            <span class="btn-icon"><!-- icon: close --></span>
             Hủy
           </button>
           <button class="btn btn-primary" @click="saveSize">
-            <span class="btn-icon">💾</span>
+            <span class="btn-icon"><!-- icon: save --></span>
             {{ showAddModal ? 'Thêm' : 'Cập nhật' }}
           </button>
         </div>
@@ -400,298 +400,18 @@ const exportSizesToExcel = () => {
     const result = exportToExcel(filteredData, 'Product_Sizes', 'Danh sách kích cỡ sản phẩm', headerMapping)
     
     if (result && result.success) {
-      alert(`✅ ${result.message}`)
+      alert(`<!-- icon: check --> ${result.message}`)
     } else {
-      alert(`❌ ${result ? result.message : 'Có lỗi xảy ra khi xuất file Excel'}`)
+      alert(`<!-- icon: close --> ${result ? result.message : 'Có lỗi xảy ra khi xuất file Excel'}`)
     }
   } catch (error) {
     console.error('Error exporting to Excel:', error)
-    alert(`❌ Có lỗi xảy ra khi xuất file Excel: ${error.message}`)
+    alert(`<!-- icon: close --> Có lỗi xảy ra khi xuất file Excel: ${error.message}`)
   }
 }
 </script>
 
 <style scoped>
-.product-sizes {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* page-header styles are now defined in globals.css */
-
-/* Filter Section */
-.filter-section {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow);
-}
-
-.search-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.search-box {
-  display: flex;
-  gap: 0.5rem;
-  flex: 1;
-  min-width: 300px;
-}
-
-.filter-controls {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.filter-controls select {
-  min-width: 150px;
-}
-
-/* Table Styles */
-.card {
-  overflow-x: auto;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0;
-  table-layout: auto;
-  position: relative;
-}
-
-.table th {
-  background-color: #4ade80;
-  color: white;
-  font-weight: 600;
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.table td {
-  padding: 1rem;
-  text-align: center;
-  vertical-align: middle;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 0.875rem;
-}
-
-.sole-code {
-  font-weight: 600;
-  color: #4ade80;
-}
-
-.sole-name {
-  font-weight: 500;
-  text-align: left;
-}
-
-.thickness-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.thickness-bar {
-  width: 6px;
-  height: 40px;
-  background-color: #e0e0e0;
-  border-radius: 3px;
-  position: relative;
-  overflow: hidden;
-}
-
-.thickness-fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: linear-gradient(to top, #4ade80 0%, #22c55e 50%, #16a34a 100%);
-  border-radius: 3px;
-  transition: height 0.3s ease;
-}
-
-.thickness-value {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--secondary-color);
-  min-width: 35px;
-}
-
-/* Form styles */
-.form-range {
-  width: 100%;
-  margin: 0.5rem 0;
-}
-
-.range-value {
-  text-align: center;
-  font-weight: 600;
-  color: #4ade80;
-  margin-top: 0.5rem;
-}
-
-/* Pagination */
-.pagination-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.page-info {
-  font-weight: 600;
-  color: var(--secondary-color);
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: var(--secondary-color);
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-}
-
-.modal-close:hover {
-  background-color: var(--light-gray);
-}
-
-.modal-body {
-  padding: 1.5rem;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 1.5rem;
-  border-top: 1px solid var(--border-color);
-}
-
-/* Form styles */
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--secondary-color);
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .product-sizes {
-    padding: 0 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
-  
-  .search-controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .search-box {
-    min-width: auto;
-  }
-  
-  .filter-controls {
-    flex-direction: column;
-  }
-  
-  .table {
-    font-size: 0.8125rem;
-  }
-  
-  .table th, .table td {
-    padding: 0.5rem 0.25rem;
-  }
-  
-  .thickness-bar {
-    height: 30px;
-  }
-  
-  .modal-overlay {
-    padding: 1rem;
-  }
-  
-  /* Hide less important columns on mobile */
-  .table th:nth-child(4),
-  .table td:nth-child(4),
-  .table th:nth-child(5),
-  .table td:nth-child(5) {
-    display: none;
-  }
-}
+/* Import external CSS file */
+@import '../../styles/cssQuanLy/kichThuocSanPham.css';
 </style>

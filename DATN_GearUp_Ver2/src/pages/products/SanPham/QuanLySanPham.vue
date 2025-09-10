@@ -211,7 +211,7 @@
     <!-- Success Notification Modal -->
     <div
       v-if="showSuccessModal"
-      class="success-modal-overlay"
+      class="them-san-pham-page success-modal-overlay"
       @click="closeSuccessModal"
     >
       <div class="success-modal-content" @click.stop>
@@ -231,9 +231,10 @@
     </div>
 
     <!-- Confirm Modal cho Hoàn thành cập nhật -->
+        <!-- Confirm Modal cho Cập nhật -->
     <div
       v-if="showConfirmUpdateModal"
-      class="custom-confirm-dialog"
+      class="them-san-pham-page custom-confirm-dialog"
       @click="closeConfirmUpdateModal"
     >
       <div class="confirm-content" @click.stop>
@@ -256,7 +257,7 @@
     <!-- Confirm Modal cho Xuất Excel -->
     <div
       v-if="showConfirmExportModal"
-      class="custom-confirm-dialog"
+      class="them-san-pham-page custom-confirm-dialog"
       @click="closeConfirmExportModal"
     >
       <div class="confirm-content" @click.stop>
