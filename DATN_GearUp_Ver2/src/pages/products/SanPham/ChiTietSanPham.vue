@@ -782,6 +782,8 @@ import {
   fetchAllChiTietSanPhamAnh,
   fetchCreateMultipleChiTietSanPhamAnh,
   fetchDeleteChiTietSanPhamAnh,
+  fetchUpdateStatusChiTietSanPhamAnh,
+  fetchUpdateStatusMultipleChiTietSanPhamAnh,
 } from "../../../services/ThuocTinh/ChiTietSanPhamAnhService";
 import { fetchAllDeGiay } from "../../../services/ThuocTinh/DeGiayService";
 import { fetchAllKichThuoc } from "../../../services/ThuocTinh/KichThuocService";
@@ -808,6 +810,10 @@ const selectedImages = ref([]);
 const selectedImageIds = ref([]);
 const availableImages = ref([]);
 const showSuccessPopup = ref(false);
+
+// Biến lưu trữ trạng thái ban đầu của ảnh để so sánh
+const initialImageIds = ref([]);
+const initialImages = ref([]);
 const successMessage = ref("");
 const sanPhams = ref([]);
 const showAllVariants = ref(false);
@@ -895,7 +901,6 @@ onMounted(async () => {
     // 3. Fetch chi tiết đợt giảm giá SAU khi đã có chi tiết sản phẩm
     await fetchChiTietDotGiamGia();
   } catch (error) {
-    console.error("onMounted error:", error);
     alert("Có lỗi xảy ra khi tải dữ liệu ban đầu!");
   }
 });
@@ -940,9 +945,7 @@ const fetchSanPham = async () => {
   try {
     const response = await fetchAllSanPham();
     sanPhams.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching san pham:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchAnhSanPham = async () => {
@@ -960,9 +963,7 @@ const fetchAnhSanPham = async () => {
     }
 
     anhSanPhams.value = anhData;
-  } catch (error) {
-    console.error("Error fetching anh san pham:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchChiTietSanPhamAnh = async () => {
@@ -980,81 +981,63 @@ const fetchChiTietSanPhamAnh = async () => {
     }
 
     chiTietSanPhamAnhs.value = anhData;
-  } catch (error) {
-    console.error("Error fetching chi tiet san pham anh:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchMauSac = async () => {
   try {
     const response = await fetchAllMauSac();
     mauSacs.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching mau sac:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchKichThuoc = async () => {
   try {
     const response = await fetchAllKichThuoc();
     kichThuocs.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching kich thuoc:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchDeGiay = async () => {
   try {
     const response = await fetchAllDeGiay();
     deGiays.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching de giay:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchChatLieu = async () => {
   try {
     const response = await fetchAllChatLieu();
     chatLieus.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching chat lieu:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchTrongLuong = async () => {
   try {
     const response = await fetchAllTrongLuong();
     trongLuongs.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching trong luong:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchNhaSanXuat = async () => {
   try {
     const response = await fetchAllNhaSanXuat();
     nhaSanXuats.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching nha san xuat:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchXuatXu = async () => {
   try {
     const response = await fetchAllXuatXu();
     xuatXus.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching xuat xu:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchDotGiamGia = async () => {
   try {
     const response = await fetchAllDotGiamGia();
     dotGiamGias.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching dot giam gia:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchChiTietSanPhamId = async (id) => {
@@ -1070,27 +1053,21 @@ const fetchChiTietSanPhamId = async (id) => {
       const response = await fetchAllChiTietSanPham();
       chiTietSanPhams.value = response.data || [];
     }
-  } catch (error) {
-    console.error("Error fetching chi tiet san pham:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchChiTietDotGiamGia = async () => {
   try {
     const response = await fetchAllChiTietDotGiamGia();
     chiTietDotGiamGias.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching chi tiet dot giam gia:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchChiTietSanPham = async () => {
   try {
     const response = await fetchAllChiTietSanPham();
     chiTietSanPhams.value = response.data || [];
-  } catch (error) {
-    console.error("Error fetching chi tiet san pham:", error);
-  }
+  } catch (error) {}
 };
 
 const toggleShowAllVariants = async () => {
@@ -1122,9 +1099,7 @@ const fetchAll = async () => {
       fetchDotGiamGia(),
       fetchChiTietDotGiamGia(),
     ]);
-  } catch (error) {
-    console.error("Error fetching all data:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchAllThuocTinh = async () => {
@@ -1140,9 +1115,7 @@ const fetchAllThuocTinh = async () => {
       fetchNhaSanXuat(),
       fetchXuatXu(),
     ]);
-  } catch (error) {
-    console.error("Error fetching all thuoc tinh:", error);
-  }
+  } catch (error) {}
 };
 
 // ========================================
@@ -1187,20 +1160,16 @@ const uploadNewImagesForPopup = async (imageFiles, chiTietSanPhamId) => {
               url: URL.createObjectURL(file),
             });
           } else {
-            console.error("Failed to create link for image ID:", imageId);
+            // Failed to create link for image ID
           }
         } catch (linkError) {
-          console.error(
-            "Error creating link for image ID:",
-            imageId,
-            linkError
-          );
+          // Error creating link for image ID
         }
       } else {
-        console.error("Upload failed - response:", response);
+        // Upload failed
       }
     } catch (error) {
-      console.error("Error uploading image:", error);
+      // Error uploading image
     }
   }
 
@@ -1212,7 +1181,7 @@ const updateProductImage = async (imageId, imageData) => {
     const response = await fetchUpdateAnhSanPham(imageId, imageData);
     return response.success;
   } catch (error) {
-    console.error("Error updating product image:", error);
+    // Error updating product image
     return false;
   }
 };
@@ -1222,7 +1191,7 @@ const deleteProductImage = async (imageId) => {
     const response = await fetchUpdateStatusAnhSanPham(imageId);
     return response.success;
   } catch (error) {
-    console.error("Error deleting product image:", error);
+    // Error deleting product image
     return false;
   }
 };
@@ -1230,7 +1199,7 @@ const deleteProductImage = async (imageId) => {
 const validateImageFile = (file) => {
   // Kiểm tra file có tồn tại không
   if (!file) {
-    console.error("File is undefined or null");
+    // File is undefined or null
     return false;
   }
 
@@ -1294,20 +1263,227 @@ const deleteAllImagesForChiTietSanPham = async (chiTietSanPhamId) => {
   }
 };
 
+// Hàm helper để lấy danh sách ID ảnh hiện tại của chi tiết sản phẩm
+const getCurrentImageIdsForChiTietSanPham = (chiTietSanPhamId) => {
+  try {
+    if (!chiTietSanPhamAnhs.value) {
+      return [];
+    }
+
+    // Lọc các liên kết ảnh hiện tại cho chi tiết sản phẩm này
+    const currentLinks = chiTietSanPhamAnhs.value.filter(
+      (item) => item.idChiTietSanPham === chiTietSanPhamId && !item.deleted
+    );
+
+    // Trả về danh sách ID ảnh
+    return currentLinks.map((link) => link.idAnhSanPham);
+  } catch (error) {
+    console.error("Error getting current image IDs:", error);
+    return [];
+  }
+};
+
+// Hàm helper để lọc ra các ID ảnh hợp lệ (chỉ số nguyên, không phải string giả)
+const getValidImageIds = (images) => {
+  if (!Array.isArray(images)) {
+    return [];
+  }
+
+  const validImages = images.filter((image) => {
+    // Kiểm tra ID có tồn tại và là số nguyên hợp lệ
+    const id = image.id;
+    const isValid =
+      id && typeof id === "number" && Number.isInteger(id) && id > 0;
+    return isValid;
+  });
+
+  const result = validImages.map((image) => image.id);
+
+  return result;
+};
+
+// Hàm đồng bộ hóa selectedImageIds với currentEditingDetail.images
+const syncSelectedImageIdsWithCurrentImages = () => {
+  if (!currentEditingDetail.value || !currentEditingDetail.value.images) {
+    return;
+  }
+
+  // Lấy tất cả ID hợp lệ từ currentEditingDetail.images
+  const currentImageIds = getValidImageIds(currentEditingDetail.value.images);
+
+  // Cập nhật selectedImageIds để khớp với currentEditingDetail.images
+  selectedImageIds.value = [...currentImageIds];
+};
+
+// Hàm so sánh trạng thái ảnh ban đầu vs hiện tại
+const compareImageStates = () => {
+  const currentImageIds = selectedImageIds.value; // Chỉ chứa ID hợp lệ (số nguyên)
+  const initialIds = initialImageIds.value; // Chứa tất cả ID ban đầu (bao gồm ID giả)
+
+  // Tìm ảnh bị xóa: có trong ban đầu nhưng không có trong hiện tại
+  // Chỉ xét những ID hợp lệ trong ban đầu
+  const initialValidIds = initialIds.filter(
+    (id) => typeof id === "number" && Number.isInteger(id) && id > 0
+  );
+
+  const deletedImageIds = initialValidIds.filter(
+    (id) => !currentImageIds.includes(id)
+  );
+
+  // Tìm ảnh mới được thêm: có trong hiện tại nhưng không có trong ban đầu
+  const addedImageIds = currentImageIds.filter(
+    (id) => !initialValidIds.includes(id)
+  );
+
+  // Tìm ảnh không thay đổi: có trong cả hai và đều hợp lệ
+  const unchangedImageIds = initialValidIds.filter((id) =>
+    currentImageIds.includes(id)
+  );
+
+  return {
+    deletedImageIds,
+    addedImageIds,
+    unchangedImageIds,
+    hasChanges: deletedImageIds.length > 0 || addedImageIds.length > 0,
+    initialCount: initialIds.length,
+    currentCount: currentImageIds.length,
+  };
+};
+
+// Hàm xử lý cập nhật trạng thái ảnh đã xóa
+const handleDeletedImages = async (chiTietSanPhamId, deletedImageIds) => {
+
+  if (deletedImageIds.length === 0) {
+    return;
+  }
+
+  try {
+    // Tìm các bản ghi ChiTietSanPhamAnh cần cập nhật
+    const allChiTietAnhRecords = await fetchAllChiTietSanPhamAnh();
+    const recordsToUpdate =
+      allChiTietAnhRecords.data?.filter(
+        (record) =>
+          record.idChiTietSanPham === chiTietSanPhamId &&
+          deletedImageIds.includes(record.idAnhSanPham) &&
+          !record.deleted
+      ) || [];
+
+    if (recordsToUpdate.length === 0) {
+      return;
+    }
+
+    // Lấy danh sách ID của các bản ghi cần cập nhật
+    const recordIdsToUpdate = recordsToUpdate.map((record) => record.id);
+
+    // Sử dụng hàm batch update để cập nhật nhiều bản ghi cùng lúc
+    const batchResult = await fetchUpdateStatusMultipleChiTietSanPhamAnh(
+      recordIdsToUpdate
+    );
+
+    if (batchResult.errorCount > 0) {
+      console.warn("⚠️ Một số bản ghi cập nhật thất bại:", batchResult.errors);
+    }
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật trạng thái ảnh đã xóa:", error);
+    throw error;
+  }
+};
+
+// Hàm kiểm tra và xử lý ảnh trùng lặp
+const checkAndHandleDuplicateImages = async (imageIds) => {
+
+  const uniqueImageIds = [];
+  const duplicateImageIds = [];
+
+  for (const imageId of imageIds) {
+    // Kiểm tra xem ảnh đã tồn tại trong database chưa
+    const existingAnhSanPham = anhSanPhams.value.find(
+      (img) => img.id === imageId
+    );
+    if (existingAnhSanPham) {
+      // Ảnh đã tồn tại, không cần tạo mới
+      uniqueImageIds.push(imageId);
+    } else {
+      // Ảnh chưa tồn tại, có thể là ảnh mới từ upload
+      uniqueImageIds.push(imageId);
+    }
+  }
+
+  return {
+    uniqueImageIds,
+    duplicateImageIds,
+  };
+};
+
+// Hàm xử lý logic cập nhật ảnh thông minh
+const handleSmartImageUpdate = async (chiTietSanPhamId, currentImageIds) => {
+
+  try {
+    // So sánh trạng thái
+    const comparison = compareImageStates();
+
+    // 1. Xử lý ảnh đã xóa
+    if (comparison.deletedImageIds.length > 0) {
+      await handleDeletedImages(chiTietSanPhamId, comparison.deletedImageIds);
+    }
+
+    // 2. Xử lý ảnh mới được thêm
+    if (comparison.addedImageIds.length > 0) {
+
+      // Kiểm tra trùng lặp
+      const { uniqueImageIds, duplicateImageIds } =
+        await checkAndHandleDuplicateImages(comparison.addedImageIds);
+
+      // Chỉ thêm những ảnh mới thực sự
+      if (uniqueImageIds.length > 0) {
+
+        const requestData = {
+          idChiTietSanPham: chiTietSanPhamId,
+          idAnhSanPhamList: uniqueImageIds,
+          trangThai: true,
+          deleted: false,
+        };
+
+        const response = await fetchCreateMultipleChiTietSanPhamAnh(
+          requestData
+        );
+
+        if (!response.success) {
+          throw new Error(response.message || "Failed to create image links");
+        }
+
+      }
+    }
+
+    // Refresh dữ liệu ảnh
+    await refreshImageData();
+    return true;
+  } catch (error) {
+    console.error("❌ Lỗi trong handleSmartImageUpdate:", error);
+    throw error;
+  }
+};
+
 const updateImagesForChiTietSanPham = async (chiTietSanPhamId, newImageIds) => {
   try {
-    // Xóa tất cả ảnh cũ
-    await deleteAllImagesForChiTietSanPham(chiTietSanPhamId);
 
-    // Thêm ảnh mới
-    if (newImageIds.length > 0) {
+    // Lấy danh sách ID ảnh hiện tại
+    const currentImageIds =
+      getCurrentImageIdsForChiTietSanPham(chiTietSanPhamId);
+
+    // Tìm ảnh nào là mới (chưa có trong danh sách hiện tại)
+    const newImageIdsOnly = newImageIds.filter(
+      (imageId) => !currentImageIds.includes(imageId)
+    );
+
+    // Chỉ thêm ảnh mới, không xóa ảnh cũ
+    if (newImageIdsOnly.length > 0) {
       const requestData = {
         idChiTietSanPham: chiTietSanPhamId,
-        idAnhSanPhamList: newImageIds,
+        idAnhSanPhamList: newImageIdsOnly,
         trangThai: true,
         deleted: false,
       };
-
       const response = await fetchCreateMultipleChiTietSanPhamAnh(requestData);
 
       if (!response.success) {
@@ -1327,11 +1503,11 @@ const updateImagesForChiTietSanPham = async (chiTietSanPhamId, newImageIds) => {
 
       // Nếu thành công, trả về thông báo thành công
       return response.message || "Cập nhật ảnh thành công";
+    } else {
+      return "Không có ảnh mới để cập nhật";
     }
-
-    return "Không có ảnh nào để cập nhật";
   } catch (error) {
-    console.error("Error updating images for chi tiet san pham:", error);
+    console.error("❌ Error updating images for chi tiet san pham:", error);
     throw error;
   }
 };
@@ -1344,13 +1520,11 @@ const handleProductImagesForPopup = async (
   try {
     const imageIds = [];
 
-    // Xử lý ảnh có sẵn
+    // Xử lý ảnh có sẵn - chỉ lấy ID hợp lệ (số nguyên)
     if (existingImages && existingImages.length > 0) {
-      for (const image of existingImages) {
-        if (image.id && image.duongDanAnh) {
-          imageIds.push(image.id);
-        }
-      }
+
+      const validExistingIds = getValidImageIds(existingImages);
+      imageIds.push(...validExistingIds);
     }
 
     // Upload ảnh mới
@@ -1377,12 +1551,14 @@ const handleProductImagesForPopup = async (
       }
     }
 
-    // Cập nhật liên kết ảnh
-    if (imageIds.length > 0) {
-      const result = await updateImagesForChiTietSanPham(
-        chiTietSanPhamId,
-        imageIds
-      );
+    // Cập nhật liên kết ảnh thông minh (xử lý cả thêm và xóa)
+
+    // Cập nhật selectedImageIds để đồng bộ với imageIds cuối cùng
+    selectedImageIds.value = [...imageIds];
+
+    if (imageIds.length > 0 || (existingImages && existingImages.length > 0)) {
+      await handleSmartImageUpdate(chiTietSanPhamId, selectedImageIds.value);
+    } else {
     }
 
     return imageIds;
@@ -1487,38 +1663,31 @@ const saveEditPopupFromPopup = async () => {
       createBy: currentProduct.value?.createBy || 1,
     };
 
-
-    console.log(sanPhamData);
     // Kiểm tra dữ liệu trước khi update
     if (!sanPhamData.idNhaSanXuat) {
-      console.error("❌ idNhaSanXuat is null! Cannot update product.");
       alert("Không thể cập nhật sản phẩm: Thiếu thông tin nhà sản xuất!");
       return;
     }
 
     if (!sanPhamData.idXuatXu) {
-      console.error("❌ idXuatXu is null! Cannot update product.");
       alert("Không thể cập nhật sản phẩm: Thiếu thông tin xuất xứ!");
       return;
     }
 
     // Kiểm tra chất liệu
     if (!chatLieu?.id) {
-      console.error("❌ idChatLieu is null! Cannot update product detail.");
       alert("Không thể cập nhật chi tiết sản phẩm: Thiếu thông tin chất liệu!");
       return;
     }
 
     // Kiểm tra đế giày
     if (!deGiay?.id) {
-      console.error("❌ idDeGiay is null! Cannot update product detail.");
       alert("Không thể cập nhật chi tiết sản phẩm: Thiếu thông tin đế giày!");
       return;
     }
 
     // Kiểm tra kích thước
     if (!kichThuoc?.id) {
-      console.error("❌ idKichThuoc is null! Cannot update product detail.");
       alert(
         "Không thể cập nhật chi tiết sản phẩm: Thiếu thông tin kích thước!"
       );
@@ -1527,14 +1696,12 @@ const saveEditPopupFromPopup = async () => {
 
     // Kiểm tra màu sắc
     if (!mauSac?.id) {
-      console.error("❌ idMauSac is null! Cannot update product detail.");
       alert("Không thể cập nhật chi tiết sản phẩm: Thiếu thông tin màu sắc!");
       return;
     }
 
     // Kiểm tra trọng lượng
     if (!trongLuong?.id) {
-      console.error("❌ idTrongLuong is null! Cannot update product detail.");
       alert(
         "Không thể cập nhật chi tiết sản phẩm: Thiếu thông tin trọng lượng!"
       );
@@ -1639,7 +1806,11 @@ const saveEditPopupFromPopup = async () => {
 
     // Refresh dữ liệu - chỉ lấy chi tiết sản phẩm của sản phẩm hiện tại
     await refreshImageData();
-    await fetchChiTietSanPham(route.params.id);
+    await fetchChiTietSanPhamId(route.params.id);
+
+    // Reset trạng thái ban đầu sau khi edit thành công
+    initialImageIds.value = [];
+    initialImages.value = [];
 
     // Hiển thị thông báo thành công
     showSuccessPopupForEdit("Cập nhật chi tiết sản phẩm thành công!");
@@ -1647,7 +1818,6 @@ const saveEditPopupFromPopup = async () => {
     // Đóng popup
     closeEditPopup();
   } catch (error) {
-    console.error("Error saving edit popup:", error);
     alert("Có lỗi xảy ra khi cập nhật: " + error.message);
   }
 };
@@ -1822,7 +1992,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
             }
 
             // Bước 4: Refresh dữ liệu và reset trạng thái
-            await fetchChiTietSanPham(route.params.id);
+            await fetchChiTietSanPhamId(route.params.id);
 
             // Reset các trạng thái
             editingChiTietSanPhams.value.clear();
@@ -2086,11 +2256,10 @@ const handleDeleteClick = async (chiTietSanPham) => {
       await fetchUpdateStatusChiTietSanPham(chiTietSanPham.id);
 
       // Refresh dữ liệu - chỉ lấy chi tiết sản phẩm của sản phẩm hiện tại
-      await fetchChiTietSanPham(route.params.id);
+      await fetchChiTietSanPhamId(route.params.id);
 
       alert("Xóa chi tiết sản phẩm thành công!");
     } catch (error) {
-      console.error("Error deleting chi tiet san pham:", error);
       alert("Có lỗi xảy ra khi xóa: " + error.message);
     }
   }
@@ -2408,15 +2577,26 @@ const editDetailForEdit = async (data) => {
     const images = getImagesForChiTietSanPhamForEdit(data.id);
     if (images.length > 0) {
       selectedImages.value = images.map((img) => img.duongDanAnh);
-      selectedImageIds.value = images.map((img) => img.id);
+      // Chỉ lấy ID hợp lệ (số nguyên) từ ảnh hiện tại
+      selectedImageIds.value = getValidImageIds(images);
+
+      // Lưu trữ trạng thái ban đầu để so sánh sau này - bao gồm cả ID giả
+      initialImageIds.value = images
+        .map((img) => img.id)
+        .filter((id) => id != null);
+      initialImages.value = images.map((img) => ({
+        ...img,
+        isInitial: true, // Đánh dấu là ảnh ban đầu
+      }));
     } else {
       selectedImages.value = [];
       selectedImageIds.value = [];
+      initialImageIds.value = [];
+      initialImages.value = [];
     }
 
     showEditModal.value = true;
   } catch (error) {
-    console.error("Error in editDetail:", error);
     alert("Có lỗi xảy ra khi mở form chỉnh sửa!");
   }
 };
@@ -2458,35 +2638,21 @@ const saveDetailForEdit = async () => {
       chiTietSanPhamId = dataToSend.id;
     }
 
-    // Xử lý ảnh sản phẩm
-    if (chiTietSanPhamId && selectedImageIds.value.length > 0) {
+    // Xử lý ảnh sản phẩm thông minh - so sánh với trạng thái ban đầu
+    if (chiTietSanPhamId) {
       try {
-        // Xóa tất cả liên kết ảnh cũ
-        const existingImages = chiTietSanPhamAnhs.value.filter(
-          (item) => item.idChiTietSanPham === chiTietSanPhamId
-        );
-
-        for (const existingImage of existingImages) {
-          if (existingImage.id) {
-            await fetchDeleteChiTietSanPhamAnh(existingImage.id);
-          }
-        }
-
-        // Tạo liên kết ảnh mới - sử dụng method tạo nhiều ảnh cùng lúc
-        await fetchCreateMultipleChiTietSanPhamAnh({
-          idChiTietSanPham: chiTietSanPhamId,
-          idAnhSanPhamList: selectedImageIds.value,
-          deleted: false,
-        });
+        // Sử dụng hàm xử lý thông minh
+        await handleSmartImageUpdate(chiTietSanPhamId, selectedImageIds.value);
       } catch (imageError) {
-        console.error("Error handling images:", imageError);
+        console.error("❌ Error handling images in popup edit:", imageError);
+        alert("Có lỗi xảy ra khi cập nhật ảnh: " + imageError.message);
       }
     }
 
     // Refresh data từ server để đảm bảo đồng bộ - chỉ lấy chi tiết sản phẩm của sản phẩm hiện tại
 
     // Đảm bảo thứ tự refresh để dữ liệu ảnh được cập nhật đúng
-    await fetchChiTietSanPham(route.params.id);
+    await fetchChiTietSanPhamId(route.params.id);
     // Force refresh dữ liệu ảnh để đảm bảo table được cập nhật
     await forceRefreshImageData();
     closeModals();
@@ -2624,8 +2790,10 @@ const openAddModalForEdit = () => {
 
 const openImageSelectorForModal = () => {
   try {
-    // Chỉ hiển thị những ảnh chưa bị xóa
-    availableImages.value = anhSanPhams.value.filter((img) => !img.deleted);
+    // Chỉ hiển thị những ảnh chưa bị xóa và chưa được chọn
+    availableImages.value = anhSanPhams.value.filter(
+      (img) => !img.deleted && !selectedImageIds.value.includes(img.id)
+    );
     showImageSelector.value = true;
   } catch (error) {
     alert("Có lỗi khi mở image selector!");
@@ -2648,7 +2816,6 @@ const toggleImageSelectionForModal = (imageId) => {
       const image = anhSanPhams.value.find((img) => img.id === imageId);
       if (image) {
         selectedImageIds.value.push(imageId);
-        selectedImageIds.value.push(image.duongDanAnh);
       }
     } else {
       alert("Chỉ được chọn tối đa 5 ảnh!");
@@ -2680,7 +2847,10 @@ const openImageSelectorForEdit = async () => {
 
     // Lọc ra những ảnh chưa được sử dụng hoặc chưa bị xóa
     availableImagesForEdit.value = anhSanPhams.value.filter(
-      (img) => !img.deleted && img.duongDanAnh
+      (img) =>
+        !img.deleted &&
+        img.duongDanAnh &&
+        !selectedImageIds.value.includes(img.id)
     );
 
     showImageSelectorForEdit.value = true;
@@ -2818,6 +2988,11 @@ const handleFileUploadForEdit = async (event) => {
                 id: imageId,
                 isNew: false, // Không phải ảnh tạm nữa
               };
+
+              // Thêm ID thực vào selectedImageIds
+              if (!selectedImageIds.value.includes(imageId)) {
+                selectedImageIds.value.push(imageId);
+              }
             }
           } else {
             console.error(
@@ -2882,13 +3057,23 @@ const removeImageFromPopup = (index) => {
       URL.revokeObjectURL(imageToRemove.url);
     }
 
-    // Nếu là ảnh có sẵn, có thể xóa khỏi server (tùy chọn)
-    if (!imageToRemove.isNewUpload && imageToRemove.id) {
-      // Có thể gọi API để xóa ảnh khỏi server nếu cần
-      removeProductImageForEdit(imageToRemove.id);
+    // Xóa ID ảnh khỏi selectedImageIds nếu tồn tại
+    if (imageToRemove.id) {
+      const idIndex = selectedImageIds.value.indexOf(imageToRemove.id);
+      if (idIndex > -1) {
+        selectedImageIds.value.splice(idIndex, 1);
+        // Cũng xóa khỏi selectedImages để đồng bộ
+        if (selectedImages.value && selectedImages.value[idIndex]) {
+          selectedImages.value.splice(idIndex, 1);
+        }
+      }
     }
 
+    // Xóa ảnh khỏi danh sách hiển thị
     currentEditingDetail.value.images.splice(index, 1);
+
+    // Đồng bộ hóa selectedImageIds với currentEditingDetail.images
+    syncSelectedImageIdsWithCurrentImages();
   }
 };
 
@@ -2929,18 +3114,49 @@ const getImagesForChiTietSanPhamForEdit = (chiTietSanPhamId) => {
 
     // Kiểm tra xem chi tiết sản phẩm có trường anhSanPham không
     if (chiTietSanPham.anhSanPham && Array.isArray(chiTietSanPham.anhSanPham)) {
-      // Chuyển đổi array đường dẫn ảnh thành format tương thích với UI
-      const images = chiTietSanPham.anhSanPham.map((duongDanAnh, index) => ({
-        id: `direct_${chiTietSanPhamId}_${index}`, // Tạo ID giả
-        duongDanAnh: duongDanAnh,
-        loaiAnh: "product",
-        moTa: `Ảnh ${index + 1} của chi tiết sản phẩm ${chiTietSanPhamId}`,
-        file: null,
-        url: null,
-        isNew: false,
-      }));
+
+      // Tìm ID thực từ anhSanPhams dựa trên duongDanAnh
+      const images = chiTietSanPham.anhSanPham.map((duongDanAnh, index) => {
+        // Tìm ảnh trong anhSanPhams dựa trên duongDanAnh
+        let realId = null;
+        let anhSanPhamData = null;
+
+        if (anhSanPhams.value && Array.isArray(anhSanPhams.value)) {
+          anhSanPhamData = anhSanPhams.value.find(
+            (anh) => anh.duongDanAnh === duongDanAnh
+          );
+          if (anhSanPhamData && anhSanPhamData.id) {
+            realId = anhSanPhamData.id;
+          }
+        }
+
+        // Nếu không tìm thấy ID thực, tạo ID giả
+        if (!realId) {
+          realId = `direct_${chiTietSanPhamId}_${index}`;
+        }
+
+        return {
+          id: realId,
+          duongDanAnh: duongDanAnh,
+          loaiAnh: anhSanPhamData ? anhSanPhamData.loaiAnh : "product",
+          moTa: anhSanPhamData
+            ? anhSanPhamData.moTa
+            : `Ảnh ${index + 1} của chi tiết sản phẩm ${chiTietSanPhamId}`,
+          file: null,
+          url: null,
+          isNew: false,
+        };
+      });
+
+      const realIdCount = images.filter(
+        (img) => !img.id.toString().startsWith("direct_")
+      ).length;
+      const fakeIdCount = images.filter((img) =>
+        img.id.toString().startsWith("direct_")
+      ).length;
 
       return images;
+    } else {
     }
 
     // Fallback: sử dụng cách cũ nếu không có anhSanPham trực tiếp
@@ -3094,7 +3310,7 @@ const updateProductImageForInline = async (imageId, file) => {
     const response = await fetchUpdateAnhSanPham(imageId, formData);
     return response.data;
   } catch (error) {
-    console.error("Error updating product image:", error);
+    // Error updating product image
     throw new Error("Không thể cập nhật ảnh sản phẩm");
   }
 };
@@ -3105,7 +3321,7 @@ const deleteProductImageForInline = async (imageId) => {
     const response = await fetchUpdateStatusAnhSanPham(imageId);
     return response.data;
   } catch (error) {
-    console.error("Error deleting product image:", error);
+    // Error deleting product image
     throw new Error("Không thể xóa ảnh sản phẩm");
   }
 };
@@ -3117,6 +3333,7 @@ const handleProductImagesForInline = async (
   newImageFiles
 ) => {
   try {
+
     // 1. Upload ảnh mới lên server
     let uploadedImageIds = [];
     if (newImageFiles && newImageFiles.length > 0) {
@@ -3125,9 +3342,9 @@ const handleProductImagesForInline = async (
     }
 
     // 2. Lấy danh sách ID ảnh cuối cùng (ảnh có sẵn + ảnh mới upload)
-    const existingImageIds = currentImages
-      .filter((img) => !img.isNewUpload && img.id)
-      .map((img) => img.id);
+    // Lọc ra chỉ ảnh có sẵn với ID hợp lệ (không phải ID giả)
+    const existingImagesValid = currentImages.filter((img) => !img.isNewUpload);
+    const existingImageIds = getValidImageIds(existingImagesValid);
 
     const finalImageIds = [...existingImageIds, ...uploadedImageIds];
 
@@ -3147,7 +3364,7 @@ const handleProductImagesForInline = async (
 
     return true;
   } catch (error) {
-    console.error("Error handling product images:", error);
+    console.error("❌ Error handling product images:", error);
     throw error;
   }
 };
@@ -3323,6 +3540,10 @@ const startEdit = async (detail) => {
 const closeEditPopup = () => {
   showEditPopup.value = false;
   currentEditingDetail.value = {};
+
+  // Reset trạng thái ban đầu khi đóng popup
+  initialImageIds.value = [];
+  initialImages.value = [];
 };
 
 // Hàm lưu từ popup edit
@@ -3510,7 +3731,6 @@ const saveEditPopupFromInline = async () => {
 
     showSuccessNotificationForEdit("Cập nhật chi tiết sản phẩm thành công!");
   } catch (error) {
-    console.error("Error saving edit popup:", error);
     alert("Có lỗi xảy ra khi cập nhật!");
   }
 };
@@ -3560,7 +3780,6 @@ const saveInlineEdit = async (detailId) => {
 
     showSuccessNotificationForEdit("Cập nhật chi tiết sản phẩm thành công!");
   } catch (error) {
-    console.error("Error saving inline edit:", error);
     alert("Có lỗi xảy ra khi cập nhật!");
   }
 };
@@ -4591,3 +4810,4 @@ body {
   color: rgb(255, 255, 255) !important;
 }
 </style>
+

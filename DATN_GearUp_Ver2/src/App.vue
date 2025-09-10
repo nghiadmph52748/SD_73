@@ -145,12 +145,6 @@ const currentPageTitle = computed(() => {
     return 'Chi tiết sản phẩm';
   }
   
-  // Debug: Log current route to console (can be removed later)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Current route path:', route.path);
-    console.log('Available paths:', Object.keys(pathTitles));
-  }
-  
   return pathTitles[route.path] || `Trang không xác định (${route.path})`;
 });
 
@@ -348,10 +342,6 @@ const filterCounts = computed(() => {
 
 // Notification functions
 const toggleNotifications = () => {
-  console.log(
-    "Toggle notifications clicked, current state:",
-    showNotifications.value
-  );
   showNotifications.value = !showNotifications.value;
 };
 

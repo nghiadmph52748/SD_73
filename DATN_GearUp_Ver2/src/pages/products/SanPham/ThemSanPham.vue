@@ -473,9 +473,33 @@
 
         <!-- Form Actions -->
         <div class="form-actions">
-          <button type="button" class="btn-outline" @click="saveProduct">
+          <button
+            type="button"
+            class="btn-outline"
+            @click="confirmCreateProduct"
+          >
             Tạo sản phẩm
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div
+      v-if="showConfirmModal"
+      class="confirm-modal-overlay"
+      @click="closeConfirmModal"
+    >
+      <div class="confirm-modal-content" @click.stop>
+        <div class="confirm-header">
+          <h3>{{ confirmTitle }}</h3>
+        </div>
+        <div class="confirm-body">
+          <p>{{ confirmMessage }}</p>
+        </div>
+        <div class="confirm-actions">
+          <button class="btn-outline" @click="closeConfirmModal">Hủy</button>
+          <button class="btn-primary" @click="confirmAction">Xác nhận</button>
         </div>
       </div>
     </div>
@@ -497,12 +521,10 @@
           <p class="success-message">{{ successMessage }}</p>
         </div>
         <div class="success-actions">
-          <button class="success-close-btn" @click="closeSuccessModal">
-            Đóng
-          </button>
-          <router-link to="/products" class="btn-primary">
-            Xem danh sách
-          </router-link>
+          <div class="auto-redirect-notice">
+            <div class="redirect-spinner"></div>
+            <span>Đang chuyển hướng đến trang chi tiết sản phẩm...</span>
+          </div>
         </div>
       </div>
     </div>
@@ -875,6 +897,13 @@ import {
 const router = useRouter();
 const showSuccessModal = ref(false);
 const successMessage = ref("");
+const createdProductId = ref(null);
+
+// Confirm modal variables
+const showConfirmModal = ref(false);
+const confirmTitle = ref("");
+const confirmMessage = ref("");
+const onConfirmCallback = ref(null);
 const productForm = ref({
   tenSanPham: "",
   tenNhaSanXuat: "",
@@ -1255,82 +1284,42 @@ const selectDeGiay = (deGiay) => {
 
 // Create new functions
 const createNewTenSanPham = async () => {
-  try {
-    const newTenSanPham = {
-      tenSanPham: productForm.value.tenSanPham,
-      trangThai: true,
-      deleted: false,
-    };
-    await fetchCreateSanPham(newTenSanPham);
-    await fetchTenSanPham();
-    selectedProductFromDropdown.value = null; // Reset vì tạo sản phẩm mới
-    showTenSanPhamDropdown.value = false;
-  } catch (error) {
-    console.error("Error creating ten san pham:", error);
-    alert("Có lỗi xảy ra khi tạo tên sản phẩm!");
-  }
+  // Chỉ đóng dropdown và để tên sản phẩm trong form
+  // Việc tạo sản phẩm mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
+  selectedProductFromDropdown.value = null; // Reset vì tạo sản phẩm mới
+  showTenSanPhamDropdown.value = false;
+  console.log("📝 Đã lưu tên sản phẩm mới:", productForm.value.tenSanPham);
 };
 
 const createNewNhaSanXuat = async () => {
-  try {
-    const newNhaSanXuat = {
-      tenNhaSanXuat: productForm.value.tenNhaSanXuat,
-      trangThai: true,
-      deleted: false,
-    };
-    await fetchCreateNhaSanXuat(newNhaSanXuat);
-    await fetchNhaSanXuat();
-    showNhaSanXuatDropdown.value = false;
-  } catch (error) {
-    console.error("Error creating nha san xuat:", error);
-    alert("Có lỗi xảy ra khi tạo nhà sản xuất!");
-  }
+  // Chỉ đóng dropdown và để tên nhà sản xuất trong form
+  // Việc tạo nhà sản xuất mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
+  showNhaSanXuatDropdown.value = false;
+  console.log(
+    "📝 Đã lưu tên nhà sản xuất mới:",
+    productForm.value.tenNhaSanXuat
+  );
 };
 
 const createNewXuatXu = async () => {
-  try {
-    const newXuatXu = {
-      tenXuatXu: productForm.value.tenXuatXu,
-      trangThai: true,
-      deleted: false,
-    };
-    await fetchCreateXuatXu(newXuatXu);
-    await fetchXuatXu();
-    showXuatXuDropdown.value = false;
-  } catch (error) {
-    console.error("Error creating xuat xu:", error);
-    alert("Có lỗi xảy ra khi tạo xuất xứ!");
-  }
+  // Chỉ đóng dropdown và để tên xuất xứ trong form
+  // Việc tạo xuất xứ mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
+  showXuatXuDropdown.value = false;
+  console.log("📝 Đã lưu tên xuất xứ mới:", productForm.value.tenXuatXu);
 };
 
 const createNewChatLieu = async () => {
-  try {
-    const newChatLieu = {
-      tenChatLieu: productForm.value.tenChatLieu,
-      trangThai: true,
-      deleted: false,
-    };
-    await fetchCreateChatLieu(newChatLieu);
-    await fetchChatLieu();
-    showChatLieuDropdown.value = false;
-  } catch (error) {
-    console.error("Error creating chat lieu:", error);
-  }
+  // Chỉ đóng dropdown và để tên chất liệu trong form
+  // Việc tạo chất liệu mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
+  showChatLieuDropdown.value = false;
+  console.log("📝 Đã lưu tên chất liệu mới:", productForm.value.tenChatLieu);
 };
 
 const createNewDeGiay = async () => {
-  try {
-    const newDeGiay = {
-      tenDeGiay: productForm.value.tenDeGiay,
-      trangThai: true,
-      deleted: false,
-    };
-    await fetchCreateDeGiay(newDeGiay);
-    await fetchDeGiay();
-    showDeGiayDropdown.value = false;
-  } catch (error) {
-    console.error("Error creating de giay:", error);
-  }
+  // Chỉ đóng dropdown và để tên đế giày trong form
+  // Việc tạo đế giày mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
+  showDeGiayDropdown.value = false;
+  console.log("📝 Đã lưu tên đế giày mới:", productForm.value.tenDeGiay);
 };
 
 // Popup functions
@@ -1376,68 +1365,58 @@ const selectKichThuocFromPopup = (kichThuoc) => {
 
 const createNewMauSacFromPopup = async () => {
   if (!newMauSacName.value.trim()) {
-    alert("Vui lòng nhập tên màu sắc!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập tên màu sắc!");
     return;
   }
 
-  try {
-    const newMauSac = {
-      tenMauSac: newMauSacName.value,
-      trangThai: true,
-      deleted: false,
-    };
-    await fetchCreateMauSac(newMauSac);
-    await fetchMauSac();
+  // Tạo màu sắc mới tạm thời chỉ để sử dụng trong form
+  // Việc tạo thực sự sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
+  const newMauSac = {
+    id: null, // Chưa có ID vì chưa tạo trong DB
+    tenMauSac: newMauSacName.value,
+    trangThai: true,
+    deleted: false,
+  };
 
-    // Auto-select the newly created color
-    const createdMauSac = mauSacs.value.find(
-      (item) => item.tenMauSac === newMauSacName.value
-    );
-    if (
-      createdMauSac &&
-      !selectedMauSacs.value.find((item) => item.id === createdMauSac.id)
-    ) {
-      selectedMauSacs.value.push(createdMauSac);
-    }
-
-    closeMauSacPopup();
-  } catch (error) {
-    console.error("Error creating mau sac:", error);
-    alert("Có lỗi xảy ra khi tạo màu sắc!");
+  // Thêm vào danh sách đã chọn
+  if (
+    !selectedMauSacs.value.find(
+      (item) => item.tenMauSac === newMauSac.tenMauSac
+    )
+  ) {
+    selectedMauSacs.value.push(newMauSac);
   }
+
+  console.log("📝 Đã thêm màu sắc mới:", newMauSacName.value);
+  closeMauSacPopup();
 };
 
 const createNewKichThuocFromPopup = async () => {
   if (!newKichThuocName.value.trim()) {
-    alert("Vui lòng nhập tên kích thước!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập tên kích thước!");
     return;
   }
 
-  try {
-    const newKichThuoc = {
-      tenKichThuoc: newKichThuocName.value,
-      trangThai: true,
-      deleted: false,
-    };
-    await fetchCreateKichThuoc(newKichThuoc);
-    await fetchKichThuoc();
+  // Tạo kích thước mới tạm thời chỉ để sử dụng trong form
+  // Việc tạo thực sự sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
+  const newKichThuoc = {
+    id: null, // Chưa có ID vì chưa tạo trong DB
+    tenKichThuoc: newKichThuocName.value,
+    trangThai: true,
+    deleted: false,
+  };
 
-    // Auto-select the newly created size
-    const createdKichThuoc = kichThuocs.value.find(
-      (item) => item.tenKichThuoc === newKichThuocName.value
-    );
-    if (
-      createdKichThuoc &&
-      !selectedKichThuocs.value.find((item) => item.id === createdKichThuoc.id)
-    ) {
-      selectedKichThuocs.value.push(createdKichThuoc);
-    }
-
-    closeKichThuocPopup();
-  } catch (error) {
-    console.error("Error creating kich thuoc:", error);
-    alert("Có lỗi xảy ra khi tạo kích thước!");
+  // Thêm vào danh sách đã chọn
+  if (
+    !selectedKichThuocs.value.find(
+      (item) => item.tenKichThuoc === newKichThuoc.tenKichThuoc
+    )
+  ) {
+    selectedKichThuocs.value.push(newKichThuoc);
   }
+
+  console.log("📝 Đã thêm kích thước mới:", newKichThuocName.value);
+  closeKichThuocPopup();
 };
 
 // Quick edit state
@@ -1787,6 +1766,68 @@ const getDeGiayId = async (tenDeGiay) => {
   }
 };
 
+// Helper functions để tạo màu sắc và kích thước mới
+const getMauSacId = async (mauSac) => {
+  // Nếu đã có ID thì trả về luôn
+  if (mauSac.id) {
+    return mauSac.id;
+  }
+
+  // Nếu chưa có ID thì tạo mới
+  try {
+    const newMauSac = {
+      tenMauSac: mauSac.tenMauSac,
+      trangThai: true,
+      deleted: false,
+      createAt: new Date().toISOString().split("T")[0],
+      createBy: 1,
+      updateAt: new Date().toISOString().split("T")[0],
+      updateBy: 1,
+    };
+
+    await fetchCreateMauSac(newMauSac);
+    await fetchMauSac(); // Refresh danh sách
+
+    return mauSacs.value.find(
+      (item) => item.tenMauSac.toLowerCase() === mauSac.tenMauSac.toLowerCase()
+    ).id;
+  } catch (error) {
+    console.error("Error creating mau sac:", error);
+    return null;
+  }
+};
+
+const getKichThuocId = async (kichThuoc) => {
+  // Nếu đã có ID thì trả về luôn
+  if (kichThuoc.id) {
+    return kichThuoc.id;
+  }
+
+  // Nếu chưa có ID thì tạo mới
+  try {
+    const newKichThuoc = {
+      tenKichThuoc: kichThuoc.tenKichThuoc,
+      trangThai: true,
+      deleted: false,
+      createAt: new Date().toISOString().split("T")[0],
+      createBy: 1,
+      updateAt: new Date().toISOString().split("T")[0],
+      updateBy: 1,
+    };
+
+    await fetchCreateKichThuoc(newKichThuoc);
+    await fetchKichThuoc(); // Refresh danh sách
+
+    return kichThuocs.value.find(
+      (item) =>
+        item.tenKichThuoc.toLowerCase() === kichThuoc.tenKichThuoc.toLowerCase()
+    ).id;
+  } catch (error) {
+    console.error("Error creating kich thuoc:", error);
+    return null;
+  }
+};
+
 const getTrongLuongId = async (trongLuong) => {
   if (!trongLuong || !trongLuong.trim()) return null;
 
@@ -1891,6 +1932,10 @@ const handleClickOutside = (event) => {
 
 // Function to add variants to existing product
 const addVariantsToExistingProduct = async (existingProductId) => {
+  console.log(
+    "🔄 Bắt đầu addVariantsToExistingProduct với ID:",
+    existingProductId
+  );
   try {
     const idDeGiay = await getDeGiayId(productForm.value.tenDeGiay);
     const idChatLieu = await getChatLieuId(productForm.value.tenChatLieu);
@@ -1916,10 +1961,25 @@ const addVariantsToExistingProduct = async (existingProductId) => {
           );
         }
 
+        // Lấy ID màu sắc và kích thước (tạo mới nếu chưa có)
+        const idKichThuoc = await getKichThuocId(selectedKichThuocs.value[j]);
+        const idMauSac = await getMauSacId(selectedMauSacs.value[i]);
+
+        if (!idKichThuoc) {
+          throw new Error(
+            `Không thể tạo kích thước: ${selectedKichThuocs.value[j].tenKichThuoc}`
+          );
+        }
+        if (!idMauSac) {
+          throw new Error(
+            `Không thể tạo màu sắc: ${selectedMauSacs.value[i].tenMauSac}`
+          );
+        }
+
         const variantData = {
           idSanPham: existingProductId,
-          idKichThuoc: selectedKichThuocs.value[j].id,
-          idMauSac: selectedMauSacs.value[i].id,
+          idKichThuoc: idKichThuoc,
+          idMauSac: idMauSac,
           idDeGiay: idDeGiay,
           idChatLieu: idChatLieu,
           idTrongLuong: trongLuongId,
@@ -1983,8 +2043,24 @@ const addVariantsToExistingProduct = async (existingProductId) => {
       }
     }
 
+    // Lưu ID sản phẩm đã chọn từ dropdown
+    createdProductId.value = selectedProductFromDropdown.value.id;
+    console.log("✅ Đã lưu ID sản phẩm từ dropdown:", createdProductId.value);
+
+    // Hiển thị thông báo thành công trong thời gian ngắn
     successMessage.value = `Đã thêm biến thể mới cho sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" thành công!`;
     showSuccessModal.value = true;
+    console.log("🎉 Thành công thêm biến thể! Sẽ chuyển hướng sau 1.5 giây");
+
+    // Tự động chuyển hướng sau 1.5 giây
+    setTimeout(() => {
+      console.log(
+        "🔄 Đang chuyển hướng đến:",
+        `/products/details/${createdProductId.value}`
+      );
+      showSuccessModal.value = false;
+      router.push(`/products/details/${createdProductId.value}`);
+    }, 1500);
 
     // Reset form after successful creation
     resetForm();
@@ -1998,87 +2074,115 @@ const addVariantsToExistingProduct = async (existingProductId) => {
   }
 };
 
-// Save product function
-const saveProduct = async () => {
-  try {
-    // Validate form
-    if (!productForm.value.tenSanPham.trim()) {
-      alert("Vui lòng nhập tên sản phẩm!");
-      return;
-    }
+// Confirm create product function
+const confirmCreateProduct = () => {
+  console.log("🔍 Bắt đầu confirmCreateProduct");
 
-    if (!productForm.value.tenNhaSanXuat.trim()) {
-      alert("Vui lòng nhập hoặc chọn nhà sản xuất!");
-      return;
-    }
+  // Validate basic form before showing confirm
+  if (!productForm.value.tenSanPham.trim()) {
+    showAlert("Thiếu thông tin", "Vui lòng nhập tên sản phẩm!");
+    return;
+  }
 
-    if (!productForm.value.tenXuatXu.trim()) {
-      alert("Vui lòng nhập hoặc chọn xuất xứ!");
-      return;
-    }
+  if (!productForm.value.tenNhaSanXuat.trim()) {
+    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn nhà sản xuất!");
+    return;
+  }
 
-    if (!productForm.value.tenChatLieu.trim()) {
-      alert("Vui lòng nhập hoặc chọn chất liệu!");
-      return;
-    }
+  if (!productForm.value.tenXuatXu.trim()) {
+    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn xuất xứ!");
+    return;
+  }
 
-    if (!productForm.value.tenDeGiay.trim()) {
-      alert("Vui lòng nhập hoặc chọn đế giày!");
-      return;
-    }
+  if (!productForm.value.tenChatLieu.trim()) {
+    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn chất liệu!");
+    return;
+  }
 
-    if (selectedMauSacs.value.length === 0) {
-      alert("Vui lòng chọn ít nhất một màu sắc!");
-      return;
-    }
+  if (!productForm.value.tenDeGiay.trim()) {
+    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn đế giày!");
+    return;
+  }
 
-    if (selectedKichThuocs.value.length === 0) {
-      alert("Vui lòng chọn ít nhất một kích thước!");
-      return;
-    }
+  if (selectedMauSacs.value.length === 0) {
+    showAlert("Thiếu thông tin", "Vui lòng chọn ít nhất một màu sắc!");
+    return;
+  }
 
-    // Validate variants
-    for (let i = 0; i < selectedMauSacs.value.length; i++) {
-      for (let j = 0; j < selectedKichThuocs.value.length; j++) {
-        const variant = productVariants.value[i][j];
-        // Không cần validate tenSanPham vì nó được tự động điền từ form chính
-        if (!variant.trongLuong || !variant.trongLuong.trim()) {
-          alert(
-            `Vui lòng nhập trọng lượng cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}`
-          );
-          return;
-        }
-        if (variant.soLuong <= 0) {
-          alert(
-            `Vui lòng nhập số lượng > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}`
-          );
-          return;
-        }
-        if (variant.giaBan <= 0) {
-          alert(
-            `Vui lòng nhập giá bán > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}`
-          );
-          return;
-        }
-      }
-    }
+  if (selectedKichThuocs.value.length === 0) {
+    showAlert("Thiếu thông tin", "Vui lòng chọn ít nhất một kích thước!");
+    return;
+  }
 
-    // Kiểm tra xem có sản phẩm được chọn từ dropdown không
-    if (selectedProductFromDropdown.value) {
-      // Thêm biến thể cho sản phẩm đã tồn tại
-      const confirmed = confirm(
-        `Sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" đã tồn tại. Bạn có muốn thêm biến thể mới cho sản phẩm này không?\n\nNếu chọn "OK": Thêm biến thể cho sản phẩm cũ\nNếu chọn "Cancel": Tạo sản phẩm mới với tên này`
-      );
-
-      if (confirmed) {
-        // Thêm biến thể cho sản phẩm cũ
-        await addVariantsToExistingProduct(
-          selectedProductFromDropdown.value.id
+  // Validate variants
+  for (let i = 0; i < selectedMauSacs.value.length; i++) {
+    for (let j = 0; j < selectedKichThuocs.value.length; j++) {
+      const variant = productVariants.value[i][j];
+      if (!variant.trongLuong || !variant.trongLuong.trim()) {
+        showAlert(
+          "Thiếu thông tin",
+          `Vui lòng nhập trọng lượng cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`
         );
         return;
       }
-      // Nếu không xác nhận, tiếp tục tạo sản phẩm mới
+      if (variant.soLuong <= 0) {
+        showAlert(
+          "Thiếu thông tin",
+          `Vui lòng nhập số lượng > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`
+        );
+        return;
+      }
+      if (variant.giaBan <= 0) {
+        showAlert(
+          "Thiếu thông tin",
+          `Vui lòng nhập giá bán > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`
+        );
+        return;
+      }
     }
+  }
+
+  console.log("✅ Validation passed, checking product selection");
+
+  // Kiểm tra xem có sản phẩm được chọn từ dropdown không
+  if (selectedProductFromDropdown.value) {
+    console.log(
+      "📦 Product selected from dropdown:",
+      selectedProductFromDropdown.value.tenSanPham
+    );
+    // Show confirm for adding variants to existing product
+    const variantCount =
+      selectedMauSacs.value.length * selectedKichThuocs.value.length;
+    showConfirm(
+      "Thêm biến thể cho sản phẩm hiện có",
+      `Sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" đã tồn tại. Bạn có muốn thêm ${variantCount} biến thể mới cho sản phẩm này không?`,
+      () => {
+        console.log("🔄 Calling addVariantsToExistingProduct");
+        addVariantsToExistingProduct(selectedProductFromDropdown.value.id);
+      }
+    );
+  } else {
+    console.log("🆕 No product selected from dropdown, creating new product");
+    // Show confirm for creating new product
+    const variantCount =
+      selectedMauSacs.value.length * selectedKichThuocs.value.length;
+    showConfirm(
+      "Xác nhận tạo sản phẩm",
+      `Bạn có muốn tạo sản phẩm "${productForm.value.tenSanPham}" với ${variantCount} biến thể không?`,
+      () => {
+        console.log("🔄 Calling saveProduct for new product");
+        saveProduct();
+      }
+    );
+  }
+};
+
+// Save product function
+const saveProduct = async () => {
+  console.log("🔄 Bắt đầu saveProduct - tạo sản phẩm mới");
+  try {
+    // Form validation has been moved to confirmCreateProduct function
+    // This function now only handles creating NEW products (not existing ones)
 
     // Tạo dữ liệu sản phẩm chính trước
     const sanPhamData = {
@@ -2133,6 +2237,10 @@ const saveProduct = async () => {
 
     // Lấy ID từ response
     const sanPhamId = newSanPhamData.id;
+
+    // Lưu ID sản phẩm vừa tạo ngay lập tức
+    createdProductId.value = sanPhamId;
+    console.log("✅ Đã lưu ID sản phẩm:", createdProductId.value);
     for (let i = 0; i < selectedMauSacs.value.length; i++) {
       for (let j = 0; j < selectedKichThuocs.value.length; j++) {
         const variant = productVariants.value[i][j];
@@ -2141,10 +2249,25 @@ const saveProduct = async () => {
         const idDeGiay = await getDeGiayId(productForm.value.tenDeGiay);
         const idChatLieu = await getChatLieuId(productForm.value.tenChatLieu);
 
+        // Lấy ID màu sắc và kích thước (tạo mới nếu chưa có)
+        const idKichThuoc = await getKichThuocId(selectedKichThuocs.value[j]);
+        const idMauSac = await getMauSacId(selectedMauSacs.value[i]);
+
+        if (!idKichThuoc) {
+          throw new Error(
+            `Không thể tạo kích thước: ${selectedKichThuocs.value[j].tenKichThuoc}`
+          );
+        }
+        if (!idMauSac) {
+          throw new Error(
+            `Không thể tạo màu sắc: ${selectedMauSacs.value[i].tenMauSac}`
+          );
+        }
+
         const variantData = {
           idSanPham: sanPhamId,
-          idKichThuoc: selectedKichThuocs.value[j].id,
-          idMauSac: selectedMauSacs.value[i].id,
+          idKichThuoc: idKichThuoc,
+          idMauSac: idMauSac,
           idDeGiay: idDeGiay,
           idChatLieu: idChatLieu,
           idTrongLuong: trongLuongId,
@@ -2265,8 +2388,20 @@ const saveProduct = async () => {
       }
     }
 
+    // Hiển thị thông báo thành công trong thời gian ngắn
     successMessage.value = "Sản phẩm mới đã được tạo thành công!";
     showSuccessModal.value = true;
+    console.log("🎉 Thành công! Sẽ chuyển hướng sau 1.5 giây");
+
+    // Tự động chuyển hướng sau 1.5 giây
+    setTimeout(() => {
+      console.log(
+        "🔄 Đang chuyển hướng đến:",
+        `/products/details/${createdProductId.value}`
+      );
+      showSuccessModal.value = false;
+      router.push(`/products/details/${createdProductId.value}`);
+    }, 1500);
 
     // Reset form after successful creation
     resetForm();
@@ -2286,13 +2421,40 @@ const saveProduct = async () => {
       errorMessage = "Lỗi kết nối API. Vui lòng kiểm tra lại!";
     }
 
-    alert(errorMessage);
+    showConfirm("Lỗi", errorMessage, () => {});
   }
 };
 
 const closeSuccessModal = () => {
   showSuccessModal.value = false;
   successMessage.value = "";
+  createdProductId.value = null;
+};
+
+// Confirm modal functions
+const showConfirm = (title, message, callback) => {
+  confirmTitle.value = title;
+  confirmMessage.value = message;
+  onConfirmCallback.value = callback;
+  showConfirmModal.value = true;
+};
+
+const closeConfirmModal = () => {
+  showConfirmModal.value = false;
+  confirmTitle.value = "";
+  confirmMessage.value = "";
+  onConfirmCallback.value = null;
+};
+
+const confirmAction = () => {
+  console.log("✅ Confirm action triggered");
+  if (onConfirmCallback.value) {
+    console.log("🔄 Executing confirm callback");
+    onConfirmCallback.value();
+  } else {
+    console.log("❌ No confirm callback found");
+  }
+  closeConfirmModal();
 };
 
 onMounted(async () => {
@@ -3935,3 +4097,4 @@ const isValidImageUrl = (url) => {
   padding: 20px;
 }
 </style>
+

@@ -310,7 +310,6 @@ const fetchAllData = async () => {
   try {
     const res = await fetchAllSanPham();
     products.value = res.data;
-    console.log(products.value);
   } catch (error) {
     console.error("Error fetching products:", error);
   }
