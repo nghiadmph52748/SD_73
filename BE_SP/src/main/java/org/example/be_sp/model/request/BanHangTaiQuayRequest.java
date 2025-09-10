@@ -14,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BanHangTaiQuayRequest {
-    private String tenHoaDon;
     private Integer idKhachHang;
     private Integer idPhieuGiamGia;
     private Integer idNhanVien;
@@ -24,15 +23,14 @@ public class BanHangTaiQuayRequest {
     private BigDecimal phiVanChuyen;
     private BigDecimal tongTien;
     private BigDecimal tongTienSauGiam;
-    private String ghiChu;
     private String tenNguoiNhan;
     private String diaChiNhanHang;
     private String soDienThoaiNguoiNhan;
     private String emailNguoiNhan;
     private LocalDate ngayTao;
     private LocalDate ngayThanhToan;
+    private Boolean loaiDon;
     private Boolean trangThai;
     private Boolean deleted;
-    private LocalDate createAt;
-    private Integer createBy;
+    private String ghiChu;
 }

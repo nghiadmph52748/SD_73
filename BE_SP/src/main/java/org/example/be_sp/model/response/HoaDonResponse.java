@@ -8,6 +8,7 @@ import org.example.be_sp.entity.HoaDon;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,8 +44,12 @@ public class HoaDonResponse {
     private Integer createBy;
     private LocalDate updateAt;
     private Integer updateBy;
-
-
+    private List<String> tenSanPhams;
+    private List<HinhThucThanhToanReponse> lichSuThanhToan;
+    private List<HoaDonChiTietResponse> chiTietSanPham;
+    private Integer idNhanVien;
+    private List<String> ghiChus;
+    private List<HoaDonChiTietResponse> items;
     public HoaDonResponse(HoaDon hd) {
         this.id = hd.getId();
 
@@ -65,10 +70,7 @@ public class HoaDonResponse {
             this.soTienToiDa = hd.getIdPhieuGiamGia().getSoTienToiDa();
         }
 
-        // Nhân viên
-        if (hd.getIdNhanVien() != null) {
-            this.tenNhanVien = hd.getIdNhanVien().getTenNhanVien();
-        }
+
 
         this.tenHoaDon = hd.getTenHoaDon();
         this.loaiDon = hd.getLoaiDon();
@@ -88,6 +90,52 @@ public class HoaDonResponse {
         this.createBy = hd.getCreateBy();
         this.updateAt = hd.getUpdateAt();
         this.updateBy = hd.getUpdateBy();
+
+        // Mapping chi tiết sản phẩm
+        // Mapping danh sách sản phẩm (items cho frontend)
+//        if (hd.getHoaDonChiTiets() != null) {
+////            this.items = hd.getHoaDonChiTiets()
+////                    .stream()
+////                    .map(HoaDonChiTietResponse::new)  // map sang response chi tiết
+////                    .toList();
+//
+////            // Nếu vẫn muốn có list tên sản phẩm riêng
+//            this.tenSanPhams = hd.getHoaDonChiTiets()
+//                    .stream()
+//                    .map(ct -> ct.getIdChiTietSanPham()
+//                            .getIdSanPham()
+//                            .getTenSanPham())
+//                    .toList();
+//        }
+        if (hd.getHoaDonChiTiets() != null) {
+            this.items = hd.getHoaDonChiTiets()
+                    .stream()
+                    .map(HoaDonChiTietResponse::new)
+                    .toList();
+        }
+
+        // Mapping lịch sử thanh toán
+        if (hd.getHinhThucThanhToans() != null) {
+            this.lichSuThanhToan = hd.getHinhThucThanhToans()
+                    .stream()
+                    .map(HinhThucThanhToanReponse::new)
+                    .toList();
+        }
+        this.ghiChus = hd.getHoaDonChiTiets()
+                .stream()
+                .map(ct -> ct.getGhiChu())
+                .toList();
+        // Nhân viên
+        if (hd.getIdNhanVien() != null) {
+            this.tenNhanVien = hd.getIdNhanVien().getTenNhanVien();
+            this.idNhanVien = hd.getIdNhanVien().getId();
+        }
+        // Mapping chi tiết sản phẩm
+
+
     }
+
+
+
 
 }

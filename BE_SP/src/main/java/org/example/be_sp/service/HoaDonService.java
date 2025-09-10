@@ -1,23 +1,20 @@
 package org.example.be_sp.service;
 
-import org.example.be_sp.entity.DotGiamGia;
 import org.example.be_sp.entity.HoaDon;
-import org.example.be_sp.entity.HoaDonChiTiet;
 import org.example.be_sp.exception.ApiException;
 import org.example.be_sp.model.request.BanHangTaiQuayRequest;
 import org.example.be_sp.model.response.HoaDonResponse;
 import org.example.be_sp.model.response.PagingResponse;
-import org.example.be_sp.repository.*;
+import org.example.be_sp.repository.HoaDonRepository;
+import org.example.be_sp.repository.KhachHangRepository;
+import org.example.be_sp.repository.NhanVienRepository;
 import org.example.be_sp.util.MapperUtils;
-import org.hibernate.annotations.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,17 +22,12 @@ public class HoaDonService {
     @Autowired
     private HoaDonRepository hoaDonRepository;
     @Autowired
-    private HoaDonChiTietRepository hoaDonChiTietRepository;
-    @Autowired
-    private ChiTietSanPhamRepository chiTietSanPhamRepository;
-    @Autowired
     KhachHangRepository khachHangRepository;
     @Autowired
     NhanVienRepository nhanVienRepository;
     @Autowired
     PhieuGiamGiaService phieuGiamGiaService;
-    @Autowired
-    DotGiamGiaRepository dotGiamGiaRepository;
+
 
 
     public List<HoaDonResponse> getAll() {
@@ -55,49 +47,75 @@ public class HoaDonService {
         hd.setIdKhachHang(khachHangRepository.findKhachHangById(request.getIdKhachHang()));
         hd.setIdPhieuGiamGia(phieuGiamGiaService.getById(request.getIdPhieuGiamGia()));
         hd.setIdNhanVien(nhanVienRepository.getById(request.getIdNhanVien()));
-        hd.setDiaChiNguoiNhan(request.getDiaChiNhanHang());
-        hd.setLoaiDon(true); // bán tại quầy
-        HoaDon saved = hoaDonRepository.save(hd);
-        for (Integer idSanPham : request.getDanhSachSanPham().keySet()) {
-            HoaDonChiTiet hdct = new HoaDonChiTiet();
-            hdct.setIdHoaDon(saved);
-            var chiTiet = chiTietSanPhamRepository.getById(idSanPham);
-            hdct.setIdChiTietSanPham(chiTiet);
-            Integer soLuong = request.getDanhSachSanPham().get(idSanPham);
-            hdct.setSoLuong(soLuong);
-            java.math.BigDecimal giaGoc = chiTiet.getGiaBan();
-            Integer phanTramGiam = chiTiet.getChiTietDotGiamGias().stream()
-                    .filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.TRUE.equals(ct.getTrangThai()) && Boolean.FALSE.equals(ct.getDeleted()))
-                    .map(ct -> ct.getIdDotGiamGia().getGiaTriGiamGia())
-                    .filter(giaTri -> giaTri != null)
-                    .findFirst()
-                    .orElse(0);
-            if (phanTramGiam < 0) phanTramGiam = 0;
-            if (phanTramGiam > 100) phanTramGiam = 100;
-            BigDecimal discountMultiplier = BigDecimal.valueOf(100 - phanTramGiam)
-                    .divide(BigDecimal.valueOf(100), MathContext.DECIMAL64);
-            BigDecimal giaSauGiam = giaGoc.multiply(discountMultiplier)
-                    .setScale(2, RoundingMode.HALF_UP);
-            hdct.setGiaBan(giaSauGiam);
-            hdct.setThanhTien(giaSauGiam.multiply(BigDecimal.valueOf(soLuong))
-                    .setScale(2, RoundingMode.HALF_UP));
-            hdct.setTrangThai(true);
-            hdct.setDeleted(false);
-            hoaDonChiTietRepository.save(hdct);
-        }
-    }
-    public void update(Integer id, BanHangTaiQuayRequest request) {
-        HoaDon hd = hoaDonRepository.findById(id).orElseThrow(() -> new ApiException("Không tìm thấy hóa đơn","404"));
-        MapperUtils.mapToExisting(request, hd);
-        hd.setIdKhachHang(khachHangRepository.findKhachHangById(request.getIdKhachHang()));
-        hd.setIdPhieuGiamGia(phieuGiamGiaService.getById(request.getIdPhieuGiamGia()));
-        hd.setIdNhanVien(nhanVienRepository.getById(request.getIdNhanVien()));
         hoaDonRepository.save(hd);
     }
+    public HoaDonResponse update(Integer id, BanHangTaiQuayRequest request) {
+        HoaDon hd = hoaDonRepository.findById(id)
+                .orElseThrow(() -> new ApiException("Không tìm thấy hóa đơn","404"));
+
+        // Cập nhật thủ công từng field
+        if (request.getTenNguoiNhan() != null) {
+            hd.setTenNguoiNhan(request.getTenNguoiNhan());
+        }
+        if (request.getDiaChiNhanHang() != null) {
+            hd.setDiaChiNguoiNhan(request.getDiaChiNhanHang());
+        }
+        if (request.getSoDienThoaiNguoiNhan() != null) {
+            hd.setSoDienThoaiNguoiNhan(request.getSoDienThoaiNguoiNhan());
+        }
+        if (request.getEmailNguoiNhan() != null) {
+            hd.setEmailNguoiNhan(request.getEmailNguoiNhan());
+        }
+        if (request.getTongTien() != null) {
+            hd.setTongTien(request.getTongTien());
+        }
+        if (request.getTongTienSauGiam() != null) {
+            hd.setTongTienSauGiam(request.getTongTienSauGiam());
+        }
+        if (request.getPhiVanChuyen() != null) {
+            hd.setPhiVanChuyen(request.getPhiVanChuyen());
+        }
+        if (request.getLoaiDon() != null) {
+            hd.setLoaiDon(request.getLoaiDon());   // ✅ update loại đơn
+        }
+        if (request.getTrangThai() != null) {
+            hd.setTrangThai(request.getTrangThai());
+        }
+        if (request.getNgayTao() != null) {
+            hd.setNgayTao(request.getNgayTao());
+        }
+        if (request.getNgayThanhToan() != null) {
+            hd.setNgayThanhToan(request.getNgayThanhToan());
+        }
+        if (request.getGhiChu() != null) {
+            hd.setGhiChu(request.getGhiChu());
+        }
+
+        // Gán lại các quan hệ
+        if (request.getIdKhachHang() != null) {
+            hd.setIdKhachHang(khachHangRepository.findKhachHangById(request.getIdKhachHang()));
+        }
+        if (request.getIdPhieuGiamGia() != null) {
+            hd.setIdPhieuGiamGia(phieuGiamGiaService.getById(request.getIdPhieuGiamGia()));
+        }
+        if (request.getIdNhanVien() != null) {
+            hd.setIdNhanVien(nhanVienRepository.getById(request.getIdNhanVien()));
+        }
+
+        hd.setUpdateAt(LocalDate.now());
+
+        HoaDon saved = hoaDonRepository.save(hd);
+        return new HoaDonResponse(saved);
+    }
+
+
+
     public void delete(Integer id) {
         HoaDon hd = hoaDonRepository.findById(id).orElseThrow(() -> new ApiException("Không tìm thấy hóa đơn","404"));
         hd.setDeleted(true);
         hoaDonRepository.save(hd);
     }
+
+
 
 }
