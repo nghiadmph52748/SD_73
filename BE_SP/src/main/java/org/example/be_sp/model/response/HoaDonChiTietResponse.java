@@ -6,103 +6,63 @@ import lombok.Setter;
 import org.example.be_sp.entity.HoaDonChiTiet;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class HoaDonChiTietResponse {
     private Integer id;
-
     private String idmaKhachHang;
-
     private String idtenKhachHang;
-
     private String idmaPhieuGiamGia;
-
     private String idtenPhieuGiamGia;
-
     private String idmaNhanVien;
-
     private String idtenNhanVien;
-
     private String maHoaDon;
-
     private String tenHoaDon;
-
     private Boolean loaiDon;
-
     private BigDecimal phiVanChuyen;
-
     private BigDecimal tongTien;
-
     private BigDecimal tongTienSauGiam;
-
     private String tenNguoiNhan;
-
     private String diaChiNguoiNhan;
-
     private String sdtNguoiNhan;
-
     private String emailNguoiNhan;
-
     private String maSanPham;
-
     private String tenSanPham;
-
     private String maMauSac;
-
     private String tenMauSac;
-
     private String maKichThuoc;
-
     private String tenKichThuoc;
-
     private String maDeGiay;
-
     private String tenDeGiay;
-
     private String maChatLieu;
-
     private String tenChatLieu;
-
     private String maDemGiay;
-
     private String tenDemGiay;
-
     private String maTrongLuong;
-
     private String tenTrongLuong;
-
     private String maMonTheThao;
-
     private String tenMonTheThao;
-
     private String maLoaiMua;
-
     private String tenLoaiMua;
-
     private String maDoBen;
-
     private String tenDoBen;
-
     private String maChongNuoc;
-
     private String tenChongNuoc;
-
     private Integer soLuong;
-
     private BigDecimal giaBan;
-
     private String maHoaDonChiTiet;
-
     private BigDecimal thanhTien;
-
     private Boolean trangThai;
-
     private String ghiChu;
-
     private Boolean deleted;
-
+    private Integer sanPhamId;
+    private String tenNhaSanXuat;
+    private BigDecimal giaBanSanPham;
+    private List<String> anhSanPham;
+    private ChiTietSanPhamFullResponse sanPham;
     public HoaDonChiTietResponse(HoaDonChiTiet d) {
         this.id = d.getId();
         this.idmaKhachHang = d.getIdHoaDon().getIdKhachHang().getMaKhachHang();
@@ -140,5 +100,10 @@ public class HoaDonChiTietResponse {
         this.trangThai = d.getTrangThai();
         this.ghiChu = d.getGhiChu();
         this.deleted = d.getDeleted();
+//        if (d.getIdChiTietSanPham() != null) {
+//            this.sanPham = new ChiTietSanPhamFullResponse(d.getIdChiTietSanPham());
+//        }
+
     }
+
 }

@@ -24,7 +24,7 @@ public class HoaDonRequest {
     private String soDienThoaiNguoiNhan;
     private String emailNguoiNhan;
     private LocalDate ngayThanhToan;
-
+    private LocalDate ngayTao;
     private Integer idKhachHang;     // chỉ cần id thay vì full object
     private Integer idNhanVien;      // id nhân viên tạo/duyệt
     private Integer idPhieuGiamGia;  // id phiếu giảm giá (nếu có)

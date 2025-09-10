@@ -1,65 +1,81 @@
 <template>
+  <nav class="breadcrumb">
+    <ol>
+      <li>
+        <router-link to="/">></router-link>
+      </li>
+      <li v-if="parent">
+        <router-link :to="parent.link">{{ parent.label }}</router-link>
+      </li>
+      <li class="active">{{ current }}</li>
+    </ol>
+  </nav>
   <div class="customer-management">
+
     <!-- Search and Filter Section -->
-    <div class="filter-section">
-      <div class="search-controls">
-        <div class="search-box">
-          <input
-            type="text"
-            placeholder="Tìm kiếm tên hoặc sdt hoặc email"
-            v-model="searchQuery"
-            class="form-control"
-          />
-        </div>
+   <div class="card mb-3 p-3">
+  <h5 class="fw-bold mb-3">Bộ lọc</h5>
+  <div class="filter-group">
+    
+    <!-- Ô tìm kiếm -->
+    <input
+      type="text"
+      placeholder="Tìm theo tên hoặc SĐT..."
+      v-model="searchQuery"
+      class="form-control filter-input"
+    />
 
-        <div class="filter-controls">
-          <select v-model="selectedGender" class="form-control">
-            <option value="">Giới tính: Tất cả</option>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
-          </select>
+    <!-- Dropdown giới tính -->
+    <select v-model="selectedGender" class="form-control filter-input">
+      <option value="">Giới tính: Tất cả</option>
+      <option value="Nam">Nam</option>
+      <option value="Nữ">Nữ</option>
+    </select>
 
-          <select v-model="selectedStatus" class="form-control">
-            <option value="">Trạng thái: Tất cả</option>
-            <option value="active">Hoạt động</option>
-            <option value="inactive">Ngừng hoạt động</option>
-          </select>
-        </div>
-      </div>
-    </div>
+    <!-- Dropdown trạng thái -->
+    <select v-model="selectedStatus" class="form-control filter-input">
+      <option value="">Trạng thái: Tất cả</option>
+      <option value="active">Hoạt động</option>
+      <option value="inactive">Ngừng hoạt động</option>
+    </select>
+  </div>
+</div>
+
+
 
     <!-- Customers Table -->
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-      "
-    >
-      <div
-        style="
-          font-weight: bold;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        "
-      >
-        <img :src="ClipboardIcon" alt="Clipboard" class="icon-sm" /> Danh sách Khách Hàng
+     <!-- <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+        <div style="font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 6px;">
+          📋 Danh sách Khách Hàng
+        </div>
       </div>
-    </div>
-    <hr style="margin-top: 0; margin-bottom: 15px" />
+      <hr style="margin-top: 0; margin-bottom: 15px;" />
 
-    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px">
-      <button class="custom-button" @click="showAddModal = true">
-        <img :src="PlusIcon" alt="Plus" class="icon-sm" /> Thêm khách hàng
-      </button>
-      <button class="custom-button" @click="exportToExcel">
-        <img :src="ExcelIcon" alt="Excel" class="icon-sm" /> Download template
-      </button>
-    </div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+    <button class="custom-button" @click="showAddModal = true">
+      <i class="fas fa-plus-circle"></i> Thêm nhân viên
+    </button>
+    <button class="custom-button" @click="exportToExcel">
+      <i class="fas fa-download"></i> Download template
+    </button>
+    </div> -->
+
+
     <div class="card">
+       <div class="card-header"
+              style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 6px;">
+              Danh Sách Nhân Viên
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button class="custom-button" @click="showAddModal = true">
+                <i class="fas fa-plus-circle"></i> Thêm Khách Hàng
+              </button>
+              <button class="custom-button" @click="exportToExcel">
+                <i class="fas fa-download"></i> Xuất Excel
+              </button>
+            </div>
+          </div>
       <div class="card-body">
         <table class="table">
           <thead>
@@ -116,16 +132,16 @@
               <td>
                 <ButtonGroup spacing="xs">
                   <ActionButton
-                    icon="view"
-                    variant="info"
-                    size="sm"
-                    tooltip="Xem chi tiết"
-                    class="action-button-info"
-                    @click="viewCustomer(customer)"
-                  />
+                      icon="view"
+                      variant="info"
+                      size="sm"
+                      tooltip="Xem chi tiết"
+                      class="action-button-info"
+                      @click="viewCustomer(customer)"
+                    />
                   <ActionButton
                     icon="edit"
-                    variant="warning"
+                    variant="info"
                     size="sm"
                     tooltip="Chỉnh sửa thông tin"
                     class="action-button-warning"
@@ -133,7 +149,7 @@
                   />
                   <ActionButton
                     icon="delete"
-                    variant="danger"
+                    variant="info"
                     size="sm"
                     tooltip="Xóa khách hàng"
                     class="action-button-danger"
@@ -247,7 +263,7 @@
                   </div>
                   <span v-else>Chưa cập nhật</span>
                 </div>
-                <div class="info-item">
+                <div class="">
                   <label>Trạng thái:</label>
                   <span
                     :class="[
@@ -371,7 +387,7 @@
                 @click="addAddress"
                 title="Thêm địa chỉ"
               >
-                <span class="btn-icon"><img :src="PlusIcon" alt="Plus" class="icon-sm" /></span>
+                <span class="btn-icon">➕</span>
                 Thêm địa chỉ
               </button>
             </div>
@@ -394,65 +410,70 @@
                 </button>
               </div>
 
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">*Tỉnh/thành phố</label>
-                  <input
-                    type="text"
-                    v-model="address.thanhPho"
-                    class="form-control"
-                    placeholder="Nhập tên tỉnh/thành phố"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">*Quận/huyện</label>
-                  <input
-                    type="text"
-                    v-model="address.quan"
-                    class="form-control"
-                    placeholder="Nhập tên quận/huyện"
-                    required
-                  />
-                </div>
-              </div>
+             <!-- Thay thế phần địa chỉ -->
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label">*Tỉnh/thành phố</label>
+    <select v-model="address.thanhPho" @change="onProvinceChange(index)" class="form-control" required>
+      <option value="">-- Chọn tỉnh/thành phố --</option>
+      <option v-for="p in provinces" :key="p.code" :value="p.name">
+        {{ p.name }}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="form-label">*Quận/huyện</label>
+    <select v-model="address.quan" @change="onDistrictChange(index)" class="form-control" required>
+      <option value="">-- Chọn quận/huyện --</option>
+      <option 
+        v-for="d in districts[index]" 
+        :key="d.code" 
+        :value="d.name">
+        {{ d.name }}
+      </option>
+    </select>
+  </div>
+</div>
 
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">*Xã/phường/thị trấn</label>
-                  <input
-                    type="text"
-                    v-model="address.phuong"
-                    class="form-control"
-                    placeholder="Nhập tên xã/phường/thị trấn"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">*Địa chỉ cụ thể</label>
-                  <input
-                    type="text"
-                    v-model="address.diaChiCuThe"
-                    class="form-control"
-                    required
-                  />
-                </div>
-              </div>
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label">*Xã/phường/thị trấn</label>
+    <select v-model="address.phuong" class="form-control" required>
+      <option value="">-- Chọn xã/phường/thị trấn --</option>
+      <option 
+        v-for="w in wards[index]" 
+        :key="w.code" 
+        :value="w.name">
+        {{ w.name }}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="form-label">*Địa chỉ cụ thể</label>
+    <input
+      type="text"
+      v-model="address.diaChiCuThe"
+      class="form-control"
+      required
+    />
+  </div>
+</div>
+
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            @click="showAddModal = false"
-          >
-            Hủy
-          </button>
-          <button type="submit" class="btn btn-primary" @click="saveCustomer">
-            Thêm khách hàng
-          </button>
-        </div>
+        <button
+          type="button"
+          class="btn"
+          @click="showAddModal = false"
+        >
+          Hủy
+        </button>
+        <button type="submit" class="btn" @click="saveCustomer">
+          Thêm khách hàng
+        </button>
+      </div>
       </div>
     </div>
   </div>
@@ -555,7 +576,7 @@
               @click="addAddress"
               title="Thêm địa chỉ"
             >
-              <span class="btn-icon"><img :src="PlusIcon" alt="Plus" class="icon-sm" /></span>
+              <span class="btn-icon">➕</span>
               Thêm địa chỉ
             </button>
           </div>
@@ -577,112 +598,86 @@
                 <span class="btn-icon">❌</span>
               </button>
             </div>
-
             <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">*Tỉnh/thành phố</label>
-                <input
-                  type="text"
-                  v-model="address.thanhPho"
-                  class="form-control"
-                  placeholder="Nhập tên tỉnh/thành phố"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label class="form-label">*Quận/huyện</label>
-                <input
-                  type="text"
-                  v-model="address.quan"
-                  class="form-control"
-                  placeholder="Nhập tên quận/huyện"
-                  required
-                />
-              </div>
-            </div>
+  <div class="form-group">
+    <label class="form-label">*Tỉnh/thành phố</label>
+    <select v-model="address.thanhPho" @change="onProvinceChange(index)" class="form-control" required>
+      <option value="">-- Chọn tỉnh/thành phố --</option>
+      <option v-for="p in provinces" :key="p.code" :value="p.name">
+        {{ p.name }}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="form-label">*Quận/huyện</label>
+    <select v-model="address.quan" @change="onDistrictChange(index)" class="form-control" required>
+      <option value="">-- Chọn quận/huyện --</option>
+      <option 
+        v-for="d in districts[index]" 
+        :key="d.code" 
+        :value="d.name">
+        {{ d.name }}
+      </option>
+    </select>
+  </div>
+</div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">*Xã/phường/thị trấn</label>
-                <input
-                  type="text"
-                  v-model="address.phuong"
-                  class="form-control"
-                  placeholder="Nhập tên xã/phường/thị trấn"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label class="form-label">*Địa chỉ cụ thể</label>
-                <input
-                  type="text"
-                  v-model="address.diaChiCuThe"
-                  class="form-control"
-                  required
-                />
-              </div>
-            </div>
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label">*Xã/phường/thị trấn</label>
+    <select v-model="address.phuong" class="form-control" required>
+      <option value="">-- Chọn xã/phường/thị trấn --</option>
+      <option 
+        v-for="w in wards[index]" 
+        :key="w.code" 
+        :value="w.name">
+        {{ w.name }}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="form-label">*Địa chỉ cụ thể</label>
+    <input
+      type="text"
+      v-model="address.diaChiCuThe"
+      class="form-control"
+      required
+    />
+  </div>
+</div>
+            
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          @click="showEditModal = false"
-        >
-          Hủy
-        </button>
-        <button type="submit" class="btn btn-primary" @click="saveCustomer">
-          Cập nhật khách hàng
-        </button>
-      </div>
+      <button
+        type="button"
+        class="btn "
+        @click="showEditModal = false"
+      >
+        Hủy
+      </button>
+      <button type="submit" class="btn " @click="saveCustomer">
+        Cập nhật khách hàng
+      </button>
+    </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// SVG Icons
-import RefreshIcon from "@/assets/Reload.svg?url";
-import EditIcon from "@/assets/Edit.svg?url";
-import ViewIcon from "@/assets/View.svg?url";
-import PrintIcon from "@/assets/Print.svg?url";
-import PlusIcon from "@/assets/Plus.svg?url";
-import TrashIcon from "@/assets/Trash.svg?url";
-import SaveIcon from "@/assets/Save.svg?url";
-import CancelIcon from "@/assets/Cancel.svg?url";
-import ChevronLeftIcon from "@/assets/chevron-left.svg?url";
-import ChevronRightIcon from "@/assets/chevron-right.svg?url";
-import ChevronsLeftIcon from "@/assets/chevrons-left.svg?url";
-import ChevronsRightIcon from "@/assets/chevrons-right.svg?url";
-import ClipboardIcon from "@/assets/Clipboard.svg?url";
-import ExcelIcon from "@/assets/Excel.svg?url";
-import StatisticsIcon from "@/assets/Statistics.svg?url";
-import PhoneIcon from "@/assets/Phone.svg?url";
-import UsersIcon from "@/assets/Users.svg?url";
-import ProfileIcon from "@/assets/Profile.svg?url";
-import DashboardIcon from "@/assets/Dashboard.svg?url";
-import OrdersIcon from "@/assets/Orders.svg?url";
-import ProductsIcon from "@/assets/Shoes.svg?url";
-import ShoppingCartIcon from "@/assets/ShoppingCart.svg?url";
-import CreditCardIcon from "@/assets/CreditCard.svg?url";
-import RevenueIcon from "@/assets/Revenue.svg?url";
-import GrowthIcon from "@/assets/Growth.svg?url";
-import SettingsIcon from "@/assets/Settings.svg?url";
-import ExportIcon from "@/assets/Export.svg?url";
-import FindIcon from "@/assets/Find.svg?url";
-
-import ButtonGroup from "@/components/ui/NhomNut.vue";
+import { ref, computed, onMounted } from "vue";
 import ActionButton from "@/components/ui/NutHanhDong.vue";
-import { saveAs } from "file-saver";
-import { computed, onMounted, ref } from "vue";
+import ButtonGroup from "@/components/ui/NhomNut.vue";
 import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 
 import {
-    fetchAllKhachHang,
-    fetchCreateKhachHang,
-    fetchUpdateKhachHang,
-    fetchUpdateStatusKhachHang,
+  fetchAllKhachHang,
+  fetchCreateKhachHang,
+  fetchUpdateKhachHang,
+  fetchUpdateStatusKhachHang,
 } from "../../services/KhachHang/KhachHangService";
 
 // Data
@@ -693,6 +688,51 @@ const showDetailModal = ref(false);
 const showAddModal = ref(false);
 const showEditModal = ref(false);
 const selectedCustomer = ref({});
+const provinces = ref([]);
+const districts = ref([]);
+const wards = ref([]);
+
+
+const onProvinceChange = async (index) => {
+  districts.value[index] = [];
+  wards.value[index] = [];
+  customerForm.value.listDiaChi[index].quan = "";
+  customerForm.value.listDiaChi[index].phuong = "";
+
+  const provinceName = customerForm.value.listDiaChi[index].thanhPho;
+  const province = provinces.value.find(p => p.name === provinceName);
+
+  if (province) {
+    const res = await fetch(`https://provinces.open-api.vn/api/p/${province.code}?depth=2`);
+    const data = await res.json();
+    districts.value[index] = data.districts;
+  }
+};
+
+const onDistrictChange = async (index) => {
+  wards.value[index] = [];
+  customerForm.value.listDiaChi[index].phuong = "";
+
+  const provinceName = customerForm.value.listDiaChi[index].thanhPho;
+  const districtName = customerForm.value.listDiaChi[index].quan;
+
+  const province = provinces.value.find(p => p.name === provinceName);
+
+  if (!province) return;
+
+  const district = province.districts.find(d => d.name === districtName);
+
+  if (!district) return;
+
+  // Lấy xã/phường từ API
+  const res = await fetch(`https://provinces.open-api.vn/api/d/${district.code}?depth=2`);
+  const data = await res.json();
+
+  // Gán danh sách xã/phường
+  wards.value[index] = data.wards || [];
+};
+
+
 
 // Pagination data
 const currentPage = ref(1);
@@ -724,8 +764,11 @@ const fetchAll = async () => {
   try {
     const response = await fetchAllKhachHang();
     customers.value = response.data; // giữ nguyên tất cả, lọc ở computed
-  } catch (res) {}
+  } catch (res) {
+    console.log(res.message);
+  }
 };
+
 
 // Computed
 const filteredCustomers = computed(() => {
@@ -852,14 +895,13 @@ const saveCustomer = async () => {
     await fetchAll();
     resetForm();
   } catch (res) {
+    console.log(res.message);
     alert("Có lỗi xảy ra khi lưu thông tin khách hàng");
   }
 };
 
 const deleteCustomer = async (id) => {
-  const confirmDelete = window.confirm(
-    "Bạn có chắc chắn muốn xoá khách hàng này không?"
-  );
+  const confirmDelete = window.confirm("Bạn có chắc chắn muốn xoá khách hàng này không?");
   if (!confirmDelete) return;
 
   try {
@@ -871,6 +913,7 @@ const deleteCustomer = async (id) => {
     alert("❌ Có lỗi xảy ra khi xoá khách hàng.");
   }
 };
+
 
 const addAddress = () => {
   customerForm.value.listDiaChi.push({
@@ -924,6 +967,7 @@ const nextPage = () => {
   }
 };
 
+
 const exportToExcel = () => {
   try {
     const headerMapping = {
@@ -952,10 +996,7 @@ const exportToExcel = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "KhachHang");
 
     // Xuất file
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
     saveAs(data, "DanhSachKhachHang.xlsx");
 
@@ -966,48 +1007,683 @@ const exportToExcel = () => {
   }
 };
 
-onMounted(fetchAll);
+onMounted(async () => {
+fetchAll();
+const res = await fetch("https://provinces.open-api.vn/api/p/");
+  provinces.value = await res.json();
+});
 </script>
 
 <style scoped>
-/* Import external CSS file */
-@import '../../styles/cssQuanLy/khachHang.css';
 
-/* SVG Icon Styles */
-.icon-xs {
-  width: 12px;
-  height: 12px;
+.customer-management {
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
-.icon-sm {
-  width: 16px;
-  height: 16px;
+/* page-header styles are now defined in globals.css */
+
+/* Filter Section */
+.filter-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
 }
 
-.icon-md {
-  width: 20px;
-  height: 20px;
+.search-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.icon-lg {
-  width: 24px;
-  height: 24px;
+.search-box {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 300px;
+}
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: nowrap;
 }
 
-.icon-xl {
-  width: 32px;
-  height: 32px;
+.filter-controls select {
+  min-width: 150px;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f8fff9;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
-/* Button icon alignment */
-.custom-button {
+.filter-controls select:focus {
+  outline: none;
+  border-color: #5ebe81;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+  transform: translateY(-1px);
+}
+
+.filter-controls select:hover {
+  border-color: #d1d5db;
+  background-color: #f9fafb;
+}
+
+
+
+/* Table Styles */
+.table th {
+  background-color: #ececec;
+  color: rgb(18, 15, 15);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table td {
+  padding: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
+}
+
+.customer-name {
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Pagination */
+.pagination-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+   margin: 0;
+}
+
+.pagination .btn {
+  border: none;
+  background-color: #8d98a4;
+  color: #fff;
+  font-weight: 500;
+}
+
+
+
+.pagination .btn:hover:not(:disabled) {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+.page-info {
+  margin: 0 0.75rem;
+  padding: 0.25rem 0.75rem;
+  background-color: #e9f3ff; /* xanh nhạt */
+  color: #0056b3;            /* xanh đậm */
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
 }
 
-.custom-button img {
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;        /* modal không vượt màn hình */
+  width: 800px;            /* hoặc tùy bạn */
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;        /* tránh tràn */
+
+}
+/* .modal-content {
+  width: 80vw;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px;
+  font-size: 16px;
+  box-sizing: border-box;
+} */
+.modal-header {
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--secondary-color);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close:hover {
+  background-color: var(--light-gray);
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+/* Customer Detail */
+.customer-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.customer-info h4 {
+  text-align: center;
+  margin: 0 0 2rem 0;
+  color: var(--secondary-color);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-item label {
+  font-weight: 500;
+  color: var(--medium-gray);
+  font-size: 0.875rem;
+}
+
+.info-item span {
+  color: var(--secondary-color);
+}
+
+.total-orders {
+  font-weight: 600;
+  color: var(--info-color);
+}
+
+.total-spent {
+  font-weight: 600;
+  color: var(--success-color);
+}
+
+/* Modal Footer */
+.modal-footer {
+   flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 10;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Form Sections */
+.form-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-section h4 {
+  margin: 0 0 1rem 0;
+  color: var(--secondary-color);
+  font-size: 1.125rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--medium-gray);
+  font-size: 0.875rem;
+}
+
+.form-control {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: border-color 0.3s ease;
+  min-height: 38px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+}
+
+/* Address Components */
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add-address {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #4ade80;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.3s ease;
+}
+
+.address-item {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background-color: #f9fafb;
+}
+
+.address-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.address-item-header h5 {
+  margin: 0;
+  color: var(--secondary-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-remove-address {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-remove-address:hover {
+  background-color: #b27171;
+}
+
+.btn-remove-address .btn-icon {
+  font-size: 0.875rem;
+}
+
+/* Address Detail Display */
+.address-list-item {
+  grid-column: 1 / -1;
+}
+
+.address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.address-detail-item {
+  padding: 0.75rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.address-label {
+  font-weight: 500;
+  color: var(--medium-gray);
+  font-size: 0.8rem;
+}
+
+.address-value {
+  color: var(--secondary-color);
+  font-size: 0.875rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: #495057;
+}
+
+.table td {
+  color: #212529;
+}
+.action-buttons-section .btn {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #1f3e72;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #0f0d24;
+  color: white;
+}
+
+.custom-button {
+  background-color: #1e2d50;  /* Màu xanh đậm */
+  color: #ffffff;
+  border: 1px solid #1e2d50;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-button i {
+  font-size: 16px;
+}
+::v-deep label.form-label {
+  color: #000000;
+  font-weight: 600;
+}
+::v-deep input.form-control,
+::v-deep select.form-control,
+::v-deep textarea.form-control {
+  color: #000000;
+  font-weight: 500;
+}
+::v-deep input::placeholder,
+::v-deep textarea::placeholder {
+  color: #555555;
+  opacity: 1;
+}
+/* Ví dụ style nút "Xem chi tiết" */
+
+/* Nút xem chi tiết */
+/* Nút Xem chi tiết */
+.action-button-info {
+  background-color: #ffffff; /* xanh đậm */
+  color: #0a0909;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* Nút Chỉnh sửa */
+.action-button-warning {
+  background-color: #ffffff; /* xanh đậm */
+  color: #0a0909;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+
+/* Nút Xóa */
+.action-button-danger {
+ background-color: #ffffff; /* xanh đậm */
+  color: #0a0909;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* các nút kích thước bằng nhau */
+
+
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+  background-color: #f9f9f9;
+}
+
+.info-box {
+  background-color: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+}
+
+.info-box label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #555;
+}
+.info-box span {
+  color: #333;
+  word-break: break-word;
+}
+
+.customer-name {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.address-label {
+  font-weight: bold;
+}
+
+.address-value {
+  display: block;
+  margin-left: 8px;
+}
+
+.info-box strong {
+  color: #444;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid #adb5bd;
+  color: #212529;
+  background-color: #f8f9fa;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+.badge-active {
+  border-color: #198754;
+  color: #198754;
+}
+.badge-inactive {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+.breadcrumb {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.breadcrumb ol {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.breadcrumb li {
+  margin-right: 8px;
+}
+.breadcrumb li::after {
+  content: "›";
+  margin-left: 8px;
+}
+.breadcrumb li:last-child::after {
+  content: "";
+}
+.breadcrumb .active {
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-content h3,
+.modal-content h4 {
+  font-weight: 700; /* Tiêu đề đậm hơn */
+  color: #111;
+}
+
+.modal-content label {
+  font-weight: 700; /* Các nhãn (label) đậm */
+  color: #333;
+  display: inline-block;
+  width: 120px; /* Giữ khoảng cách đều */
+}
+
+.modal-content span {
+  font-weight: 600; /* Nội dung đậm vừa phải */
+  color: #444;
+}
+
+.address-label {
+  font-weight: 700;
+  color: #333;
+}
+
+.badge-success {
+  background-color: #4caf50;
+  color: white;
+  font-weight: 700;
+  padding: 4px 20px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.badge-danger {
+  background-color: #f21505;
+  color: white;
+  font-weight: 700;
+  padding: 4px 4px;
+  border-radius: 15px;
+  text-transform: uppercase;
+}
+.filter-group {
+  display: flex;
+  gap: 16px;
+}
+
+.filter-input {
+  flex: 1;              /* Chia đều không gian cho các phần tử */
+  min-height: 38px;     /* Chiều cao tối thiểu */
 }
 
 </style>
