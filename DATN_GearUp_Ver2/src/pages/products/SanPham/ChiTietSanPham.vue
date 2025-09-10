@@ -133,6 +133,17 @@
           >
             Hoàn thành cập nhật ({{ checkedChiTietSanPhamsCount }})
           </button>
+          <button
+            @click="toggleShowAllVariants"
+            :class="['btn-toggle-variants', { 'showing-all': showAllVariants }]"
+            :title="
+              showAllVariants
+                ? 'Hiển thị biến thể sản phẩm hiện tại'
+                : 'Hiển thị toàn bộ biến thể sản phẩm'
+            "
+          >
+            {{ toggleVariantsButtonText }}
+          </button>
         </div>
       </div>
     </div>
@@ -750,34 +761,33 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import {
-    fetchAllChiTietDotGiamGia,
-    fetchUpdateChiTietDotGiamGia,
+  fetchAllChiTietDotGiamGia,
+  fetchUpdateChiTietDotGiamGia,
 } from "../../../services/GiamGia/ChiTietDotGiamGiaService";
 import { fetchAllDotGiamGia } from "../../../services/GiamGia/DotGiamGiaService";
 import {
-    fetchAllChiTietSanPham,
-    fetchAllChiTietSanPhamBySanPhamId,
-    fetchCreateChiTietSanPham,
-    fetchUpdateChiTietSanPham,
-    fetchUpdateStatusChiTietSanPham,
+  fetchAllChiTietSanPham,
+  fetchAllChiTietSanPhamBySanPhamId,
+  fetchCreateChiTietSanPham,
+  fetchUpdateChiTietSanPham,
+  fetchUpdateStatusChiTietSanPham,
 } from "../../../services/SanPham/ChiTietSanPhamService";
 import {
-    fetchAllSanPham,
-    fetchUpdateSanPham,
+  fetchAllSanPham,
+  fetchUpdateSanPham,
 } from "../../../services/SanPham/SanPhamService";
 import {
-    fetchAllAnhSanPham,
-    fetchCreateAnhSanPham,
-    fetchOneAnhSanPham,
-    fetchUpdateAnhSanPham,
-    fetchUpdateStatusAnhSanPham,
+  fetchAllAnhSanPham,
+  fetchCreateAnhSanPham,
+  fetchOneAnhSanPham,
+  fetchUpdateAnhSanPham,
+  fetchUpdateStatusAnhSanPham,
 } from "../../../services/ThuocTinh/AnhSanPhamService";
 import { fetchAllChatLieu } from "../../../services/ThuocTinh/ChatLieuService";
 import {
   fetchAllChiTietSanPhamAnh,
   fetchCreateMultipleChiTietSanPhamAnh,
   fetchDeleteChiTietSanPhamAnh,
-  fetchUpdateStatusChiTietSanPhamAnh,
   fetchUpdateStatusMultipleChiTietSanPhamAnh,
 } from "../../../services/ThuocTinh/ChiTietSanPhamAnhService";
 import { fetchAllDeGiay } from "../../../services/ThuocTinh/DeGiayService";
@@ -797,6 +807,7 @@ const selectedTrongLuong = ref("");
 const selectedDotGiamGia = ref("");
 const statusFilter = ref("");
 const showAddModal = ref(false);
+const showAllVariants = ref(false); // Biến để kiểm soát hiển thị tất cả biến thể hay chỉ biến thể của sản phẩm hiện tại
 const showEditModal = ref(false);
 const showImageSelector = ref(false);
 const currentPage = ref(1);
@@ -1063,12 +1074,19 @@ const toggleShowAllVariants = async () => {
 
   if (showAllVariants.value) {
     // Hiển thị tất cả biến thể
-    await fetchChiTietSanPham();
+    await fetchChiTietSanPham(); // Không truyền id để fetch tất cả
   } else {
     // Hiển thị biến thể của sản phẩm hiện tại
-    await fetchChiTietSanPhamId(id);
+    await fetchChiTietSanPham(id); // Truyền id để fetch theo sản phẩm
   }
 };
+
+// Computed để tạo text động cho nút
+const toggleVariantsButtonText = computed(() => {
+  return showAllVariants.value
+    ? "Hiển thị biến thể sản phẩm hiện tại"
+    : "Hiển thị toàn bộ biến thể";
+});
 const fetchAll = async () => {
   try {
     await Promise.all([
@@ -1338,7 +1356,6 @@ const compareImageStates = () => {
 
 // Hàm xử lý cập nhật trạng thái ảnh đã xóa
 const handleDeletedImages = async (chiTietSanPhamId, deletedImageIds) => {
-
   if (deletedImageIds.length === 0) {
     return;
   }
@@ -1377,7 +1394,6 @@ const handleDeletedImages = async (chiTietSanPhamId, deletedImageIds) => {
 
 // Hàm kiểm tra và xử lý ảnh trùng lặp
 const checkAndHandleDuplicateImages = async (imageIds) => {
-
   const uniqueImageIds = [];
   const duplicateImageIds = [];
 
@@ -1403,7 +1419,6 @@ const checkAndHandleDuplicateImages = async (imageIds) => {
 
 // Hàm xử lý logic cập nhật ảnh thông minh
 const handleSmartImageUpdate = async (chiTietSanPhamId, currentImageIds) => {
-
   try {
     // So sánh trạng thái
     const comparison = compareImageStates();
@@ -1415,14 +1430,12 @@ const handleSmartImageUpdate = async (chiTietSanPhamId, currentImageIds) => {
 
     // 2. Xử lý ảnh mới được thêm
     if (comparison.addedImageIds.length > 0) {
-
       // Kiểm tra trùng lặp
       const { uniqueImageIds, duplicateImageIds } =
         await checkAndHandleDuplicateImages(comparison.addedImageIds);
 
       // Chỉ thêm những ảnh mới thực sự
       if (uniqueImageIds.length > 0) {
-
         const requestData = {
           idChiTietSanPham: chiTietSanPhamId,
           idAnhSanPhamList: uniqueImageIds,
@@ -1437,7 +1450,6 @@ const handleSmartImageUpdate = async (chiTietSanPhamId, currentImageIds) => {
         if (!response.success) {
           throw new Error(response.message || "Failed to create image links");
         }
-
       }
     }
 
@@ -1452,7 +1464,6 @@ const handleSmartImageUpdate = async (chiTietSanPhamId, currentImageIds) => {
 
 const updateImagesForChiTietSanPham = async (chiTietSanPhamId, newImageIds) => {
   try {
-
     // Lấy danh sách ID ảnh hiện tại
     const currentImageIds =
       getCurrentImageIdsForChiTietSanPham(chiTietSanPhamId);
@@ -1508,7 +1519,6 @@ const handleProductImagesForPopup = async (
 
     // Xử lý ảnh có sẵn - chỉ lấy ID hợp lệ (số nguyên)
     if (existingImages && existingImages.length > 0) {
-
       const validExistingIds = getValidImageIds(existingImages);
       imageIds.push(...validExistingIds);
     }
@@ -1986,7 +1996,10 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
             // Thoát khỏi edit mode
             isEditing.value = false;
           } catch (error) {
-            console.error("<!-- icon: close --> Lỗi trong quá trình cập nhật hàng loạt:", error);
+            console.error(
+              "<!-- icon: close --> Lỗi trong quá trình cập nhật hàng loạt:",
+              error
+            );
             showSuccessNotificationForEdit(
               "Có lỗi xảy ra trong quá trình cập nhật!"
             );
@@ -3098,7 +3111,6 @@ const getImagesForChiTietSanPhamForEdit = (chiTietSanPhamId) => {
 
     // Kiểm tra xem chi tiết sản phẩm có trường anhSanPham không
     if (chiTietSanPham.anhSanPham && Array.isArray(chiTietSanPham.anhSanPham)) {
-
       // Tìm ID thực từ anhSanPhams dựa trên duongDanAnh
       const images = chiTietSanPham.anhSanPham.map((duongDanAnh, index) => {
         // Tìm ảnh trong anhSanPhams dựa trên duongDanAnh
@@ -3317,7 +3329,6 @@ const handleProductImagesForInline = async (
   newImageFiles
 ) => {
   try {
-
     // 1. Upload ảnh mới lên server
     let uploadedImageIds = [];
     if (newImageFiles && newImageFiles.length > 0) {
@@ -4652,5 +4663,52 @@ body {
   align-items: center;
   justify-content: center;
 }
-</style>
 
+/* CSS cho nút toggle hiển thị biến thể */
+.btn-toggle-variants {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent-color); /* Sử dụng màu chủ đạo như nút hoàn thành cập nhật */
+  color: white !important;
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.1);
+  min-width: 220px;
+  justify-content: center;
+}
+
+.btn-toggle-variants:hover {
+  background: #22c55e; /* Màu hover xanh lục đậm hơn */
+  border-color: #22c55e;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.2);
+}
+
+.btn-toggle-variants:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(74, 222, 128, 0.2);
+}
+
+/* Trạng thái hiển thị tất cả biến thể - thay đổi màu sắc để phân biệt */
+.btn-toggle-variants.showing-all {
+  background: #f59e0b; /* Màu cam vàng khi đang hiển thị tất cả */
+  border-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+}
+
+.btn-toggle-variants.showing-all:hover {
+  background: #d97706; /* Màu cam vàng đậm hơn khi hover */
+  border-color: #d97706;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.btn-toggle-variants.showing-all:active {
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+}
+</style>
