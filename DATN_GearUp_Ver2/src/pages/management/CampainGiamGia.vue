@@ -528,374 +528,218 @@
     <!-- Apply Discount Modal -->
     <!-- Apply Discount Modal - Redesigned -->
     <div v-if="showApplyModal" class="modal-overlay-new" @click="closeApplyModal">
-      <div class="modal-content-new apply-modal-minimal" @click.stop>
+      <div class="modal-content-new apply-modal-redesigned" @click.stop>
         <!-- Modal Header -->
-        <div class="modal-header-minimal">
-          <div class="header-content-minimal">
-            <div class="header-icon-minimal">
-              <img :src="TagIcon" alt="Apply Discount" class="modal-icon-minimal" />
-            </div>
-            <div class="header-text-minimal">
-              <h3 class="modal-title-minimal">Áp dụng đợt giảm giá</h3>
-              <div class="modal-subtitle-minimal" v-if="applyingCampaign">
-                {{ applyingCampaign.tenDotGiamGia }}
+        <div class="modal-header-redesigned">
+          <div class="header-content-redesigned">
+            <div class="header-left-redesigned">
+              <div class="campaign-icon-redesigned">
+                <img :src="TagIcon" alt="Campaign" class="tag-icon-redesigned" />
+              </div>
+              <div class="campaign-info-redesigned">
+                <h2 class="campaign-title-redesigned" v-if="applyingCampaign">
+                  {{ applyingCampaign.tenDotGiamGia }}
+                </h2>
+                <div class="campaign-status-redesigned">
+                  <span class="status-badge-redesigned">HOẠT ĐỘNG</span>
+                </div>
               </div>
             </div>
+            <button class="close-btn-redesigned" @click="closeApplyModal">
+              <img :src="CancelIcon" alt="Close" />
+            </button>
           </div>
-          <button class="close-btn-minimal" @click="closeApplyModal">
-            <span>×</span>
-          </button>
         </div>
 
-        <!-- Modal Body -->
-        <div class="modal-body-minimal">
-          <!-- Campaign Information -->
-          <div class="detail-section-minimal" v-if="applyingCampaign">
-            <div class="section-title-minimal">
-              <img :src="MoneyIcon" alt="Discount Info" class="section-icon-minimal" />
-              <span>Thông tin chiến dịch</span>
-            </div>
-            <div class="detail-rows-minimal">
-              <div class="detail-row-minimal">
-                <span class="row-label-minimal">Giá trị giảm giá:</span>
-                <span class="row-value-minimal primary-text">{{ applyingCampaign.giaTriGiamGia }}%</span>
-              </div>
-              <div class="detail-row-minimal">
-                <span class="row-label-minimal">Thời gian áp dụng:</span>
-                <span class="row-value-minimal">
-                  {{ formatDateShort(applyingCampaign.ngayBatDau) }} - {{ formatDateShort(applyingCampaign.ngayKetThuc) }}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Product Selection -->
-          <div class="detail-section-minimal">
-            <div class="section-title-minimal">
-              <img :src="ClipboardIcon" alt="Product Selection" class="section-icon-minimal" />
-              <span>Chọn sản phẩm áp dụng</span>
-            </div>
-            
-            <!-- Search and Controls -->
-            <div class="form-content-minimal">
-              <div class="form-group-minimal">
-                <label class="form-label-minimal">Tìm kiếm sản phẩm</label>
+        <!-- Modal Body - Unified Content -->
+        <div class="modal-body-redesigned">
+          <!-- Search and Selection Controls -->
+          <div class="controls-section-redesigned">
+            <div class="search-container-redesigned">
+              <div class="search-input-container-redesigned">
+                <img :src="SearchIcon" alt="Search" class="search-icon-redesigned" />
                 <input
                   type="text"
-                  placeholder="Nhập tên sản phẩm..."
-                  class="form-input-minimal"
+                  placeholder="Tìm kiếm sản phẩm theo tên, màu sắc, kích thước..."
+                  class="search-input-redesigned"
                   v-model="searchProductQuery"
                 />
               </div>
-
-              <div class="selection-controls-minimal">
+            </div>
+            
+            <div class="selection-controls-redesigned">
+              <div class="control-buttons-redesigned">
                 <button
                   type="button"
-                  class="btn-control-minimal btn-select-all"
-                  @click="selectAllProducts"
-                  :disabled="selectedProducts.length === availableProducts.length || availableProducts.length === 0"
+                  class="control-btn-redesigned select-all-btn"
+                  @click="selectAllAvailableProducts"
+                  :disabled="availableProducts.length === 0"
                 >
-                  <img :src="SuccessIcon" alt="Select All" class="btn-icon-minimal" />
-                  Chọn tất cả
+                  <img :src="ChecklistIcon" alt="Select All" />
+                  <span>Chọn tất cả</span>
                 </button>
                 <button
                   type="button"
-                  class="btn-control-minimal btn-clear-all"
+                  class="control-btn-redesigned clear-all-btn"
                   @click="clearAllProducts"
                   :disabled="selectedProducts.length === 0"
                 >
-                  <img :src="CancelIcon" alt="Clear All" class="btn-icon-minimal" />
-                  Bỏ chọn tất cả
+                  <img :src="CancelIcon" alt="Clear All" />
+                  <span>Bỏ chọn</span>
                 </button>
               </div>
-
-              <!-- Selection Summary -->
-              <div class="selection-summary-minimal">
-                <div class="summary-item-minimal">
-                  <span class="summary-label-minimal">Đã chọn:</span>
-                  <span class="summary-value-minimal success-text">{{ selectedProducts.length }} sản phẩm</span>
+              
+              <div class="selection-summary-redesigned">
+                <div class="summary-badge-redesigned selected">
+                  <span class="summary-count-redesigned">{{ selectedProducts.length }}</span>
+                  <span class="summary-label-redesigned">đã chọn</span>
                 </div>
-                <div class="summary-item-minimal">
-                  <span class="summary-label-minimal">Có thể chọn:</span>
-                  <span class="summary-value-minimal">{{ availableProducts.length }} sản phẩm</span>
+                <div class="summary-badge-redesigned available">
+                  <span class="summary-count-redesigned">{{ availableProducts.length }}</span>
+                  <span class="summary-label-redesigned">có thể chọn</span>
                 </div>
-              </div>
-            </div>
-
-            <div class="product-list">
-              <!-- Products already in current campaign -->
-              <div
-                v-if="currentCampaignProducts.length > 0"
-                class="product-section"
-              >
-                <h5 class="section-title current-campaign-title">
-                  <!-- icon: refresh --> Sản phẩm đã áp dụng cho đợt này ({{
-                    currentCampaignProducts.length
-                  }})
-                </h5>
-                <div
-                  v-for="product in currentCampaignProducts"
-                  :key="'current-' + product.id"
-                  class="product-item current-campaign-product"
-                  @click="toggleProductSelection(product.id)"
-                >
-                  <input
-                    type="checkbox"
-                    :checked="selectedProducts.includes(product.id)"
-                    @click.stop="toggleProductSelection(product.id)"
-                  />
-                  <div class="product-info">
-                    <div class="product-name">{{ product.tenSanPham }}</div>
-                    <div class="product-details">
-                      <div class="details-grid">
-                        <div class="detail-column">
-                          <div class="detail-row">
-                            <span class="detail-label">Màu sắc:</span>
-                            <span class="detail-value">{{
-                              product.tenMauSac
-                            }}</span>
-                          </div>
-                          <div class="detail-row">
-                            <span class="detail-label">Kích thước:</span>
-                            <span class="detail-value">{{
-                              product.tenKichThuoc
-                            }}</span>
-                          </div>
-                        </div>
-                        <div class="detail-column">
-                          <div class="detail-row">
-                            <span class="detail-label">Trạng thái:</span>
-                            <span class="detail-value current-campaign"
-                              >Đã áp dụng</span
-                            >
-                          </div>
-                          <div class="detail-row" v-if="getProductActiveCampaigns(product.id).length > 1">
-                            <span class="detail-label">Tham gia:</span>
-                            <span class="detail-value multiple-campaigns">
-                              {{ getProductActiveCampaigns(product.id).length }} đợt
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="product-price">
-                      {{
-                        new Intl.NumberFormat("vi-VN").format(product.giaBan)
-                      }}
-                      VNĐ
-                    </div>
-                  </div>
+                <div class="summary-badge-redesigned unavailable" v-if="productsWithDiscount.length > 0">
+                  <span class="summary-count-redesigned">{{ productsWithDiscount.length }}</span>
+                  <span class="summary-label-redesigned">không khả dụng</span>
                 </div>
               </div>
-
-              <!-- Available Products -->
-              <div
-                v-if="availableProducts.length > currentCampaignProducts.length"
-                class="product-section"
-              >
-                <h5 class="section-title available-title">
-                  <!-- icon: check --> Sản phẩm có thể áp dụng ({{
-                    availableProducts.length - currentCampaignProducts.length
-                  }})
-                </h5>
-                <div
-                  v-for="product in availableProducts.filter(
-                    (p) => !getProductCurrentCampaignStatus(p.id)
-                  )"
-                  :key="product.id"
-                  class="product-item available-product"
-                  @click="toggleProductSelection(product.id)"
-                >
-                  <input
-                    type="checkbox"
-                    :checked="selectedProducts.includes(product.id)"
-                    @click.stop="toggleProductSelection(product.id)"
-                  />
-                  <div class="product-info">
-                    <div class="product-name">{{ product.tenSanPham }}</div>
-                    <div class="product-details">
-                      <div class="details-grid">
-                        <div class="detail-column">
-                          <div class="detail-row">
-                            <span class="detail-label">Màu sắc:</span>
-                            <span class="detail-value">{{
-                              product.tenMauSac
-                            }}</span>
-                          </div>
-                          <div class="detail-row">
-                            <span class="detail-label">Kích thước:</span>
-                            <span class="detail-value">{{
-                              product.tenKichThuoc
-                            }}</span>
-                          </div>
-                          <div class="detail-row" v-if="product.tenChatLieu">
-                            <span class="detail-label">Chất liệu:</span>
-                            <span class="detail-value">{{
-                              product.tenChatLieu
-                            }}</span>
-                          </div>
-                          <div class="detail-row" v-if="product.tenDoBen">
-                            <span class="detail-label">Độ bền:</span>
-                            <span class="detail-value">{{
-                              product.tenDoBen
-                            }}</span>
-                          </div>
-                          <div class="detail-row" v-if="product.tenTrongLuong">
-                            <span class="detail-label">Trọng lượng:</span>
-                            <span class="detail-value">{{
-                              product.tenTrongLuong
-                            }}</span>
-                          </div>
-                        </div>
-
-                        <div class="detail-column">
-                          <div class="detail-row" v-if="product.tenDeGiay">
-                            <span class="detail-label">Đế giày:</span>
-                            <span class="detail-value">{{
-                              product.tenDeGiay
-                            }}</span>
-                          </div>
-                          <div class="detail-row" v-if="product.tenDemGiay">
-                            <span class="detail-label">Đệm giày:</span>
-                            <span class="detail-value">{{
-                              product.tenDemGiay
-                            }}</span>
-                          </div>
-                          <div class="detail-row" v-if="product.tenLoaiMua">
-                            <span class="detail-label">Loại mùa:</span>
-                            <span class="detail-value">{{
-                              product.tenLoaiMua
-                            }}</span>
-                          </div>
-                          <div class="detail-row" v-if="product.tenMonTheThao">
-                            <span class="detail-label">Môn thể thao:</span>
-                            <span class="detail-value">{{
-                              product.tenMonTheThao
-                            }}</span>
-                          </div>
-                          <div class="detail-row" v-if="product.tenChongNuoc">
-                            <span class="detail-label">Chống nước:</span>
-                            <span class="detail-value">{{
-                              product.tenChongNuoc
-                            }}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="product-price">
-                      {{
-                        new Intl.NumberFormat("vi-VN").format(product.giaBan)
-                      }}
-                      VNĐ
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Products with existing discount from higher value campaigns -->
-              <div
-                v-if="productsWithDiscount.length > 0"
-                class="product-section"
-              >
-                <h5 class="section-title unavailable-title">
-                  <!-- icon: close --> Sản phẩm có giảm giá cao hơn ({{ productsWithDiscount.length }})
-                </h5>
-                <div
-                  v-for="product in productsWithDiscount"
-                  :key="product.id"
-                  class="product-item unavailable-product"
-                >
-                  <input type="checkbox" disabled class="disabled-checkbox" />
-                  <div class="product-info">
-                    <div class="product-name disabled-text">
-                      {{ product.tenSanPham }}
-                    </div>
-                    <div class="product-details">
-                      <div class="details-grid">
-                        <div class="detail-column">
-                          <div class="detail-row">
-                            <span class="detail-label">Màu sắc:</span>
-                            <span class="detail-value">{{
-                              product.tenMauSac
-                            }}</span>
-                          </div>
-                          <div class="detail-row">
-                            <span class="detail-label">Kích thước:</span>
-                            <span class="detail-value">{{
-                              product.tenKichThuoc
-                            }}</span>
-                          </div>
-                        </div>
-                        <div class="detail-column">
-                          <div class="detail-row">
-                            <span class="detail-label">Trạng thái:</span>
-                            <span class="detail-value discount-active"
-                              >Có giảm giá cao hơn</span
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="product-price disabled-text">
-                      {{
-                        new Intl.NumberFormat("vi-VN").format(product.giaBan)
-                      }}
-                      VNĐ
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              v-if="
-                availableProducts.length === 0 &&
-                productsWithDiscount.length === 0 &&
-                currentCampaignProducts.length === 0
-              "
-              class="empty-products"
-            >
-              <p>Không có sản phẩm nào</p>
-            </div>
-
-            <div
-              v-if="
-                availableProducts.length === currentCampaignProducts.length &&
-                productsWithDiscount.length > 0
-              "
-              class="empty-available"
-            >
-              <p class="warning-text">
-                <!-- icon: warning --> Các sản phẩm còn lại đều có đợt giảm giá với giá trị cao hơn
-              </p>
             </div>
           </div>
 
-          <div class="selection-summary">
-            <div class="selected-count">
-              Đã chọn: {{ selectedProducts.length }} sản phẩm
-            </div>
-            <div class="available-count">
-              Có thể áp dụng: {{ availableProducts.length }} /
-              {{ productsDetails.length }} sản phẩm
-              <br />
-              <small
-                >Đã áp dụng: {{ currentCampaignProducts.length }} | Có giảm giá cao hơn:
-                {{ productsWithDiscount.length }}</small
+          <!-- Products Display -->
+          <div class="products-container-redesigned">
+            <!-- Available Products -->
+            <div v-if="availableProducts.length > 0" class="products-grid-redesigned">
+              <div
+                v-for="product in availableProducts"
+                :key="product.id"
+                class="product-card-redesigned"
+                :class="{ 
+                  'selected': selectedProducts.includes(product.id),
+                  'applied': getProductCurrentCampaignStatus(product.id)
+                }"
+                @click="toggleProductSelection(product.id)"
               >
+                <div class="product-selection-redesigned">
+                  <div class="checkbox-container-redesigned">
+                    <input
+                      type="checkbox"
+                      :checked="selectedProducts.includes(product.id)"
+                      @click.stop="toggleProductSelection(product.id)"
+                      class="product-checkbox-redesigned"
+                    />
+                    <div class="checkmark-redesigned"></div>
+                  </div>
+                </div>
+                
+                <div class="product-content-redesigned">
+                  <div class="product-header-redesigned">
+                    <h4 class="product-name-redesigned">{{ product.tenSanPham }}</h4>
+                    <div class="product-status-redesigned" :class="getProductCurrentCampaignStatus(product.id) ? 'applied-status' : 'available-status'">
+                      {{ getProductCurrentCampaignStatus(product.id) ? 'Đang áp dụng' : 'Sẵn sàng' }}
+                    </div>
+                  </div>
+                  
+                  <div class="product-details-redesigned">
+                    <div class="product-specs-redesigned">
+                      <div class="spec-item-redesigned color-spec">
+                        <span class="spec-label-redesigned">{{ product.tenMauSac }}</span>
+                      </div>
+                      <div class="spec-item-redesigned size-spec">
+                        <span class="spec-label-redesigned">{{ product.tenKichThuoc }}</span>
+                      </div>
+                    </div>
+                    <div class="product-price-redesigned">
+                      <span class="price-amount-redesigned">{{ new Intl.NumberFormat("vi-VN").format(product.giaBan) }}</span>
+                      <span class="price-currency-redesigned">VNĐ</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unavailable Products -->
+            <div v-if="productsWithDiscount.length > 0" class="unavailable-section-redesigned">
+              <div class="unavailable-header-redesigned">
+                <img :src="WarningIcon" alt="Warning" class="warning-icon-redesigned" />
+                <span class="unavailable-title-redesigned">Sản phẩm không thể áp dụng</span>
+                <span class="unavailable-count-redesigned">({{ productsWithDiscount.length }})</span>
+              </div>
+              
+              <div class="unavailable-products-redesigned">
+                <div
+                  v-for="product in productsWithDiscount"
+                  :key="product.id"
+                  class="product-card-redesigned unavailable-card"
+                >
+                  <div class="product-selection-redesigned">
+                    <div class="checkbox-container-redesigned disabled">
+                      <input type="checkbox" disabled class="product-checkbox-redesigned" />
+                      <div class="checkmark-redesigned"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="product-content-redesigned">
+                    <div class="product-header-redesigned">
+                      <h4 class="product-name-redesigned">{{ product.tenSanPham }}</h4>
+                      <div class="product-status-redesigned unavailable-status">
+                        Có giảm giá cao hơn
+                      </div>
+                    </div>
+                    
+                    <div class="product-details-redesigned">
+                      <div class="product-specs-redesigned">
+                        <div class="spec-item-redesigned color-spec">
+                          <span class="spec-label-redesigned">{{ product.tenMauSac }}</span>
+                        </div>
+                        <div class="spec-item-redesigned size-spec">
+                          <span class="spec-label-redesigned">{{ product.tenKichThuoc }}</span>
+                        </div>
+                      </div>
+                      <div class="product-price-redesigned">
+                        <span class="price-amount-redesigned">{{ new Intl.NumberFormat("vi-VN").format(product.giaBan) }}</span>
+                        <span class="price-currency-redesigned">VNĐ</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-if="availableProducts.length === 0 && productsWithDiscount.length === 0" class="empty-state-redesigned">
+              <div class="empty-icon-redesigned">
+                <img :src="WarningIcon" alt="No Products" />
+              </div>
+              <div class="empty-content-redesigned">
+                <h3 class="empty-title-redesigned">Không có sản phẩm nào</h3>
+                <p class="empty-description-redesigned">Hiện tại không có sản phẩm nào có thể áp dụng cho chiến dịch này.</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="modal-footer-minimal">
-          <button type="button" class="btn-cancel-minimal" @click="closeApplyModal">
-            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
-            <span>Hủy</span>
-          </button>
-          <button type="button" class="btn-confirm-minimal" @click="applyDiscountToCampaign">
-            <img :src="SuccessIcon" alt="Confirm" class="btn-icon-minimal" />
-            <span>Xác nhận áp dụng</span>
-          </button>
+        <!-- Modal Footer -->
+        <div class="modal-footer-redesigned">
+          <div class="footer-info-redesigned">
+            <span class="footer-text-redesigned">
+              Đã chọn <strong>{{ selectedProducts.length }}</strong> sản phẩm để áp dụng chiến dịch
+            </span>
+          </div>
+          <div class="footer-actions-redesigned">
+            <button type="button" class="btn-cancel-redesigned" @click="closeApplyModal">
+              <span>Hủy bỏ</span>
+            </button>
+            <button 
+              type="button" 
+              class="btn-confirm-redesigned" 
+              @click="applyDiscountToCampaign"
+              :disabled="selectedProducts.length === 0"
+            >
+              <img :src="SuccessIcon" alt="Confirm" />
+              <span>Áp dụng chiến dịch</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1127,6 +971,9 @@ import ClockIcon from "@/assets/Clock.svg";
 import ClipboardIcon from "@/assets/Clipboard.svg";
 import DateIcon from "@/assets/Date.svg";
 import PlusIcon from "@/assets/Plus.svg";
+import InfoIcon from "@/assets/Info.svg";
+import ChecklistIcon from "@/assets/Checklist.svg";
+import SearchIcon from "@/assets/Search.svg";
 
 // Reactive data
 const searchQuery = ref("");
@@ -2221,6 +2068,32 @@ const selectAllProducts = () => {
 // Clear all selected products
 const clearAllProducts = () => {
   selectedProducts.value = [];
+};
+
+// Select products by category
+const selectCategoryProducts = (category) => {
+  if (category === 'available') {
+    // Select all available products that are not currently in campaign
+    const availableProductIds = availableProducts.value
+      .filter(p => !getProductCurrentCampaignStatus(p.id))
+      .map(p => p.id);
+    
+    // Add to existing selection without duplicates
+    const newSelection = [...new Set([...selectedProducts.value, ...availableProductIds])];
+    selectedProducts.value = newSelection;
+  } else if (category === 'current') {
+    // Select all current campaign products
+    const currentProductIds = currentCampaignProducts.value.map(p => p.id);
+    
+    // Add to existing selection without duplicates
+    const newSelection = [...new Set([...selectedProducts.value, ...currentProductIds])];
+    selectedProducts.value = newSelection;
+  }
+};
+
+// Select all available products (combined section)
+const selectAllAvailableProducts = () => {
+  selectedProducts.value = availableProducts.value.map((product) => product.id);
 };
 
 // Validation before applying discount - check for conflicts with higher discount campaigns
@@ -3846,6 +3719,10 @@ const formatDiscountValue = (value) => {
 .apply-modal-minimal {
   max-width: 900px;
   width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .selection-controls-minimal {
@@ -5821,46 +5698,74 @@ const formatDiscountValue = (value) => {
   }
 }
 
-/* Apply Discount Modal Styling (Minimal Design) */
+/* Apply Discount Modal Styling (Enhanced Minimal Design) */
 .apply-modal-minimal {
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   max-width: 900px;
-  width: 95vw;
-  max-height: 85vh;
+  width: 90vw;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
-  position: relative;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(229, 231, 235, 0.8);
   overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  position: relative;
+  border: none;
+  backdrop-filter: blur(10px);
 }
 
-/* Modal Header */
+/* Modal Header - Enhanced */
 .modal-header-minimal {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-bottom: 1px solid #e5e7eb;
+  gap: 1.25rem;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #d1fae5 100%);
+  border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-header-minimal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
 }
 
 .header-icon-minimal {
-  width: 32px;
-  height: 32px;
-  padding: 8px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border-radius: 14px;
   background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 8px 16px rgba(74, 222, 128, 0.3);
+  position: relative;
+}
+
+.header-icon-minimal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: exclude;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
 }
 
 .header-icon-minimal img {
-  width: 16px;
-  height: 16px;
-  filter: brightness(0) invert(1);
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .header-content-minimal {
@@ -5868,164 +5773,382 @@ const formatDiscountValue = (value) => {
 }
 
 .modal-title-minimal {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-weight: 700;
   color: #1f2937;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.4;
+  background: linear-gradient(135deg, #1f2937 0%, #4ade80 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .modal-subtitle-minimal {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin: 0.25rem 0 0 0;
+  font-size: 0.9375rem;
+  color: #16a34a;
+  margin: 0.375rem 0 0 0;
   line-height: 1.4;
+  font-weight: 500;
 }
 
-/* Modal Body */
+/* Modal Body - Enhanced */
 .modal-body-minimal {
   flex: 1;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 2.5rem 2rem 2.5rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.75rem;
+  background: #fafafa;
 }
 
-/* Selection Controls */
+/* Custom Scrollbar */
+.modal-body-minimal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body-minimal::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 3px;
+}
+
+.modal-body-minimal::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  border-radius: 3px;
+}
+
+.modal-body-minimal::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+/* Detail Section Styles */
+.detail-section-minimal {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.detail-section-minimal:hover {
+  border-color: #4ade80;
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.15);
+}
+
+.section-title-minimal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+  border-bottom: 2px solid rgba(74, 222, 128, 0.1);
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.section-icon-minimal {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.detail-rows-minimal {
+  padding: 24px 24px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: white;
+}
+
+.detail-row-minimal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.detail-row-minimal:nth-child(3) {
+  padding: 20px 32px !important;
+  margin-bottom: 8px !important;
+}
+
+.detail-row-minimal:last-child {
+  margin-bottom: 0;
+}
+
+.detail-row-minimal:hover {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+  border-color: rgba(74, 222, 128, 0.3);
+  transform: translateX(2px);
+}
+
+.row-label-minimal {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0;
+  min-width: fit-content;
+}
+
+.row-value-minimal {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.row-value-minimal.primary-text {
+  color: #22c55e;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Form Content Styles */
+.form-content-minimal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  border: 2px solid #e2e8f0;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.form-content-minimal:hover {
+  border-color: #4ade80;
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.15);
+}
+
+.form-group-minimal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label-minimal {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.form-input-minimal {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-input-minimal:focus {
+  outline: none;
+  border-color: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+/* Selection Controls - Enhanced */
 .selection-controls-minimal {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  margin-bottom: 1rem;
+  padding: 1.25rem;
+  background: white;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 16px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 8px rgba(74, 222, 128, 0.08);
 }
 
 .bulk-actions-minimal {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .select-all-minimal {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.625rem;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
+  padding: 0.625rem 0.875rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: 1px solid transparent;
 }
 
 .select-all-minimal:hover {
-  background: rgba(74, 222, 128, 0.1);
+  background: rgba(74, 222, 128, 0.08);
+  border-color: rgba(74, 222, 128, 0.2);
 }
 
 .select-all-minimal input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   accent-color: #4ade80;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .select-all-text-minimal {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: #374151;
+  user-select: none;
 }
 
 .selection-summary-minimal {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.375rem;
   text-align: right;
 }
 
 .selected-count-minimal {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #4ade80;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #16a34a;
+  background: rgba(74, 222, 128, 0.1);
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  border: 1px solid rgba(74, 222, 128, 0.2);
 }
 
 .available-count-minimal {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   color: #6b7280;
+  font-weight: 500;
 }
 
-/* Products List */
+/* Products List Container - Enhanced */
 .products-list-minimal {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .product-section-minimal {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .section-header-minimal {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  position: sticky;
+  top: -1.5rem;
+  background: #fafafa;
+  z-index: 10;
+  padding: 0.5rem 0;
 }
 
 .section-badge-minimal {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  gap: 0.625rem;
+  padding: 0.75rem 1.125rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: -0.025em;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.section-badge-minimal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: exclude;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
 }
 
 .section-badge-minimal.current-campaign {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(74, 222, 128, 0.1) 100%);
-  color: #059669;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(74, 222, 128, 0.15) 100%);
+  color: #15803d;
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
 }
 
 .section-badge-minimal.available {
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(34, 197, 94, 0.15) 100%);
   color: #16a34a;
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-color: rgba(74, 222, 128, 0.3);
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.15);
 }
 
 .section-badge-minimal.unavailable {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%);
   color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
 }
 
 .badge-icon-minimal {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
 }
 
-/* Product Items */
+/* Product Items - Enhanced */
 .product-item-minimal {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 1.25rem;
+  padding: 1.25rem;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 16px;
   background: white;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-item-minimal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: transparent;
+  transition: all 0.3s ease;
 }
 
 .product-item-minimal:hover {
-  border-color: #4ade80;
-  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.15);
-  transform: translateY(-1px);
+  border-color: rgba(74, 222, 128, 0.5);
+  box-shadow: 0 8px 25px rgba(74, 222, 128, 0.12), 0 0 0 1px rgba(74, 222, 128, 0.1);
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ffffff 0%, #f9fffe 100%);
+}
+
+.product-item-minimal:hover::before {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
 }
 
 .product-item-minimal.current-applied {
@@ -6033,21 +6156,29 @@ const formatDiscountValue = (value) => {
   border-color: rgba(34, 197, 94, 0.3);
 }
 
+.product-item-minimal.current-applied::before {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
 .product-item-minimal.available {
   background: white;
 }
 
 .product-item-minimal.unavailable {
-  background: rgba(243, 244, 246, 0.8);
-  border-color: rgba(156, 163, 175, 0.5);
+  background: rgba(249, 250, 251, 0.8);
+  border-color: rgba(156, 163, 175, 0.4);
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 .product-item-minimal.unavailable:hover {
   transform: none;
   box-shadow: none;
-  border-color: rgba(156, 163, 175, 0.5);
+  border-color: rgba(156, 163, 175, 0.4);
+}
+
+.product-item-minimal.unavailable::before {
+  background: #9ca3af;
 }
 
 .product-checkbox-minimal {
@@ -6055,11 +6186,12 @@ const formatDiscountValue = (value) => {
 }
 
 .product-checkbox-minimal input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   accent-color: #4ade80;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .product-checkbox-minimal input[type="checkbox"]:disabled {
@@ -6071,118 +6203,139 @@ const formatDiscountValue = (value) => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.625rem;
+  min-width: 0;
 }
 
 .product-name-minimal {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.0625rem;
+  font-weight: 700;
   color: #1f2937;
   line-height: 1.4;
+  margin: 0;
 }
 
 .product-specs-minimal {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
   color: #6b7280;
+  flex-wrap: wrap;
 }
 
 .spec-item-minimal {
-  background: rgba(243, 244, 246, 0.8);
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  font-weight: 500;
+  background: rgba(74, 222, 128, 0.08);
+  color: #16a34a;
+  padding: 0.375rem 0.625rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  border: 1px solid rgba(74, 222, 128, 0.2);
 }
 
 .spec-separator-minimal {
   color: #d1d5db;
-  font-weight: 600;
+  font-weight: 400;
+  font-size: 1rem;
 }
 
 .product-status-minimal {
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.025em;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
+  letter-spacing: 0.05em;
+  padding: 0.375rem 0.625rem;
+  border-radius: 8px;
   width: fit-content;
+  border: 1px solid transparent;
 }
 
 .product-status-minimal.current-status {
-  background: rgba(34, 197, 94, 0.1);
-  color: #059669;
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+  border-color: rgba(34, 197, 94, 0.2);
 }
 
 .product-status-minimal.available-status {
-  background: rgba(74, 222, 128, 0.1);
+  background: rgba(74, 222, 128, 0.12);
   color: #16a34a;
+  border-color: rgba(74, 222, 128, 0.2);
 }
 
 .product-status-minimal.unavailable-status {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.12);
   color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .product-price-minimal {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.125rem;
+  font-weight: 800;
   color: #16a34a;
   text-align: right;
   flex-shrink: 0;
+  background: rgba(74, 222, 128, 0.08);
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  min-width: fit-content;
 }
 
 .disabled-text {
   color: #9ca3af !important;
+  opacity: 0.7;
 }
 
-/* Empty State */
+/* Empty State - Enhanced */
 .empty-state-minimal {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 2rem;
+  padding: 4rem 2rem;
   text-align: center;
+  background: white;
+  border-radius: 16px;
+  border: 2px dashed #d1d5db;
 }
 
 .empty-icon-minimal {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 1rem;
-  opacity: 0.5;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+  filter: grayscale(1);
 }
 
 .empty-icon-minimal img {
   width: 100%;
   height: 100%;
-  filter: grayscale(1);
 }
 
 .empty-text-minimal h4 {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-weight: 700;
   color: #374151;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.75rem 0;
 }
 
 .empty-text-minimal p {
-  font-size: 1rem;
+  font-size: 1.0625rem;
   color: #6b7280;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 400px;
 }
 
-/* Modal Footer */
+/* Modal Footer - Enhanced */
 .modal-footer-minimal {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-top: 1px solid #e5e7eb;
+  gap: 1.25rem;
+  padding: 2rem 2.5rem;
+  background: white;
+  border-top: 1px solid rgba(74, 222, 128, 0.15);
 }
 
 .btn-cancel-minimal,
@@ -6190,42 +6343,60 @@ const formatDiscountValue = (value) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  border-radius: 10px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-  transition: all 0.3s ease;
+  gap: 0.625rem;
+  padding: 1rem 1.75rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: -0.025em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   border: 2px solid transparent;
-  min-width: 140px;
+  min-width: 160px;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-cancel-minimal {
   background: white;
   border-color: #e5e7eb;
   color: #6b7280;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .btn-cancel-minimal:hover {
   background: #f9fafb;
   border-color: #9ca3af;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #374151;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .btn-confirm-minimal {
   background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+  border-color: transparent;
+}
+
+.btn-confirm-minimal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: exclude;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
 }
 
 .btn-confirm-minimal:hover {
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+  box-shadow: 0 6px 24px rgba(74, 222, 128, 0.4);
 }
 
 .btn-confirm-minimal:active,
@@ -6234,8 +6405,8 @@ const formatDiscountValue = (value) => {
 }
 
 .btn-icon-minimal {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
 .btn-cancel-minimal .btn-icon-minimal {
@@ -6243,52 +6414,71 @@ const formatDiscountValue = (value) => {
 }
 
 .btn-confirm-minimal .btn-icon-minimal {
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.1));
 }
 
 /* Responsive Design for Apply Modal */
+@media (max-width: 1024px) {
+  .apply-modal-minimal {
+    max-width: 95vw;
+    max-height: 95vh;
+    border-radius: 16px;
+  }
+
+  .modal-header-minimal,
+  .modal-footer-minimal {
+    padding: 1.5rem 2rem;
+  }
+
+  .modal-body-minimal {
+    padding: 1.25rem 2rem;
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .apply-modal-minimal {
-    max-width: 100%;
-    max-height: 95vh;
-    margin: 0.5rem;
-    border-radius: 12px;
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+    margin: 0;
   }
 
   .modal-header-minimal {
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.5rem;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
   .header-icon-minimal {
-    width: 28px;
-    height: 28px;
-    padding: 6px;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
   }
 
   .header-icon-minimal img {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
   }
 
   .modal-title-minimal {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
   }
 
   .modal-subtitle-minimal {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
   }
 
   .modal-body-minimal {
     padding: 1rem 1.5rem;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .selection-controls-minimal {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
+    padding: 1rem;
   }
 
   .bulk-actions-minimal {
@@ -6302,46 +6492,162 @@ const formatDiscountValue = (value) => {
   .product-item-minimal {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
-    padding: 1rem;
+    gap: 1rem;
+    padding: 1.125rem;
+  }
+
+  .product-details-minimal {
+    text-align: center;
   }
 
   .product-specs-minimal {
-    flex-wrap: wrap;
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   .product-price-minimal {
     text-align: center;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
+    align-self: center;
   }
 
   .modal-footer-minimal {
     flex-direction: column;
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.5rem;
+    gap: 1rem;
   }
 
   .btn-cancel-minimal,
   .btn-confirm-minimal {
     min-width: 100%;
+    padding: 1.125rem 1.5rem;
   }
 
   .empty-state-minimal {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.5rem;
   }
 
   .empty-icon-minimal {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
   }
 
   .empty-text-minimal h4 {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
   }
 
   .empty-text-minimal p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-header-minimal {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-body-minimal {
+    padding: 0.875rem 1.25rem;
+  }
+
+  .modal-footer-minimal {
+    padding: 1rem 1.25rem;
+  }
+
+  .product-item-minimal {
+    padding: 1rem;
+  }
+
+  .section-badge-minimal {
+    padding: 0.625rem 1rem;
     font-size: 0.875rem;
   }
+
+  .selected-count-minimal {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .product-name-minimal {
+    font-size: 1rem;
+  }
+
+  .product-price-minimal {
+    font-size: 1.125rem;
+    padding: 0.625rem 1rem;
+  }
+}
+
+/* Enhanced Animation Effects */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.apply-modal-minimal {
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes productSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-item-minimal {
+  animation: productSlideIn 0.2s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.product-item-minimal:nth-child(1) { animation-delay: 0ms; }
+.product-item-minimal:nth-child(2) { animation-delay: 50ms; }
+.product-item-minimal:nth-child(3) { animation-delay: 100ms; }
+.product-item-minimal:nth-child(4) { animation-delay: 150ms; }
+.product-item-minimal:nth-child(5) { animation-delay: 200ms; }
+
+/* Loading States */
+.product-item-minimal.loading {
+  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Focus States for Accessibility */
+.product-checkbox-minimal input[type="checkbox"]:focus,
+.select-all-minimal input[type="checkbox"]:focus {
+  outline: 2px solid #4ade80;
+  outline-offset: 2px;
+}
+
+.btn-cancel-minimal:focus,
+.btn-confirm-minimal:focus {
+  outline: 2px solid #4ade80;
+  outline-offset: 2px;
+}
+
+.product-item-minimal:focus {
+  outline: 2px solid #4ade80;
+  outline-offset: -2px;
 }
 
 /* Auto-update status notification styles */
@@ -6387,6 +6693,1451 @@ const formatDiscountValue = (value) => {
   to {
     opacity: 0;
     transform: translateY(-5px);
+  }
+}
+
+/* ===============================================
+   REDESIGNED PRODUCT SELECTION SECTION
+   =============================================== */
+
+.products-grid-redesign {
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 0 4px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Scrollbar Styling */
+.products-grid-redesign::-webkit-scrollbar {
+  width: 8px;
+}
+
+.products-grid-redesign::-webkit-scrollbar-track {
+  background: rgba(148, 163, 184, 0.1);
+  border-radius: 4px;
+}
+
+.products-grid-redesign::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.products-grid-redesign::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* Category Section */
+.product-category-redesign {
+  margin-bottom: 32px;
+  background: white;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.product-category-redesign:hover {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.product-category-redesign.available-category {
+  border-color: rgba(74, 222, 128, 0.4);
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.02) 0%, rgba(34, 197, 94, 0.02) 100%);
+}
+
+.product-category-redesign.applied-category {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(37, 99, 235, 0.02) 100%);
+}
+
+.product-category-redesign.unavailable-category {
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+/* Category Header */
+.category-header-redesign {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Different backgrounds for each category */
+.available-category .category-header-redesign {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, rgba(34, 197, 94, 0.08) 100%);
+}
+
+.applied-category .category-header-redesign {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%);
+}
+
+.unavailable-category .category-header-redesign {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.08) 0%, rgba(239, 68, 68, 0.08) 100%);
+}
+
+.category-title-redesign {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.category-icon-redesign {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-icon-redesign::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
+  opacity: 0.1;
+}
+
+.category-icon-redesign.available-icon {
+  color: #22c55e;
+  border: 2px solid rgba(74, 222, 128, 0.3);
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.category-icon-redesign.applied-icon {
+  color: #3b82f6;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.category-icon-redesign.unavailable-icon {
+  color: #f87171;
+  border: 2px solid rgba(248, 113, 113, 0.2);
+}
+
+.category-icon-redesign img {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.category-info-redesign h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.category-info-redesign p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Category Actions */
+.category-actions-redesign {
+  display: flex;
+  gap: 12px;
+}
+
+.quick-select-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.quick-select-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+.quick-select-btn.available-select {
+  color: #16a34a;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.quick-select-btn.available-select:hover {
+  background: rgba(74, 222, 128, 0.1);
+  border-color: #4ade80;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+}
+
+.quick-select-btn.applied-select {
+  color: #1d4ed8;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.quick-select-btn.applied-select:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+/* Products Grid Container */
+.products-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  padding: 24px;
+}
+
+/* Product Card */
+.product-card-redesign {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card-redesign::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.product-card-redesign.available-card::before {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.product-card-redesign.applied-card {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(37, 99, 235, 0.02) 100%);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.product-card-redesign.applied-card::before {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.product-card-redesign.unavailable-card::before {
+  background: linear-gradient(90deg, #f87171, #ef4444);
+}
+
+.product-card-redesign:hover:not(.disabled) {
+  border-color: #4ade80;
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.2);
+  transform: translateY(-2px);
+}
+
+.product-card-redesign.selected {
+  border-color: #22c55e;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.3);
+}
+
+.product-card-redesign.applied-card.selected {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+}
+
+.product-card-redesign.disabled {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Product Selection */
+.product-selection-redesign {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
+.custom-checkbox-redesign {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.custom-checkbox-redesign input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.checkmark-redesign {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 2px solid #cbd5e1;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-checkbox-redesign input:checked ~ .checkmark-redesign {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  border-color: #22c55e;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.4);
+}
+
+.checkmark-redesign:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox-redesign input:checked ~ .checkmark-redesign:after {
+  display: block;
+}
+
+.custom-checkbox-redesign.disabled .checkmark-redesign {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* Product Info */
+.product-info-redesign {
+  padding-right: 40px;
+}
+
+.product-header-redesign {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.product-name-redesign {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+/* Status Badges */
+.product-status-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.available-badge {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(34, 197, 94, 0.15) 100%);
+  color: #16a34a;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.applied-badge {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.unavailable-badge {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
+  color: #dc2626;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* Product Details */
+.product-details-redesign {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-specs-redesign {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.spec-chip-redesign {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.spec-chip-redesign.color-chip {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #1d4ed8;
+}
+
+.spec-chip-redesign.size-chip {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #7c3aed;
+}
+
+.spec-chip-redesign.disabled {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+}
+
+.spec-label {
+  font-weight: 500;
+}
+
+.spec-value {
+  font-weight: 600;
+}
+
+/* Product Price */
+.product-price-redesign {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.product-price-redesign .currency {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.product-price-redesign.disabled {
+  color: #94a3b8;
+}
+
+/* Unavailable Reason */
+.unavailable-reason-redesign {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.unavailable-reason-redesign img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Enhanced Empty State */
+.empty-state-redesign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  text-align: center;
+}
+
+.empty-illustration-redesign {
+  max-width: 400px;
+  width: 100%;
+}
+
+.empty-icon-redesign {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+  border: 2px solid rgba(248, 113, 113, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon-redesign img {
+  width: 40px;
+  height: 40px;
+}
+
+.empty-content-redesign h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+}
+
+.empty-content-redesign > p {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+.empty-suggestions-redesign {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+}
+
+.empty-suggestions-redesign > p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+}
+
+.empty-suggestions-redesign ul {
+  margin: 0;
+  padding-left: 16px;
+  color: #64748b;
+}
+
+.empty-suggestions-redesign li {
+  font-size: 14px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .products-grid-container {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  .category-header-redesign {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+  
+  .category-actions-redesign {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .product-card-redesign {
+    padding: 16px;
+  }
+  
+  .product-info-redesign {
+    padding-right: 32px;
+  }
+}
+
+/* Animation Enhancements */
+.product-card-redesign {
+  animation: cardSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: backwards;
+}
+
+.product-card-redesign:nth-child(odd) {
+  animation-delay: 0.1s;
+}
+
+.product-card-redesign:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.category-header-redesign {
+  animation: headerSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes headerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ===============================================
+   REDESIGNED APPLY MODAL - UNIFIED BODY
+   =============================================== */
+
+.apply-modal-redesigned {
+  max-width: 1100px;
+  width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Modal Header */
+.modal-header-redesigned {
+  background: #e2e8f0;
+  padding: 24px 32px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header-content-redesigned {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left-redesigned {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.campaign-icon-redesigned {
+  width: 56px;
+  height: 56px;
+  background: #4ade80;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tag-icon-redesigned {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+
+.campaign-info-redesigned {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campaign-title-redesigned {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.campaign-status-redesigned {
+  display: flex;
+  align-items: center;
+}
+
+.status-badge-redesigned {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(74, 222, 128, 0.1);
+  color: #166534;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge-redesigned::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #4ade80;
+  border-radius: 50%;
+}
+
+.close-btn-redesigned {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn-redesigned:hover {
+  background: #f8fafc;
+  transform: scale(1.05);
+}
+
+.close-btn-redesigned img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+/* Modal Body */
+.modal-body-redesigned {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  overflow-y: auto;
+  background: #fafafa;
+  gap: 32px;
+}
+
+/* Controls Section */
+.controls-section-redesigned {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.controls-section-redesigned:hover {
+  border-color: #4ade80;
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.15);
+}
+
+.search-container-redesigned {
+  margin-bottom: 20px;
+}
+
+.search-input-container-redesigned {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon-redesigned {
+  position: absolute;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.5;
+  z-index: 2;
+}
+
+.search-input-redesigned {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  font-size: 16px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.search-input-redesigned:focus {
+  outline: none;
+  border-color: #4ade80;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1);
+  background: #fafffe;
+}
+
+.selection-controls-redesigned {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.control-buttons-redesigned {
+  display: flex;
+  gap: 12px;
+}
+
+.control-btn-redesigned {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.control-btn-redesigned img {
+  width: 16px;
+  height: 16px;
+}
+
+.select-all-btn {
+  color: #166534;
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.05);
+}
+
+.select-all-btn:hover:not(:disabled) {
+  background: rgba(74, 222, 128, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+}
+
+.clear-all-btn {
+  color: #dc2626;
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.05);
+}
+
+.clear-all-btn:hover:not(:disabled) {
+  background: rgba(248, 113, 113, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(248, 113, 113, 0.3);
+}
+
+.control-btn-redesigned:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.selection-summary-redesigned {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.summary-badge-redesigned {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.summary-badge-redesigned.selected {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(74, 222, 128, 0.15) 100%);
+  color: #166534;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.summary-badge-redesigned.available {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.summary-badge-redesigned.unavailable {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
+  color: #dc2626;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.summary-count-redesigned {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.summary-label-redesigned {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* Products Container */
+.products-container-redesigned {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.products-container-redesigned:hover {
+  border-color: #4ade80;
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.15);
+}
+
+.products-grid-redesigned {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.product-card-redesigned {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card-redesigned::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.product-card-redesigned:hover:not(.unavailable-card) {
+  border-color: #4ade80;
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.2);
+  transform: translateY(-4px);
+}
+
+.product-card-redesigned:hover:not(.unavailable-card)::before {
+  background: linear-gradient(90deg, #4ade80, #22c55e);
+}
+
+.product-card-redesigned.selected {
+  border-color: #4ade80;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.05) 0%, rgba(74, 222, 128, 0.05) 100%);
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.3);
+  transform: translateY(-4px);
+}
+
+.product-card-redesigned.selected::before {
+  background: linear-gradient(90deg, #4ade80, #4ade80);
+}
+
+.product-card-redesigned.applied {
+  border-color: #4ade80;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.03) 0%, rgba(34, 197, 94, 0.03) 100%);
+}
+
+.product-card-redesigned.applied::before {
+  background: linear-gradient(90deg, #4ade80, #22c55e);
+}
+
+.product-card-redesigned.unavailable-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.product-card-redesigned.unavailable-card::before {
+  background: linear-gradient(90deg, #f87171, #ef4444);
+}
+
+.product-selection-redesigned {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
+.checkbox-container-redesigned {
+  position: relative;
+  width: 28px;
+  height: 28px;
+}
+
+.product-checkbox-redesigned {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.checkmark-redesigned {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  background: white;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-checkbox-redesigned:checked ~ .checkmark-redesigned {
+  background: linear-gradient(135deg, #4ade80, #4ade80);
+  border-color: #4ade80;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.4);
+}
+
+.checkmark-redesigned:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 9px;
+  top: 5px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.product-checkbox-redesigned:checked ~ .checkmark-redesigned:after {
+  display: block;
+}
+
+.checkbox-container-redesigned.disabled .checkmark-redesigned {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.product-content-redesigned {
+  padding-right: 44px;
+}
+
+.product-header-redesigned {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.product-name-redesigned {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.product-status-redesigned {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.available-status {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(74, 222, 128, 0.15) 100%);
+  color: #166534;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.applied-status {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(34, 197, 94, 0.15) 100%);
+  color: #166534;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.unavailable-status {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
+  color: #dc2626;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.product-details-redesigned {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.product-specs-redesigned {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.spec-item-redesigned {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.color-spec {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+  color: #1d4ed8;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.size-spec {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+  color: #7c3aed;
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.product-price-redesigned {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-amount-redesigned {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.price-currency-redesigned {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* Unavailable Section */
+.unavailable-section-redesigned {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 2px dashed rgba(248, 113, 113, 0.3);
+}
+
+.unavailable-header-redesigned {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.08) 0%, rgba(239, 68, 68, 0.08) 100%);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  border-radius: 12px;
+}
+
+.warning-icon-redesigned {
+  width: 24px;
+  height: 24px;
+  filter: sepia(1) saturate(3) hue-rotate(330deg);
+}
+
+.unavailable-title-redesigned {
+  font-size: 16px;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.unavailable-count-redesigned {
+  font-size: 14px;
+  font-weight: 500;
+  color: #dc2626;
+  opacity: 0.8;
+}
+
+.unavailable-products-redesigned {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* Empty State */
+.empty-state-redesigned {
+  text-align: center;
+  padding: 60px 40px;
+  color: #64748b;
+}
+
+.empty-icon-redesigned {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(248, 113, 113, 0.2);
+}
+
+.empty-icon-redesigned img {
+  width: 40px;
+  height: 40px;
+  opacity: 0.6;
+}
+
+.empty-title-redesigned {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+}
+
+.empty-description-redesigned {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Modal Footer */
+.modal-footer-redesigned {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 24px 32px;
+  border-top: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-info-redesigned {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.footer-text-redesigned strong {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.footer-actions-redesigned {
+  display: flex;
+  gap: 16px;
+}
+
+.btn-cancel-redesigned {
+  padding: 12px 24px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel-redesigned:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #374151;
+}
+
+.btn-confirm-redesigned {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #4ade80 0%, #4ade80 100%);
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.4);
+}
+
+.btn-confirm-redesigned:hover:not(:disabled) {
+  background: linear-gradient(135deg, #22c55e 0%, #22c55e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.5);
+}
+
+.btn-confirm-redesigned:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-confirm-redesigned img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .apply-modal-redesigned {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+
+  .modal-header-redesigned {
+    padding: 20px 24px;
+  }
+
+  .campaign-icon-redesigned {
+    width: 48px;
+    height: 48px;
+  }
+
+  .tag-icon-redesigned {
+    width: 20px;
+    height: 20px;
+  }
+
+  .campaign-title-redesigned {
+    font-size: 20px;
+  }
+
+  .products-grid-redesigned {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .selection-controls-redesigned {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .control-buttons-redesigned {
+    justify-content: center;
+  }
+
+  .selection-summary-redesigned {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .apply-modal-redesigned {
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .modal-header-redesigned {
+    padding: 20px;
+  }
+
+  .header-left-redesigned {
+    gap: 12px;
+  }
+
+  .campaign-icon-redesigned {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tag-icon-redesigned {
+    width: 18px;
+    height: 18px;
+  }
+
+  .campaign-title-redesigned {
+    font-size: 18px;
+  }
+
+  .close-btn-redesigned {
+    width: 36px;
+    height: 36px;
+  }
+
+  .modal-body-redesigned,
+  .modal-footer-redesigned {
+    padding: 20px;
+  }
+
+  .modal-body-redesigned,
+  .modal-footer-redesigned {
+    padding: 20px;
+  }
+
+  .products-grid-redesigned,
+  .unavailable-products-redesigned {
+    grid-template-columns: 1fr;
+  }
+
+  .product-header-redesigned {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .product-status-redesigned {
+    margin-left: 0;
+  }
+
+  .footer-actions-redesigned {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-cancel-redesigned,
+  .btn-confirm-redesigned {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Animations */
+.product-card-redesigned {
+  animation: cardFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: backwards;
+}
+
+.product-card-redesigned:nth-child(odd) {
+  animation-delay: 0.1s;
+}
+
+.product-card-redesigned:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 </style>
