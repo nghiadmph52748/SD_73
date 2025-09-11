@@ -19,7 +19,7 @@ public class HinhThucThanhToanReponse {
     private BigDecimal tienChuyenKhoan;
     private BigDecimal tienMat;
     private Boolean deleted;
-    private String ghiChu;
+    //    private String ghiChu;
     private String tenNhanVienXacNhan;
     private LocalDate ngayTao;
 
@@ -32,15 +32,15 @@ public class HinhThucThanhToanReponse {
         this.tienChuyenKhoan = httt.getTienChuyenKhoan();
         this.tienMat = httt.getTienMat();
         this.deleted = httt.getDeleted();
-        this.ghiChu = httt.getGhiChu();
+//        this.ghiChu = httt.getGhiChu();
 
-        this.tenNhanVienXacNhan = httt.getNhanVienXacNhan(); // vì nó đã là String
-        if (httt.getIdHoaDon() != null) {
-            this.ngayTao = httt.getIdHoaDon().getNgayTao();
-        }
-        if (httt.getIdHoaDon() != null && httt.getIdHoaDon().getIdNhanVien() != null) {
-            this.tenNhanVienXacNhan = httt.getIdHoaDon().getIdNhanVien().getTenNhanVien();
-        }
+//        this.tenNhanVienXacNhan = httt.getNhanVienXacNhan(); // vì nó đã là String
+//        if (httt.getIdHoaDon() != null) {
+//            this.ngayTao = httt.getIdHoaDon().getNgayTao();
+//        }
+//        if (httt.getIdHoaDon() != null && httt.getIdHoaDon().getIdNhanVien() != null) {
+//            this.tenNhanVienXacNhan = httt.getIdHoaDon().getIdNhanVien().getTenNhanVien();
+//        }
 
     }
 }

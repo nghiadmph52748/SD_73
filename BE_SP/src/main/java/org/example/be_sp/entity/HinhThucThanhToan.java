@@ -42,20 +42,18 @@ public class HinhThucThanhToan {
     @Column(name = "tien_mat", precision = 18, scale = 2)
     private BigDecimal tienMat;
 
-    @Column(name = "ngay_tao")
-    private LocalDateTime ngayTao;
+//    @Column(name = "ngay_tao")
+//    private LocalDateTime ngayTao;
 
-    @Column(name = "loai_giao_dich")
-    private String loaiGiaoDich; // ví dụ: "Thanh toán", "Hoàn tiền"
+//    @Column(name = "loai_giao_dich")
+//    private String loaiGiaoDich;
 
     @Column(name = "trang_thai")
-    private String trangThai; // ví dụ: "Thành công", "Chờ xử lý"
+    private String trangThai;
 
-    @Column(name = "ghi_chu")
-    private String ghiChu;
 
-    @Column(name = "nhan_vien_xac_nhan")
-    private String nhanVienXacNhan;
+//    @Column(name = "nhan_vien_xac_nhan")
+//    private String nhanVienXacNhan;
 
 
     @ColumnDefault("0")

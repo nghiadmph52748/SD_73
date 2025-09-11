@@ -153,13 +153,37 @@
                     size="sm"
                     tooltip="Xóa khách hàng"
                     class="action-button-danger"
-                    @click="deleteCustomer(customer.id)"
+                    @click="confirmDeleteCustomer(customer.id)"
                   />
                 </ButtonGroup>
               </td>
             </tr>
           </tbody>
         </table>
+        <!-- Modal xác nhận xoá -->
+<div
+  v-if="showDeleteConfirmModal"
+  class="confirm-dialog-overlay"
+  @click="showDeleteConfirmModal = false"
+>
+  <div class="confirm-dialog-box" @click.stop>
+    <div class="confirm-dialog-header">
+      <h3>Xác nhận xoá</h3>
+    </div>
+    <div class="confirm-dialog-body">
+      <p>Bạn có chắc chắn muốn xoá khách hàng này không?</p>
+    </div>
+    <div class="confirm-dialog-footer">
+      <button class="confirm-btn" @click="showDeleteConfirmModal = false">
+        Hủy
+      </button>
+      <button class="confirm-btn confirm-btn-ok" @click="handleConfirmDelete">
+        Xác nhận
+      </button>
+    </div>
+  </div>
+</div>
+
 
         <!-- Pagination -->
         <div class="pagination-wrapper">
@@ -379,85 +403,88 @@
           </div>
 
           <div class="form-section">
-            <div class="address-header">
-              <h4>Địa chỉ</h4>
-              <button
-                type="button"
-                class="btn-add-address"
-                @click="addAddress"
-                title="Thêm địa chỉ"
-              >
-                <span class="btn-icon">➕</span>
-                Thêm địa chỉ
-              </button>
-            </div>
+  <div class="address-header">
+    <h4>Địa chỉ</h4>
+    <button
+      type="button"
+      class="btn-add-address"
+      @click="addAddress"
+      title="Thêm địa chỉ"
+    >
+      <span class="btn-icon">➕</span>
+      Thêm địa chỉ
+    </button>
+  </div>
 
-            <div
-              v-for="(address, index) in customerForm.listDiaChi"
-              :key="index"
-              class="address-item"
-            >
-              <div class="address-item-header">
-                <h5>Địa chỉ {{ index + 1 }}</h5>
-                <button
-                  v-if="customerForm.listDiaChi.length > 1"
-                  type="button"
-                  class="btn-remove-address"
-                  @click="removeAddress(index)"
-                  title="Xóa địa chỉ"
-                >
-                  <span class="btn-icon">❌</span>
-                </button>
-              </div>
+  <div
+    v-for="(address, index) in customerForm.listDiaChi"
+    :key="address.id"
+    class="address-item"
+  >
+    <div class="address-item-header">
+      <h5>Địa chỉ {{ index + 1 }}</h5>
+      <button
+        v-if="customerForm.listDiaChi.length > 1"
+        type="button"
+        class="btn-remove-address"
+        @click="removeAddress(index)"
+        title="Xóa địa chỉ"
+      >
+        <span class="btn-icon">❌</span>
+      </button>
+    </div>
 
-             <!-- Thay thế phần địa chỉ -->
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label">*Tỉnh/thành phố</label>
-    <select v-model="address.thanhPho" @change="onProvinceChange(index)" class="form-control" required>
-      <option value="">-- Chọn tỉnh/thành phố --</option>
-      <option v-for="p in provinces" :key="p.code" :value="p.name">
-        {{ p.name }}
-      </option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label class="form-label">*Quận/huyện</label>
-    <select v-model="address.quan" @change="onDistrictChange(index)" class="form-control" required>
-      <option value="">-- Chọn quận/huyện --</option>
-      <option 
-        v-for="d in districts[index]" 
-        :key="d.code" 
-        :value="d.name">
-        {{ d.name }}
-      </option>
-    </select>
-  </div>
-</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">*Tỉnh/thành phố</label>
+        <select
+          v-model="address.thanhPho"
+          @change="onProvinceChange(index)"
+          class="form-control"
+          required
+        >
+          <option value="">-- Chọn tỉnh/thành phố --</option>
+          <option v-for="p in provinces" :key="p.code" :value="p.name">
+            {{ p.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">*Quận/huyện</label>
+        <select
+          v-model="address.quan"
+          @change="onDistrictChange(index)"
+          class="form-control"
+          required
+        >
+          <option value="">-- Chọn quận/huyện --</option>
+          <option v-for="d in districts[index]" :key="d.code" :value="d.name">
+            {{ d.name }}
+          </option>
+        </select>
+      </div>
+    </div>
 
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label">*Xã/phường/thị trấn</label>
-    <select v-model="address.phuong" class="form-control" required>
-      <option value="">-- Chọn xã/phường/thị trấn --</option>
-      <option 
-        v-for="w in wards[index]" 
-        :key="w.code" 
-        :value="w.name">
-        {{ w.name }}
-      </option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label class="form-label">*Địa chỉ cụ thể</label>
-    <input
-      type="text"
-      v-model="address.diaChiCuThe"
-      class="form-control"
-      required
-    />
-  </div>
-</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">*Xã/phường/thị trấn</label>
+        <select v-model="address.phuong" class="form-control" required>
+          <option value="">-- Chọn xã/phường/thị trấn --</option>
+          <option v-for="w in wards[index]" :key="w.code" :value="w.name">
+            {{ w.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">*Địa chỉ cụ thể</label>
+        <input
+          type="text"
+          v-model="address.diaChiCuThe"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
 
             </div>
           </div>
@@ -470,9 +497,26 @@
         >
           Hủy
         </button>
-        <button type="submit" class="btn" @click="saveCustomer">
+        <button type="submit" class="btn" @click="showConfirmModal = true" >
           Thêm khách hàng
         </button>
+        <div v-if="showConfirmModal" class="confirm-dialog-overlay" @click="showConfirmModal = false">
+          <div class="confirm-dialog-box" @click.stop>
+            <div class="confirm-dialog-header">
+              <h3>Xác nhận</h3>
+            </div>
+            <div class="confirm-dialog-body">
+              <p>Bạn có muốn thêm khách hàng không?</p>
+            </div>
+            <div class="confirm-dialog-footer">
+              <button class="confirm-btn" @click="showConfirmModal = false">Hủy</button>
+              <button class="confirm-btn confirm-btn-ok" @click="handleConfirmAdd">Xác nhận</button>
+            </div>
+          </div>
+        </div>
+        <div v-if="toast.show" :class="['toast', toast.type]">
+          {{ toast.message }}
+        </div>
       </div>
       </div>
     </div>
@@ -635,32 +679,60 @@
       </option>
     </select>
   </div>
-  <div class="form-group">
-    <label class="form-label">*Địa chỉ cụ thể</label>
-    <input
-      type="text"
-      v-model="address.diaChiCuThe"
-      class="form-control"
-      required
-    />
-  </div>
-</div>
+          <div class="form-group">
+            <label class="form-label">*Địa chỉ cụ thể</label>
+            <input
+              type="text"
+              v-model="address.diaChiCuThe"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
             
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-      <button
-        type="button"
-        class="btn "
-        @click="showEditModal = false"
-      >
+     <div class="modal-footer">
+  <button
+    type="button"
+    class="btn"
+    @click="showEditModal = false"
+  >
+    Hủy
+  </button>
+  <button
+    type="submit"
+    class="btn"
+    @click="showEditConfirmModal = true"
+  >
+    Cập nhật khách hàng
+  </button>
+</div>
+<!-- Modal xác nhận cập nhật -->
+<div
+  v-if="showEditConfirmModal"
+  class="confirm-dialog-overlay"
+  @click="showEditConfirmModal = false"
+>
+  <div class="confirm-dialog-box" @click.stop>
+    <div class="confirm-dialog-header">
+      <h3>Xác nhận</h3>
+    </div>
+    <div class="confirm-dialog-body">
+      <p>Bạn có chắc muốn cập nhật khách hàng này không?</p>
+    </div>
+    <div class="confirm-dialog-footer">
+      <button class="confirm-btn" @click="showEditConfirmModal = false">
         Hủy
       </button>
-      <button type="submit" class="btn " @click="saveCustomer">
-        Cập nhật khách hàng
+      <button class="confirm-btn confirm-btn-ok" @click="handleConfirmEdit">
+        Xác nhận
       </button>
     </div>
+  </div>
+</div>
+
     </div>
   </div>
 </template>
@@ -705,7 +777,12 @@ const onProvinceChange = async (index) => {
   if (province) {
     const res = await fetch(`https://provinces.open-api.vn/api/p/${province.code}?depth=2`);
     const data = await res.json();
-    districts.value[index] = data.districts;
+
+    // Lưu luôn districts vào mảng districts
+    districts.value[index] = data.districts || [];
+
+    // ⚡ Cập nhật lại province để sau này tìm quận sẽ có danh sách đầy đủ
+    province.districts = data.districts || [];
   }
 };
 
@@ -718,7 +795,7 @@ const onDistrictChange = async (index) => {
 
   const province = provinces.value.find(p => p.name === provinceName);
 
-  if (!province) return;
+  if (!province || !province.districts) return;
 
   const district = province.districts.find(d => d.name === districtName);
 
@@ -732,7 +809,35 @@ const onDistrictChange = async (index) => {
   wards.value[index] = data.wards || [];
 };
 
+const showConfirmModal = ref(false);
 
+const handleConfirmAdd = async () => {
+  showConfirmModal.value = false; // đóng modal xác nhận
+
+  try {
+    // gọi API thêm khách hàng (ở đây là hàm saveCustomer bạn đã có sẵn)
+    const result = await saveCustomer();
+
+    if (result) {
+      showToast("Thêm khách hàng thành công!", "success");
+    } else {
+      showToast("Thêm khách hàng thất bại!", "error");
+    }
+  } catch (e) {
+    showToast("Có lỗi xảy ra khi thêm khách hàng!", "error");
+  }
+};
+function showToast(message, type = "success") {
+  toast.value = { show: true, message, type };
+  setTimeout(() => {
+    toast.value.show = false;
+  }, 6000); // 4 giây
+}
+const toast = ref({
+  show: false,
+  message: "",
+  type: "success" // success | error
+});
 
 // Pagination data
 const currentPage = ref(1);
@@ -750,6 +855,7 @@ const customerForm = ref({
   deleted: false,
   listDiaChi: [
     {
+      id: Date.now(), // key duy nhất
       diaChiCuThe: "",
       thanhPho: "",
       quan: "",
@@ -859,12 +965,12 @@ const viewCustomer = (customer) => {
 };
 
 const editCustomer = (customer) => {
-  // Điền dữ liệu khách hàng vào form
   customerForm.value = {
     ...customer,
+    // ✅ clone sâu (deep clone), tránh tham chiếu
     listDiaChi:
       customer.listDiaChi && customer.listDiaChi.length > 0
-        ? customer.listDiaChi
+        ? customer.listDiaChi.map(dc => ({ ...dc }))
         : [
             {
               diaChiCuThe: "",
@@ -881,24 +987,52 @@ const addCustomer = () => {
   resetForm();
   showAddModal.value = true;
 };
+const showEditConfirmModal = ref(false);
+
+const handleConfirmEdit = async () => {
+  showEditConfirmModal.value = false; // đóng modal xác nhận
+
+  try {
+    const result = await saveCustomer(); // gọi API cập nhật
+
+    if (result) {
+      showToast("Cập nhật khách hàng thành công!", "success");
+      showEditModal.value = false; // đóng modal edit
+    } else {
+      showToast("Cập nhật khách hàng thất bại!", "error");
+    }
+  } catch (e) {
+    showToast("Có lỗi xảy ra khi cập nhật khách hàng!", "error");
+  }
+};
 
 const saveCustomer = async () => {
   try {
+    // ✅ lọc bỏ địa chỉ rỗng
+    customerForm.value.listDiaChi = customerForm.value.listDiaChi.filter(
+      (dc) => dc.diaChiCuThe || dc.thanhPho || dc.quan || dc.phuong
+    );
+    
+
     if (showAddModal.value) {
       await fetchCreateKhachHang(customerForm.value);
       currentPage.value = 1;
     } else if (showEditModal.value) {
       await fetchUpdateKhachHang(customerForm.value.id, customerForm.value);
     }
+
+    // ✅ luôn reset để không bị cộng dồn
+    resetForm();
     showAddModal.value = false;
     showEditModal.value = false;
     await fetchAll();
-    resetForm();
-  } catch (res) {
-    console.log(res.message);
+  } catch (err) {
+    console.error("❌ saveCustomer error:", err.message);
     alert("Có lỗi xảy ra khi lưu thông tin khách hàng");
   }
+  
 };
+
 
 const deleteCustomer = async (id) => {
   const confirmDelete = window.confirm("Bạn có chắc chắn muốn xoá khách hàng này không?");
@@ -913,16 +1047,45 @@ const deleteCustomer = async (id) => {
     alert("❌ Có lỗi xảy ra khi xoá khách hàng.");
   }
 };
+const showDeleteConfirmModal = ref(false);
+const customerToDelete = ref(null);
+
+const confirmDeleteCustomer = (id) => {
+  customerToDelete.value = id;
+  showDeleteConfirmModal.value = true;
+};
+
+const handleConfirmDelete = async () => {
+  showDeleteConfirmModal.value = false;
+
+  try {
+    await fetchUpdateStatusKhachHang(customerToDelete.value);
+    customers.value = customers.value.filter(
+      (c) => c.id !== customerToDelete.value
+    );
+
+    showToast("✅ Đã xoá khách hàng thành công!", "success");
+  } catch (error) {
+    console.error("❌ Lỗi khi xoá khách hàng:", error.message);
+    showToast("❌ Có lỗi xảy ra khi xoá khách hàng!", "error");
+  } finally {
+    customerToDelete.value = null;
+  }
+};
 
 
+// ➕ Thêm địa chỉ
 const addAddress = () => {
   customerForm.value.listDiaChi.push({
+    id: Date.now() + Math.random(), // đảm bảo luôn duy nhất
     diaChiCuThe: "",
     thanhPho: "",
     quan: "",
     phuong: "",
   });
 };
+
+
 
 const removeAddress = (index) => {
   if (customerForm.value.listDiaChi.length > 1) {
@@ -950,6 +1113,7 @@ const resetForm = () => {
     ],
   };
 };
+
 
 const refreshData = async () => {
   await fetchAll();
@@ -1022,6 +1186,101 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 }
 
 /* page-header styles are now defined in globals.css */
+.confirm-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 3000; /* cao hơn modal cha */
+}
+
+.confirm-dialog-box {
+  background: #fff;
+  border-radius: 8px;
+  width: 360px;
+  max-width: calc(100% - 40px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.18s ease-in-out;
+  overflow: hidden;
+}
+
+.confirm-dialog-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.confirm-dialog-body {
+  padding: 16px;
+  font-size: 14px;
+  color: #444;
+}
+
+.confirm-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #f1f1f1;
+}
+
+.confirm-btn {
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.confirm-btn:hover {
+  background: #eee;
+}
+
+.confirm-btn-ok {
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: fadeInOut 4s forwards;
+}
+
+/* màu thành công */
+.toast.success {
+  background-color: #28a745;
+}
+
+/* màu lỗi */
+.toast.error {
+  background-color: #dc3545;
+}
+
+/* hiệu ứng hiện lên rồi biến mất */
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translateY(-20px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  90%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
 
 /* Filter Section */
 .filter-section {
@@ -1290,10 +1549,9 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 }
 
 .form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  flex: 1; /* Mỗi cột chiếm đều nhau */
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group {
@@ -1309,12 +1567,11 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 }
 
 .form-control {
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 0.875rem;
-  transition: border-color 0.3s ease;
-  min-height: 38px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
 .form-control:focus {
@@ -1660,21 +1917,13 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 }
 
 .badge-success {
-  background-color: #4caf50;
-  color: white;
   font-weight: 700;
   padding: 4px 20px;
-  border-radius: 12px;
-  text-transform: uppercase;
 }
 
 .badge-danger {
-  background-color: #f21505;
-  color: white;
   font-weight: 700;
   padding: 4px 4px;
-  border-radius: 15px;
-  text-transform: uppercase;
 }
 .filter-group {
   display: flex;
@@ -1685,5 +1934,6 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
   flex: 1;              /* Chia đều không gian cho các phần tử */
   min-height: 38px;     /* Chiều cao tối thiểu */
 }
+
 
 </style>
