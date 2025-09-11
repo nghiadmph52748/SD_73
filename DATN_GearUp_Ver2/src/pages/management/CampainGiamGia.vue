@@ -526,57 +526,100 @@
     </div>
 
     <!-- Apply Discount Modal -->
-    <div v-if="showApplyModal" class="modal-overlay" @click="closeApplyModal">
-      <div class="modal-content apply-modal" @click.stop>
-        <div class="modal-header">
-          <h3>Áp dụng đợt giảm giá: {{ applyingCampaign?.tenDotGiamGia }}</h3>
-          <button class="modal-close" @click="closeApplyModal">✕</button>
+    <!-- Apply Discount Modal - Redesigned -->
+    <div v-if="showApplyModal" class="modal-overlay-new" @click="closeApplyModal">
+      <div class="modal-content-new apply-modal-minimal" @click.stop>
+        <!-- Modal Header -->
+        <div class="modal-header-minimal">
+          <div class="header-content-minimal">
+            <div class="header-icon-minimal">
+              <img :src="TagIcon" alt="Apply Discount" class="modal-icon-minimal" />
+            </div>
+            <div class="header-text-minimal">
+              <h3 class="modal-title-minimal">Áp dụng đợt giảm giá</h3>
+              <div class="modal-subtitle-minimal" v-if="applyingCampaign">
+                {{ applyingCampaign.tenDotGiamGia }}
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeApplyModal">
+            <span>×</span>
+          </button>
         </div>
 
-        <div class="modal-body">
-          <div class="discount-info">
-            <div class="info-row">
-              <span class="label">Giá trị giảm giá:</span>
-              <span class="value">{{ applyingCampaign?.giaTriGiamGia }}%</span>
+        <!-- Modal Body -->
+        <div class="modal-body-minimal">
+          <!-- Campaign Information -->
+          <div class="detail-section-minimal" v-if="applyingCampaign">
+            <div class="section-title-minimal">
+              <img :src="MoneyIcon" alt="Discount Info" class="section-icon-minimal" />
+              <span>Thông tin chiến dịch</span>
             </div>
-            <div class="info-row">
-              <span class="label">Thời gian:</span>
-              <span class="value">
-                {{ formatDateShort(applyingCampaign?.ngayBatDau) }} -
-                {{ formatDateShort(applyingCampaign?.ngayKetThuc) }}
-              </span>
+            <div class="detail-rows-minimal">
+              <div class="detail-row-minimal">
+                <span class="row-label-minimal">Giá trị giảm giá:</span>
+                <span class="row-value-minimal primary-text">{{ applyingCampaign.giaTriGiamGia }}%</span>
+              </div>
+              <div class="detail-row-minimal">
+                <span class="row-label-minimal">Thời gian áp dụng:</span>
+                <span class="row-value-minimal">
+                  {{ formatDateShort(applyingCampaign.ngayBatDau) }} - {{ formatDateShort(applyingCampaign.ngayKetThuc) }}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div class="product-selection">
-            <h4>Chọn sản phẩm chi tiết áp dụng:</h4>
-            <div class="product-search">
-              <input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                class="form-control"
-                v-model="searchProductQuery"
-              />
+          <!-- Product Selection -->
+          <div class="detail-section-minimal">
+            <div class="section-title-minimal">
+              <img :src="ClipboardIcon" alt="Product Selection" class="section-icon-minimal" />
+              <span>Chọn sản phẩm áp dụng</span>
             </div>
+            
+            <!-- Search and Controls -->
+            <div class="form-content-minimal">
+              <div class="form-group-minimal">
+                <label class="form-label-minimal">Tìm kiếm sản phẩm</label>
+                <input
+                  type="text"
+                  placeholder="Nhập tên sản phẩm..."
+                  class="form-input-minimal"
+                  v-model="searchProductQuery"
+                />
+              </div>
 
-            <div class="selection-controls">
-              <button
-                class="btn btn-outline btn-sm"
-                @click="selectAllProducts"
-                :disabled="
-                  selectedProducts.length === availableProducts.length ||
-                  availableProducts.length === 0
-                "
-              >
-                <!-- icon: check --> Chọn hết
-              </button>
-              <button
-                class="btn btn-outline btn-sm"
-                @click="clearAllProducts"
-                :disabled="selectedProducts.length === 0"
-              >
-                <!-- icon: close --> Bỏ chọn hết
-              </button>
+              <div class="selection-controls-minimal">
+                <button
+                  type="button"
+                  class="btn-control-minimal btn-select-all"
+                  @click="selectAllProducts"
+                  :disabled="selectedProducts.length === availableProducts.length || availableProducts.length === 0"
+                >
+                  <img :src="SuccessIcon" alt="Select All" class="btn-icon-minimal" />
+                  Chọn tất cả
+                </button>
+                <button
+                  type="button"
+                  class="btn-control-minimal btn-clear-all"
+                  @click="clearAllProducts"
+                  :disabled="selectedProducts.length === 0"
+                >
+                  <img :src="CancelIcon" alt="Clear All" class="btn-icon-minimal" />
+                  Bỏ chọn tất cả
+                </button>
+              </div>
+
+              <!-- Selection Summary -->
+              <div class="selection-summary-minimal">
+                <div class="summary-item-minimal">
+                  <span class="summary-label-minimal">Đã chọn:</span>
+                  <span class="summary-value-minimal success-text">{{ selectedProducts.length }} sản phẩm</span>
+                </div>
+                <div class="summary-item-minimal">
+                  <span class="summary-label-minimal">Có thể chọn:</span>
+                  <span class="summary-value-minimal">{{ availableProducts.length }} sản phẩm</span>
+                </div>
+              </div>
             </div>
 
             <div class="product-list">
@@ -844,12 +887,14 @@
           </div>
         </div>
 
-        <div class="modal-footer">
-          <button class="btn btn-secondary" @click="closeApplyModal">
-            Hủy
+        <div class="modal-footer-minimal">
+          <button type="button" class="btn-cancel-minimal" @click="closeApplyModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy</span>
           </button>
-          <button class="btn btn-primary" @click="applyDiscountToCampaign">
-            Xác nhận áp dụng
+          <button type="button" class="btn-confirm-minimal" @click="applyDiscountToCampaign">
+            <img :src="SuccessIcon" alt="Confirm" class="btn-icon-minimal" />
+            <span>Xác nhận áp dụng</span>
           </button>
         </div>
       </div>
@@ -3797,9 +3842,285 @@ const formatDiscountValue = (value) => {
   .table th:nth-child(7) { width: 280px; min-width: 250px; }
 }
 
-/* Apply Modal Styles */
-.apply-modal {
-  max-width: 800px;
+/* Apply Modal Styles - Redesigned */
+.apply-modal-minimal {
+  max-width: 900px;
+  width: 90vw;
+}
+
+.selection-controls-minimal {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  align-items: center;
+}
+
+.btn-control-minimal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-control-minimal:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.btn-control-minimal:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-icon-minimal {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-select-all:hover:not(:disabled) {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.btn-clear-all:hover:not(:disabled) {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.selection-summary-minimal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border: 1px solid #e2e8f0;
+}
+
+.summary-item-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summary-label-minimal {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.summary-value-minimal {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.products-list-minimal {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+}
+
+.product-section-minimal {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.product-section-minimal:last-child {
+  border-bottom: none;
+}
+
+.section-header-minimal {
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.section-badge-minimal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.section-badge-minimal.current-campaign {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.section-badge-minimal.available {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.section-badge-minimal.unavailable {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.badge-icon-minimal {
+  width: 14px;
+  height: 14px;
+}
+
+.product-item-minimal {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-item-minimal:last-child {
+  border-bottom: none;
+}
+
+.product-item-minimal:hover:not(.unavailable) {
+  background: #f8fafc;
+}
+
+.product-item-minimal.current-applied {
+  background: #f0fdf4;
+  border-left: 3px solid #22c55e;
+}
+
+.product-item-minimal.available {
+  background: white;
+}
+
+.product-item-minimal.unavailable {
+  background: #fafafa;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.product-checkbox-minimal {
+  flex-shrink: 0;
+}
+
+.product-checkbox-minimal input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.product-details-minimal {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-name-minimal {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.product-specs-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.spec-item-minimal {
+  font-weight: 500;
+}
+
+.spec-separator-minimal {
+  color: #cbd5e1;
+}
+
+.product-status-minimal {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.current-status {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.available-status {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.unavailable-status {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.product-price-minimal {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #059669;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.disabled-text {
+  opacity: 0.6;
+  color: #64748b !important;
+}
+
+.empty-state-minimal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.empty-icon-minimal {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-icon-minimal img {
+  width: 100%;
+  height: 100%;
+}
+
+.empty-text-minimal h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-text-minimal p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
 }
 
 .discount-info {
@@ -5497,6 +5818,529 @@ const formatDiscountValue = (value) => {
 
   .delete-footer .btn {
     min-width: 100%;
+  }
+}
+
+/* Apply Discount Modal Styling (Minimal Design) */
+.apply-modal-minimal {
+  background: white;
+  border-radius: 16px;
+  max-width: 900px;
+  width: 95vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  overflow: hidden;
+}
+
+/* Modal Header */
+.modal-header-minimal {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-icon-minimal {
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-icon-minimal img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.header-content-minimal {
+  flex: 1;
+}
+
+.modal-title-minimal {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.modal-subtitle-minimal {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0 0;
+  line-height: 1.4;
+}
+
+/* Modal Body */
+.modal-body-minimal {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Selection Controls */
+.selection-controls-minimal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.bulk-actions-minimal {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.select-all-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.select-all-minimal:hover {
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.select-all-minimal input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #4ade80;
+  cursor: pointer;
+}
+
+.select-all-text-minimal {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.selection-summary-minimal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: right;
+}
+
+.selected-count-minimal {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.available-count-minimal {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Products List */
+.products-list-minimal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.product-section-minimal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section-header-minimal {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.section-badge-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.section-badge-minimal.current-campaign {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(74, 222, 128, 0.1) 100%);
+  color: #059669;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.section-badge-minimal.available {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
+  color: #16a34a;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.section-badge-minimal.unavailable {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-icon-minimal {
+  width: 14px;
+  height: 14px;
+}
+
+/* Product Items */
+.product-item-minimal {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.product-item-minimal:hover {
+  border-color: #4ade80;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.15);
+  transform: translateY(-1px);
+}
+
+.product-item-minimal.current-applied {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(74, 222, 128, 0.05) 100%);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.product-item-minimal.available {
+  background: white;
+}
+
+.product-item-minimal.unavailable {
+  background: rgba(243, 244, 246, 0.8);
+  border-color: rgba(156, 163, 175, 0.5);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.product-item-minimal.unavailable:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(156, 163, 175, 0.5);
+}
+
+.product-checkbox-minimal {
+  flex-shrink: 0;
+}
+
+.product-checkbox-minimal input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4ade80;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.product-checkbox-minimal input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.product-details-minimal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.product-name-minimal {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.product-specs-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.spec-item-minimal {
+  background: rgba(243, 244, 246, 0.8);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.spec-separator-minimal {
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+.product-status-minimal {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.product-status-minimal.current-status {
+  background: rgba(34, 197, 94, 0.1);
+  color: #059669;
+}
+
+.product-status-minimal.available-status {
+  background: rgba(74, 222, 128, 0.1);
+  color: #16a34a;
+}
+
+.product-status-minimal.unavailable-status {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.product-price-minimal {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #16a34a;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.disabled-text {
+  color: #9ca3af !important;
+}
+
+/* Empty State */
+.empty-state-minimal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.empty-icon-minimal {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-icon-minimal img {
+  width: 100%;
+  height: 100%;
+  filter: grayscale(1);
+}
+
+.empty-text-minimal h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-text-minimal p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Modal Footer */
+.modal-footer-minimal {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel-minimal,
+.btn-confirm-minimal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  min-width: 140px;
+}
+
+.btn-cancel-minimal {
+  background: white;
+  border-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.btn-cancel-minimal:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-confirm-minimal {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+}
+
+.btn-confirm-minimal:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+}
+
+.btn-confirm-minimal:active,
+.btn-cancel-minimal:active {
+  transform: translateY(0);
+}
+
+.btn-icon-minimal {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-cancel-minimal .btn-icon-minimal {
+  filter: grayscale(1);
+}
+
+.btn-confirm-minimal .btn-icon-minimal {
+  filter: brightness(0) invert(1);
+}
+
+/* Responsive Design for Apply Modal */
+@media (max-width: 768px) {
+  .apply-modal-minimal {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .modal-header-minimal {
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .header-icon-minimal {
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+  }
+
+  .header-icon-minimal img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .modal-title-minimal {
+    font-size: 1.125rem;
+  }
+
+  .modal-subtitle-minimal {
+    font-size: 0.8125rem;
+  }
+
+  .modal-body-minimal {
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .selection-controls-minimal {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .bulk-actions-minimal {
+    justify-content: center;
+  }
+
+  .selection-summary-minimal {
+    text-align: center;
+  }
+
+  .product-item-minimal {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .product-specs-minimal {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .product-price-minimal {
+    text-align: center;
+    font-size: 1.125rem;
+  }
+
+  .modal-footer-minimal {
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+  }
+
+  .btn-cancel-minimal,
+  .btn-confirm-minimal {
+    min-width: 100%;
+  }
+
+  .empty-state-minimal {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon-minimal {
+    width: 60px;
+    height: 60px;
+  }
+
+  .empty-text-minimal h4 {
+    font-size: 1.125rem;
+  }
+
+  .empty-text-minimal p {
+    font-size: 0.875rem;
   }
 }
 
