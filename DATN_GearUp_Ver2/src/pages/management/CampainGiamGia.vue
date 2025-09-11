@@ -154,14 +154,14 @@
                     @click="viewCampaign(campaign)"
                     title="Xem chi tiết"
                   >
-                    <!-- icon: view -->
+                    <img :src="ViewIcon" alt="View" class="action-icon" />
                   </button>
                   <button
                     class="action-btn edit-btn"
                     @click="editCampaign(campaign)"
                     title="Chỉnh sửa"
                   >
-                    <!-- icon: edit -->
+                    <img :src="EditIcon" alt="Edit" class="action-icon" />
                   </button>
                   <button
                     class="action-btn delete-btn"
@@ -170,7 +170,7 @@
                     :disabled="campaign.deleted"
                     :style="{ opacity: campaign.deleted ? 0.3 : 1 }"
                   >
-                    <!-- icon: delete -->
+                    <img :src="TrashIcon" alt="Delete" class="action-icon" />
                   </button>
                 </div>
               </td>
@@ -217,390 +217,294 @@
     <!-- Add/Edit Modal -->
     <div
       v-if="showAddModal || showEditModal"
-      class="modal-overlay"
+      class="modal-overlay-new"
       @click="closeModals"
     >
-      <div class="modal-content edit-modal" @click.stop>
-        <div class="modal-header">
-          <div class="header-content">
-            <div class="header-icon"><!-- icon: edit --></div>
-            <div class="header-text">
-              <h3>{{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật đợt giảm giá" }}</h3>
-              <p class="header-subtitle">{{ showAddModal ? "Thiết lập chiến dịch mới" : "Chỉnh sửa thông tin chiến dịch" }}</p>
+      <div class="modal-content-new modal-form-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="form-header-minimal">
+          <div class="header-info-minimal">
+            <div class="form-icon-minimal">
+              <img :src="showAddModal ? PlusIcon : EditIcon" alt="Form" class="header-icon" />
             </div>
-          </div>
-          <button class="modal-close" @click="closeModals">✕</button>
-        </div>
-        
-        <div class="modal-body">
-          <!-- Campaign Information Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: clipboard --></div>
-              <h4>Thông tin cơ bản</h4>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Tên đợt giảm giá *</label>
-              <input
-                v-model="formData.tenDotGiamGia"
-                type="text"
-                class="form-control"
-                placeholder="Nhập tên đợt giảm giá"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Giá trị giảm giá (%) *</label>
-              <div class="input-with-help">
-                <input
-                  v-model.number="formData.giaTriGiamGia"
-                  type="number"
-                  class="form-control"
-                  placeholder="Nhập giá trị giảm giá (0-100)"
-                  min="0"
-                  max="100"
-                  required
-                />
-                <small class="form-help">Giá trị từ 0% đến 100%</small>
+            <div class="form-title-minimal">
+              <h3>
+                {{
+                  showAddModal
+                    ? "Tạo đợt giảm giá"
+                    : "Cập nhật đợt giảm giá"
+                }}
+              </h3>
+              <div class="form-status-minimal" v-if="showEditModal">
+                <img :src="EditIcon" alt="Edit" class="status-icon-minimal" />
+                <span class="status-text-minimal">CHỈNH SỬA</span>
               </div>
             </div>
           </div>
-
-          <!-- Campaign Schedule Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: calendar --></div>
-              <h4>Lịch trình chiến dịch</h4>
-            </div>
-            
-            <div class="date-row">
-              <div class="date-group">
-                <label class="form-label">Ngày bắt đầu *</label>
-                <input
-                  v-model="formData.ngayBatDau"
-                  type="date"
-                  class="form-control"
-                  :min="minStartDate"
-                  required
-                />
-              </div>
-              <div class="date-group">
-                <label class="form-label">Ngày kết thúc *</label>
-                <input
-                  v-model="formData.ngayKetThuc"
-                  type="date"
-                  class="form-control"
-                  :min="minEndDate"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Campaign Status Section (Edit Mode Only) -->
-          <div class="form-section" v-if="showEditModal">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: settings --></div>
-              <h4>Trạng thái hoạt động</h4>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Trạng thái *</label>
-              <select
-                v-model="formData.trangThai"
-                class="form-control"
-                :disabled="!isWithinCampaignPeriod"
-              >
-                <option :value="true">🟢 Đang diễn ra</option>
-                <option :value="false">🟡 Sắp diễn ra</option>
-              </select>
-              <small v-if="!isWithinCampaignPeriod" class="text-muted">
-                Chỉ có thể sửa trạng thái khi ngày hiện tại nằm trong thời gian đợt giảm giá
-              </small>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Hiện trạng *</label>
-              <select v-model="formData.trangThai" class="form-control">
-                <option :value="true"><!-- icon: check --> Hoạt động</option>
-                <option :value="false"><!-- icon: close --> Ngừng hoạt động</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        
-        <div class="modal-footer">
-          <button class="btn btn-secondary" @click="closeModals">
-            <span class="btn-icon"><!-- icon: close --></span>
-            Hủy
+          <button class="close-btn-minimal" @click="closeModals">
+            <span>×</span>
           </button>
-          <button class="btn btn-primary" @click="saveCampaign">
-            <span class="btn-icon"><!-- icon: save --></span>
-            {{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật" }}
+        </div>
+
+        <!-- Minimal Body -->
+        <div class="form-body-minimal">
+          <form @submit.prevent="saveCampaign" class="coupon-form-minimal">
+            <!-- Basic Information Section -->
+            <div class="form-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="ClipboardIcon" alt="Basic Info" class="section-icon-minimal" />
+                <span>Thông tin cơ bản</span>
+              </div>
+              <div class="form-content-minimal">
+                <div class="form-rows-minimal">
+                  <div class="form-row-minimal single-column">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Tên đợt giảm giá</label>
+                      <input
+                        type="text"
+                        v-model="formData.tenDotGiamGia"
+                        class="form-input-minimal"
+                        placeholder="Nhập tên đợt giảm giá"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="form-row-minimal">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Giá trị giảm giá (%)</label>
+                      <input
+                        type="number"
+                        v-model="formData.giaTriGiamGia"
+                        class="form-input-minimal"
+                        placeholder="Nhập % giảm (1-100)"
+                        min="1"
+                        max="100"
+                        required
+                      />
+                    </div>
+                    <div class="form-group-minimal" v-if="showEditModal">
+                      <label class="form-label-minimal required">Trạng thái</label>
+                      <select
+                        v-model="formData.trangThai"
+                        class="form-select-minimal"
+                        :disabled="!isWithinCampaignPeriod"
+                        required
+                      >
+                        <option :value="true">Đang hoạt động</option>
+                        <option :value="false">Ngừng hoạt động</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div class="form-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="DateIcon" alt="Schedule" class="section-icon-minimal" />
+                <span>Lịch trình chiến dịch</span>
+              </div>
+              <div class="form-content-minimal">
+                <div class="form-rows-minimal">
+                  <div class="form-row-minimal">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Ngày bắt đầu</label>
+                      <input
+                        type="date"
+                        v-model="formData.ngayBatDau"
+                        class="form-input-minimal"
+                        :min="minStartDate"
+                        required
+                      />
+                    </div>
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Ngày kết thúc</label>
+                      <input
+                        type="date"
+                        v-model="formData.ngayKetThuc"
+                        class="form-input-minimal"
+                        :min="minEndDate"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div v-if="!isWithinCampaignPeriod && showEditModal" class="form-row-minimal single-column">
+                    <div class="form-help-minimal warning">
+                      <img :src="WarningIcon" alt="Warning" class="help-icon-minimal" />
+                      <span>Chỉ có thể sửa trạng thái khi ngày hiện tại nằm trong thời gian đợt giảm giá</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Minimal Footer -->
+        <div class="form-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeModals">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy</span>
+          </button>
+          <button class="save-btn-minimal" @click="saveCampaign">
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
+            <span>{{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật" }}</span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- View Campaign Detail Modal -->
+    <!-- Campaign Detail Modal -->
     <div
       v-if="showDetailModal"
-      class="modal-overlay"
+      class="modal-overlay-new"
       @click="showDetailModal = false"
     >
-      <div class="modal-content detail-modal" @click.stop>
-        <div class="modal-header">
-          <div class="header-content">
-            <div class="header-icon"><!-- icon: target --></div>
-            <div class="header-text">
-              <h3>Chi tiết đợt giảm giá</h3>
-              <p class="header-subtitle">Thông tin chi tiết và thống kê</p>
+      <div class="modal-content-new detail-modal-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="detail-header-minimal">
+          <div class="header-info-minimal">
+            <div class="coupon-icon-minimal">
+              <img :src="TagIcon" alt="Campaign" class="header-icon" />
+            </div>
+            <div class="coupon-title-minimal">
+              <h3>{{ selectedCampaign?.tenDotGiamGia }}</h3>
+              <div class="coupon-status-minimal" v-if="selectedCampaign">
+                <img 
+                  :src="selectedCampaign.trangThai ? SuccessIcon : CancelIcon" 
+                  alt="Status" 
+                  class="status-icon-minimal" 
+                />
+                <span class="status-text-minimal">
+                  {{ selectedCampaign.trangThai ? 'ĐANG HOẠT ĐỘNG' : 'NGỪNG HOẠT ĐỘNG' }}
+                </span>
+              </div>
             </div>
           </div>
-          <button class="modal-close" @click="showDetailModal = false">
-            ✕
+          <button class="close-btn-minimal" @click="showDetailModal = false">
+            <span>×</span>
           </button>
         </div>
-        
-        <div class="modal-body" v-if="selectedCampaign">
-          <!-- Campaign Overview Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: target --></div>
-              <h4>Tổng quan chiến dịch</h4>
+
+        <!-- Minimal Body -->
+        <div class="detail-body-minimal" v-if="selectedCampaign">
+          <!-- Key Information Cards -->
+          <div class="info-cards-minimal">
+            <!-- Discount Value Card -->
+            <div class="info-card-minimal primary-card">
+              <div class="card-icon-minimal">
+                <img :src="MoneyIcon" alt="Discount" class="card-icon" />
+              </div>
+              <div class="card-content-minimal">
+                <div class="card-label-minimal">Giá trị giảm</div>
+                <div class="card-value-minimal primary-value">
+                  {{ selectedCampaign.giaTriGiamGia }}%
+                </div>
+                <div class="card-subtitle-minimal">Phần trăm giảm giá</div>
+              </div>
             </div>
-            
-            <div class="overview-content">
-              <div class="campaign-title">
-                <h2>{{ selectedCampaign.tenDotGiamGia }}</h2>
-                <div class="campaign-badge">
-                  <span class="badge-code">{{ selectedCampaign.maDotGiamGia }}</span>
-                  <span 
-                    :class="[
-                      'badge-status',
-                      selectedCampaign.trangThai ? 'badge-active' : 'badge-inactive'
-                    ]"
-                  >
-                    {{ selectedCampaign.trangThai ? '🟢 Đang hoạt động' : '🟡 Sắp diễn ra' }}
+
+            <!-- Products Applied Card -->
+            <div class="info-card-minimal">
+              <div class="card-icon-minimal">
+                <img :src="StatisticsIcon" alt="Products" class="card-icon" />
+              </div>
+              <div class="card-content-minimal">
+                <div class="card-label-minimal">Sản phẩm áp dụng</div>
+                <div class="card-value-minimal">
+                  {{ getAppliedProductsCount(selectedCampaign.id) }}
+                </div>
+                <div class="card-subtitle-minimal">
+                  {{ getActiveProductsCount(selectedCampaign.id) }} đang hoạt động
+                </div>
+              </div>
+            </div>
+
+            <!-- Time Card -->
+            <div class="info-card-minimal">
+              <div class="card-icon-minimal">
+                <img :src="ClockIcon" alt="Time" class="card-icon" />
+              </div>
+              <div class="card-content-minimal">
+                <div class="card-label-minimal">Thời gian còn lại</div>
+                <div class="card-value-minimal">
+                  {{ getTimeRemaining(selectedCampaign) }}
+                </div>
+                <div class="card-subtitle-minimal">
+                  {{ formatDate(selectedCampaign.ngayKetThuc) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Information -->
+          <div class="detail-sections-minimal">
+            <!-- Basic Details -->
+            <div class="detail-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="ClipboardIcon" alt="Details" class="section-icon-minimal" />
+                <span>Chi tiết chiến dịch</span>
+              </div>
+              <div class="detail-rows-minimal">
+                <div class="detail-row-minimal" v-if="selectedCampaign.maDotGiamGia">
+                  <span class="row-label-minimal">Mã đợt giảm giá:</span>
+                  <span class="row-value-minimal">{{ selectedCampaign.maDotGiamGia }}</span>
+                </div>
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Giá trị giảm giá:</span>
+                  <span class="row-value-minimal primary-text">{{ selectedCampaign.giaTriGiamGia }}%</span>
+                </div>
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Trạng thái:</span>
+                  <span class="row-value-minimal" :class="selectedCampaign.trangThai ? 'success-text' : 'warning-text'">
+                    {{ selectedCampaign.trangThai ? 'Đang hoạt động' : 'Ngừng hoạt động' }}
                   </span>
                 </div>
               </div>
+            </div>
 
-              <!-- Campaign Stats -->
-              <div class="campaign-stats">
-                <div class="stat-card">
-                  <div class="stat-icon"><!-- icon: money --></div>
-                  <div class="stat-content">
-                    <div class="stat-value">{{ selectedCampaign.giaTriGiamGia }}%</div>
-                    <div class="stat-label">Giá trị giảm giá</div>
-                  </div>
+            <!-- Schedule Details -->
+            <div class="detail-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="DateIcon" alt="Schedule" class="section-icon-minimal" />
+                <span>Thời gian diễn ra</span>
+              </div>
+              <div class="detail-rows-minimal">
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Ngày bắt đầu:</span>
+                  <span class="row-value-minimal">{{ formatDate(selectedCampaign.ngayBatDau) }}</span>
                 </div>
-                
-                <div class="stat-card">
-                  <div class="stat-icon"><!-- icon: calendar --></div>
-                  <div class="stat-content">
-                    <div class="stat-value">{{ getCampaignDuration(selectedCampaign) }}</div>
-                    <div class="stat-label">Thời gian diễn ra</div>
-                  </div>
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Ngày kết thúc:</span>
+                  <span class="row-value-minimal">{{ formatDate(selectedCampaign.ngayKetThuc) }}</span>
                 </div>
-                
-                <div class="stat-card">
-                  <div class="stat-icon"><!-- icon: chart --></div>
-                  <div class="stat-content">
-                    <div class="stat-value">{{ getAppliedProductsCount(selectedCampaign.id) }}</div>
-                    <div class="stat-label">Sản phẩm áp dụng</div>
-                  </div>
-                </div>
-                
-                <div class="stat-card">
-                  <div class="stat-icon">⏰</div>
-                  <div class="stat-content">
-                    <div class="stat-value">{{ getTimeRemaining(selectedCampaign) }}</div>
-                    <div class="stat-label">Thời gian còn lại</div>
-                  </div>
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Thời gian diễn ra:</span>
+                  <span class="row-value-minimal">{{ getCampaignDuration(selectedCampaign) }}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Basic Information Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: clipboard --></div>
-              <h4>Thông tin cơ bản</h4>
-            </div>
-            
-            <div class="detail-grid">
-              <div class="detail-item">
-                <label class="detail-label">Tên đợt giảm giá:</label>
-                <span class="detail-value">{{ selectedCampaign.tenDotGiamGia }}</span>
-              </div>
-              <div class="detail-item">
-                <label class="detail-label">Mã đợt giảm giá:</label>
-                <span class="detail-value code-value">{{ selectedCampaign.maDotGiamGia }}</span>
-              </div>
-              <div class="detail-item">
-                <label class="detail-label">Giá trị giảm giá:</label>
-                <span class="detail-value discount-value">{{ selectedCampaign.giaTriGiamGia }}%</span>
-              </div>
-              <div class="detail-item">
-                <label class="detail-label">Trạng thái hoạt động:</label>
-                <span 
-                  :class="[
-                    'detail-value status-badge',
-                    selectedCampaign.trangThai ? 'status-active' : 'status-inactive'
-                  ]"
-                >
-                  {{ selectedCampaign.trangThai ? 'Đang diễn ra' : 'Sắp diễn ra' }}
-                </span>
-              </div>
-              <div class="detail-item">
-                <label class="detail-label">Hiện trạng:</label>
-                <span 
-                  :class="[
-                    'detail-value status-badge',
-                    !selectedCampaign.deleted ? 'status-active' : 'status-deleted'
-                  ]"
-                >
-                  {{ !selectedCampaign.deleted ? 'Hoạt động' : 'Ngừng hoạt động' }}
-                </span>
-              </div>
-            </div>
+          <!-- Action Section -->
+          <div class="detail-actions-minimal">
+            <button 
+              v-if="selectedCampaign.trangThai && !selectedCampaign.deleted"
+              class="action-btn-minimal primary-action" 
+              @click="openApplyModal(selectedCampaign)"
+            >
+              <img :src="StatisticsIcon" alt="Manage" class="btn-icon-minimal" />
+              <span>Quản lý sản phẩm</span>
+            </button>
+            <button 
+              class="action-btn-minimal secondary-action" 
+              @click="editCampaign(selectedCampaign)"
+            >
+              <img :src="EditIcon" alt="Edit" class="btn-icon-minimal" />
+              <span>Chỉnh sửa</span>
+            </button>
           </div>
-
-          <!-- Schedule Information Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: calendar --></div>
-              <h4>Thông tin thời gian</h4>
-            </div>
-            
-            <div class="detail-grid">
-              <div class="detail-item">
-                <label class="detail-label">Ngày bắt đầu:</label>
-                <span class="detail-value">{{ formatDate(selectedCampaign.ngayBatDau) }}</span>
-              </div>
-              <div class="detail-item">
-                <label class="detail-label">Ngày kết thúc:</label>
-                <span class="detail-value">{{ formatDate(selectedCampaign.ngayKetThuc) }}</span>
-              </div>
-              <div class="detail-item">
-                <label class="detail-label">Thời gian còn lại:</label>
-                <span class="detail-value time-remaining">{{ getTimeRemaining(selectedCampaign) }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Applied Products Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: shopping-bag --></div>
-              <h4>Sản phẩm đã áp dụng</h4>
-            </div>
-            
-            <div class="products-summary">
-              <div class="summary-stats">
-                <div class="summary-item">
-                  <span class="summary-label">Tổng sản phẩm:</span>
-                  <span class="summary-value">{{ getAppliedProductsCount(selectedCampaign.id) }}</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label">Đang áp dụng:</span>
-                  <span class="summary-value active-count">{{ getActiveProductsCount(selectedCampaign.id) }}</span>
-                </div>
-              </div>
-              
-              <div class="products-list" v-if="getAppliedProducts(selectedCampaign.id).length > 0">
-                <div 
-                  v-for="product in getAppliedProducts(selectedCampaign.id)" 
-                  :key="product.id"
-                  class="product-card"
-                >
-                  <div class="product-info">
-                    <div class="product-name">{{ product.tenSanPham }}</div>
-                    <div class="product-details">
-                      <span class="product-attribute">
-                        <span class="attr-label">Màu:</span>
-                        <span class="attr-value">{{ product.tenMauSac }}</span>
-                      </span>
-                      <span class="product-attribute">
-                        <span class="attr-label">Kích thước:</span>
-                        <span class="attr-value">{{ product.tenKichThuoc }}</span>
-                      </span>
-                      <span class="product-attribute">
-                        <span class="attr-label">Giá gốc:</span>
-                        <span class="attr-value price">{{ formatPrice(product.giaBan) }}</span>
-                      </span>
-                      <span class="product-attribute">
-                        <span class="attr-label">Giá sau giảm:</span>
-                        <span class="attr-value discounted-price">{{ formatPrice(getDiscountedPrice(product.giaBan, selectedCampaign.giaTriGiamGia)) }}</span>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="product-status">
-                    <span 
-                      :class="[
-                        'status-indicator',
-                        !product.deleted ? 'status-active' : 'status-inactive'
-                      ]"
-                    >
-                      {{ !product.deleted ? '<!-- icon: check --> Đang áp dụng' : '<!-- icon: close --> Đã dừng' }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-              <div v-else class="no-products">
-                <div class="no-products-icon"><!-- icon: package --></div>
-                <p>Chưa có sản phẩm nào được áp dụng cho đợt giảm giá này</p>
-                <button class="btn-apply-products" @click="openApplyModal(selectedCampaign)">
-                  <span class="btn-icon"><!-- icon: plus --></span>
-                  Áp dụng sản phẩm
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Campaign Progress Section -->
-          <div class="form-section">
-            <div class="section-header">
-              <div class="section-icon"><!-- icon: chart-up --></div>
-              <h4>Tiến độ chiến dịch</h4>
-            </div>
-            
-            <div class="progress-container">
-              <div class="progress-bar">
-                <div 
-                  class="progress-fill"
-                  :style="{ width: getCampaignProgress(selectedCampaign) + '%' }"
-                ></div>
-              </div>
-              <div class="progress-info">
-                <span class="progress-text">{{ getCampaignProgress(selectedCampaign) }}% hoàn thành</span>
-                <span class="progress-days">{{ getDaysRemaining(selectedCampaign) }} ngày còn lại</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="modal-footer">
-          <button 
-            v-if="selectedCampaign.trangThai && !selectedCampaign.deleted"
-            class="btn btn-primary" 
-            @click="openApplyModal(selectedCampaign)"
-          >
-            <span class="btn-icon"><!-- icon: check --></span>
-            Quản lý sản phẩm
-          </button>
-          <button 
-            class="btn btn-primary" 
-            @click="editCampaign(selectedCampaign)"
-          >
-            <span class="btn-icon"><!-- icon: edit --></span>
-            Chỉnh sửa
-          </button>
         </div>
       </div>
     </div>
@@ -935,93 +839,34 @@
       </div>
     </div>
 
-    <!-- Notification Modal -->
+    <!-- Simple Notification Modal -->
     <div
       v-if="showNotificationModal"
-      class="modal-overlay notification-overlay"
+      class="modal-overlay-new"
       @click="closeNotificationModal"
     >
-      <div class="modal-content notification-modal" @click.stop>
-        <div class="notification-header" :class="notificationData.type">
+      <div class="notification-modal-minimal" @click.stop>
+        <!-- Icon -->
+        <div class="notification-icon-container" :class="notificationData.type">
           <div class="notification-icon">
-            <span v-if="notificationData.type === 'success'"><!-- icon: check --></span>
-            <span v-else><!-- icon: close --></span>
-          </div>
-          <div class="notification-title">
-            <h3>{{ notificationData.title }}</h3>
-            <p>{{ notificationData.message }}</p>
-          </div>
-          <button class="notification-close" @click="closeNotificationModal">
-            ✕
-          </button>
-        </div>
-
-        <div class="notification-body" v-if="notificationData.details">
-          <div class="notification-details">
-            <h4>Chi tiết cập nhật:</h4>
-            <div class="details-grid">
-              <div
-                class="detail-item"
-                v-if="notificationData.details.tenDotGiamGia"
-              >
-                <span class="detail-label">Tên đợt giảm giá:</span>
-                <span class="detail-value">{{
-                  notificationData.details.tenDotGiamGia
-                }}</span>
-              </div>
-              <div
-                class="detail-item"
-                v-if="notificationData.details.giaTriGiamGia"
-              >
-                <span class="detail-label">Giá trị giảm:</span>
-                <span class="detail-value">{{
-                  notificationData.details.giaTriGiamGia
-                }}%</span>
-              </div>
-              <div
-                class="detail-item"
-                v-if="notificationData.details.ngayBatDau"
-              >
-                <span class="detail-label">Ngày bắt đầu:</span>
-                <span class="detail-value">{{
-                  formatDate(notificationData.details.ngayBatDau)
-                }}</span>
-              </div>
-              <div
-                class="detail-item"
-                v-if="notificationData.details.ngayKetThuc"
-              >
-                <span class="detail-label">Ngày kết thúc:</span>
-                <span class="detail-value">{{
-                  formatDate(notificationData.details.ngayKetThuc)
-                }}</span>
-              </div>
-              <div
-                class="detail-item"
-                v-if="notificationData.details.productsAdded !== undefined"
-              >
-                <span class="detail-label">Sản phẩm đã thêm:</span>
-                <span class="detail-value">
-                  {{ notificationData.details.productsAdded }} sản phẩm
-                </span>
-              </div>
-              <div
-                class="detail-item"
-                v-if="notificationData.details.productsRemoved !== undefined"
-              >
-                <span class="detail-label">Sản phẩm đã xóa:</span>
-                <span class="detail-value">
-                  {{ notificationData.details.productsRemoved }} sản phẩm
-                </span>
-              </div>
-            </div>
+            <img 
+              :src="notificationData.type === 'success' ? SuccessIcon : CancelIcon" 
+              alt="Notification" 
+              class="notification-icon-img"
+            />
           </div>
         </div>
 
-        <div class="notification-footer">
-          <button class="btn btn-primary" @click="closeNotificationModal">
-            <span class="btn-icon">👌</span>
-            Đã hiểu
+        <!-- Content -->
+        <div class="notification-content-minimal">
+          <h3 class="notification-title-minimal">{{ notificationData.title }}</h3>
+          <p class="notification-message-minimal">{{ notificationData.message }}</p>
+        </div>
+
+        <!-- Action Button -->
+        <div class="notification-action-minimal">
+          <button class="notification-btn-minimal" :class="notificationData.type" @click="closeNotificationModal">
+            <span>{{ notificationData.type === 'success' ? 'Tiếp tục' : 'Thử lại' }}</span>
           </button>
         </div>
       </div>
@@ -1030,72 +875,75 @@
     <!-- Delete Confirmation Modal -->
     <div
       v-if="showDeleteModal"
-      class="modal-overlay delete-overlay"
+      class="modal-overlay-new"
       @click="closeDeleteModal"
     >
-      <div class="modal-content delete-modal" @click.stop>
-        <div class="delete-header">
-          <div class="delete-icon"><!-- icon: delete --></div>
-          <h3>Xác nhận xóa đợt giảm giá</h3>
+      <div class="modal-content-new delete-modal-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="delete-header-minimal">
+          <div class="header-info-minimal">
+            <div class="delete-icon-minimal">
+              <img :src="WarningIcon" alt="Warning" class="header-icon" />
+            </div>
+            <div class="delete-title-minimal">
+              <h3>Xác nhận xóa đợt giảm giá</h3>
+              <div class="delete-status-minimal">
+                <img :src="TrashIcon" alt="Delete" class="status-icon-minimal" />
+                <span class="status-text-minimal">XÓA VĨNH VIỄN</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeDeleteModal">
+            <span>×</span>
+          </button>
         </div>
 
-        <div class="delete-body">
-          <div class="delete-warning">
-            <div class="warning-icon"><!-- icon: warning --></div>
-            <p class="warning-text">
-              Bạn có chắc chắn muốn xóa đợt giảm giá
-              <strong>"{{ deleteCampaignData?.tenDotGiamGia }}"</strong>?
-            </p>
+        <!-- Minimal Body -->
+        <div class="delete-body-minimal" v-if="deleteCampaignData">
+          <!-- Warning Card -->
+          <div class="warning-card-minimal">
+            <div class="warning-content-minimal">
+              <p class="warning-text-minimal">
+                Bạn có chắc chắn muốn xóa đợt giảm giá
+                <strong>"{{ deleteCampaignData?.tenDotGiamGia }}"</strong>?
+              </p>
+            </div>
           </div>
 
-          <div class="delete-details" v-if="deleteCampaignData">
-            <h4>Thông tin đợt giảm giá:</h4>
-            <div class="delete-info-grid">
-              <div class="delete-info-item">
-                <span class="info-label">Mã đợt giảm giá:</span>
-                <span class="info-value">{{
-                  deleteCampaignData.maDotGiamGia || "N/A"
-                }}</span>
+          <!-- Campaign Info Card -->
+          <div class="coupon-info-card-minimal">
+            <div class="info-header-minimal">
+              <img :src="TagIcon" alt="Campaign" class="info-icon-minimal" />
+              <span>Thông tin đợt giảm giá</span>
+            </div>
+            <div class="info-content-minimal">
+              <div class="info-row-minimal">
+                <span class="info-label-minimal">Mã đợt giảm giá:</span>
+                <span class="info-value-minimal">{{ deleteCampaignData.maDotGiamGia || "N/A" }}</span>
               </div>
-              <div class="delete-info-item">
-                <span class="info-label">Giá trị giảm:</span>
-                <span class="info-value">{{ deleteCampaignData.giaTriGiamGia }}%</span>
+              <div class="info-row-minimal">
+                <span class="info-label-minimal">Giá trị giảm:</span>
+                <span class="info-value-minimal">{{ deleteCampaignData.giaTriGiamGia }}%</span>
               </div>
-              <div class="delete-info-item">
-                <span class="info-label">Thời gian:</span>
-                <span class="info-value">
-                  {{ formatDateShort(deleteCampaignData.ngayBatDau) }} -
-                  {{ formatDateShort(deleteCampaignData.ngayKetThuc) }}
-                </span>
-              </div>
-              <div class="delete-info-item">
-                <span class="info-label">Sản phẩm áp dụng:</span>
-                <span class="info-value">
-                  {{ getAppliedProductsCount(deleteCampaignData.id) }} sản phẩm
+              <div class="info-row-minimal">
+                <span class="info-label-minimal">Thời gian:</span>
+                <span class="info-value-minimal">
+                  {{ formatDateShort(deleteCampaignData.ngayBatDau) }} - {{ formatDateShort(deleteCampaignData.ngayKetThuc) }}
                 </span>
               </div>
             </div>
           </div>
-
-          <div class="delete-consequences">
-            <h4><!-- icon: warning --> Hậu quả khi xóa:</h4>
-            <ul class="consequences-list">
-              <li>Đợt giảm giá sẽ bị vô hiệu hóa hoàn toàn</li>
-              <li>Không thể khôi phục lại sau khi xóa</li>
-              <li>Tất cả sản phẩm áp dụng sẽ hết giảm giá</li>
-              <li>Dữ liệu thống kê sẽ bị ảnh hưởng</li>
-            </ul>
-          </div>
         </div>
 
-        <div class="delete-footer">
-          <button class="btn btn-outline" @click="closeDeleteModal">
-            <span class="btn-icon"><!-- icon: close --></span>
-            Hủy bỏ
+        <!-- Minimal Footer -->
+        <div class="delete-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeDeleteModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy bỏ</span>
           </button>
-          <button class="btn btn-danger" @click="confirmDelete">
-            <span class="btn-icon"><!-- icon: delete --></span>
-            Xác nhận xóa
+          <button class="delete-btn-minimal" @click="confirmDelete">
+            <img :src="TrashIcon" alt="Delete" class="btn-icon-minimal" />
+            <span>Xác nhận xóa</span>
           </button>
         </div>
       </div>
@@ -1118,6 +966,21 @@ import {
 } from "../../services/GiamGia/DotGiamGiaService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel";
+
+// Import icons
+import ViewIcon from "@/assets/View.svg";
+import EditIcon from "@/assets/Edit.svg";
+import TrashIcon from "@/assets/Trash.svg";
+import CancelIcon from "@/assets/Cancel.svg";
+import WarningIcon from "@/assets/Warning.svg";
+import TagIcon from "@/assets/Tag:Label.svg";
+import SuccessIcon from "@/assets/Success.svg";
+import MoneyIcon from "@/assets/Money.svg";
+import StatisticsIcon from "@/assets/Statistics.svg";
+import ClockIcon from "@/assets/Clock.svg";
+import ClipboardIcon from "@/assets/Clipboard.svg";
+import DateIcon from "@/assets/Date.svg";
+import PlusIcon from "@/assets/Plus.svg";
 
 // Reactive data
 const searchQuery = ref("");
@@ -1293,6 +1156,11 @@ const filteredCampaigns = computed(() => {
         default:
           return 0;
       }
+    });
+  } else {
+    // Default sorting: newest campaigns first (by ID descending)
+    filtered = [...filtered].sort((a, b) => {
+      return (b.id || 0) - (a.id || 0);
     });
   }
 
@@ -2134,7 +2002,7 @@ const showSuccessNotification = (message, details = null) => {
 const showErrorNotification = (message, errorDetails = null) => {
   notificationData.value = {
     type: "error",
-    title: "Có lỗi xảy ra! <!-- icon: close -->",
+    title: "Có lỗi xảy ra!",
     message: message,
     details: errorDetails,
   };
@@ -3138,7 +3006,7 @@ const formatDiscountValue = (value) => {
   align-items: center;
   padding: 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(135deg, #ffffff, #ffffff) 100%);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
 }
 
 .modal-header h3 {

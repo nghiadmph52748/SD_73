@@ -977,7 +977,7 @@
                 </div>
                 <div class="bank-detail-row">
                   <span class="bank-label">Chủ tài khoản:</span>
-                  <span class="bank-value">CONG TY TNHH GEAR UP</span>
+                  <span class="bank-value">GEARUP STORE</span>
                 </div>
                 <div class="bank-detail-row">
                   <span class="bank-label">Số tiền:</span>

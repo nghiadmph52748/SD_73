@@ -109,8 +109,8 @@ const currentPageTitle = computed(() => {
     '/sales/returns': 'Quản lý đơn trả hàng',
 
     // Marketing & Promotions
-    '/marketing/discounts': 'Quản lý phiếu giảm giá',
-    '/marketing/campaigns': 'Quản lý chiến dịch giảm giá',
+    '/marketing/discounts': 'Giảm Giá',
+    '/marketing/campaigns': 'Khuyến Mãi',
     '/marketing/vouchers': 'Quản lý phiếu người dùng',
 
     // Customer Engagement
@@ -135,7 +135,7 @@ const currentPageTitle = computed(() => {
     '/pos': 'Hệ thống bán hàng (POS)',
     '/employees': 'Quản lý nhân viên', 
     '/customers': 'Quản lý khách hàng',
-    '/discounts': 'Quản lý phiếu giảm giá',
+    '/discounts': 'Giảm Giá',
     '/returns': 'Quản lý đơn trả hàng',
     '/reviews': 'Quản lý đánh giá sản phẩm'
   };
@@ -143,6 +143,12 @@ const currentPageTitle = computed(() => {
   // Handle dynamic routes like /products/details/:id
   if (route.path.startsWith('/products/details/')) {
     return 'Chi tiết sản phẩm';
+  }
+  
+  // Debug: Log current route to console (can be removed later)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Current route path:', route.path);
+    console.log('Available paths:', Object.keys(pathTitles));
   }
   
   return pathTitles[route.path] || `Trang không xác định (${route.path})`;
@@ -202,8 +208,8 @@ const pageTitle = computed(() => {
     '/sales/returns': 'Quản lý đơn trả hàng',
 
     // Marketing & Promotions
-    '/marketing/discounts': 'Quản lý phiếu giảm giá',
-    '/marketing/campaigns': 'Quản lý chiến dịch giảm giá',
+    '/marketing/discounts': 'Giảm Giá',
+    '/marketing/campaigns': 'Khuyến Mãi',
     '/marketing/vouchers': 'Quản lý phiếu người dùng',
 
     // Customer Engagement
@@ -294,14 +300,14 @@ const menuItems = [
     </svg>`,
     hasSubmenu: true,
     submenu: [
-      { path: "/marketing/discounts", name: "Mã giảm giá" },
-      { path: "/marketing/campaigns", name: "Chiến dịch khuyến mãi" },
+      { path: "/marketing/discounts", name: "Giảm Giá" },
+      { path: "/marketing/campaigns", name: "Khuyến Mãi" },
     ],
   },
 
   // Users Section
   {
-    name: "NGƯỜI DÙNG",
+    name: "NHÂN VIÊN & KHÁCH HÀNG",
     iconSvg: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M16 4C18.2 4 20 5.8 20 8S18.2 12 16 12S12 10.2 12 8S13.8 4 16 4ZM4 8C4 5.8 5.8 4 8 4S12 5.8 12 8S10.2 12 8 12S4 10.2 4 8ZM8 14C12.4 14 16 16.6 16 20V22H0V20C0 16.6 3.6 14 8 14ZM24 20V22H18V20C18 18.2 17.2 16.5 15.8 15.3C17.1 14.8 18.5 14.5 20 14.5C22.2 14.5 24 17.1 24 20Z"/>
     </svg>`,
@@ -350,6 +356,10 @@ const filterCounts = computed(() => {
 
 // Notification functions
 const toggleNotifications = () => {
+  console.log(
+    "Toggle notifications clicked, current state:",
+    showNotifications.value
+  );
   showNotifications.value = !showNotifications.value;
 };
 

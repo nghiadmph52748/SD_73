@@ -168,14 +168,14 @@
                     @click="viewCoupon(coupon)"
                     title="Xem chi tiết"
                   >
-                    <!-- icon: view -->
+                    <img :src="ViewIcon" alt="View" class="action-icon" />
                   </button>
                   <button
                     class="action-btn edit-btn"
                     @click="editCoupon(coupon)"
                     title="Chỉnh sửa"
                   >
-                    <!-- icon: edit -->
+                    <img :src="EditIcon" alt="Edit" class="action-icon" />
                   </button>
                   <button
                     class="action-btn delete-btn"
@@ -184,7 +184,7 @@
                     :disabled="coupon.deleted"
                     :style="{ opacity: coupon.deleted ? 0.3 : 1 }"
                   >
-                    <!-- icon: delete -->
+                    <img :src="TrashIcon" alt="Delete" class="action-icon" />
                   </button>
                 </div>
               </td>
@@ -225,334 +225,259 @@
       class="modal-overlay-new"
       @click="closeModals"
     >
-      <div class="modal-content-new" @click.stop>
-        <!-- Header -->
-        <div class="modal-header-new">
-          <div class="header-content-new">
-            <div class="modal-title-section">
-              <div class="modal-icon">
-                <span class="icon-text">🎫</span>
-              </div>
-              <div class="modal-title">
-                <h3 class="title-text">
+      <div class="modal-content-new modal-form-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="form-header-minimal">
+          <div class="header-info-minimal">
+            <div class="form-icon-minimal">
+              <img :src="showAddModal ? PlusIcon : EditIcon" alt="Form" class="header-icon" />
+            </div>
+            <div class="form-title-minimal">
+              <h3>
                 {{
                   showAddModal
                     ? "Tạo phiếu giảm giá"
                     : "Cập nhật phiếu giảm giá"
                 }}
               </h3>
-                <p class="title-subtitle">
-                  {{
-                    showAddModal
-                      ? "Thêm phiếu giảm giá mới vào hệ thống"
-                      : "Chỉnh sửa thông tin phiếu giảm giá"
-                  }}
-                </p>
+              <div class="form-status-minimal" v-if="showEditModal">
+                <img :src="EditIcon" alt="Edit" class="status-icon-minimal" />
+                <span class="status-text-minimal">CHỈNH SỬA</span>
+              </div>
             </div>
-            </div>
-            <div v-if="showEditModal" class="edit-badge">
-              <span class="edit-text">CHỈNH SỬA</span>
           </div>
-          </div>
-          <button class="modal-close-new" @click="closeModals">
-            <span class="close-icon">×</span>
+          <button class="close-btn-minimal" @click="closeModals">
+            <span>×</span>
           </button>
         </div>
 
-        <!-- Body -->
-        <div class="modal-body-new">
-          <form @submit.prevent="saveCoupon" class="coupon-form-new">
-              <!-- Basic Information Section -->
-            <div class="form-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: clipboard --></div>
-                <h4 class="section-title-new">Thông tin cơ bản</h4>
-                </div>
-              <div class="form-grid-new">
-                <div class="form-item-new">
-                  <label class="form-label-new">Tên phiếu giảm giá *</label>
-                    <input
-                      type="text"
-                      v-model="couponForm.tenPhieuGiamGia"
-                    class="form-input-new"
-                      placeholder="Nhập tên phiếu giảm giá"
-                      required
-                    />
-                  </div>
-                <div class="form-item-new full-width">
-                  <label class="form-label-new">Mô tả</label>
-                    <textarea
-                      v-model="couponForm.moTa"
-                    class="form-textarea-new"
-                      rows="3"
-                      placeholder="Nhập mô tả phiếu giảm giá"
-                    ></textarea>
-                  </div>
-                </div>
+        <!-- Minimal Body -->
+        <div class="form-body-minimal">
+          <form @submit.prevent="saveCoupon" class="coupon-form-minimal">
+            <!-- Basic Information Section -->
+            <div class="form-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="ClipboardIcon" alt="Basic Info" class="section-icon-minimal" />
+                <span>Thông tin cơ bản</span>
               </div>
-
-              <!-- Discount Information Section -->
-            <div class="form-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: money --></div>
-                <h4 class="section-title-new">Thông tin giảm giá</h4>
-                </div>
-              <div class="form-grid-new">
-                <div class="form-item-new">
-                  <label class="form-label-new">Kiểu giảm giá *</label>
-                    <select
-                      v-model="couponForm.loaiPhieuGiamGia"
-                    class="form-select-new"
-                      required
-                    >
-                      <option :value="false">Phần trăm (%)</option>
-                      <option :value="true">Số tiền cố định (VND)</option>
-                    </select>
-                  </div>
-                <div class="form-item-new">
-                  <label class="form-label-new">Giá trị giảm *</label>
-                    <input
-                      type="number"
-                      v-model="couponForm.giaTriGiamGia"
-                    class="form-input-new"
-                    :class="{ 'input-error-new': showDiscountError }"
-                      :placeholder="
-                        !couponForm.loaiPhieuGiamGia
-                          ? 'Nhập % giảm (1-100)'
-                          : 'Nhập số tiền'
-                      "
-                      :min="!couponForm.loaiPhieuGiamGia ? 1 : 1000"
-                      :max="!couponForm.loaiPhieuGiamGia ? 100 : undefined"
-                      @input="validateDiscountValue"
-                      required
-                    />
-                  <div v-if="showDiscountError" class="error-message-new">
-                      <!-- icon: warning --> Giảm giá phần trăm không được vượt quá 100%
+              <div class="form-content-minimal">
+                <div class="form-rows-minimal">
+                  <div class="form-row-minimal">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Tên phiếu giảm giá</label>
+                      <input
+                        type="text"
+                        v-model="couponForm.tenPhieuGiamGia"
+                        class="form-input-minimal"
+                        placeholder="Nhập tên phiếu giảm giá"
+                        required
+                      />
+                    </div>
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Kiểu giảm giá</label>
+                      <select
+                        v-model="couponForm.loaiPhieuGiamGia"
+                        class="form-select-minimal"
+                        required
+                      >
+                        <option :value="false">Phần trăm (%)</option>
+                        <option :value="true">Số tiền cố định (VND)</option>
+                      </select>
                     </div>
                   </div>
-                <div class="form-item-new">
-                  <label class="form-label-new">Hóa đơn tối thiểu</label>
-                    <input
-                      type="number"
-                      v-model="couponForm.hoaDonToiThieu"
-                    class="form-input-new"
-                      placeholder="0"
-                      min="0"
-                    />
+                  <div class="form-row-minimal">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Giá trị giảm</label>
+                      <input
+                        type="number"
+                        v-model="couponForm.giaTriGiamGia"
+                        class="form-input-minimal"
+                        :class="{ 'form-error': showDiscountError }"
+                        :placeholder="
+                          !couponForm.loaiPhieuGiamGia
+                            ? 'Nhập % giảm (1-100)'
+                            : 'Nhập số tiền'
+                        "
+                        :min="!couponForm.loaiPhieuGiamGia ? 1 : 1000"
+                        :max="!couponForm.loaiPhieuGiamGia ? 100 : undefined"
+                        @input="validateDiscountValue"
+                        required
+                      />
+                      <div v-if="showDiscountError" class="error-message-minimal">
+                        Giảm giá phần trăm không được vượt quá 100%
+                      </div>
+                    </div>
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Số lượng sử dụng</label>
+                      <input
+                        type="number"
+                        v-model="couponForm.soLuongDung"
+                        class="form-input-minimal"
+                        placeholder="Nhập số lượng"
+                        min="1"
+                        required
+                      />
+                    </div>
                   </div>
-                <div class="form-item-new" v-if="!couponForm.loaiPhieuGiamGia">
-                  <label class="form-label-new">Giảm tối đa</label>
-                    <input
-                      type="number"
-                      v-model="couponForm.soTienToiDa"
-                    class="form-input-new"
-                      placeholder="Số tiền giảm tối đa"
-                      min="0"
-                    />
+                  <div class="form-row-minimal single-column">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal">Mô tả</label>
+                      <textarea
+                        v-model="couponForm.moTa"
+                        class="form-textarea-minimal"
+                        rows="3"
+                        placeholder="Nhập mô tả phiếu giảm giá"
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Usage Information Section -->
-            <div class="form-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: chart --></div>
-                <h4 class="section-title-new">Thông tin sử dụng</h4>
-                </div>
-              
-              <!-- Số lượng sử dụng -->
-              <div class="form-item-new">
-                <label class="form-label-new">Số lượng sử dụng *</label>
-                    <input
-                      type="number"
-                      v-model="couponForm.soLuongDung"
-                  class="form-input-new"
-                      placeholder="Nhập số lượng"
-                      min="1"
-                      required
-                    />
+            <!-- Discount Conditions Section -->
+            <div class="form-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="MoneyIcon" alt="Discount Info" class="section-icon-minimal" />
+                <span>Điều kiện áp dụng</span>
+              </div>
+              <div class="form-content-minimal">
+                <div class="form-rows-minimal">
+                  <div class="form-row-minimal">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Ngày bắt đầu</label>
+                      <input
+                        type="date"
+                        v-model="couponForm.ngayBatDau"
+                        class="form-input-minimal"
+                        required
+                      />
+                    </div>
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Ngày kết thúc</label>
+                      <input
+                        type="date"
+                        v-model="couponForm.ngayKetThuc"
+                        class="form-input-minimal"
+                        required
+                      />
+                    </div>
                   </div>
+                  <div class="form-row-minimal">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal">Hóa đơn tối thiểu</label>
+                      <input
+                        type="number"
+                        v-model="couponForm.hoaDonToiThieu"
+                        class="form-input-minimal"
+                        placeholder="Nhập giá trị đơn hàng tối thiểu"
+                        min="0"
+                      />
+                    </div>
+                    <div class="form-group-minimal" v-if="!couponForm.loaiPhieuGiamGia">
+                      <label class="form-label-minimal">Giảm tối đa</label>
+                      <input
+                        type="number"
+                        v-model="couponForm.soTienToiDa"
+                        class="form-input-minimal"
+                        placeholder="Số tiền giảm tối đa"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-              <!-- Loại phiếu -->
-              <div class="form-item-new">
-                <label class="form-label-new">Loại phiếu *</label>
-                    <select
-                      v-model="couponForm.idKhachHang"
-                  class="form-select-new"
-                    >
-                      <option :value="null">
-                        Công khai (tất cả khách hàng)
-                      </option>
-                      <option value="personal">
-                        Áp dụng cho khách hàng cụ thể
-                      </option>
-                    </select>
+            <!-- Customer Selection Section -->
+            <div class="form-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="UsersIcon" alt="Customer Selection" class="section-icon-minimal" />
+                <span>Đối tượng áp dụng</span>
+              </div>
+              <div class="form-content-minimal">
+                <div class="form-rows-minimal">
+                  <div class="form-row-minimal single-column">
+                    <div class="form-group-minimal">
+                      <label class="form-label-minimal required">Loại phiếu</label>
+                      <select
+                        v-model="couponForm.idKhachHang"
+                        class="form-select-minimal"
+                      >
+                        <option :value="null">
+                          Công khai (tất cả khách hàng)
+                        </option>
+                        <option value="personal">
+                          Áp dụng cho khách hàng cụ thể
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Customer Selection Section -->
+                <!-- Customer Selection -->
                 <div
                   v-if="couponForm.idKhachHang === 'personal'"
-                class="customer-selection-new"
+                  class="customer-selection-minimal"
                 >
-                <h5 class="customer-selection-title">Chọn khách hàng áp dụng:</h5>
-                
-                <div class="customer-search-new">
-                    <input
-                      type="text"
-                      placeholder="Tìm kiếm khách hàng..."
-                    class="customer-search-input"
-                      v-model="searchCustomerQuery"
-                    />
-                  </div>
-
-                <div class="selection-controls-new">
-                    <button
-                      type="button"
-                    class="selection-btn select-all-btn"
-                      @click="selectAllCustomers"
-                      :disabled="
-                        selectedCustomers.length ===
-                          availableCustomers.length ||
-                        availableCustomers.length === 0
-                      "
-                    >
-                      <!-- icon: check --> Chọn hết
-                    </button>
-                    <button
-                      type="button"
-                    class="selection-btn clear-all-btn"
-                      @click="clearAllCustomers"
-                      :disabled="selectedCustomers.length === 0"
-                    >
-                      <!-- icon: close --> Bỏ chọn hết
-                    </button>
-                  </div>
-
-                <div class="customer-list-new">
-                    <div
-                      v-for="customer in availableCustomers"
-                      :key="customer.id"
-                    class="customer-item-new"
-                      @click="toggleCustomerSelection(customer.id)"
-                    >
+                  <div class="customer-header-minimal">Chọn khách hàng áp dụng</div>
+                  <div class="customer-content-minimal">
+                    <div class="customer-search-minimal">
                       <input
-                        type="checkbox"
-                        :checked="selectedCustomers.includes(customer.id)"
-                        @click.stop="toggleCustomerSelection(customer.id)"
-                      class="customer-checkbox"
+                        type="text"
+                        placeholder="Tìm kiếm khách hàng..."
+                        v-model="searchCustomerQuery"
                       />
-                    <div class="customer-info-new">
-                      <div class="customer-name-new">
-                          {{ customer.tenKhachHang }}
-                        </div>
-                      <div class="customer-details-new">
-                        <div class="customer-detail-item" v-if="customer.email">
-                          <span class="detail-label-new">Email:</span>
-                          <span class="detail-value-new">{{ customer.email }}</span>
-                              </div>
-                        <div class="customer-detail-item" v-if="customer.soDienThoai">
-                          <span class="detail-label-new">SĐT:</span>
-                          <span class="detail-value-new">{{ customer.soDienThoai }}</span>
-                              </div>
-                        <div class="customer-detail-item" v-if="customer.gioiTinh">
-                          <span class="detail-label-new">Giới tính:</span>
-                          <span class="detail-value-new">{{ customer.gioiTinh }}</span>
-                            </div>
+                    </div>
+                    <div class="customer-actions-minimal">
+                      <button type="button" class="customer-action-btn" @click="selectAllCustomers">
+                        Chọn hết
+                      </button>
+                      <button type="button" class="customer-action-btn" @click="clearAllCustomers">
+                        Bỏ chọn hết
+                      </button>
+                    </div>
+                    <div class="customer-list-minimal">
+                      <div
+                        v-for="customer in availableCustomers"
+                        :key="customer.id"
+                        class="customer-item-minimal"
+                        @click="toggleCustomerSelection(customer.id)"
+                      >
+                        <input
+                          type="checkbox"
+                          class="customer-checkbox-minimal"
+                          :checked="selectedCustomers.includes(customer.id)"
+                          @click.stop
+                        />
+                        <div class="customer-info-minimal">
+                          <div class="customer-name-minimal">{{ customer.tenKhachHang }}</div>
+                          <div class="customer-details-minimal">
+                            <strong>EMAIL:</strong> {{ customer.email }} |
+                            <strong>SĐT:</strong> {{ customer.soDienThoai }} |
+                            <strong>GIỚI TÍNH:</strong> {{ customer.gioiTinh ? 'Nam' : 'Nữ' }}
+                          </div>
                         </div>
                       </div>
                     </div>
-
-                    <div
-                      v-if="availableCustomers.length === 0"
-                    class="empty-customers-new"
-                    >
-                      <p>Không có khách hàng nào</p>
+                    <div v-if="selectedCustomers.length > 0" class="customer-summary-minimal">
+                      Đã chọn {{ selectedCustomers.length }} khách hàng
                     </div>
                   </div>
-
-                <div class="selection-summary-new">
-                  <div class="selected-count-new">
-                      Đã chọn: {{ selectedCustomers.length }} khách hàng
-                    </div>
-                  <div class="available-count-new">
-                      Có sẵn: {{ availableCustomers.length }} /
-                      {{ customers.length }} khách hàng
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Time Information Section -->
-            <div class="form-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new">⏰</div>
-                <h4 class="section-title-new">Thông tin thời gian</h4>
-                </div>
-              <div class="form-grid-new">
-                <div class="form-item-new">
-                  <label class="form-label-new">Ngày bắt đầu *</label>
-                    <input
-                      type="date"
-                      v-model="couponForm.ngayBatDau"
-                      :min="minStartDate"
-                    class="form-input-new"
-                      required
-                    />
-                  </div>
-                <div class="form-item-new">
-                  <label class="form-label-new">Ngày kết thúc *</label>
-                    <input
-                      type="date"
-                      v-model="couponForm.ngayKetThuc"
-                      :min="minEndDate"
-                    class="form-input-new"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <!-- Status Section (only for edit) -->
-            <div class="form-section-new" v-if="showEditModal">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: settings --></div>
-                <h4 class="section-title-new">Trạng thái</h4>
-                </div>
-              <div class="form-grid-new">
-                <div class="form-item-new">
-                  <label class="form-label-new">Trạng thái hoạt động *</label>
-                    <select
-                      v-model="couponForm.trangThai"
-                    class="form-select-new"
-                    >
-                      <option :value="true">Đang hoạt động</option>
-                      <option :value="false">Tạm dừng</option>
-                    </select>
-                  </div>
-                <div class="form-item-new">
-                  <label class="form-label-new">Hiện trạng *</label>
-                    <select
-                      v-model="couponForm.deleted"
-                    class="form-select-new"
-                    >
-                      <option :value="false">Hoạt động</option>
-                      <option :value="true">Ngừng hoạt động</option>
-                    </select>
                 </div>
               </div>
             </div>
           </form>
         </div>
 
-        <!-- Footer -->
-        <div class="modal-footer-new">
-          <button class="modal-btn-new cancel-btn" @click="closeModals">
-            <span class="btn-icon-new">✕</span>
-            Hủy
+        <!-- Minimal Footer -->
+        <div class="form-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeModals">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy</span>
           </button>
-          <button class="modal-btn-new save-btn" @click="saveCoupon">
-            <span class="btn-icon-new"><!-- icon: save --></span>
-            {{ showAddModal ? "Tạo phiếu giảm giá" : "Cập nhật" }}
+          <button class="save-btn-minimal" @click="saveCoupon">
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
+            <span>{{ showAddModal ? "Tạo phiếu giảm giá" : "Cập nhật" }}</span>
           </button>
         </div>
       </div>
@@ -564,320 +489,198 @@
       class="modal-overlay-new"
       @click="showDetailModal = false"
     >
-      <div class="modal-content-new detail-modal-new" @click.stop>
-        <!-- Header -->
-        <div class="modal-header-new detail-header-new">
-          <div class="header-content-new">
-            <div class="modal-title-section">
-              <div class="modal-icon">
-                <span class="icon-text">🎫</span>
+      <div class="modal-content-new detail-modal-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="detail-header-minimal">
+          <div class="header-info-minimal">
+            <div class="coupon-icon-minimal">
+              <img :src="TagIcon" alt="Coupon" class="header-icon" />
             </div>
-              <div class="modal-title">
-                <h3 class="title-text">{{ selectedCoupon?.tenPhieuGiamGia }}</h3>
-                <p class="title-subtitle">Chi tiết phiếu giảm giá</p>
+            <div class="coupon-title-minimal">
+              <h3>{{ selectedCoupon?.tenPhieuGiamGia }}</h3>
+              <div class="coupon-status-minimal" v-if="selectedCoupon">
+                <img 
+                  :src="getDetailedStatus(selectedCoupon) === 'Đang diễn ra' ? SuccessIcon : CancelIcon" 
+                  alt="Status" 
+                  class="status-icon-minimal" 
+                />
+                <span class="status-text-minimal">{{ getDetailedStatus(selectedCoupon) }}</span>
               </div>
             </div>
-            <div class="status-badge-new" v-if="selectedCoupon">
-              <span :class="['status-text', getStatusClass(selectedCoupon)]">
-                {{ getStatusText(selectedCoupon) }}
-              </span>
-            </div>
           </div>
-          <button class="modal-close-new" @click="showDetailModal = false">
-            <span class="close-icon">×</span>
+          <button class="close-btn-minimal" @click="showDetailModal = false">
+            <span>×</span>
           </button>
         </div>
 
-        <div class="modal-body-new detail-body-new" v-if="selectedCoupon">
-          <div class="detail-content-new">
-            <!-- Basic Information Section -->
-            <div class="detail-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: clipboard --></div>
-                <h4 class="section-title-new">Thông tin cơ bản</h4>
+        <!-- Minimal Body -->
+        <div class="detail-body-minimal" v-if="selectedCoupon">
+          <!-- Key Information Cards -->
+          <div class="info-cards-minimal">
+            <!-- Discount Value Card -->
+            <div class="info-card-minimal primary-card">
+              <div class="card-icon-minimal">
+                <img :src="MoneyIcon" alt="Discount" class="card-icon" />
               </div>
-              <div class="detail-grid-new">
-                <div class="detail-item-new" v-if="selectedCoupon.maPhieuGiamGia">
-                  <div class="detail-label-new">Mã phiếu</div>
-                  <div class="coupon-code-detail">{{
-                    selectedCoupon.maPhieuGiamGia
-                  }}</div>
+              <div class="card-content-minimal">
+                <div class="card-label-minimal">Giá trị giảm</div>
+                <div class="card-value-minimal primary-value">
+                  {{
+                    !selectedCoupon.loaiPhieuGiamGia
+                      ? selectedCoupon.giaTriGiamGia + "%"
+                      : formatCurrency(selectedCoupon.giaTriGiamGia)
+                  }}
                 </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Mô tả</div>
-                  <div class="description-detail">{{
-                    selectedCoupon.moTa || "Không có mô tả"
-                  }}</div>
-                </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Loại phiếu</div>
-                  <div class="discount-type-detail">
-                    {{ getCouponTypeText(selectedCoupon) }}
-                </div>
-                </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Ngày tạo</div>
-                  <div class="detail-value-new">{{
-                    formatDateTime(
-                      selectedCoupon.ngayTao || selectedCoupon.ngayBatDau
-                    )
-                  }}</div>
+                <div class="card-subtitle-minimal">
+                  {{ !selectedCoupon.loaiPhieuGiamGia ? "Phần trăm" : "Số tiền cố định" }}
                 </div>
               </div>
             </div>
 
-            <!-- Discount Information Section -->
-            <div class="detail-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: money --></div>
-                <h4 class="section-title-new">Thông tin giảm giá</h4>
+            <!-- Usage Card -->
+            <div class="info-card-minimal">
+              <div class="card-icon-minimal">
+                <img :src="StatisticsIcon" alt="Usage" class="card-icon" />
               </div>
-              <div class="detail-grid-new">
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Kiểu giảm giá</div>
-                  <div class="detail-value-new">
-                    {{
-                      !selectedCoupon.loaiPhieuGiamGia
-                        ? "Phần trăm (%)"
-                        : "Số tiền cố định (VND)"
-                    }}
+              <div class="card-content-minimal">
+                <div class="card-label-minimal">Đã sử dụng</div>
+                <div class="card-value-minimal">
+                  {{ selectedCoupon.soLuongDaDung || 0 }}/{{ selectedCoupon.soLuongDung }}
                 </div>
-                </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Giá trị giảm</div>
-                  <div class="discount-value-detail">
-                    {{
-                      !selectedCoupon.loaiPhieuGiamGia
-                        ? selectedCoupon.giaTriGiamGia + "%"
-                        : formatCurrency(selectedCoupon.giaTriGiamGia)
-                    }}
-                </div>
-                </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Hóa đơn tối thiểu</div>
-                  <div class="min-amount-detail">{{
-                    formatCurrency(selectedCoupon.hoaDonToiThieu || 0)
-                  }}</div>
-                </div>
-                <div class="detail-item-new" v-if="selectedCoupon.soTienToiDa">
-                  <div class="detail-label-new">Giảm tối đa</div>
-                  <div class="max-discount-detail">{{
-                    formatCurrency(selectedCoupon.soTienToiDa)
-                  }}</div>
+                <div class="card-subtitle-minimal">
+                  {{ selectedCoupon.soLuongDung ? Math.round(((selectedCoupon.soLuongDaDung || 0) / selectedCoupon.soLuongDung) * 100) : 0 }}% sử dụng
                 </div>
               </div>
             </div>
 
-            <!-- Usage Information Section -->
-            <div class="detail-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: chart --></div>
-                <h4 class="section-title-new">Thông tin sử dụng</h4>
+            <!-- Time Card -->
+            <div class="info-card-minimal">
+              <div class="card-icon-minimal">
+                <img :src="ClockIcon" alt="Time" class="card-icon" />
               </div>
-              <div class="detail-grid-new">
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Số lượng sử dụng</div>
-                  <div class="usage-count-detail">{{
-                    selectedCoupon.soLuongDung
-                  }}</div>
+              <div class="card-content-minimal">
+                <div class="card-label-minimal">Thời gian còn lại</div>
+                <div class="card-value-minimal">
+                  {{ getTimeRemaining(selectedCoupon.ngayKetThuc) }}
                 </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Đã sử dụng</div>
-                  <div class="used-count-detail">{{
-                    selectedCoupon.soLuongDaDung || 0
-                  }}</div>
+                <div class="card-subtitle-minimal">
+                  {{ formatDate(selectedCoupon.ngayKetThuc) }}
                 </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Còn lại</div>
-                  <div class="remaining-count-detail">{{
-                    (selectedCoupon.soLuongDung || 0) -
-                    (selectedCoupon.soLuongDaDung || 0)
-                  }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Information -->
+          <div class="detail-sections-minimal">
+            <!-- Basic Details -->
+            <div class="detail-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="ClipboardIcon" alt="Details" class="section-icon-minimal" />
+                <span>Chi tiết</span>
+              </div>
+              <div class="detail-rows-minimal">
+                <div class="detail-row-minimal" v-if="selectedCoupon.maPhieuGiamGia">
+                  <span class="row-label-minimal">Mã phiếu:</span>
+                  <span class="row-value-minimal">{{ selectedCoupon.maPhieuGiamGia }}</span>
                 </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Tỷ lệ sử dụng</div>
-                  <div class="usage-rate-detail">
-                    {{
-                      selectedCoupon.soLuongDung
-                        ? Math.round(
-                            ((selectedCoupon.soLuongDaDung || 0) /
-                              selectedCoupon.soLuongDung) *
-                              100
-                          )
-                        : 0
-                    }}%
-                  </div>
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Hóa đơn tối thiểu:</span>
+                  <span class="row-value-minimal">{{ formatCurrency(selectedCoupon.hoaDonToiThieu || 0) }}</span>
+                </div>
+                <div class="detail-row-minimal" v-if="selectedCoupon.soTienToiDa">
+                  <span class="row-label-minimal">Giảm tối đa:</span>
+                  <span class="row-value-minimal">{{ formatCurrency(selectedCoupon.soTienToiDa) }}</span>
+                </div>
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Loại phiếu:</span>
+                  <span class="row-value-minimal">{{ getCouponTypeText(selectedCoupon) }}</span>
                 </div>
               </div>
             </div>
 
-            <!-- Time Information Section -->
-            <div class="detail-section-new">
-              <div class="section-header-new">
-                <div class="section-icon-new">⏰</div>
-                <h4 class="section-title-new">Thông tin thời gian</h4>
+            <!-- Time Information -->
+            <div class="detail-section-minimal">
+              <div class="section-title-minimal">
+                <img :src="DateIcon" alt="Dates" class="section-icon-minimal" />
+                <span>Thời gian áp dụng</span>
               </div>
-              <div class="detail-grid-new">
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Ngày bắt đầu</div>
-                  <div class="start-date-detail">{{
-                    formatDateTime(selectedCoupon.ngayBatDau)
-                  }}</div>
+              <div class="detail-rows-minimal">
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Bắt đầu:</span>
+                  <span class="row-value-minimal">{{ formatDateTime(selectedCoupon.ngayBatDau) }}</span>
                 </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Ngày kết thúc</div>
-                  <div class="end-date-detail">{{
-                    formatDateTime(selectedCoupon.ngayKetThuc)
-                  }}</div>
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Kết thúc:</span>
+                  <span class="row-value-minimal">{{ formatDateTime(selectedCoupon.ngayKetThuc) }}</span>
                 </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Thời gian còn lại</div>
-                  <div class="time-remaining-detail">
-                    {{ getTimeRemaining(selectedCoupon.ngayKetThuc) }}
-                </div>
-                </div>
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Trạng thái hoạt động</div>
-                  <div :class="['badge-detail', getStatusClass(selectedCoupon) + '-detail']">
-                    {{ getStatusText(selectedCoupon) }}
-              </div>
-            </div>
               </div>
             </div>
 
-            <!-- Applied Customers Section -->
-            <div class="detail-section-new" v-if="getCustomerCountForCoupon(selectedCoupon.id) > 0">
-              <div class="section-header-new">
-                <div class="section-icon-new"><!-- icon: users --></div>
-                <h4 class="section-title-new">Khách hàng được áp dụng</h4>
+            <!-- Customer Information (if applicable) -->
+            <div class="detail-section-minimal" v-if="getCustomerCountForCoupon(selectedCoupon.id) > 0">
+              <div class="section-title-minimal">
+                <img :src="UsersIcon" alt="Customers" class="section-icon-minimal" />
+                <span>Khách hàng áp dụng</span>
               </div>
-              <div class="detail-grid-new">
-                <div class="detail-item-new">
-                  <div class="detail-label-new">Số lượng khách hàng</div>
-                  <div class="customer-count-detail">{{
-                    getCustomerCountForCoupon(selectedCoupon.id)
-                  }}</div>
-                  </div>
+              <div class="detail-rows-minimal">
+                <div class="detail-row-minimal">
+                  <span class="row-label-minimal">Số lượng:</span>
+                  <span class="row-value-minimal">{{ getCustomerCountForCoupon(selectedCoupon.id) }} khách hàng</span>
                 </div>
-                  </div>
+              </div>
+            </div>
+
+            <!-- Description (if available) -->
+            <div class="detail-section-minimal" v-if="selectedCoupon.moTa">
+              <div class="section-title-minimal">
+                <img :src="ClipboardIcon" alt="Description" class="section-icon-minimal" />
+                <span>Mô tả</span>
+              </div>
+              <div class="description-content-minimal">
+                {{ selectedCoupon.moTa }}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="modal-footer detail-footer">
-          <button
-            class="btn btn-primary"
-            @click="editFromDetail(selectedCoupon)"
-          >
-            <span class="btn-icon"><!-- icon: edit --></span>
-            Chỉnh sửa
+        <!-- Minimal Footer -->
+        <div class="detail-footer-minimal">
+          <button class="edit-btn-minimal" @click="editFromDetail(selectedCoupon)">
+            <img :src="EditIcon" alt="Edit" class="btn-icon-minimal" />
+            <span>Chỉnh sửa</span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Notification Modal -->
+    <!-- Simple Notification Modal -->
     <div
       v-if="showNotificationModal"
-      class="modal-overlay notification-overlay-new"
+      class="modal-overlay-new"
       @click="closeNotificationModal"
     >
-      <div class="modal-content notification-modal-new" @click.stop>
-        <!-- Header -->
-        <div class="notification-header-new" :class="notificationData.type">
-          <div class="notification-icon-new">
-            <span v-if="notificationData.type === 'success'" class="success-icon"><!-- icon: checkmark --></span>
-            <span v-else class="error-icon">✕</span>
-          </div>
-          <div class="notification-title-new">
-            <h3 class="notification-title-text">{{ notificationData.title }}</h3>
-            <p class="notification-message">{{ notificationData.message }}</p>
-          </div>
-          <button class="notification-close-new" @click="closeNotificationModal">
-            <span class="close-icon">×</span>
-          </button>
-        </div>
-
-        <!-- Body with Details -->
-        <div class="notification-body-new" v-if="notificationData.details">
-          <div class="notification-details-new">
-            <h4 class="details-title">Chi tiết cập nhật:</h4>
-            <div class="details-grid-new">
-              <div
-                class="detail-item-new"
-                v-if="notificationData.details.tenPhieuGiamGia"
-              >
-                <span class="detail-label-new">Tên phiếu:</span>
-                <span class="detail-value-new">{{
-                  notificationData.details.tenPhieuGiamGia
-                }}</span>
-              </div>
-              <div
-                class="detail-item-new"
-                v-if="notificationData.details.loaiPhieuGiamGia"
-              >
-                <span class="detail-label-new">Loại giảm giá:</span>
-                <span class="detail-value-new">{{
-                  notificationData.details.loaiPhieuGiamGia
-                }}</span>
-              </div>
-              <div
-                class="detail-item-new"
-                v-if="notificationData.details.giaTriGiamGia"
-              >
-                <span class="detail-label-new">Giá trị:</span>
-                <span class="detail-value-new highlight-value">
-                  {{
-                    notificationData.details.loaiPhieuGiamGia === "Phần trăm"
-                      ? notificationData.details.giaTriGiamGia + "%"
-                      : formatCurrency(notificationData.details.giaTriGiamGia)
-                  }}
-                </span>
-              </div>
-              <div
-                class="detail-item-new"
-                v-if="notificationData.details.ngayBatDau"
-              >
-                <span class="detail-label-new">Ngày bắt đầu:</span>
-                <span class="detail-value-new">{{
-                  formatDate(notificationData.details.ngayBatDau)
-                }}</span>
-              </div>
-              <div
-                class="detail-item-new"
-                v-if="notificationData.details.ngayKetThuc"
-              >
-                <span class="detail-label-new">Ngày kết thúc:</span>
-                <span class="detail-value-new">{{
-                  formatDate(notificationData.details.ngayKetThuc)
-                }}</span>
-              </div>
-              <div
-                class="detail-item-new"
-                v-if="notificationData.details.trangThai"
-              >
-                <span class="detail-label-new">Trạng thái:</span>
-                <span class="detail-value-new status-badge" :class="notificationData.details.trangThai.toLowerCase()">
-                  {{ notificationData.details.trangThai }}
-                </span>
-              </div>
-              <div
-                class="detail-item-new"
-                v-if="notificationData.details.appliedCustomers !== undefined"
-              >
-                <span class="detail-label-new">Khách hàng áp dụng:</span>
-                <span class="detail-value-new customer-count">
-                  {{ notificationData.details.appliedCustomers }} khách hàng
-                </span>
-              </div>
-            </div>
+      <div class="notification-modal-minimal" @click.stop>
+        <!-- Icon -->
+        <div class="notification-icon-container" :class="notificationData.type">
+          <div class="notification-icon">
+            <img 
+              :src="notificationData.type === 'success' ? SuccessIcon : CancelIcon" 
+              alt="Notification" 
+              class="notification-icon-img"
+            />
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="notification-footer-new">
-          <button class="notification-btn-new" @click="closeNotificationModal">
-            <span class="btn-icon-new"><!-- icon: checkmark --></span>
-            Đã hiểu
+        <!-- Content -->
+        <div class="notification-content-minimal">
+          <h3 class="notification-title-minimal">{{ notificationData.title }}</h3>
+          <p class="notification-message-minimal">{{ notificationData.message }}</p>
+        </div>
+
+        <!-- Action Button -->
+        <div class="notification-action-minimal">
+          <button class="notification-btn-minimal" :class="notificationData.type" @click="closeNotificationModal">
+            <span>{{ notificationData.type === 'success' ? 'Tiếp tục' : 'Thử lại' }}</span>
           </button>
         </div>
       </div>
@@ -886,46 +689,55 @@
     <!-- Delete Confirmation Modal -->
     <div
       v-if="showDeleteModal"
-      class="modal-overlay delete-overlay"
+      class="modal-overlay-new"
       @click="closeDeleteModal"
     >
-      <div class="modal-content delete-modal" @click.stop>
-        <div class="delete-header">
-          <div class="delete-icon"><!-- icon: delete --></div>
-          <h3>Xác nhận xóa phiếu giảm giá</h3>
+      <div class="modal-content-new delete-modal-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="delete-header-minimal">
+          <div class="header-info-minimal">
+            <div class="delete-icon-minimal">
+              <img :src="WarningIcon" alt="Warning" class="header-icon" />
+            </div>
+            <div class="delete-title-minimal">
+              <h3>Xác nhận xóa phiếu giảm giá</h3>
+              <div class="delete-status-minimal">
+                <img :src="TrashIcon" alt="Delete" class="status-icon-minimal" />
+                <span class="status-text-minimal">XÓA VĨNH VIỄN</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeDeleteModal">
+            <span>×</span>
+          </button>
         </div>
 
-        <div class="delete-body">
-          <div class="delete-warning">
-            <div class="warning-icon"><!-- icon: warning --></div>
-            <p class="warning-text">
-              Bạn có chắc chắn muốn xóa phiếu giảm giá
-              <strong>"{{ deleteCouponData?.tenPhieuGiamGia }}"</strong>?
-            </p>
+        <!-- Minimal Body -->
+        <div class="delete-body-minimal" v-if="deleteCouponData">
+          <!-- Warning Card -->
+          <div class="warning-card-minimal">
+            <div class="warning-content-minimal">
+              <p class="warning-text-minimal">
+                Bạn có chắc chắn muốn xóa phiếu giảm giá
+                <strong>"{{ deleteCouponData?.tenPhieuGiamGia }}"</strong>?
+              </p>
+            </div>
           </div>
 
-          <div class="delete-details" v-if="deleteCouponData">
-            <h4>Thông tin phiếu giảm giá:</h4>
-            <div class="delete-info-grid">
-              <div class="delete-info-item">
-                <span class="info-label">Mã phiếu:</span>
-                <span class="info-value">{{
-                  deleteCouponData.maPhieuGiamGia || "N/A"
-                }}</span>
+          <!-- Coupon Info Card -->
+          <div class="coupon-info-card-minimal">
+            <div class="info-header-minimal">
+              <img :src="TagIcon" alt="Coupon" class="info-icon-minimal" />
+              <span>Thông tin phiếu giảm giá</span>
+            </div>
+            <div class="info-content-minimal">
+              <div class="info-row-minimal">
+                <span class="info-label-minimal">Mã phiếu:</span>
+                <span class="info-value-minimal">{{ deleteCouponData.maPhieuGiamGia || "N/A" }}</span>
               </div>
-              <div class="delete-info-item">
-                <span class="info-label">Loại giảm giá:</span>
-                <span class="info-value">
-                  {{
-                    !deleteCouponData.loaiPhieuGiamGia
-                      ? "Phần trăm (%)"
-                      : "Số tiền cố định (VND)"
-                  }}
-                </span>
-              </div>
-              <div class="delete-info-item">
-                <span class="info-label">Giá trị giảm:</span>
-                <span class="info-value">
+              <div class="info-row-minimal">
+                <span class="info-label-minimal">Giá trị:</span>
+                <span class="info-value-minimal">
                   {{
                     !deleteCouponData.loaiPhieuGiamGia
                       ? deleteCouponData.giaTriGiamGia + "%"
@@ -933,35 +745,25 @@
                   }}
                 </span>
               </div>
-              <div class="delete-info-item">
-                <span class="info-label">Thời gian:</span>
-                <span class="info-value">
-                  {{ formatDate(deleteCouponData.ngayBatDau) }} -
-                  {{ formatDate(deleteCouponData.ngayKetThuc) }}
+              <div class="info-row-minimal">
+                <span class="info-label-minimal">Thời gian:</span>
+                <span class="info-value-minimal">
+                  {{ formatDate(deleteCouponData.ngayBatDau) }} - {{ formatDate(deleteCouponData.ngayKetThuc) }}
                 </span>
               </div>
             </div>
           </div>
-
-          <div class="delete-consequences">
-            <h4><!-- icon: warning --> Hậu quả khi xóa:</h4>
-            <ul class="consequences-list">
-              <li>Phiếu giảm giá sẽ bị vô hiệu hóa hoàn toàn</li>
-              <li>Không thể khôi phục lại sau khi xóa</li>
-              <li>Khách hàng sẽ không thể sử dụng phiếu này</li>
-              <li>Dữ liệu thống kê sẽ bị ảnh hưởng</li>
-            </ul>
-          </div>
         </div>
 
-        <div class="delete-footer">
-          <button class="btn btn-outline" @click="closeDeleteModal">
-            <span class="btn-icon"><!-- icon: close --></span>
-            Hủy bỏ
+        <!-- Minimal Footer -->
+        <div class="delete-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeDeleteModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy bỏ</span>
           </button>
-          <button class="btn btn-danger" @click="confirmDelete">
-            <span class="btn-icon"><!-- icon: delete --></span>
-            Xác nhận xóa
+          <button class="delete-btn-minimal" @click="confirmDelete">
+            <img :src="TrashIcon" alt="Delete" class="btn-icon-minimal" />
+            <span>Xác nhận xóa</span>
           </button>
         </div>
       </div>
@@ -970,18 +772,33 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from "vue";
-import {
-  fetchAllPhieuGiamGia,
-  fetchCreatePhieuGiamGia,
-  fetchUpdatePhieuGiamGia,
-  fetchUpdateStatusPhieuGiamGia,
-  fetchDeletePhieuGiamGia,
-} from "../../services/GiamGia/PhieuGiamGiaService.js";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { dichVuPhieuGiamGia } from "../../services/GiamGia/dichVuPhieuGiamGia.js";
 import { fetchAllPhieuGiamGiaCaNhan } from "../../services/GiamGia/PhieuGiamGiaCaNhanService.js";
+import {
+  fetchCreatePhieuGiamGia,
+  fetchDeletePhieuGiamGia,
+  fetchUpdatePhieuGiamGia,
+  fetchUpdateStatusPhieuGiamGia
+} from "../../services/GiamGia/PhieuGiamGiaService.js";
 import { fetchAllKhachHang } from "../../services/KhachHang/KhachHangService.js";
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel.js";
+
+// Import icons
+import CancelIcon from "@/assets/Cancel.svg";
+import ClipboardIcon from "@/assets/Clipboard.svg";
+import ClockIcon from "@/assets/Clock.svg";
+import DateIcon from "@/assets/Date.svg";
+import EditIcon from "@/assets/Edit.svg";
+import MoneyIcon from "@/assets/Money.svg";
+import PlusIcon from "@/assets/Plus.svg";
+import StatisticsIcon from "@/assets/Statistics.svg";
+import SuccessIcon from "@/assets/Success.svg";
+import TagIcon from "@/assets/Tag:Label.svg";
+import TrashIcon from "@/assets/Trash.svg";
+import UsersIcon from "@/assets/Users.svg";
+import ViewIcon from "@/assets/View.svg";
+import WarningIcon from "@/assets/Warning.svg";
 
 // ===== REACTIVE DATA =====
 // Search and filter data
@@ -1221,9 +1038,15 @@ const allFilteredCoupons = computed(() => {
     });
   }
 
-  // Sort by discount type (LoaiGiam) - Phần trăm (%) first, then VND
+  // Sort by ID in descending order (newest first), then by discount type
   filtered.sort((a, b) => {
-    // false = Phần trăm (%), true = VND
+    // First, sort by ID descending (newest vouchers first)
+    const idComparison = (b.id || 0) - (a.id || 0);
+    if (idComparison !== 0) {
+      return idComparison;
+    }
+    
+    // If IDs are the same, sort by discount type: Phần trăm (%) first, then VND
     if (a.loaiPhieuGiamGia === b.loaiPhieuGiamGia) {
       return 0; // Same type, maintain order
     }
@@ -1868,13 +1691,15 @@ const closeModals = () => {
  * @param {Object} details - Chi tiết bổ sung
  */
 const showSuccessNotification = (message, details = null) => {
+  console.log('Showing success notification:', message, details);
   notificationData.value = {
     type: "success",
-    title: "Thành công! <!-- icon: celebration -->",
+    title: "Thành công!",
     message: message,
     details: details,
   };
   showNotificationModal.value = true;
+  console.log('Notification modal should be visible:', showNotificationModal.value);
 
   // Auto close after 5 seconds
   setTimeout(() => {
@@ -1888,13 +1713,15 @@ const showSuccessNotification = (message, details = null) => {
  * @param {Object} errorDetails - Chi tiết lỗi
  */
 const showErrorNotification = (message, errorDetails = null) => {
+  console.log('Showing error notification:', message, errorDetails);
   notificationData.value = {
     type: "error",
-    title: "Có lỗi xảy ra! <!-- icon: close -->",
+    title: "Có lỗi xảy ra!",
     message: message,
     details: errorDetails,
   };
   showNotificationModal.value = true;
+  console.log('Notification modal should be visible:', showNotificationModal.value);
 
   // Auto close after 8 seconds for errors
   setTimeout(() => {
