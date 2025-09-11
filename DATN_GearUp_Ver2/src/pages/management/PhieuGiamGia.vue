@@ -471,13 +471,18 @@
 
         <!-- Minimal Footer -->
         <div class="form-footer-minimal">
+          <button 
+            class="save-btn-minimal" 
+            @click="openConfirmSaveModal"
+            :disabled="!hasFormChanges"
+            :class="{ 'btn-disabled': !hasFormChanges }"
+          >
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
+            <span>{{ showAddModal ? "Tạo phiếu giảm giá" : "Cập nhật" }}</span>
+          </button>
           <button class="cancel-btn-minimal" @click="closeModals">
             <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
             <span>Hủy</span>
-          </button>
-          <button class="save-btn-minimal" @click="saveCoupon">
-            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
-            <span>{{ showAddModal ? "Tạo phiếu giảm giá" : "Cập nhật" }}</span>
           </button>
         </div>
       </div>
@@ -768,6 +773,91 @@
         </div>
       </div>
     </div>
+
+    <!-- Save Confirmation Modal -->
+    <div
+      v-if="showConfirmSaveModal"
+      class="modal-overlay-new"
+      @click="closeConfirmSaveModal"
+    >
+      <div class="modal-content-new confirm-save-modal-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="confirm-header-minimal">
+          <div class="header-info-minimal">
+            <div class="confirm-icon-minimal">
+              <img :src="SuccessIcon" alt="Confirm" class="header-icon" />
+            </div>
+            <div class="confirm-title-minimal">
+              <h3>{{ showAddModal ? 'Xác nhận tạo phiếu giảm giá' : 'Xác nhận cập nhật' }}</h3>
+              <div class="confirm-status-minimal">
+                <img :src="showAddModal ? PlusIcon : EditIcon" alt="Action" class="status-icon-minimal" />
+                <span class="status-text-minimal">{{ showAddModal ? 'TẠO MỚI' : 'CẬP NHẬT' }}</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeConfirmSaveModal">
+            <span>×</span>
+          </button>
+        </div>
+
+        <!-- Minimal Body -->
+        <div class="confirm-body-minimal">
+          <!-- Confirmation Card -->
+          <div class="confirm-card-minimal">
+            <div class="confirm-content-minimal">
+              <p class="confirm-text-minimal">
+                {{ showAddModal 
+                  ? `Bạn có chắc chắn muốn tạo phiếu giảm giá "${couponForm.tenPhieuGiamGia}"?`
+                  : `Bạn có chắc chắn muốn cập nhật phiếu giảm giá "${couponForm.tenPhieuGiamGia}"?`
+                }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Coupon Summary Card -->
+          <div class="coupon-summary-card-minimal">
+            <div class="summary-header-minimal">
+              <img :src="TagIcon" alt="Coupon" class="summary-icon-minimal" />
+              <span>Thông tin tóm tắt</span>
+            </div>
+            <div class="summary-content-minimal">
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Tên phiếu:</span>
+                <span class="summary-value-minimal">{{ couponForm.tenPhieuGiamGia }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Loại giảm:</span>
+                <span class="summary-value-minimal">{{ couponForm.loaiPhieuGiamGia ? 'Số tiền cố định' : 'Phần trăm (%)' }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Giá trị giảm:</span>
+                <span class="summary-value-minimal">{{ couponForm.giaTriGiamGia }}{{ couponForm.loaiPhieuGiamGia ? ' VNĐ' : '%' }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Thời gian:</span>
+                <span class="summary-value-minimal">{{ formatDate(couponForm.ngayBatDau) }} - {{ formatDate(couponForm.ngayKetThuc) }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Đối tượng:</span>
+                <span class="summary-value-minimal">{{ couponForm.idKhachHang === 'personal' ? `${selectedCustomers.length} khách hàng cụ thể` : 'Công khai' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Minimal Footer -->
+        <div class="confirm-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeConfirmSaveModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy bỏ</span>
+          </button>
+          <button class="confirm-btn-minimal" @click="confirmSave">
+            <img :src="SuccessIcon" alt="Confirm" class="btn-icon-minimal" />
+            <span>{{ showAddModal ? 'Xác nhận tạo' : 'Xác nhận cập nhật' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -816,6 +906,7 @@ const showEditModal = ref(false);
 const showDetailModal = ref(false);
 const showNotificationModal = ref(false);
 const showDeleteModal = ref(false);
+const showConfirmSaveModal = ref(false);
 
 // Selected data
 const selectedCoupon = ref(null);
@@ -853,6 +944,25 @@ const couponForm = ref({
   deleted: false,
   idKhachHang: [],
 });
+
+// ===== ORIGINAL FORM DATA FOR CHANGE DETECTION =====
+const originalCouponForm = ref({
+  maPhieuGiamGia: "",
+  tenPhieuGiamGia: "",
+  moTa: "",
+  loaiPhieuGiamGia: false,
+  giaTriGiamGia: 0,
+  hoaDonToiThieu: 0,
+  soTienToiDa: 0,
+  soLuongDung: 1,
+  ngayBatDau: "",
+  ngayKetThuc: "",
+  trangThai: true,
+  deleted: false,
+  idKhachHang: [],
+});
+
+const originalSelectedCustomers = ref([]);
 
 // ===== DATA ARRAYS =====
 const coupons = ref([]);
@@ -1364,6 +1474,10 @@ const editCoupon = (coupon) => {
     selectedCustomers.value = customerIds;
   }
 
+  // Store original form data for change detection
+  originalCouponForm.value = { ...couponForm.value };
+  originalSelectedCustomers.value = [...selectedCustomers.value];
+
   searchCustomerQuery.value = "";
 
   // Debug logging
@@ -1459,6 +1573,65 @@ const confirmDelete = async () => {
 const closeDeleteModal = () => {
   showDeleteModal.value = false;
   deleteCouponData.value = null;
+};
+
+/**
+ * Mở popup xác nhận lưu
+ */
+const openConfirmSaveModal = () => {
+  // Validate form before showing confirmation
+  if (!couponForm.value.tenPhieuGiamGia.trim()) {
+    showErrorNotification("Vui lòng nhập tên phiếu giảm giá!");
+    return;
+  }
+
+  if (couponForm.value.giaTriGiamGia <= 0) {
+    showErrorNotification("Giá trị giảm giá phải lớn hơn 0!");
+    return;
+  }
+
+  // Validate percentage discount maximum 100%
+  if (!couponForm.value.loaiPhieuGiamGia && couponForm.value.giaTriGiamGia > 100) {
+    showErrorNotification("Giá trị giảm giá theo phần trăm không được vượt quá 100%!");
+    return;
+  }
+
+  if (!couponForm.value.ngayBatDau || !couponForm.value.ngayKetThuc) {
+    showErrorNotification("Vui lòng chọn ngày bắt đầu và ngày kết thúc!");
+    return;
+  }
+
+  if (new Date(couponForm.value.ngayKetThuc) <= new Date(couponForm.value.ngayBatDau)) {
+    showErrorNotification("Ngày kết thúc phải sau ngày bắt đầu!");
+    return;
+  }
+
+  // Validate personal coupon must have customers selected
+  if (couponForm.value.idKhachHang === "personal" && selectedCustomers.value.length === 0) {
+    showErrorNotification("Vui lòng chọn ít nhất một khách hàng cho phiếu giảm giá cá nhân!");
+    return;
+  }
+
+  showConfirmSaveModal.value = true;
+};
+
+/**
+ * Đóng popup xác nhận lưu
+ */
+const closeConfirmSaveModal = () => {
+  showConfirmSaveModal.value = false;
+};
+
+/**
+ * Xác nhận lưu phiếu giảm giá
+ */
+const confirmSave = async () => {
+  try {
+    closeConfirmSaveModal();
+    await saveCoupon();
+  } catch (error) {
+    console.error("Lỗi khi xác nhận lưu:", error);
+  }
 };
 
 /**
@@ -1675,10 +1848,12 @@ const closeModals = () => {
   showEditModal.value = false;
   showDetailModal.value = false;
   showDeleteModal.value = false;
+  showConfirmSaveModal.value = false;
   editingCoupon.value = null;
   selectedCoupon.value = null;
   deleteCouponData.value = null;
   selectedCustomers.value = [];
+  originalSelectedCustomers.value = [];
   searchCustomerQuery.value = "";
   showDiscountError.value = false; // Reset validation error
   resetForm();
@@ -1742,6 +1917,7 @@ const closeNotificationModal = () => {
 const openAddModal = () => {
   resetForm();
   selectedCustomers.value = [];
+  originalSelectedCustomers.value = [];
   searchCustomerQuery.value = "";
   showAddModal.value = true;
 };
@@ -1862,11 +2038,33 @@ const getAppliedCustomers = (couponId) => {
   );
 };
 
-/**
- * Kiểm tra xem có nên hiển thị phần chọn khách hàng không
- */
+// Computed property to check if any filter is active
 const shouldShowCustomerSelection = computed(() => {
   return couponForm.value.idKhachHang === "personal";
+});
+
+// Computed property to detect if form has changes
+const hasFormChanges = computed(() => {
+  // For add modal, always allow save if form is valid
+  if (showAddModal.value) {
+    return couponForm.value.tenPhieuGiamGia.trim() !== "" && 
+           couponForm.value.giaTriGiamGia > 0 && 
+           couponForm.value.ngayBatDau !== "" && 
+           couponForm.value.ngayKetThuc !== "";
+  }
+
+  // For edit modal, check if any field has changed
+  if (showEditModal.value && editingCoupon.value) {
+    // Check form fields
+    const formChanged = JSON.stringify(couponForm.value) !== JSON.stringify(originalCouponForm.value);
+    
+    // Check selected customers
+    const customersChanged = JSON.stringify(selectedCustomers.value.sort()) !== JSON.stringify(originalSelectedCustomers.value.sort());
+    
+    return formChanged || customersChanged;
+  }
+
+  return false;
 });
 
 // Debug computed for form state
@@ -1920,6 +2118,9 @@ const resetForm = () => {
     deleted: false,
     idKhachHang: null, // This will be set to array in API calls
   };
+
+  // Reset original form data
+  originalCouponForm.value = { ...couponForm.value };
 };
 
 /**

@@ -102,6 +102,22 @@ public class PhieuGiamGiaService {
         }
     }
 
+    public void delete(Integer id) {
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
+            .orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
+        
+        // Soft delete the coupon
+        phieuGiamGia.setDeleted(true);
+        phieuGiamGiaRepository.save(phieuGiamGia);
+        
+        // Also soft delete associated personal coupons
+        List<PhieuGiamGiaCaNhan> personalCoupons = phieuGiamGiaCaNhanRepository.findByIdPhieuGiamGiaId(id);
+        for (PhieuGiamGiaCaNhan pggcn : personalCoupons) {
+            pggcn.setDeleted(true);
+            phieuGiamGiaCaNhanRepository.save(pggcn);
+        }
+    }
+
     public List<PhieuGiamGiaResponse> getActiveCouponsForCustomer(Integer idKhachHang) {
         KhachHang khachHang = khachHangRepository.findById(idKhachHang).orElseThrow(() -> new ApiException("KhachHang not found", "404"));
         List<PhieuGiamGia> activeCoupons = phieuGiamGiaRepository.findAllByDeletedFalseAndTrangThaiTrueAndLoaiPhieuGiamGiaTrue(false,true,true);

@@ -130,21 +130,20 @@
                 <span
                   :class="[
                     'status-badge',
-                    campaign.deleted ? 'status-deleted' : 
-                    (campaign.trangThai ? 'status-active' : 'status-inactive'),
+                    getCampaignStatusClass(campaign),
                   ]"
                 >
-                  {{ campaign.deleted ? "Đã xóa" : (campaign.trangThai ? "Hoạt động" : "Ngừng hoạt động") }}
+                  {{ getCampaignStatusLabel(campaign) }}
                 </span>
               </td>
               <td>
                 <span
                   :class="[
                     'status-badge',
-                    campaign.trangThai ? 'status-active' : 'status-upcoming',
+                    getCampaignTimeStatusClass(campaign),
                   ]"
                 >
-                  {{ campaign.trangThai ? "Đang diễn ra" : "Sắp diễn ra" }}
+                  {{ getCampaignTimeStatus(campaign) }}
                 </span>
               </td>
               <td>
@@ -343,13 +342,18 @@
 
         <!-- Minimal Footer -->
         <div class="form-footer-minimal">
+          <button 
+            class="save-btn-minimal" 
+            @click="openConfirmSaveModal"
+            :disabled="!hasFormChanges"
+            :class="{ 'btn-disabled': !hasFormChanges }"
+          >
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
+            <span>{{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật" }}</span>
+          </button>
           <button class="cancel-btn-minimal" @click="closeModals">
             <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
             <span>Hủy</span>
-          </button>
-          <button class="save-btn-minimal" @click="saveCampaign">
-            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
-            <span>{{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật" }}</span>
           </button>
         </div>
       </div>
@@ -372,12 +376,12 @@
               <h3>{{ selectedCampaign?.tenDotGiamGia }}</h3>
               <div class="coupon-status-minimal" v-if="selectedCampaign">
                 <img 
-                  :src="selectedCampaign.trangThai ? SuccessIcon : CancelIcon" 
+                  :src="getCampaignActualStatus(selectedCampaign) === 'active' ? SuccessIcon : CancelIcon" 
                   alt="Status" 
                   class="status-icon-minimal" 
                 />
                 <span class="status-text-minimal">
-                  {{ selectedCampaign.trangThai ? 'ĐANG HOẠT ĐỘNG' : 'NGỪNG HOẠT ĐỘNG' }}
+                  {{ getCampaignStatusLabel(selectedCampaign).toUpperCase() }}
                 </span>
               </div>
             </div>
@@ -457,8 +461,8 @@
                 </div>
                 <div class="detail-row-minimal">
                   <span class="row-label-minimal">Trạng thái:</span>
-                  <span class="row-value-minimal" :class="selectedCampaign.trangThai ? 'success-text' : 'warning-text'">
-                    {{ selectedCampaign.trangThai ? 'Đang hoạt động' : 'Ngừng hoạt động' }}
+                  <span class="row-value-minimal" :class="getCampaignActualStatus(selectedCampaign) === 'active' ? 'success-text' : 'warning-text'">
+                    {{ getCampaignStatusLabel(selectedCampaign) }}
                   </span>
                 </div>
               </div>
@@ -948,11 +952,96 @@
         </div>
       </div>
     </div>
+
+    <!-- Save Confirmation Modal -->
+    <div
+      v-if="showConfirmSaveModal"
+      class="modal-overlay-new"
+      @click="closeConfirmSaveModal"
+    >
+      <div class="modal-content-new confirm-save-modal-minimal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="confirm-header-minimal">
+          <div class="header-info-minimal">
+            <div class="confirm-icon-minimal">
+              <img :src="SuccessIcon" alt="Confirm" class="header-icon" />
+            </div>
+            <div class="confirm-title-minimal">
+              <h3>{{ showAddModal ? 'Xác nhận tạo đợt giảm giá' : 'Xác nhận cập nhật' }}</h3>
+              <div class="confirm-status-minimal">
+                <img :src="showAddModal ? PlusIcon : EditIcon" alt="Action" class="status-icon-minimal" />
+                <span class="status-text-minimal">{{ showAddModal ? 'TẠO MỚI' : 'CẬP NHẬT' }}</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeConfirmSaveModal">
+            <span>×</span>
+          </button>
+        </div>
+
+        <!-- Minimal Body -->
+        <div class="confirm-body-minimal">
+          <!-- Confirmation Card -->
+          <div class="confirm-card-minimal">
+            <div class="confirm-content-minimal">
+              <p class="confirm-text-minimal">
+                {{ showAddModal 
+                  ? `Bạn có chắc chắn muốn tạo đợt giảm giá "${formData.tenDotGiamGia}"?`
+                  : `Bạn có chắc chắn muốn cập nhật đợt giảm giá "${formData.tenDotGiamGia}"?`
+                }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Campaign Summary Card -->
+          <div class="coupon-summary-card-minimal">
+            <div class="summary-header-minimal">
+              <img :src="TagIcon" alt="Campaign" class="summary-icon-minimal" />
+              <span>Thông tin tóm tắt</span>
+            </div>
+            <div class="summary-content-minimal">
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Tên đợt giảm giá:</span>
+                <span class="summary-value-minimal">{{ formData.tenDotGiamGia }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Giá trị giảm:</span>
+                <span class="summary-value-minimal">{{ formatDiscountValue(formData.giaTriGiamGia) }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Ngày bắt đầu:</span>
+                <span class="summary-value-minimal">{{ formatDateForDisplay(formData.ngayBatDau) }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Ngày kết thúc:</span>
+                <span class="summary-value-minimal">{{ formatDateForDisplay(formData.ngayKetThuc) }}</span>
+              </div>
+              <div class="summary-row-minimal">
+                <span class="summary-label-minimal">Trạng thái:</span>
+                <span class="summary-value-minimal">{{ formData.trangThai ? 'Hoạt động' : 'Tạm dừng' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Minimal Footer -->
+        <div class="confirm-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeConfirmSaveModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy bỏ</span>
+          </button>
+          <button class="confirm-btn-minimal" @click="confirmSave">
+            <img :src="SuccessIcon" alt="Confirm" class="btn-icon-minimal" />
+            <span>{{ showAddModal ? 'Xác nhận tạo' : 'Xác nhận cập nhật' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch, nextTick } from "vue";
 import {
     fetchAllChiTietDotGiamGia,
     fetchCreateChiTietDotGiamGia,
@@ -996,6 +1085,7 @@ const showDetailModal = ref(false);
 const showApplyModal = ref(false);
 const showNotificationModal = ref(false);
 const showDeleteModal = ref(false);
+const showConfirmSaveModal = ref(false);
 const editingCampaign = ref(null);
 const selectedCampaign = ref(null);
 const applyingCampaign = ref(null);
@@ -1024,6 +1114,16 @@ const formData = ref({
   deleted: false,
 });
 
+// Original form data for change detection
+const originalFormData = ref({
+  tenDotGiamGia: "",
+  giaTriGiamGia: 0,
+  ngayBatDau: "",
+  ngayKetThuc: "",
+  trangThai: true,
+  deleted: false,
+});
+
 // Mock data
 const campaigns = ref([]);
 const campaignDetail = ref([]);
@@ -1037,6 +1137,7 @@ const applyFormData = ref({
 const fetchDGG = async () => {
   try {
     const res = await fetchAllDotGiamGia();
+    
     // Validate and update status for all campaigns
     campaigns.value = res.data.map((campaign) =>
       validateCampaignStatus(campaign)
@@ -1309,6 +1410,25 @@ const minEndDate = computed(() => {
   return minEnd.toISOString().split('T')[0];
 });
 
+// Computed property to detect if form has changes
+const hasFormChanges = computed(() => {
+  // For add modal, always allow save if form is valid
+  if (showAddModal.value) {
+    return formData.value.tenDotGiamGia.trim() !== "" && 
+           formData.value.giaTriGiamGia > 0 && 
+           formData.value.ngayBatDau !== "" && 
+           formData.value.ngayKetThuc !== "";
+  }
+
+  // For edit modal, check if any field has changed
+  if (showEditModal.value && editingCampaign.value) {
+    const hasChanged = JSON.stringify(formData.value) !== JSON.stringify(originalFormData.value);
+    return hasChanged;
+  }
+
+  return false;
+});
+
 // Watch for start date changes and auto-adjust end date if needed
 watch(
   () => formData.value.ngayBatDau,
@@ -1333,11 +1453,11 @@ const validateCampaignStatus = (campaign) => {
   const startDate = new Date(campaign.ngayBatDau);
   const endDate = new Date(campaign.ngayKetThuc);
 
-  // If current date is not within campaign period, set status to false
-  if (!(now >= startDate && now <= endDate)) {
+  // If campaign has ended (past end date), force it to inactive
+  if (now > endDate) {
     campaign.trangThai = false;
   }
-
+  
   return campaign;
 };
 
@@ -1489,6 +1609,9 @@ const editCampaign = (campaign) => {
     deleted: false, // Always keep deleted as false during editing
   };
   
+  // Store original form data for change detection - use shallow copy like PhieuGiamGia
+  originalFormData.value = { ...formData.value };
+  
   // Đóng popup chi tiết nếu đang mở
   if (showDetailModal.value) {
     showDetailModal.value = false;
@@ -1526,16 +1649,6 @@ const saveCampaign = async () => {
     ) {
       showErrorNotification("Ngày không hợp lệ", "Ngày kết thúc phải sau ngày bắt đầu");
       return;
-    }
-
-    // Auto-validate status based on dates before saving
-    const now = new Date();
-    const startDate = new Date(formData.value.ngayBatDau);
-    const endDate = new Date(formData.value.ngayKetThuc);
-
-    // If current date is not within campaign period, force status to false
-    if (!(now >= startDate && now <= endDate)) {
-      formData.value.trangThai = false;
     }
 
     if (showAddModal.value) {
@@ -1577,6 +1690,19 @@ const saveCampaign = async () => {
 
     // Refresh data after save
     await fetchDGG();
+    
+    // Force reactivity update
+    await nextTick();
+    
+    // If we're editing and the detail modal is open, update the selected campaign
+    if (showEditModal.value && editingCampaign.value && selectedCampaign.value?.id === editingCampaign.value.id) {
+      // Find the updated campaign in the campaigns array
+      const updatedCampaign = campaigns.value.find(c => c.id === editingCampaign.value.id);
+      if (updatedCampaign) {
+        selectedCampaign.value = { ...updatedCampaign };
+      }
+    }
+    
     closeModals();
   } catch (error) {
     console.error("Lỗi khi lưu đợt giảm giá:", error);
@@ -1591,6 +1717,7 @@ const closeModals = () => {
   showAddModal.value = false;
   showEditModal.value = false;
   showDetailModal.value = false;
+  showConfirmSaveModal.value = false;
   editingCampaign.value = null;
   selectedCampaign.value = null;
   resetForm();
@@ -1609,6 +1736,9 @@ const resetForm = () => {
     trangThai: true,
     deleted: false,
   };
+
+  // Reset original form data - use shallow copy like PhieuGiamGia
+  originalFormData.value = { ...formData.value };
 };
 
 // Search for products in apply modal
@@ -1982,7 +2112,7 @@ const openAddModal = () => {
 const showSuccessNotification = (message, details = null) => {
   notificationData.value = {
     type: "success",
-    title: "Thành công! <!-- icon: celebration -->",
+    title: "Thành công!",
     message: message,
     details: details,
   };
@@ -2042,6 +2172,58 @@ const closeDeleteModal = () => {
 };
 
 /**
+ * Mở popup xác nhận lưu
+ */
+const openConfirmSaveModal = () => {
+  // Validate form before showing confirmation
+  if (!formData.value.tenDotGiamGia.trim()) {
+    showErrorNotification("Vui lòng nhập tên đợt giảm giá!");
+    return;
+  }
+
+  if (formData.value.giaTriGiamGia <= 0) {
+    showErrorNotification("Giá trị giảm giá phải lớn hơn 0!");
+    return;
+  }
+
+  if (formData.value.giaTriGiamGia > 100) {
+    showErrorNotification("Giá trị giảm giá không được vượt quá 100%!");
+    return;
+  }
+
+  if (!formData.value.ngayBatDau || !formData.value.ngayKetThuc) {
+    showErrorNotification("Vui lòng chọn ngày bắt đầu và ngày kết thúc!");
+    return;
+  }
+
+  if (new Date(formData.value.ngayKetThuc) <= new Date(formData.value.ngayBatDau)) {
+    showErrorNotification("Ngày kết thúc phải sau ngày bắt đầu!");
+    return;
+  }
+
+  showConfirmSaveModal.value = true;
+};
+
+/**
+ * Đóng popup xác nhận lưu
+ */
+const closeConfirmSaveModal = () => {
+  showConfirmSaveModal.value = false;
+};
+
+/**
+ * Xác nhận lưu đợt giảm giá
+ */
+const confirmSave = async () => {
+  try {
+    closeConfirmSaveModal();
+    await saveCampaign();
+  } catch (error) {
+    console.error("Lỗi khi xác nhận lưu:", error);
+  }
+};
+
+/**
  * Xác nhận xóa đợt giảm giá
  * @returns {Promise<void>}
  */
@@ -2083,6 +2265,79 @@ onMounted(async () => {
 });
 
 // Helper functions
+const getCampaignActualStatus = (campaign) => {
+  if (campaign.deleted) return "deleted";
+  
+  const now = new Date();
+  const startDate = new Date(campaign.ngayBatDau);
+  const endDate = new Date(campaign.ngayKetThuc);
+  
+  // If campaign has ended
+  if (now > endDate) {
+    return "expired";
+  }
+  
+  // If campaign hasn't started yet
+  if (now < startDate) {
+    return campaign.trangThai ? "upcoming" : "inactive";
+  }
+  
+  // Campaign is in progress
+  return campaign.trangThai ? "active" : "inactive";
+};
+
+const getCampaignStatusLabel = (campaign) => {
+  const status = getCampaignActualStatus(campaign);
+  
+  switch (status) {
+    case "deleted": return "Đã xóa";
+    case "expired": return "Đã kết thúc";
+    case "active": return "Hoạt động";
+    case "inactive": return "Ngừng hoạt động";
+    case "upcoming": return "Sắp diễn ra";
+    default: return "Ngừng hoạt động";
+  }
+};
+
+const getCampaignStatusClass = (campaign) => {
+  const status = getCampaignActualStatus(campaign);
+  
+  switch (status) {
+    case "deleted": return "status-deleted";
+    case "expired": return "status-expired";
+    case "active": return "status-active";
+    case "inactive": return "status-inactive";
+    case "upcoming": return "status-upcoming";
+    default: return "status-inactive";
+  }
+};
+
+const getCampaignTimeStatus = (campaign) => {
+  const status = getCampaignActualStatus(campaign);
+  
+  switch (status) {
+    case "deleted": return "Đã xóa";
+    case "expired": return "Đã kết thúc";
+    case "active": return "Đang diễn ra";
+    case "inactive": return "Tạm dừng";
+    case "upcoming": return "Sắp diễn ra";
+    default: return "Sắp diễn ra";
+  }
+};
+
+const getCampaignTimeStatusClass = (campaign) => {
+  const status = getCampaignActualStatus(campaign);
+  
+  switch (status) {
+    case "deleted": return "status-deleted";
+    case "expired": return "status-expired";
+    case "active": return "status-active";
+    case "inactive": return "status-inactive";
+    case "upcoming": return "status-upcoming";
+    default: return "status-upcoming";
+  }
+};
+
 const getCampaignDuration = (campaign) => {
   const startDate = new Date(campaign.ngayBatDau);
   const endDate = new Date(campaign.ngayKetThuc);
@@ -2978,15 +3233,18 @@ const formatDiscountValue = (value) => {
   backdrop-filter: blur(4px);
 }
 
-.modal-content {
+.modal-content-new {
   background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  animation: modalSlideIn 0.3s ease-out;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 800px;
+  width: 90%;
+  max-height: 85vh;
+  overflow: hidden;
+  animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes modalSlideIn {
@@ -3036,8 +3294,28 @@ const formatDiscountValue = (value) => {
   color: #374151;
 }
 
+.modal-form-minimal {
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+.modal-form-minimal .form-body-minimal {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.modal-form-minimal .form-footer-minimal {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+}
+
 .modal-body {
   padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .modal-footer {
@@ -3047,6 +3325,7 @@ const formatDiscountValue = (value) => {
   padding: 1.5rem;
   border-top: 1px solid var(--border-color);
   background: #ffffff;
+  flex-shrink: 0;
 }
 
 .modal-footer .btn {
@@ -4047,6 +4326,18 @@ const formatDiscountValue = (value) => {
   border: 1px solid #fecaca;
 }
 
+.status-expired {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.status-upcoming {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
 .time-remaining {
   color: #dc2626;
   font-weight: 700;
@@ -4806,8 +5097,8 @@ const formatDiscountValue = (value) => {
 }
 
 .delete-header {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
+  background: #e2e8f0;
+  color: #334155;
   padding: 2rem;
   text-align: center;
   border-radius: 12px 12px 0 0;
@@ -4817,21 +5108,31 @@ const formatDiscountValue = (value) => {
 .delete-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
+  background: transparent;
   width: 80px;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem auto;
+  color: #334155;
+}
+
+.delete-icon svg,
+.delete-icon svg *,
+.delete-icon path,
+.delete-icon circle,
+.delete-icon rect {
+  background: transparent !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
 }
 
 .delete-header h3 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  color: #334155;
 }
 
 .delete-body {

@@ -47,4 +47,10 @@ public class DotGiamGiaController {
         dotGiamGiaService.updateStatus(id);
         return new ResponseObject<>(null, "Xoá đợt giảm giá thành công");
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseObject<?> delete(@PathVariable Integer id) {
+        dotGiamGiaService.delete(id);
+        return new ResponseObject<>(null, "Xóa đợt giảm giá thành công");
+    }
 }

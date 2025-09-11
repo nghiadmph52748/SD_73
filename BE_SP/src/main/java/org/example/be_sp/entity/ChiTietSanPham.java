@@ -6,8 +6,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.Nationalized;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,11 +33,6 @@ public class ChiTietSanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    @Generated(GenerationTime.ALWAYS)
-    @ColumnDefault("'CTSP'+right('00000'+CONVERT([varchar](5), [ID]), 5)")
-    @Column(name = "ma_chi_tiet_san_pham", length = 9, updatable = false, insertable = false)
-    private String maChiTietSanPham;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_san_pham", nullable = false)

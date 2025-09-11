@@ -140,12 +140,12 @@
   justify-items: stretch;
 }
 
-/* Center the button group */
+/* Align the button group to the right */
 .button-group {
   grid-column: -4 / -1;
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -228,7 +228,7 @@
 
 .button-group {
   min-height: auto;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -310,7 +310,7 @@
 .action-buttons-row .action-buttons {
   display: flex !important;
   gap: 1rem !important;
-  justify-content: center !important;
+  justify-content: flex-end !important;
   align-items: center !important;
   flex-wrap: wrap !important;
 }
@@ -1979,21 +1979,21 @@ button.create-btn:hover {
 }
 
 .info-header-minimal {
-  background: #f8fafc;
+  background: #4ade80;
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   border-bottom: 1px solid #e2e8f0;
   font-weight: 600;
-  color: #374151;
+  color: #ffffff;
   font-size: 0.875rem;
 }
 
 .info-icon-minimal {
   width: 16px;
   height: 16px;
-  filter: invert(37%) sepia(93%) saturate(2618%) hue-rotate(211deg) brightness(99%) contrast(101%);
+  filter: brightness(0) invert(1);
 }
 
 .info-content-minimal {
@@ -2038,9 +2038,9 @@ button.create-btn:hover {
 }
 
 .cancel-btn-minimal {
-  background: white;
-  color: #374151;
-  border: 2px solid #e5e7eb;
+  background: #ffffff;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
   border-radius: 12px;
   padding: 0.875rem 1.5rem;
   font-weight: 600;
@@ -2050,14 +2050,12 @@ button.create-btn:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .cancel-btn-minimal:hover {
   background: #f9fafb;
-  border-color: #d1d5db;
+  border-color: #9ca3af;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .cancel-btn-minimal .btn-icon-minimal {
@@ -2151,21 +2149,21 @@ button.create-btn:hover {
 
 .detail-header-minimal {
   padding: 2rem 2rem 1.5rem 2rem;
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  color: white;
+  background: #e2e8f0;
+  color: #334155;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
 .coupon-icon-minimal {
-  background: rgba(255, 255, 255, 0.2);
+  background: #4ade80;
   border-radius: 12px;
   padding: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
   flex-shrink: 0;
 }
 
@@ -2173,6 +2171,37 @@ button.create-btn:hover {
   width: 24px;
   height: 24px;
   filter: brightness(0) invert(1);
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  mask: none !important;
+  -webkit-mask: none !important;
+}
+
+/* Override any SVG elements that might have white backgrounds */
+.coupon-icon-minimal .header-icon svg,
+.coupon-icon-minimal .header-icon svg *,
+.coupon-icon-minimal .header-icon path,
+.coupon-icon-minimal .header-icon circle,
+.coupon-icon-minimal .header-icon rect {
+  background: transparent !important;
+  fill: white !important;
+  stroke: white !important;
+}
+
+/* Hide any background circles in the SVG */
+.coupon-icon-minimal .header-icon svg circle[fill="#ffffff"],
+.coupon-icon-minimal .header-icon svg circle[fill="white"],
+.coupon-icon-minimal .header-icon svg rect[fill="#ffffff"],
+.coupon-icon-minimal .header-icon svg rect[fill="white"] {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.coupon-icon-minimal .header-icon::before,
+.coupon-icon-minimal .header-icon::after {
+  display: none !important;
 }
 
 .coupon-title-minimal {
@@ -2184,7 +2213,7 @@ button.create-btn:hover {
   margin: 0 0 0.5rem 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: #1f2937;
   line-height: 1.2;
 }
 
@@ -2193,7 +2222,7 @@ button.create-btn:hover {
   align-items: center;
   gap: 0.5rem;
   padding: 0.25rem 0.75rem;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(51, 65, 85, 0.1);
   border-radius: 20px;
   backdrop-filter: blur(10px);
   width: fit-content;
@@ -2202,11 +2231,11 @@ button.create-btn:hover {
 .coupon-status-minimal .status-icon-minimal {
   width: 14px;
   height: 14px;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) saturate(100%) invert(26%) sepia(10%) saturate(1050%) hue-rotate(201deg) brightness(91%) contrast(90%);
 }
 
 .coupon-status-minimal .status-text-minimal {
-  color: white;
+  color: #334155;
   font-weight: 600;
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -2268,7 +2297,6 @@ button.create-btn:hover {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
 }
 
 .primary-card .card-icon-minimal {
@@ -2351,7 +2379,7 @@ button.create-btn:hover {
 .section-icon-minimal {
   width: 16px;
   height: 16px;
-  filter: invert(37%) sepia(93%) saturate(2618%) hue-rotate(211deg) brightness(99%) contrast(101%);
+  filter: invert(65%) sepia(78%) saturate(394%) hue-rotate(75deg) brightness(102%) contrast(89%);
 }
 
 .detail-rows-minimal {
@@ -2565,7 +2593,7 @@ button.create-btn:hover {
 /* Form Header */
 .form-header-minimal {
   padding: 2rem 2rem 1.5rem 2rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
   display: flex;
   justify-content: space-between;
@@ -2586,7 +2614,6 @@ button.create-btn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
   flex-shrink: 0;
 }
 
@@ -2594,6 +2621,30 @@ button.create-btn:hover {
   width: 24px;
   height: 24px;
   filter: brightness(0) invert(1);
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Override any SVG elements that might have white backgrounds */
+.form-icon-minimal .header-icon svg,
+.form-icon-minimal .header-icon svg *,
+.form-icon-minimal .header-icon path,
+.form-icon-minimal .header-icon circle,
+.form-icon-minimal .header-icon rect {
+  background: transparent !important;
+  fill: white !important;
+  stroke: white !important;
+}
+
+/* Hide any background circles in the SVG */
+.form-icon-minimal .header-icon svg circle[fill="#ffffff"],
+.form-icon-minimal .header-icon svg circle[fill="white"],
+.form-icon-minimal .header-icon svg rect[fill="#ffffff"],
+.form-icon-minimal .header-icon svg rect[fill="white"] {
+  display: none !important;
+  opacity: 0 !important;
 }
 
 .form-title-minimal {
@@ -2613,7 +2664,7 @@ button.create-btn:hover {
   align-items: center;
   gap: 0.25rem;
   padding: 0.125rem 0.5rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(51, 65, 85, 0.1);
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   width: fit-content;
@@ -2672,7 +2723,7 @@ button.create-btn:hover {
 .section-icon-minimal {
   width: 16px;
   height: 16px;
-  filter: invert(37%) sepia(93%) saturate(2618%) hue-rotate(211deg) brightness(99%) contrast(101%);
+  filter: invert(65%) sepia(78%) saturate(394%) hue-rotate(75deg) brightness(102%) contrast(89%);
 }
 
 .form-content-minimal {
@@ -2798,11 +2849,11 @@ button.create-btn:hover {
 
 /* Form Footer */
 .form-footer-minimal {
-  padding: 1.5rem 2rem;
+  padding: 1rem 2rem;
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 1rem;
 }
 
@@ -2826,6 +2877,22 @@ button.create-btn:hover {
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+}
+
+.save-btn-minimal:disabled,
+.save-btn-minimal.btn-disabled {
+  background: #9ca3af !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.save-btn-minimal:disabled:hover,
+.save-btn-minimal.btn-disabled:hover {
+  background: #9ca3af !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .save-btn-minimal .btn-icon-minimal {
