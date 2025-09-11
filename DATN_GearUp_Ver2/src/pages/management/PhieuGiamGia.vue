@@ -1038,9 +1038,15 @@ const getDetailedStatus = (coupon) => {
   const startDate = new Date(coupon.ngayBatDau);
   const endDate = new Date(coupon.ngayKetThuc);
   
+  // Get today's date without time for comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(coupon.ngayKetThuc);
+  endDateOnly.setHours(0, 0, 0, 0);
+  
   if (now < startDate) {
     return "Sắp diễn ra";
-  } else if (now > endDate) {
+  } else if (today > endDateOnly) {
     return "Hết hạn";
   } else if (coupon.trangThai === true) {
     return "Đang diễn ra";
@@ -1242,9 +1248,15 @@ const getCouponStatus = (coupon) => {
   const startDate = new Date(coupon.ngayBatDau);
   const endDate = new Date(coupon.ngayKetThuc);
 
+  // Get today's date without time for comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(coupon.ngayKetThuc);
+  endDateOnly.setHours(0, 0, 0, 0);
+
   if (now < startDate) {
     return "upcoming";
-  } else if (now > endDate) {
+  } else if (today > endDateOnly) {
     return "expired";
   } else {
     return "active";
@@ -1304,8 +1316,15 @@ const validateAndUpdateStatus = async (coupon) => {
   const startDate = new Date(coupon.ngayBatDau);
   const endDate = new Date(coupon.ngayKetThuc);
 
+  // Get today's date without time for comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(coupon.ngayKetThuc);
+  endDateOnly.setHours(0, 0, 0, 0);
+
   // Kiểm tra nếu ngày hiện tại không nằm trong khoảng ngayBatDau và ngayKetThuc
-  if (now < startDate || now > endDate) {
+  // Only mark as expired if today is AFTER the end date (not on the same day)
+  if (now < startDate || today > endDateOnly) {
     // Cập nhật trạng thái thành false nếu không còn trong thời gian hiệu lực
     if (coupon.trangThai !== false) {
       try {
@@ -2292,12 +2311,10 @@ watch(
 
 // ===== LIFECYCLE HOOKS =====
 onMounted(() => {
-  // Set default dates
-  const today = new Date();
-  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-
-  fromDate.value = today.toISOString().split("T")[0];
-  toDate.value = nextWeek.toISOString().split("T")[0];
+  // Don't set default date filters to avoid filtering out expired coupons
+  // Users can set their own date ranges if needed
+  fromDate.value = "";
+  toDate.value = "";
 
   // Fetch initial data
   fetchPGG();

@@ -62,9 +62,18 @@ public class PhieuGiamGiaService {
     }
 
     public void update(Integer id, PhieuGiamGiaRequest request) {
-        PhieuGiamGia pgg = MapperUtils.map(request, PhieuGiamGia.class);
-        pgg.setId(id);
-        PhieuGiamGia saved = phieuGiamGiaRepository.save(pgg);
+        // Fetch existing entity to preserve generated fields
+        PhieuGiamGia existingPgg = phieuGiamGiaRepository.findById(id)
+            .orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
+        
+        // Map request to new entity
+        PhieuGiamGia updatedPgg = MapperUtils.map(request, PhieuGiamGia.class);
+        updatedPgg.setId(id);
+        
+        // Preserve the generated maPhieuGiamGia field
+        updatedPgg.setMaPhieuGiamGia(existingPgg.getMaPhieuGiamGia());
+        
+        PhieuGiamGia saved = phieuGiamGiaRepository.save(updatedPgg);
 
         List<PhieuGiamGiaCaNhan> existingPersonalCoupons = phieuGiamGiaCaNhanRepository.findByIdPhieuGiamGiaId(id);
         for (PhieuGiamGiaCaNhan existing : existingPersonalCoupons) {
@@ -90,13 +99,13 @@ public class PhieuGiamGiaService {
 
     public void updateStatus(Integer id) {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.getById(id);
-        phieuGiamGia.setDeleted(!phieuGiamGia.getDeleted()); // Toggle deleted status
+        phieuGiamGia.setTrangThai(!phieuGiamGia.getTrangThai()); // Toggle trangThai status (active/inactive)
         phieuGiamGiaRepository.save(phieuGiamGia);
         
         // Also update personal coupons if they exist
         if (phieuGiamGia.getPhieuGiamGiaCaNhans() != null && !phieuGiamGia.getPhieuGiamGiaCaNhans().isEmpty()) {
             for (PhieuGiamGiaCaNhan pggcn : phieuGiamGia.getPhieuGiamGiaCaNhans()) {
-                pggcn.setDeleted(phieuGiamGia.getDeleted());
+                pggcn.setTrangThai(phieuGiamGia.getTrangThai()); // Update trangThai to match parent coupon
                 phieuGiamGiaCaNhanRepository.save(pggcn);
             }
         }

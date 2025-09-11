@@ -292,6 +292,18 @@
                         <option :value="true">Đang hoạt động</option>
                         <option :value="false">Ngừng hoạt động</option>
                       </select>
+                      <!-- Auto-update status notification -->
+                      <div v-if="statusAutoUpdated" class="form-help-minimal auto-update-notification">
+                        <img :src="SuccessIcon" alt="Auto Updated" class="help-icon-minimal" />
+                        <span>{{ statusAutoUpdateMessage }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Auto-update notification for Add Modal -->
+                  <div v-if="showAddModal && statusAutoUpdated" class="form-row-minimal single-column">
+                    <div class="form-help-minimal auto-update-notification">
+                      <img :src="SuccessIcon" alt="Auto Updated" class="help-icon-minimal" />
+                      <span>{{ statusAutoUpdateMessage }}</span>
                     </div>
                   </div>
                 </div>
@@ -1092,6 +1104,10 @@ const applyingCampaign = ref(null);
 const selectedProducts = ref([]);
 const deleteCampaignData = ref(null);
 
+// Auto-update status indicators
+const statusAutoUpdated = ref(false);
+const statusAutoUpdateMessage = ref("");
+
 // Notification data
 const notificationData = ref({
   type: "success",
@@ -1191,10 +1207,12 @@ const filteredCampaigns = computed(() => {
     } else if (statusFilter.value === "upcoming") {
       filtered = filtered.filter((campaign) => campaign.trangThai === false);
     } else if (statusFilter.value === "expired") {
-      const now = new Date();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       filtered = filtered.filter((campaign) => {
-        const endDate = new Date(campaign.ngayKetThuc);
-        return endDate < now;
+        const endDateOnly = new Date(campaign.ngayKetThuc);
+        endDateOnly.setHours(0, 0, 0, 0);
+        return today > endDateOnly;
       });
     }
   }
@@ -1292,10 +1310,12 @@ const totalCampaigns = computed(() => {
     } else if (statusFilter.value === "upcoming") {
       filtered = filtered.filter((campaign) => campaign.trangThai === false);
     } else if (statusFilter.value === "expired") {
-      const now = new Date();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       filtered = filtered.filter((campaign) => {
-        const endDate = new Date(campaign.ngayKetThuc);
-        return endDate < now;
+        const endDateOnly = new Date(campaign.ngayKetThuc);
+        endDateOnly.setHours(0, 0, 0, 0);
+        return today > endDateOnly;
       });
     }
   }
@@ -1443,6 +1463,97 @@ watch(
         newEndDate.setDate(startDate.getDate() + 1);
         formData.value.ngayKetThuc = newEndDate.toISOString().split('T')[0];
       }
+      
+      // Also update status based on new start date
+      const now = new Date();
+      const originalStatus = formData.value.trangThai;
+      // Set time to end of day for end date comparison
+      const endDateWithTime = new Date(formData.value.ngayKetThuc);
+      endDateWithTime.setHours(23, 59, 59, 999);
+      
+      // Get today's date without time for comparison
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const endDateOnly = new Date(formData.value.ngayKetThuc);
+      endDateOnly.setHours(0, 0, 0, 0);
+      
+      if (today > endDateOnly) {
+        // Campaign has ended - set to inactive (only after the end date has passed)
+        formData.value.trangThai = false;
+        if (originalStatus !== false) {
+          statusAutoUpdated.value = true;
+          statusAutoUpdateMessage.value = "Trạng thái đã được tự động chuyển thành 'Ngừng hoạt động' vì chiến dịch đã kết thúc";
+          setTimeout(() => { statusAutoUpdated.value = false; }, 5000);
+        }
+      } else if (startDate <= now && now <= endDateWithTime) {
+        // Campaign is currently active period - set to active
+        formData.value.trangThai = true;
+        if (originalStatus !== true) {
+          statusAutoUpdated.value = true;
+          statusAutoUpdateMessage.value = "Trạng thái đã được tự động chuyển thành 'Đang hoạt động' vì chiến dịch đang trong thời gian diễn ra";
+          setTimeout(() => { statusAutoUpdated.value = false; }, 5000);
+        }
+      } else if (startDate > now) {
+        // Campaign hasn't started yet - set to active (for upcoming campaigns)
+        formData.value.trangThai = true;
+        if (originalStatus !== true) {
+          statusAutoUpdated.value = true;
+          statusAutoUpdateMessage.value = "Trạng thái đã được tự động chuyển thành 'Đang hoạt động' cho chiến dịch sắp diễn ra";
+          setTimeout(() => { statusAutoUpdated.value = false; }, 5000);
+        }
+      }
+    }
+  }
+);
+
+// Watch for end date changes and auto-update status based on campaign timeline
+watch(
+  () => formData.value.ngayKetThuc,
+  (newEndDate) => {
+    if (newEndDate && formData.value.ngayBatDau) {
+      const now = new Date();
+      const startDate = new Date(formData.value.ngayBatDau);
+      const endDate = new Date(newEndDate);
+      const originalStatus = formData.value.trangThai;
+      
+      // Set time to end of day for end date comparison
+      endDate.setHours(23, 59, 59, 999);
+      
+      // Get today's date without time for comparison
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const endDateOnly = new Date(newEndDate);
+      endDateOnly.setHours(0, 0, 0, 0);
+      
+      // Auto-update status based on campaign timeline
+      if (today > endDateOnly) {
+        // Campaign has ended - set to inactive (only after the end date has passed)
+        formData.value.trangThai = false;
+        if (originalStatus !== false) {
+          statusAutoUpdated.value = true;
+          statusAutoUpdateMessage.value = "Trạng thái đã được tự động chuyển thành 'Ngừng hoạt động' vì ngày kết thúc đã qua";
+          setTimeout(() => { statusAutoUpdated.value = false; }, 5000);
+        }
+        console.log("Campaign end date has passed - automatically set to inactive");
+      } else if (startDate <= now && now <= endDate) {
+        // Campaign is currently active period - set to active (user can still change this)
+        formData.value.trangThai = true;
+        if (originalStatus !== true) {
+          statusAutoUpdated.value = true;
+          statusAutoUpdateMessage.value = "Trạng thái đã được tự động chuyển thành 'Đang hoạt động' vì chiến dịch đang trong thời gian diễn ra";
+          setTimeout(() => { statusAutoUpdated.value = false; }, 5000);
+        }
+        console.log("Campaign is in active period - automatically set to active");
+      } else if (startDate > now) {
+        // Campaign hasn't started yet - set to active (for upcoming campaigns)
+        formData.value.trangThai = true;
+        if (originalStatus !== true) {
+          statusAutoUpdated.value = true;
+          statusAutoUpdateMessage.value = "Trạng thái đã được tự động chuyển thành 'Đang hoạt động' cho chiến dịch sắp diễn ra";
+          setTimeout(() => { statusAutoUpdated.value = false; }, 5000);
+        }
+        console.log("Campaign is upcoming - set to active (will be upcoming status)");
+      }
     }
   }
 );
@@ -1453,8 +1564,14 @@ const validateCampaignStatus = (campaign) => {
   const startDate = new Date(campaign.ngayBatDau);
   const endDate = new Date(campaign.ngayKetThuc);
 
-  // If campaign has ended (past end date), force it to inactive
-  if (now > endDate) {
+  // Get today's date without time for comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(campaign.ngayKetThuc);
+  endDateOnly.setHours(0, 0, 0, 0);
+
+  // If campaign has ended (after end date has passed completely), force it to inactive
+  if (today > endDateOnly) {
     campaign.trangThai = false;
   }
   
@@ -1497,10 +1614,12 @@ const validateInactiveCampaigns = async () => {
 
 // Auto-update discount priorities when campaigns end
 const updateDiscountPriorities = async () => {
-  const now = new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const endedCampaigns = campaigns.value.filter(campaign => {
-    const endDate = new Date(campaign.ngayKetThuc);
-    return endDate < now && campaign.trangThai;
+    const endDateOnly = new Date(campaign.ngayKetThuc);
+    endDateOnly.setHours(0, 0, 0, 0);
+    return today > endDateOnly && campaign.trangThai;
   });
 
   for (const endedCampaign of endedCampaigns) {
@@ -1739,6 +1858,10 @@ const resetForm = () => {
 
   // Reset original form data - use shallow copy like PhieuGiamGia
   originalFormData.value = { ...formData.value };
+  
+  // Reset auto-update status indicators
+  statusAutoUpdated.value = false;
+  statusAutoUpdateMessage.value = "";
 };
 
 // Search for products in apply modal
@@ -2272,8 +2395,14 @@ const getCampaignActualStatus = (campaign) => {
   const startDate = new Date(campaign.ngayBatDau);
   const endDate = new Date(campaign.ngayKetThuc);
   
-  // If campaign has ended
-  if (now > endDate) {
+  // Get today's date without time for comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(campaign.ngayKetThuc);
+  endDateOnly.setHours(0, 0, 0, 0);
+  
+  // If campaign has ended (after end date has passed completely)
+  if (today > endDateOnly) {
     return "expired";
   }
   
@@ -2821,13 +2950,13 @@ const formatDiscountValue = (value) => {
 }
 
 .table th:nth-child(5) { /* Hiện trạng */
-  width: 140px;
-  min-width: 120px;
+  width: 80px;
+  min-width: 70px;
 }
 
 .table th:nth-child(6) { /* Trạng thái */
-  width: 140px;
-  min-width: 120px;
+  width: 90px;
+  min-width: 80px;
 }
 
 .table th:nth-child(7) { /* Thao tác */
@@ -2887,13 +3016,13 @@ const formatDiscountValue = (value) => {
 }
 
 .table td:nth-child(5) { /* Hiện trạng */
-  width: 140px;
-  min-width: 120px;
+  width: 80px;
+  min-width: 70px;
 }
 
 .table td:nth-child(6) { /* Trạng thái */
-  width: 140px;
-  min-width: 120px;
+  width: 90px;
+  min-width: 80px;
 }
 
 .table td:nth-child(7) { /* Thao tác */
@@ -4300,42 +4429,39 @@ const formatDiscountValue = (value) => {
 /* CSS moved to external file */
 
 .status-badge {
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
 .status-active {
-  background: #d1fae5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
+  background: #d4edda !important;
+  color: #155724 !important;
 }
 
 .status-inactive {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background: #f8d7da !important;
+  color: #721c24 !important;
 }
 
 .status-deleted {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: #f8f9fa !important;
+  color: #6c757d !important;
 }
 
 .status-expired {
-  background: #f3f4f6;
-  color: #6b7280;
-  border: 1px solid #d1d5db;
+  background: #fff3cd !important;
+  color: #856404 !important;
 }
 
 .status-upcoming {
-  background: #dbeafe;
-  color: #1e40af;
-  border: 1px solid #93c5fd;
+  background: #dbeafe !important;
+  color: #1e40af !important;
 }
 
 .time-remaining {
@@ -5371,6 +5497,52 @@ const formatDiscountValue = (value) => {
 
   .delete-footer .btn {
     min-width: 100%;
+  }
+}
+
+/* Auto-update status notification styles */
+.auto-update-notification {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(74, 222, 128, 0.1) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  animation: slideInDown 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
+}
+
+.auto-update-notification .help-icon-minimal {
+  width: 16px;
+  height: 16px;
+  margin-right: 0.5rem;
+}
+
+.auto-update-notification span {
+  color: #059669;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Animation for auto-update notification */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-5px);
   }
 }
 </style>
