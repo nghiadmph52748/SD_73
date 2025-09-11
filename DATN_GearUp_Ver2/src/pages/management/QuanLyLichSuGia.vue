@@ -1,4 +1,5 @@
 <template>
+
   <div class="price-history-management">
     <!-- Page Header -->
     <div class="page-header">
