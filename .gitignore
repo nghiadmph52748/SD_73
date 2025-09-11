@@ -23,4 +23,4 @@ dist-ssr
 *.sw?
 .cursor/*
 BE_SP/src/main/resources/application.properties
-BE_SP/target/classes/application.properties
+BE_SP/target/
