@@ -973,7 +973,7 @@ import EditIcon from "@/assets/Edit.svg";
 import TrashIcon from "@/assets/Trash.svg";
 import CancelIcon from "@/assets/Cancel.svg";
 import WarningIcon from "@/assets/Warning.svg";
-import TagIcon from "@/assets/Tag:Label.svg";
+import TagIcon from "@/assets/TagLabel.svg";
 import SuccessIcon from "@/assets/Success.svg";
 import MoneyIcon from "@/assets/Money.svg";
 import StatisticsIcon from "@/assets/Statistics.svg";

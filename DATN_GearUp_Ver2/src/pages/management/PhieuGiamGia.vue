@@ -794,7 +794,7 @@ import MoneyIcon from "@/assets/Money.svg";
 import PlusIcon from "@/assets/Plus.svg";
 import StatisticsIcon from "@/assets/Statistics.svg";
 import SuccessIcon from "@/assets/Success.svg";
-import TagIcon from "@/assets/Tag:Label.svg";
+import TagIcon from "@/assets/TagLabel.svg";
 import TrashIcon from "@/assets/Trash.svg";
 import UsersIcon from "@/assets/Users.svg";
 import ViewIcon from "@/assets/View.svg";
