@@ -379,21 +379,51 @@
           </div>
 
           <div class="modal-footer add-footer">
-            <button
-              type="button"
-              class="btn-cancel"
-              @click="showAddModal = false"
+              <button
+                type="button"
+                class="btn-cancel"
+                @click="showAddModal = false"
+              >
+                Hủy
+              </button>
+              <button
+                type="submit"
+                class="btn-submit"
+                @click="showConfirmAddEmployee = true"
+              >
+                Thêm Nhân Viên
+              </button>
+            </div>
+
+            <!-- Modal xác nhận thêm nhân viên -->
+            <div
+              v-if="showConfirmAddEmployee"
+              class="confirm-dialog-overlay"
+              @click="showConfirmAddEmployee = false"
             >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              class="btn-submit"
-              @click="saveEmployee"
-            >
-              Thêm Nhân Viên
-            </button>
-          </div>
+              <div class="confirm-dialog-box" @click.stop>
+                <div class="confirm-dialog-header">
+                  <h3>Xác nhận</h3>
+                </div>
+                <div class="confirm-dialog-body">
+                  <p>Bạn có muốn thêm nhân viên này không?</p>
+                </div>
+                <div class="confirm-dialog-footer">
+                  <button class="confirm-btn" @click="showConfirmAddEmployee = false">
+                    Hủy
+                  </button>
+                  <button class="confirm-btn confirm-btn-ok" @click="handleConfirmAddEmployee">
+                    Xác nhận
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toast -->
+            <div v-if="toast.show" :class="['toast', toast.type]">
+              {{ toast.message }}
+            </div>
+
 
         </div>
       </div>
@@ -628,15 +658,47 @@
           <div class="modal-footer edit-footer">
             <button
               type="button"
-              class="btn-cancel "
+              class="btn-cancel"
               @click="showEditModal = false"
             >
               Hủy
             </button>
-            <button type="submit" class="btn-submit " @click="saveEmployee">
+            <button
+              type="submit"
+              class="btn-submit"
+              @click="showConfirmEditEmployee = true"
+            >
               Cập nhật nhân viên
             </button>
           </div>
+
+          <!-- Modal xác nhận cập nhật -->
+          <div
+            v-if="showConfirmEditEmployee"
+            class="confirm-dialog-overlay"
+            @click="showConfirmEditEmployee = false"
+          >
+            <div class="confirm-dialog-box" @click.stop>
+              <div class="confirm-dialog-header">
+                <h3>Xác nhận</h3>
+              </div>
+              <div class="confirm-dialog-body">
+                <p>Bạn có muốn cập nhật thông tin nhân viên này không?</p>
+              </div>
+              <div class="confirm-dialog-footer">
+                <button class="confirm-btn" @click="showConfirmEditEmployee = false">
+                  Hủy
+                </button>
+                <button class="confirm-btn confirm-btn-ok" @click="handleConfirmEditEmployee">
+                  Xác nhận
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inline message -->
+          <p v-if="editMessage" class="inline-message">{{ editMessage }}</p>
+
         </div>
       </div>
 
@@ -765,6 +827,58 @@ const selectedEmployee = ref({});
 const provinces = ref([]);
 const districts = ref([]);
 const wards = ref([]);
+
+// abc
+const showConfirmAddEmployee = ref(false);
+
+const handleConfirmAddEmployee = async () => {
+  showConfirmAddEmployee.value = false;
+
+  try {
+    const result = await saveEmployee(); // gọi API thêm nhân viên
+
+    if (result) {
+      showToast("Thêm nhân viên thành công!", "success");
+      showAddModal.value = false; // đóng form
+    } else {
+      showToast("Thêm nhân viên thất bại!", "error");
+    }
+  } catch (e) {
+    showToast("Có lỗi xảy ra khi thêm nhân viên!", "error");
+  }
+};
+function showToast(message, type = "success") {
+  toast.value = { show: true, message, type };
+  setTimeout(() => {
+    toast.value.show = false;
+  }, 4000); // 4 giây
+}
+
+const toast = ref({
+  show: false,
+  message: "",
+  type: "success" // success | error
+});
+//abcd
+const showConfirmEditEmployee = ref(false);
+const editMessage = ref("");
+
+const handleConfirmEditEmployee = async () => {
+  showConfirmEditEmployee.value = false;
+
+  try {
+    const result = await saveEmployee(); // hàm cập nhật
+
+    if (result) {
+      editMessage.value = "✅ Cập nhật nhân viên thành công!";
+      showEditModal.value = false; // đóng modal sau khi xong
+    } else {
+      editMessage.value = "❌ Cập nhật nhân viên thất bại!";
+    }
+  } catch (e) {
+    editMessage.value = "⚠️ Có lỗi xảy ra khi cập nhật nhân viên!";
+  }
+};
 
 // Pagination data
 const currentPage = ref(1);
@@ -1073,6 +1187,101 @@ defineProps({
 
 
 <style scoped>
+.confirm-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 3000; /* cao hơn modal cha */
+}
+
+.confirm-dialog-box {
+  background: #fff;
+  border-radius: 8px;
+  width: 360px;
+  max-width: calc(100% - 40px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.18s ease-in-out;
+  overflow: hidden;
+}
+
+.confirm-dialog-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.confirm-dialog-body {
+  padding: 16px;
+  font-size: 14px;
+  color: #444;
+}
+
+.confirm-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #f1f1f1;
+}
+
+.confirm-btn {
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.confirm-btn:hover {
+  background: #eee;
+}
+
+.confirm-btn-ok {
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: fadeInOut 4s forwards;
+}
+
+/* màu thành công */
+.toast.success {
+  background-color: #28a745;
+}
+
+/* màu lỗi */
+.toast.error {
+  background-color: #dc3545;
+}
+
+/* hiệu ứng hiện lên rồi biến mất */
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translateY(-20px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  90%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
 .page-container {
   max-width: 1800px; /* hoặc 1000px nếu bạn muốn hẹp hơn */
   margin: 0 auto;
@@ -1411,12 +1620,10 @@ defineProps({
   color: var(--secondary-color);
 }
 .btn-cancel {
-  background: white;
-  color: #374151;
+
   padding: 0.6rem 1.2rem;
   font-weight: 500;
-  transition: all 0.3s ease;
-  cursor: pointer;
+
 }
 
 
