@@ -1,0 +1,25 @@
+name: "Check for Colon in Filenames"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-colon-in-filenames:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for ":" in file names
+        run: |
+          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          found=0
+          for file in $files; do
+            if [[ "$file" == *:* ]]; then
+              echo "❌ File name contains colon ':': $file"
+              found=1
+            fi
+          done
+          if [ $found -eq 1 ]; then
+            echo "Commit/PR contains files with ':' in the name. Please rename them!"
+            exit 1
+          fi
