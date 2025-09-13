@@ -1056,10 +1056,28 @@ const getDetailedStatus = (coupon) => {
 };
 
 /**
- * Get simple status text based on trangThai only
+ * Get simple status text based on trangThai and date validity
  */
 const getSimpleStatus = (coupon) => {
   if (coupon.deleted) return "Đã xóa";
+  
+  // Check date validity first
+  const now = new Date();
+  const startDate = new Date(coupon.ngayBatDau);
+  const endDate = new Date(coupon.ngayKetThuc);
+  
+  // Get today's date without time for comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(coupon.ngayKetThuc);
+  endDateOnly.setHours(0, 0, 0, 0);
+  
+  // If coupon is outside valid date range, always show as inactive
+  if (now < startDate || today > endDateOnly) {
+    return "Ngừng hoạt động";
+  }
+  
+  // If within valid date range, check trangThai field
   return coupon.trangThai === true ? "Hoạt động" : "Ngừng hoạt động";
 };
 
@@ -1699,7 +1717,29 @@ const fetchUpdatePGG = async (id) => {
     // CRITICAL FIX: Ensure deleted is always false for updates
     couponData.deleted = false;
     
+    // IMPORTANT FIX: Recalculate trangThai based on current dates
+    const now = new Date();
+    const startDate = new Date(couponData.ngayBatDau);
+    const endDate = new Date(couponData.ngayKetThuc);
+    
+    // Get today's date without time for comparison
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDateOnly = new Date(couponData.ngayKetThuc);
+    endDateOnly.setHours(0, 0, 0, 0);
+    
+    // Set trangThai based on date validity:
+    // - true if coupon is currently valid (between start and end date inclusive)
+    // - false if coupon is not yet started or already expired
+    if (now >= startDate && today <= endDateOnly) {
+      couponData.trangThai = true; // Active - within valid date range
+    } else {
+      couponData.trangThai = false; // Inactive - before start date or after end date
+    }
+    
     console.log("<!-- icon: refresh --> Updating coupon ID:", id);
+    console.log("<!-- icon: calendar --> Date validation: start =", startDate, ", end =", endDate, ", now =", now);
+    console.log("<!-- icon: check --> Calculated trangThai:", couponData.trangThai);
     console.log("<!-- icon: export --> Sending coupon data to backend:", JSON.stringify(couponData, null, 2));
     
     await fetchUpdatePhieuGiamGia(id, couponData);
