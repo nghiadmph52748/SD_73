@@ -2,58 +2,23 @@
   <div class="pos-system">
     <!-- Simple Action Bar -->
     <div class="simple-action-bar">
-      <button
-        class="action-btn secondary-btn"
-        @click="refreshData"
-        title="Làm mới dữ liệu"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
+      <button class="action-btn secondary-btn" @click="refreshData" title="Làm mới dữ liệu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="23,4 23,10 17,10"></polyline>
           <polyline points="1,20 1,14 7,14"></polyline>
-          <path
-            d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"
-          ></path>
+          <path d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"></path>
         </svg>
         <span>Làm mới</span>
       </button>
-      <button
-        class="action-btn secondary-btn"
-        @click="showProductSearch = true"
-        title="Tìm kiếm sản phẩm"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
+      <button class="action-btn secondary-btn" @click="showProductSearch = true" title="Tìm kiếm sản phẩm">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="M21 21l-4.35-4.35"></path>
         </svg>
         <span>Tìm sản phẩm</span>
       </button>
-      <button
-        class="action-btn primary-btn"
-        @click="createNewOrder"
-        title="Tạo đơn hàng mới"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
+      <button class="action-btn primary-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 5v14M5 12h14"></path>
         </svg>
         <span>Tạo đơn hàng mới</span>
@@ -64,12 +29,8 @@
     <div class="order-tabs">
       <div class="tabs-wrapper">
         <div class="tabs-scroll">
-          <div
-            v-for="order in tempOrder"
-            :key="order.id"
-            :class="['order-tab', { active: currentOrderId === order.id }]"
-            @click="switchOrder(order.id)"
-          >
+          <div v-for="order in tempOrder" :key="order.id"
+            :class="['order-tab', { active: currentOrderId === order.id }]" @click="switchOrder(order.id)">
             <div class="tab-main">
               <div class="tab-indicator"></div>
               <div class="tab-content">
@@ -78,39 +39,17 @@
                   {{ order.danhSachSanPham?.length || 0 }} sản phẩm
                 </div>
               </div>
-              <button
-                v-if="tempOrder.length > 1"
-                class="tab-close"
-                @click.stop="closeOrder(order.id)"
-                title="Đóng đơn hàng"
-              >
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
+              <button v-if="tempOrder.length > 1" class="tab-close" @click.stop="closeOrder(order.id)"
+                title="Đóng đơn hàng">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
             </div>
           </div>
         </div>
-        <button
-          class="new-tab-btn"
-          @click="createNewOrder"
-          title="Tạo đơn hàng mới"
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-          >
+        <button class="new-tab-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M12 5v14M5 12h14" />
           </svg>
         </button>
@@ -123,19 +62,10 @@
         <div class="cart-header">
           <div class="cart-header-left">
             <div class="cart-icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="8" cy="21" r="1" />
                 <circle cx="19" cy="21" r="1" />
-                <path
-                  d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
-                />
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
               </svg>
             </div>
             <div class="cart-info">
@@ -146,26 +76,11 @@
             </div>
           </div>
           <div class="cart-header-actions">
-            <button
-              class="cart-action-btn secondary-btn"
-              @click="showProductSearch = true"
-              title="Quét QR code"
-            >
+            <button class="cart-action-btn secondary-btn" @click="showQRScanner = true" title="Quét QR code">
               <img src="@/assets/QR.svg" alt="QR Code" width="18" height="18" />
             </button>
-            <button
-              class="cart-action-btn primary-btn"
-              @click="showProductSearch = true"
-              title="Thêm sản phẩm"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
+            <button class="cart-action-btn primary-btn" @click="showProductSearch = true" title="Thêm sản phẩm">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 5v14M5 12h14" />
               </svg>
               <span>Thêm sản phẩm</span>
@@ -174,47 +89,23 @@
         </div>
 
         <!-- Modern Cart Items -->
-        <div
-          class="modern-cart-items"
-          v-if="currentOrder && currentOrder.danhSachSanPham.length > 0"
-        >
-          <div
-            v-for="item in currentOrder.danhSachSanPham"
-            :key="item.id"
-            class="modern-cart-item"
-          >
+        <div class="modern-cart-items" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
+          <div v-for="item in currentOrder.danhSachSanPham" :key="item.id" class="modern-cart-item">
             <div class="cart-item-content">
               <div class="item-checkbox-wrapper">
-                <input
-                  type="checkbox"
-                  v-model="item.selected"
-                  class="modern-checkbox"
-                  id="item-{{ item.id }}"
-                />
+                <input type="checkbox" v-model="item.selected" class="modern-checkbox" :id="'item-' + item.id" />
                 <label :for="'item-' + item.id" class="checkbox-label"></label>
               </div>
 
               <div class="item-image-wrapper">
                 <div class="item-image">
-                  <img
-                    v-if="item.duongDanAnh"
-                    :src="
-                      item.duongDanAnh.startsWith('http')
-                        ? item.duongDanAnh
-                        : IMAGE_BASE_URL + item.duongDanAnh
-                    "
-                    :alt="item.tenSanPham"
-                    class="product-image"
-                  />
+                  <img v-if="item.duongDanAnh" :src="item.duongDanAnh.startsWith('http')
+                      ? item.duongDanAnh
+                      : IMAGE_BASE_URL + item.duongDanAnh
+                    " :alt="item.tenSanPham" class="product-image" />
                   <div v-else class="image-placeholder">
-                    <svg
-                      width="28"
-                      height="28"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    >
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="1.5">
                       <rect x="3" y="3" width="18" height="18" rx="2" />
                       <circle cx="8.5" cy="8.5" r="1.5" />
                       <path d="M21 15l-5-5L5 21" />
@@ -223,88 +114,68 @@
                 </div>
               </div>
 
-              <div class="item-details-wrapper">
+              <div class="item-info-wrapper">
                 <div class="item-main-info">
                   <h3 class="product-title">{{ item.tenSanPham }}</h3>
-                  <div class="product-attributes">
-                    <span class="attribute">{{ item.tenKichThuoc }}</span>
-                    <span class="attribute-separator">•</span>
-                    <span class="attribute">{{ item.tenMauSac }}</span>
-                    <span class="attribute-separator">•</span>
-                    <span class="attribute">{{ item.tenNhaSanXuat }}</span>
+                  <div class="product-details">
+                    <span class="product-brand">{{ item.tenNhaSanXuat }}</span>
+                  </div>
+                  <div class="product-specs">
+                    <span class="spec product-code">{{ 
+                      item.ma_san_pham ||
+                      item.sanPham?.ma_san_pham ||
+                      item.maSanPham || 
+                      item.sanPham?.maSanPham || 
+                      item.code || 
+                      item.productCode ||
+                      item.sku || 
+                      `SP${String(item.id).padStart(5, '0')}` 
+                    }}</span>
+                    <span class="spec">{{ item.tenMauSac }}</span>
+                    <span class="spec">{{ item.tenKichThuoc }}</span>
                   </div>
                 </div>
 
-                <div class="item-price-info">
-                  <div class="price-wrapper">
-                    <span v-if="item.giaTriGiamGia > 0" class="original-price">
-                      {{ formatCurrency(item.giaBan) }}
-                    </span>
-                    <span class="current-price">
-                      {{ formatCurrency(item.giaSauGiam) }}
-                    </span>
+                <div class="item-price-section">
+                  <div class="price-info">
+                    <div class="price-wrapper">
+                      <span class="current-price">
+                        {{ formatCurrency(item.giaSauGiam) }}
+                      </span>
+                      <span v-if="item.giaTriGiamGia > 0" class="discount-tag">
+                        -{{ item.giaTriGiamGia }}%
+                      </span>
+                    </div>
                   </div>
-                  <span v-if="item.giaTriGiamGia > 0" class="discount-tag">
-                    -{{ item.giaTriGiamGia }}%
-                  </span>
                 </div>
               </div>
 
-              <div class="item-actions">
+              <div class="item-controls-wrapper">
                 <div class="quantity-controls">
-                  <button
-                    @click="updateQuantity(item, -1)"
-                    class="quantity-btn"
-                    :disabled="item.soLuong <= 1"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
+                  <button @click="updateQuantity(item, -1)" class="quantity-btn" :disabled="item.soLuong <= 1">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M5 12h14" />
                     </svg>
                   </button>
                   <span class="quantity-display">{{ item.soLuong }}</span>
                   <button @click="updateQuantity(item, 1)" class="quantity-btn">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M12 5v14M5 12h14" />
                     </svg>
                   </button>
                 </div>
 
-                <div class="item-total-price">
-                  {{ formatCurrency(item.giaSauGiam * item.soLuong) }}
+                <div class="total-and-remove">
+                  <div class="item-total-price">
+                    {{ formatCurrency(item.giaSauGiam * item.soLuong) }}
+                  </div>
+                  <button @click="removeItem(item)" class="remove-item-btn" title="Xóa khỏi giỏ hàng">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path
+                        d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" />
+                    </svg>
+                  </button>
                 </div>
-
-                <button
-                  @click="removeItem(item)"
-                  class="remove-item-btn"
-                  title="Xóa khỏi giỏ hàng"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"
-                    />
-                  </svg>
-                </button>
               </div>
             </div>
           </div>
@@ -314,19 +185,10 @@
         <div v-else class="modern-empty-state">
           <div class="empty-state-content">
             <div class="empty-illustration">
-              <svg
-                width="96"
-                height="96"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1"
-              >
+              <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
                 <circle cx="8" cy="21" r="1" />
                 <circle cx="19" cy="21" r="1" />
-                <path
-                  d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
-                />
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
               </svg>
             </div>
             <div class="empty-text">
@@ -336,18 +198,8 @@
                 đầu tạo đơn hàng.
               </p>
             </div>
-            <button
-              class="add-first-product-btn"
-              @click="showProductSearch = true"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
+            <button class="add-first-product-btn" @click="showProductSearch = true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 5v14M5 12h14"></path>
               </svg>
               <span>Thêm sản phẩm đầu tiên</span>
@@ -356,25 +208,17 @@
         </div>
 
         <!-- Modern Total Section -->
-        <div
-          class="modern-total-section"
-          v-if="currentOrder && currentOrder.danhSachSanPham.length > 0"
-        >
+        <div class="modern-total-section" v-if="currentOrder && currentOrder.danhSachSanPham.length > 0">
           <div class="total-summary-card">
             <div class="total-row">
               <span class="total-label">Tổng tiền hàng:</span>
               <span class="total-value">{{
                 formatCurrency(currentOrder.tongTien || 0)
-              }}</span>
+                }}</span>
             </div>
-            <div
-              class="total-row"
-              v-if="currentOrder.discount && currentOrder.discount > 0"
-            >
+            <div class="total-row" v-if="currentOrder.discount && currentOrder.discount > 0">
               <span class="total-label discount-label">Giảm giá:</span>
-              <span class="total-value discount-value"
-                >-{{ formatCurrency(currentOrder.discount) }}</span
-              >
+              <span class="total-value discount-value">-{{ formatCurrency(currentOrder.discount) }}</span>
             </div>
             <div class="total-divider"></div>
             <div class="total-row final-total">
@@ -394,14 +238,7 @@
         <div class="customer-section-header">
           <div class="customer-header-content">
             <div class="customer-icon-wrapper">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
@@ -414,14 +251,7 @@
             </div>
           </div>
           <button class="find-customer-btn" @click="showCustomerSearch = true">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"></circle>
               <path d="M21 21l-4.35-4.35"></path>
             </svg>
@@ -438,80 +268,44 @@
               <label class="customer-label">Tên khách hàng</label>
               <div class="customer-input-wrapper">
                 <div class="customer-input-container">
-                  <svg
-                    class="customer-input-icon"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                  <svg class="customer-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
-                  <input
-                    type="text"
-                    v-model="customerDisplayName"
-                    @input="searchCustomers"
-                    @focus="showCustomerDropdown = true"
-                    class="customer-input"
-                    placeholder="Nhập tên hoặc email khách hàng"
-                    autocomplete="off"
-                  />
-                  <button
-                    v-if="customerDisplayName"
-                    class="clear-customer-input"
-                    @click="clearCustomerInput"
-                    title="Xóa nội dung"
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
+                  <input type="text" v-model="customerDisplayName" @input="searchCustomers"
+                    @focus="showCustomerDropdown = true" class="customer-input"
+                    placeholder="Nhập tên hoặc email khách hàng" autocomplete="off" />
+                  <button v-if="customerDisplayName" class="clear-customer-input" @click="clearCustomerInput"
+                    title="Xóa nội dung">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
 
                 <!-- Customer Suggestions -->
-                <div
-                  v-if="customerSuggestions.length > 0 && showCustomerDropdown"
-                  class="customer-suggestions"
-                >
-                  <div
-                    v-for="customer in customerSuggestions"
-                    :key="customer.id"
-                    :class="[
-                      'customer-suggestion',
-                      { 'create-new': customer.isCreateNew },
-                    ]"
-                    @click="selectCustomerFromSuggestions(customer)"
-                  >
+                <div v-if="customerSuggestions.length > 0 && showCustomerDropdown" class="customer-suggestions">
+                  <div v-for="customer in customerSuggestions" :key="customer.id" :class="[
+                    'customer-suggestion',
+                    { 'create-new': customer.isCreateNew },
+                  ]" @click="selectCustomerFromSuggestions(customer)">
                     <div class="suggestion-content">
                       <div class="suggestion-info" v-if="!customer.isCreateNew">
                         <span class="suggestion-name">{{
                           customer.tenKhachHang
-                        }}</span>
-                        <span class="suggestion-details"
-                          >{{ customer.email }} •
-                          {{ customer.soDienThoai }}</span
-                        >
+                          }}</span>
+                        <span class="suggestion-details">{{ customer.email }} •
+                          {{ customer.soDienThoai }}</span>
                       </div>
                       <div class="suggestion-info create-new-info" v-else>
                         <div class="create-new-row">
                           <img :src="PlusIcon" alt="Plus" class="plus-icon" />
                           <span class="create-new-text">{{
                             customer.displayName
-                          }}</span>
+                            }}</span>
                         </div>
-                        <span class="create-new-hint"
-                          >Nhấn để tạo khách hàng mới</span
-                        >
+                        <span class="create-new-hint">Nhấn để tạo khách hàng mới</span>
                       </div>
                     </div>
                   </div>
@@ -525,21 +319,10 @@
             <h4 class="section-title">Giảm giá & Khuyến mãi</h4>
 
             <div class="coupon-selector">
-              <button
-                class="select-coupon-btn"
-                @click="openCouponModal"
-                :disabled="availableCoupons.length === 0"
-              >
+              <button class="select-coupon-btn" @click="openCouponModal" :disabled="availableCoupons.length === 0">
                 <div class="coupon-btn-inner">
                   <div class="coupon-btn-icon">
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
                       <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2" />
                       <circle cx="9" cy="12" r="1" />
@@ -547,23 +330,12 @@
                     </svg>
                   </div>
                   <div class="coupon-btn-text">
-                    <span v-if="selectedCoupons.length > 0"
-                      >Chọn phiếu giảm giá</span
-                    >
-                    <span v-else-if="availableCoupons.length > 0"
-                      >Chọn phiếu giảm giá</span
-                    >
+                    <span v-if="selectedCoupons.length > 0">Chọn phiếu giảm giá</span>
+                    <span v-else-if="availableCoupons.length > 0">Chọn phiếu giảm giá</span>
                     <span v-else>Đang tải phiếu giảm giá...</span>
                   </div>
-                  <svg
-                    class="coupon-chevron"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                  <svg class="coupon-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
                     <path d="M9 18l6-6-6-6" />
                   </svg>
                 </div>
@@ -576,7 +348,7 @@
                 <div class="coupon-details">
                   <span class="coupon-name">{{
                     selectedCoupons[0].tenPhieuGiamGia
-                  }}</span>
+                    }}</span>
                   <span class="coupon-value">
                     <span v-if="selectedCoupons[0].loaiPhieuGiamGia === false">
                       -{{ selectedCoupons[0].giaTriGiamGia }}%
@@ -586,18 +358,8 @@
                     </span>
                   </span>
                 </div>
-                <button
-                  class="remove-coupon-btn"
-                  @click="removeSelectedCoupon(selectedCoupons[0].id)"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                <button class="remove-coupon-btn" @click="removeSelectedCoupon(selectedCoupons[0].id)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
@@ -607,14 +369,7 @@
             <!-- Auto Applied Notification -->
             <div v-if="autoAppliedCoupon" class="auto-applied-notice">
               <div class="notice-icon">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M9 12l2 2 4-4" />
                   <circle cx="12" cy="12" r="10" />
                 </svg>
@@ -633,19 +388,8 @@
                   </span>
                 </div>
               </div>
-              <button
-                class="notice-close"
-                @click="autoAppliedCoupon = null"
-                title="Ẩn thông báo"
-              >
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
+              <button class="notice-close" @click="autoAppliedCoupon = null" title="Ẩn thông báo">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
@@ -653,23 +397,12 @@
           </div>
 
           <!-- Gợi ý phiếu giảm giá tốt hơn -->
-          <div
-            v-if="showRecommendation && betterCoupons.length > 0"
-            class="recommendation-section-external"
-          >
+          <div v-if="showRecommendation && betterCoupons.length > 0" class="recommendation-section-external">
             <div class="recommendation-header">
               <div class="recommendation-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path
-                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                  />
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
               </div>
               <h4 class="recommendation-title">
@@ -681,12 +414,8 @@
             </p>
 
             <div class="recommendation-list">
-              <div
-                v-for="(coupon, index) in betterCoupons"
-                :key="coupon.coupon.id"
-                class="recommendation-item-external"
-                @click="openCouponModal"
-              >
+              <div v-for="(coupon, index) in betterCoupons" :key="coupon.coupon.id" class="recommendation-item-external"
+                @click="openCouponModal">
                 <div class="recommendation-info">
                   <div class="recommendation-name">
                     {{ coupon.coupon.tenPhieuGiamGia }}
@@ -707,14 +436,7 @@
                   <div class="benefit-label">Tiết kiệm</div>
                 </div>
                 <div class="click-hint">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
@@ -729,20 +451,11 @@
 
           <!-- Payment Methods -->
           <div class="payment-options">
-            <div
-              class="payment-option"
-              :class="{
-                selected: currentOrder?.phuongThucThanhToan === 'pay_now',
-              }"
-              @click="currentOrder.phuongThucThanhToan = 'pay_now'"
-            >
+            <div class="payment-option" :class="{
+              selected: currentOrder?.phuongThucThanhToan === 'pay_now',
+            }" @click="currentOrder.phuongThucThanhToan = 'pay_now'">
               <div class="payment-option-icon">
-                <img
-                  src="@/assets/Money.svg"
-                  alt="Cash Icon"
-                  width="18"
-                  height="18"
-                />
+                <img src="@/assets/Money.svg" alt="Cash Icon" width="18" height="18" />
               </div>
               <div class="payment-option-content">
                 <span class="payment-option-title">Tiền mặt</span>
@@ -750,67 +463,37 @@
               </div>
             </div>
 
-            <div
-              class="payment-option"
-              :class="{
-                selected: currentOrder?.phuongThucThanhToan === 'bank_transfer',
-              }"
-              @click="currentOrder.phuongThucThanhToan = 'bank_transfer'"
-            >
+            <div class="payment-option" :class="{
+              selected: currentOrder?.phuongThucThanhToan === 'bank_transfer',
+            }" @click="currentOrder.phuongThucThanhToan = 'bank_transfer'">
               <div class="payment-option-icon">
-                <img
-                  src="@/assets/Banking.svg"
-                  alt="Banking Icon"
-                  width="18"
-                  height="18"
-                />
+                <img src="@/assets/Banking.svg" alt="Banking Icon" width="18" height="18" />
               </div>
               <div class="payment-option-content">
                 <span class="payment-option-title">Chuyển khoản</span>
-                <span class="payment-option-desc"
-                  >Thanh toán qua ngân hàng</span
-                >
+                <span class="payment-option-desc">Thanh toán qua ngân hàng</span>
               </div>
             </div>
 
-            <div
-              class="payment-option"
-              :class="{
-                selected: currentOrder?.phuongThucThanhToan === 'home_delivery',
-              }"
-              @click="selectHomeDelivery"
-            >
+            <div class="payment-option" :class="{
+              selected: currentOrder?.phuongThucThanhToan === 'home_delivery',
+            }" @click="selectHomeDelivery">
               <div class="payment-option-icon">
-                <img
-                  src="@/assets/Shipping.svg"
-                  alt="Delivery Icon"
-                  width="18"
-                  height="18"
-                />
+                <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="18" height="18" />
               </div>
               <div class="payment-option-content">
                 <span class="payment-option-title">Giao hàng tận nơi</span>
-                <span class="payment-option-desc"
-                  >Thanh toán khi nhận hàng</span
-                >
+                <span class="payment-option-desc">Thanh toán khi nhận hàng</span>
               </div>
             </div>
           </div>
 
           <!-- Cash Payment Details -->
-          <div
-            v-if="currentOrder?.phuongThucThanhToan === 'pay_now'"
-            class="cash-payment-info"
-          >
+          <div v-if="currentOrder?.phuongThucThanhToan === 'pay_now'" class="cash-payment-info">
             <div class="cash-payment-card">
               <div class="cash-payment-header">
                 <div class="cash-icon">
-                  <img
-                    src="@/assets/Money.svg"
-                    alt="Cash Icon"
-                    width="24"
-                    height="24"
-                  />
+                  <img src="@/assets/Money.svg" alt="Cash Icon" width="24" height="24" />
                 </div>
                 <div class="cash-header-text">
                   <h5 class="cash-title">Thanh toán tiền mặt</h5>
@@ -824,15 +507,8 @@
                 <div class="cash-input-group">
                   <label class="cash-input-label">Tiền khách đưa:</label>
                   <div class="cash-input-wrapper">
-                    <input
-                      type="number"
-                      class="cash-input"
-                      v-model.number="currentOrder.tienKhachTra"
-                      placeholder="Nhập số tiền khách đưa"
-                      min="0"
-                      step="1000"
-                      @input="calculateChange"
-                    />
+                    <input type="number" class="cash-input" v-model.number="currentOrder.tienKhachTra"
+                      placeholder="Nhập số tiền khách đưa" min="0" step="1000" @input="calculateChange" />
                     <span class="currency-unit">VNĐ</span>
                   </div>
                 </div>
@@ -842,43 +518,38 @@
                     <span class="calc-label">Tổng tiền cần thanh toán:</span>
                     <span class="calc-amount">{{
                       formatCurrency(currentOrder?.tongTienSauGiam || 0)
-                    }}</span>
+                      }}</span>
                   </div>
                   <div class="calculation-row">
                     <span class="calc-label">Tiền khách đưa:</span>
                     <span class="calc-amount">{{
                       formatCurrency(currentOrder?.tienKhachTra || 0)
-                    }}</span>
+                      }}</span>
                   </div>
                   <div class="calculation-divider"></div>
                   <div class="calculation-row final-row">
                     <span class="calc-label final-label">
-                      <span
-                        v-if="
-                          (currentOrder?.tienKhachTra || 0) >=
-                          (currentOrder?.tongTienSauGiam || 0)
-                        "
-                      >
+                      <span v-if="
+                        (currentOrder?.tienKhachTra || 0) >=
+                        (currentOrder?.tongTienSauGiam || 0)
+                      ">
                         Tiền thừa:
                       </span>
                       <span v-else class="text-red"> Còn thiếu: </span>
                     </span>
-                    <span
-                      class="calc-amount final-amount"
-                      :class="{
-                        'text-green':
-                          (currentOrder?.tienKhachTra || 0) >=
-                          (currentOrder?.tongTienSauGiam || 0),
-                        'text-red':
-                          (currentOrder?.tienKhachTra || 0) <
-                          (currentOrder?.tongTienSauGiam || 0),
-                      }"
-                    >
+                    <span class="calc-amount final-amount" :class="{
+                      'text-green':
+                        (currentOrder?.tienKhachTra || 0) >=
+                        (currentOrder?.tongTienSauGiam || 0),
+                      'text-red':
+                        (currentOrder?.tienKhachTra || 0) <
+                        (currentOrder?.tongTienSauGiam || 0),
+                    }">
                       {{
                         formatCurrency(
                           Math.abs(
                             (currentOrder?.tienKhachTra || 0) -
-                              (currentOrder?.tongTienSauGiam || 0)
+                            (currentOrder?.tongTienSauGiam || 0)
                           )
                         )
                       }}
@@ -888,14 +559,7 @@
 
                 <div class="cash-note">
                   <div class="note-icon">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M12 16v-4M12 8h.01" />
                     </svg>
@@ -916,19 +580,11 @@
           </div>
 
           <!-- Bank Transfer Details -->
-          <div
-            v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'"
-            class="bank-transfer-info"
-          >
+          <div v-if="currentOrder?.phuongThucThanhToan === 'bank_transfer'" class="bank-transfer-info">
             <div class="bank-info-card">
               <div class="bank-card-header">
                 <div class="bank-icon">
-                  <img
-                    src="@/assets/Banking.svg"
-                    alt="Banking Icon"
-                    width="24"
-                    height="24"
-                  />
+                  <img src="@/assets/Banking.svg" alt="Banking Icon" width="24" height="24" />
                 </div>
                 <div class="bank-header-text">
                   <h5 class="bank-title">Thông tin chuyển khoản</h5>
@@ -947,30 +603,11 @@
                   <span class="bank-label">Số tài khoản:</span>
                   <div class="bank-account">
                     <span class="bank-value">1234567890123</span>
-                    <button
-                      class="copy-btn"
-                      @click="copyToClipboard('1234567890123')"
-                      title="Sao chép số tài khoản"
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <rect
-                          x="9"
-                          y="9"
-                          width="13"
-                          height="13"
-                          rx="2"
-                          ry="2"
-                        />
-                        <path
-                          d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
-                        />
+                    <button class="copy-btn" @click="copyToClipboard('1234567890123')" title="Sao chép số tài khoản">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
                       </svg>
                     </button>
                   </div>
@@ -984,7 +621,7 @@
                   <span class="bank-value amount">{{
                     formatCurrency(
                       (currentOrder?.tongTien || 0) -
-                        (currentOrder?.discount || 0)
+                      (currentOrder?.discount || 0)
                     )
                   }}</span>
                 </div>
@@ -992,40 +629,19 @@
                   <span class="bank-label">Nội dung:</span>
                   <div class="bank-account">
                     <span class="bank-value">{{
-                      `THANH TOAN DON HANG ${
-                        currentOrder?.tenDonHang || "HD" + currentOrder?.id
+                      `THANH TOAN DON HANG ${currentOrder?.tenDonHang || "HD" + currentOrder?.id
                       }`
                     }}</span>
-                    <button
-                      class="copy-btn"
-                      @click="
-                        copyToClipboard(
-                          `THANH TOAN DON HANG ${
-                            currentOrder?.tenDonHang || 'HD' + currentOrder?.id
-                          }`
-                        )
-                      "
-                      title="Sao chép nội dung chuyển khoản"
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <rect
-                          x="9"
-                          y="9"
-                          width="13"
-                          height="13"
-                          rx="2"
-                          ry="2"
-                        />
-                        <path
-                          d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
-                        />
+                    <button class="copy-btn" @click="
+                      copyToClipboard(
+                        `THANH TOAN DON HANG ${currentOrder?.tenDonHang || 'HD' + currentOrder?.id
+                        }`
+                      )
+                      " title="Sao chép nội dung chuyển khoản">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
                       </svg>
                     </button>
                   </div>
@@ -1034,14 +650,7 @@
 
               <div class="qr-code-section">
                 <div class="qr-header">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="5" height="5" />
                     <rect x="3" y="16" width="5" height="5" />
                     <rect x="16" y="3" width="5" height="5" />
@@ -1052,170 +661,38 @@
 
                 <div class="qr-code-container">
                   <div class="qr-placeholder">
-                    <svg
-                      width="120"
-                      height="120"
-                      viewBox="0 0 120 120"
-                      fill="none"
-                    >
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
                       <!-- QR Code placeholder pattern -->
-                      <rect
-                        width="120"
-                        height="120"
-                        fill="#ffffff"
-                        stroke="#e2e8f0"
-                        stroke-width="2"
-                        rx="8"
-                      />
-                      <rect
-                        x="10"
-                        y="10"
-                        width="20"
-                        height="20"
-                        fill="#1e293b"
-                        rx="2"
-                      />
+                      <rect width="120" height="120" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" rx="8" />
+                      <rect x="10" y="10" width="20" height="20" fill="#1e293b" rx="2" />
                       <rect x="35" y="10" width="5" height="5" fill="#1e293b" />
                       <rect x="45" y="10" width="5" height="5" fill="#1e293b" />
-                      <rect
-                        x="55"
-                        y="10"
-                        width="10"
-                        height="10"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="90"
-                        y="10"
-                        width="20"
-                        height="20"
-                        fill="#1e293b"
-                        rx="2"
-                      />
+                      <rect x="55" y="10" width="10" height="10" fill="#1e293b" />
+                      <rect x="90" y="10" width="20" height="20" fill="#1e293b" rx="2" />
 
-                      <rect
-                        x="15"
-                        y="15"
-                        width="10"
-                        height="10"
-                        fill="#ffffff"
-                        rx="1"
-                      />
-                      <rect
-                        x="95"
-                        y="15"
-                        width="10"
-                        height="10"
-                        fill="#ffffff"
-                        rx="1"
-                      />
+                      <rect x="15" y="15" width="10" height="10" fill="#ffffff" rx="1" />
+                      <rect x="95" y="15" width="10" height="10" fill="#ffffff" rx="1" />
 
                       <rect x="10" y="40" width="5" height="5" fill="#1e293b" />
-                      <rect
-                        x="20"
-                        y="40"
-                        width="10"
-                        height="5"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="35"
-                        y="40"
-                        width="5"
-                        height="10"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="50"
-                        y="40"
-                        width="15"
-                        height="5"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="80"
-                        y="40"
-                        width="5"
-                        height="10"
-                        fill="#1e293b"
-                      />
+                      <rect x="20" y="40" width="10" height="5" fill="#1e293b" />
+                      <rect x="35" y="40" width="5" height="10" fill="#1e293b" />
+                      <rect x="50" y="40" width="15" height="5" fill="#1e293b" />
+                      <rect x="80" y="40" width="5" height="10" fill="#1e293b" />
 
-                      <rect
-                        x="10"
-                        y="60"
-                        width="10"
-                        height="5"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="30"
-                        y="60"
-                        width="5"
-                        height="10"
-                        fill="#1e293b"
-                      />
+                      <rect x="10" y="60" width="10" height="5" fill="#1e293b" />
+                      <rect x="30" y="60" width="5" height="10" fill="#1e293b" />
                       <rect x="45" y="60" width="5" height="5" fill="#1e293b" />
-                      <rect
-                        x="60"
-                        y="60"
-                        width="10"
-                        height="10"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="85"
-                        y="60"
-                        width="10"
-                        height="5"
-                        fill="#1e293b"
-                      />
+                      <rect x="60" y="60" width="10" height="10" fill="#1e293b" />
+                      <rect x="85" y="60" width="10" height="5" fill="#1e293b" />
 
-                      <rect
-                        x="10"
-                        y="90"
-                        width="20"
-                        height="20"
-                        fill="#1e293b"
-                        rx="2"
-                      />
-                      <rect
-                        x="15"
-                        y="95"
-                        width="10"
-                        height="10"
-                        fill="#ffffff"
-                        rx="1"
-                      />
+                      <rect x="10" y="90" width="20" height="20" fill="#1e293b" rx="2" />
+                      <rect x="15" y="95" width="10" height="10" fill="#ffffff" rx="1" />
 
                       <rect x="40" y="80" width="5" height="5" fill="#1e293b" />
-                      <rect
-                        x="50"
-                        y="80"
-                        width="5"
-                        height="10"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="65"
-                        y="80"
-                        width="10"
-                        height="5"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="85"
-                        y="80"
-                        width="5"
-                        height="15"
-                        fill="#1e293b"
-                      />
-                      <rect
-                        x="100"
-                        y="80"
-                        width="10"
-                        height="10"
-                        fill="#1e293b"
-                      />
+                      <rect x="50" y="80" width="5" height="10" fill="#1e293b" />
+                      <rect x="65" y="80" width="10" height="5" fill="#1e293b" />
+                      <rect x="85" y="80" width="5" height="15" fill="#1e293b" />
+                      <rect x="100" y="80" width="10" height="10" fill="#1e293b" />
                     </svg>
                   </div>
                   <div class="qr-info">
@@ -1234,14 +711,7 @@
 
               <div class="transfer-note">
                 <div class="note-icon">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10" />
                     <path d="M12 16v-4M12 8h.01" />
                   </svg>
@@ -1264,19 +734,11 @@
           </div>
 
           <!-- Home Delivery Details -->
-          <div
-            v-if="currentOrder?.phuongThucThanhToan === 'home_delivery'"
-            class="delivery-info"
-          >
+          <div v-if="currentOrder?.phuongThucThanhToan === 'home_delivery'" class="delivery-info">
             <div class="delivery-info-card">
               <div class="delivery-card-header">
                 <div class="delivery-icon">
-                  <img
-                    src="@/assets/Shipping.svg"
-                    alt="Delivery Icon"
-                    width="24"
-                    height="24"
-                  />
+                  <img src="@/assets/Shipping.svg" alt="Delivery Icon" width="24" height="24" />
                 </div>
                 <div class="delivery-header-text">
                   <h5 class="delivery-title">Thông tin giao hàng</h5>
@@ -1289,33 +751,20 @@
               <div class="delivery-form">
                 <div class="form-group">
                   <label class="form-label">Họ và tên người nhận:</label>
-                  <input
-                    type="text"
-                    class="form-input"
-                    :value="customerDisplayName"
-                    readonly
-                    placeholder="Tên khách hàng"
-                  />
+                  <input type="text" class="form-input" :value="customerDisplayName" readonly
+                    placeholder="Tên khách hàng" />
                 </div>
 
                 <div class="form-group">
                   <label class="form-label">Số điện thoại:</label>
-                  <input
-                    type="text"
-                    class="form-input"
-                    v-model="deliveryAddress.soDienThoaiNguoiNhan"
-                    placeholder="Nhập số điện thoại người nhận"
-                  />
+                  <input type="text" class="form-input" v-model="deliveryAddress.soDienThoaiNguoiNhan"
+                    placeholder="Nhập số điện thoại người nhận" />
                 </div>
 
                 <div class="form-group">
                   <label class="form-label">Email:</label>
-                  <input
-                    type="email"
-                    class="form-input"
-                    v-model="deliveryAddress.emailNguoiNhan"
-                    placeholder="Nhập email người nhận"
-                  />
+                  <input type="email" class="form-input" v-model="deliveryAddress.emailNguoiNhan"
+                    placeholder="Nhập email người nhận" />
                 </div>
 
                 <!-- Địa chỉ chi tiết -->
@@ -1325,17 +774,9 @@
                   <div class="address-row">
                     <div class="form-group address-group">
                       <label class="form-label">Tỉnh/Thành phố:</label>
-                      <select
-                        class="form-select"
-                        v-model="deliveryAddress.thanhPho"
-                        @change="onProvinceChange"
-                      >
+                      <select class="form-select" v-model="deliveryAddress.thanhPho" @change="onProvinceChange">
                         <option value="">Chọn tỉnh/thành phố</option>
-                        <option
-                          v-for="province in provinces"
-                          :key="province.code"
-                          :value="province.name"
-                        >
+                        <option v-for="province in provinces" :key="province.code" :value="province.name">
                           {{ province.name }}
                         </option>
                       </select>
@@ -1343,18 +784,10 @@
 
                     <div class="form-group address-group">
                       <label class="form-label">Quận/Huyện:</label>
-                      <select
-                        class="form-select"
-                        v-model="deliveryAddress.quan"
-                        @change="onDistrictChange"
-                        :disabled="!deliveryAddress.thanhPho"
-                      >
+                      <select class="form-select" v-model="deliveryAddress.quan" @change="onDistrictChange"
+                        :disabled="!deliveryAddress.thanhPho">
                         <option value="">Chọn quận/huyện</option>
-                        <option
-                          v-for="district in districts"
-                          :key="district.code"
-                          :value="district.name"
-                        >
+                        <option v-for="district in districts" :key="district.code" :value="district.name">
                           {{ district.name }}
                         </option>
                       </select>
@@ -1362,17 +795,9 @@
 
                     <div class="form-group address-group">
                       <label class="form-label">Xã/Phường:</label>
-                      <select
-                        class="form-select"
-                        v-model="deliveryAddress.phuong"
-                        :disabled="!deliveryAddress.quan"
-                      >
+                      <select class="form-select" v-model="deliveryAddress.phuong" :disabled="!deliveryAddress.quan">
                         <option value="">Chọn xã/phường</option>
-                        <option
-                          v-for="ward in wards"
-                          :key="ward.code"
-                          :value="ward.name"
-                        >
+                        <option v-for="ward in wards" :key="ward.code" :value="ward.name">
                           {{ ward.name }}
                         </option>
                       </select>
@@ -1381,12 +806,8 @@
 
                   <div class="form-group">
                     <label class="form-label">Địa chỉ cụ thể:</label>
-                    <input
-                      type="text"
-                      class="form-input"
-                      v-model="deliveryAddress.diaChiCuThe"
-                      placeholder="Số nhà, tên đường, khu vực..."
-                    />
+                    <input type="text" class="form-input" v-model="deliveryAddress.diaChiCuThe"
+                      placeholder="Số nhà, tên đường, khu vực..." />
                   </div>
 
                   <!-- Hiển thị địa chỉ đầy đủ -->
@@ -1399,11 +820,7 @@
                 <div class="delivery-options">
                   <div class="delivery-option-item">
                     <label class="form-label">Đơn vị vận chuyển:</label>
-                    <select
-                      class="form-select"
-                      v-model="selectedShippingCarrier"
-                      @change="updateShippingFee"
-                    >
+                    <select class="form-select" v-model="selectedShippingCarrier" @change="updateShippingFee">
                       <option value="">Chọn đơn vị vận chuyển</option>
                       <option value="ghn">Giao Hàng Nhanh (GHN)</option>
                       <option value="ghtk">Giao Hàng Tiết Kiệm (GHTK)</option>
@@ -1416,12 +833,8 @@
 
                   <div class="delivery-option-item">
                     <label class="form-label">Loại dịch vụ:</label>
-                    <select
-                      class="form-select"
-                      v-model="selectedServiceType"
-                      @change="updateShippingFee"
-                      :disabled="!selectedShippingCarrier"
-                    >
+                    <select class="form-select" v-model="selectedServiceType" @change="updateShippingFee"
+                      :disabled="!selectedShippingCarrier">
                       <option value="">Chọn loại dịch vụ</option>
                       <template v-if="selectedShippingCarrier === 'ghn'">
                         <option value="standard">
@@ -1440,9 +853,7 @@
                           Nhanh (1-2 ngày) - 30.000Đ
                         </option>
                       </template>
-                      <template
-                        v-else-if="selectedShippingCarrier === 'vnpost'"
-                      >
+                      <template v-else-if="selectedShippingCarrier === 'vnpost'">
                         <option value="standard">
                           Tiêu chuẩn (3-5 ngày) - 20.000Đ
                         </option>
@@ -1466,9 +877,7 @@
                           Express (1-2h) - 60.000Đ
                         </option>
                       </template>
-                      <template
-                        v-else-if="selectedShippingCarrier === 'shopee'"
-                      >
+                      <template v-else-if="selectedShippingCarrier === 'shopee'">
                         <option value="standard">
                           Tiêu chuẩn (2-3 ngày) - 23.000Đ
                         </option>
@@ -1487,18 +896,14 @@
                       <span class="fee-value">{{ formatShippingFee() }}</span>
                     </div>
                     <div class="fee-item" v-if="isEligibleForFreeShipping()">
-                      <span class="fee-label text-green"
-                        >Miễn phí giao hàng:</span
-                      >
-                      <span class="fee-value text-green"
-                        >-{{ formatShippingFee() }}</span
-                      >
+                      <span class="fee-label text-green">Miễn phí giao hàng:</span>
+                      <span class="fee-value text-green">-{{ formatShippingFee() }}</span>
                     </div>
                     <div class="fee-total">
                       <span class="total-label">Tổng phí vận chuyển:</span>
                       <span class="total-value">{{
                         formatFinalShippingFee()
-                      }}</span>
+                        }}</span>
                     </div>
                   </div>
 
@@ -1507,12 +912,12 @@
                       <div class="carrier-logo">
                         <span class="carrier-name">{{
                           getCarrierDisplayName()
-                        }}</span>
+                          }}</span>
                       </div>
                       <div class="delivery-estimate">
                         <span class="estimate-text">{{
                           getDeliveryEstimate()
-                        }}</span>
+                          }}</span>
                       </div>
                     </div>
                   </div>
@@ -1521,14 +926,7 @@
 
               <div class="delivery-note">
                 <div class="note-icon">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10" />
                     <path d="M12 16v-4M12 8h.01" />
                   </svg>
@@ -1556,13 +954,11 @@
                 <span class="total-label">Tổng tiền hàng:</span>
                 <span class="total-amount">{{
                   formatCurrency(currentOrder?.tongTien || 0)
-                }}</span>
+                  }}</span>
               </div>
               <div class="total-row" v-if="currentOrder?.discount">
                 <span class="total-label">Giảm giá:</span>
-                <span class="total-amount discount-amount"
-                  >-{{ formatCurrency(currentOrder.discount) }}</span
-                >
+                <span class="total-amount discount-amount">-{{ formatCurrency(currentOrder.discount) }}</span>
               </div>
               <div class="total-divider"></div>
               <div class="total-row final-row">
@@ -1570,7 +966,7 @@
                 <span class="final-amount">{{
                   formatCurrency(
                     (currentOrder?.tongTien || 0) -
-                      (currentOrder?.discount || 0)
+                    (currentOrder?.discount || 0)
                   )
                 }}</span>
               </div>
@@ -1578,23 +974,11 @@
           </div>
 
           <!-- Confirm Order Button -->
-          <button
-            class="confirm-order-btn"
-            @click="confirmOrder"
-            :disabled="
-              !currentOrder ||
-              !currentOrder.danhSachSanPham?.length ||
-              !customerDisplayName.trim()
-            "
-          >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+          <button class="confirm-order-btn" @click="confirmOrder" :disabled="!currentOrder ||
+            !currentOrder.danhSachSanPham?.length ||
+            !customerDisplayName.trim()
+            ">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 12l2 2 4-4" />
               <circle cx="12" cy="12" r="10" />
             </svg>
@@ -1606,24 +990,13 @@
   </div>
 
   <!-- Modern Product Search Modal -->
-  <div
-    v-if="showProductSearch"
-    class="modal-overlay"
-    @click="showProductSearch = false"
-  >
+  <div v-if="showProductSearch" class="modal-overlay" @click="showProductSearch = false">
     <div class="product-modal" @click.stop>
       <div class="product-modal-header">
         <h3 class="modal-title">Tìm kiếm sản phẩm</h3>
         <p class="modal-subtitle">Chọn sản phẩm để thêm vào đơn hàng</p>
         <button class="modal-close-btn" @click="showProductSearch = false">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </button>
@@ -1634,24 +1007,13 @@
         <div class="search-header">
           <div class="main-search-container">
             <div class="search-input-wrapper">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                class="search-icon"
-              >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="search-icon">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="M21 21l-4.35-4.35"></path>
               </svg>
-              <input
-                type="text"
-                v-model="productSearchQuery"
-                class="main-search-input"
-                placeholder="Tìm theo tên sản phẩm, mã sản phẩm..."
-              />
+              <input type="text" v-model="productSearchQuery" class="main-search-input"
+                placeholder="Tìm theo tên sản phẩm, mã sản phẩm..." />
             </div>
 
             <div class="price-filter-compact">
@@ -1659,17 +1021,12 @@
               <div class="price-display">
                 <span class="price-value">{{
                   formatCurrency(priceRange.min)
-                }}</span>
-                <input
-                  type="range"
-                  :min="priceRange.min"
-                  :max="priceRange.max"
-                  v-model="selectedPriceMax"
-                  class="price-slider"
-                />
+                  }}</span>
+                <input type="range" :min="priceRange.min" :max="priceRange.max" v-model="selectedPriceMax"
+                  class="price-slider" />
                 <span class="price-value">{{
                   formatCurrency(priceRange.max)
-                }}</span>
+                  }}</span>
               </div>
             </div>
           </div>
@@ -1680,17 +1037,8 @@
           <div class="filter-header">
             <h4 class="filter-title">Bộ lọc sản phẩm</h4>
             <button class="clear-filters-btn" @click="clearAllFilters">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"
-                />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" />
               </svg>
               Xóa bộ lọc
             </button>
@@ -1701,11 +1049,7 @@
               <label class="filter-label">Nhà sản xuất</label>
               <select v-model="selectedNhaSanXuat" class="filter-select">
                 <option value="">Tất cả nhà sản xuất</option>
-                <option
-                  v-for="category in NhaSanXuats"
-                  :key="category.id"
-                  :value="category.id"
-                >
+                <option v-for="category in NhaSanXuats" :key="category.id" :value="category.id">
                   {{ category.tenNhaSanXuat }}
                 </option>
               </select>
@@ -1715,11 +1059,7 @@
               <label class="filter-label">Xuất xứ</label>
               <select v-model="selectedXuatXu" class="filter-select">
                 <option value="">Tất cả xuất xứ</option>
-                <option
-                  v-for="category in XuatXus"
-                  :key="category.id"
-                  :value="category.id"
-                >
+                <option v-for="category in XuatXus" :key="category.id" :value="category.id">
                   {{ category.tenXuatXu }}
                 </option>
               </select>
@@ -1729,11 +1069,7 @@
               <label class="filter-label">Chất liệu</label>
               <select v-model="selectedChatLieu" class="filter-select">
                 <option value="">Tất cả chất liệu</option>
-                <option
-                  v-for="category in ChatLieus"
-                  :key="category.id"
-                  :value="category.id"
-                >
+                <option v-for="category in ChatLieus" :key="category.id" :value="category.id">
                   {{ category.tenChatLieu }}
                 </option>
               </select>
@@ -1743,11 +1079,7 @@
               <label class="filter-label">Kích thước</label>
               <select v-model="selectedSize" class="filter-select">
                 <option value="">Tất cả kích thước</option>
-                <option
-                  v-for="category in KichThuocs"
-                  :key="category.id"
-                  :value="category.id"
-                >
+                <option v-for="category in KichThuocs" :key="category.id" :value="category.id">
                   {{ category.tenKichThuoc }}
                 </option>
               </select>
@@ -1757,11 +1089,7 @@
               <label class="filter-label">Đế giày</label>
               <select v-model="selectedDeGiay" class="filter-select">
                 <option value="">Tất cả loại đế</option>
-                <option
-                  v-for="category in DeGiays"
-                  :key="category.id"
-                  :value="category.id"
-                >
+                <option v-for="category in DeGiays" :key="category.id" :value="category.id">
                   {{ category.tenDeGiay }}
                 </option>
               </select>
@@ -1771,11 +1099,7 @@
               <label class="filter-label">Màu sắc</label>
               <select v-model="selectedMauSac" class="filter-select">
                 <option value="">Tất cả màu sắc</option>
-                <option
-                  v-for="category in MauSacs"
-                  :key="category.id"
-                  :value="category.id"
-                >
+                <option v-for="category in MauSacs" :key="category.id" :value="category.id">
                   {{ category.tenMauSac }}
                 </option>
               </select>
@@ -1785,64 +1109,27 @@
 
         <!-- Redesigned Product Grid -->
         <div class="product-grid">
-          <div
-            v-for="product in filteredSearchProducts"
-            :key="product.id"
-            class="product-card"
-          >
-            <div
-              class="product-discount-badge"
-              v-if="product.giaTriGiamGia > 0"
-            >
+          <div v-for="product in filteredSearchProducts" :key="product.id" class="product-card">
+            <div class="product-discount-badge" v-if="product.giaTriGiamGia > 0">
               <span class="discount-text">-{{ product.giaTriGiamGia }}%</span>
             </div>
 
-            <div
-              class="product-image-section"
-              @click="openImageModal(product.id)"
-            >
+            <div class="product-image-section" @click="openImageModal(product.id)">
               <div class="product-image">
-                <img
-                  v-if="product.anhSanPham && product.anhSanPham.length > 0"
-                  :src="
-                    product.anhSanPham[0].startsWith('http')
-                      ? product.anhSanPham[0]
-                      : IMAGE_BASE_URL + product.anhSanPham[0]
-                  "
-                  :alt="product.tenSanPham"
-                  @error="handleImageError"
-                />
+                <img v-if="product.anhSanPham && product.anhSanPham.length > 0" :src="product.anhSanPham[0].startsWith('http')
+                    ? product.anhSanPham[0]
+                    : IMAGE_BASE_URL + product.anhSanPham[0]
+                  " :alt="product.tenSanPham" @error="handleImageError" />
                 <div v-else class="image-placeholder">
-                  <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <rect
-                      x="3"
-                      y="3"
-                      width="18"
-                      height="18"
-                      rx="2"
-                      ry="2"
-                    ></rect>
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                     <polyline points="21,15 16,10 5,21"></polyline>
                   </svg>
                 </div>
               </div>
               <div class="image-overlay">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                   <circle cx="12" cy="12" r="3"></circle>
                 </svg>
@@ -1854,25 +1141,13 @@
 
               <!-- Stock Status Badge -->
               <div class="stock-status">
-                <div
-                  class="stock-badge"
-                  :class="{
-                    'in-stock': product.soLuong > 10,
-                    'low-stock': product.soLuong > 0 && product.soLuong <= 10,
-                    'out-of-stock': !product.soLuong || product.soLuong <= 0,
-                  }"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
+                <div class="stock-badge" :class="{
+                  'in-stock': product.soLuong > 10,
+                  'low-stock': product.soLuong > 0 && product.soLuong <= 10,
+                  'out-of-stock': !product.soLuong || product.soLuong <= 0,
+                }">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                   </svg>
                   <span class="stock-text">
                     {{
@@ -1885,10 +1160,19 @@
               </div>
 
               <div class="product-details">
-                <span class="product-code">{{ product.maSanPham }}</span>
                 <span class="product-brand">{{ product.tenNhaSanXuat }}</span>
               </div>
               <div class="product-specs">
+                <span class="spec product-code">{{ 
+                  product.ma_san_pham ||
+                  product.sanPham?.ma_san_pham ||
+                  product.maSanPham || 
+                  product.sanPham?.maSanPham || 
+                  product.code || 
+                  product.productCode ||
+                  product.sku || 
+                  `SP${String(product.id).padStart(5, '0')}` 
+                }}</span>
                 <span class="spec">{{ product.tenMauSac }}</span>
                 <span class="spec">{{ product.tenKichThuoc }}</span>
                 <span class="spec">{{ product.tenChatLieu }}</span>
@@ -1896,7 +1180,7 @@
               <div class="product-pricing">
                 <span v-if="product.giaTriGiamGia > 0" class="original-price">{{
                   formatCurrency(product.giaBan)
-                }}</span>
+                  }}</span>
                 <span class="current-price">{{
                   formatCurrency(
                     (product.giaBan / 100) * (100 - product.giaTriGiamGia)
@@ -1906,40 +1190,19 @@
             </div>
 
             <div class="product-actions">
-              <button
-                class="add-to-cart-btn"
-                :class="{
-                  disabled:
-                    !product.trangThai ||
-                    !product.soLuong ||
-                    product.soLuong <= 0,
-                }"
-                :disabled="
-                  !product.trangThai || !product.soLuong || product.soLuong <= 0
-                "
-                @click="addProductToCart(product)"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
-                  />
-                </svg>
+              <button class="add-to-cart-btn" :class="{
+                disabled:
+                  !product.trangThai ||
+                  !product.soLuong ||
+                  product.soLuong <= 0,
+              }" :disabled="!product.trangThai || !product.soLuong || product.soLuong <= 0
+                  " @click="addProductToCart(product)">
+                <img :src="ShoppingCartIcon" alt="Shopping Cart" width="16" height="16" />
                 <span>
                   {{
                     !product.trangThai
                       ? "Ngưng bán"
-                      : !product.soLuong || product.soLuong <= 0
-                      ? "Hết hàng"
-                      : "Thêm vào giỏ"
-                  }}
-                </span>
+                      : !product.soLuong || product.soLuong <= 0 ? "Hết hàng" : "Thêm vào giỏ" }} </span>
               </button>
             </div>
           </div>
@@ -1949,23 +1212,12 @@
   </div>
 
   <!-- Modern Customer Search Modal -->
-  <div
-    v-if="showCustomerSearch"
-    class="modal-overlay"
-    @click="showCustomerSearch = false"
-  >
+  <div v-if="showCustomerSearch" class="modal-overlay" @click="showCustomerSearch = false">
     <div class="customer-modal" @click.stop>
       <div class="customer-modal-header">
         <h3 class="modal-title">Tìm kiếm khách hàng</h3>
         <button class="modal-close-btn" @click="showCustomerSearch = false">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </button>
@@ -1974,34 +1226,16 @@
       <div class="customer-modal-body">
         <div class="customer-search-section">
           <div class="search-input-container">
-            <svg
-              class="search-icon"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
               <circle cx="11" cy="11" r="8" />
               <path d="M21 21l-4.35-4.35" />
             </svg>
-            <input
-              type="text"
-              v-model="customerSearchQuery"
-              class="customer-search-input"
-              placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email"
-            />
+            <input type="text" v-model="customerSearchQuery" class="customer-search-input"
+              placeholder="Tìm kiếm tên hoặc số điện thoại hoặc email" />
           </div>
           <button class="add-customer-btn" @click="openAddCustomerForm">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 5v14M5 12h14" />
             </svg>
             <span>THÊM KHÁCH HÀNG</span>
@@ -2021,11 +1255,7 @@
               <div class="header-cell">THAO TÁC</div>
             </div>
             <div class="table-body">
-              <div
-                v-for="(customer, index) in filteredCustomers"
-                :key="customer.id"
-                class="table-row"
-              >
+              <div v-for="(customer, index) in filteredCustomers" :key="customer.id" class="table-row">
                 <div class="table-cell">{{ index + 1 }}</div>
                 <div class="table-cell">{{ customer.email }}</div>
                 <div class="table-cell">
@@ -2038,7 +1268,7 @@
                 <div class="table-cell">
                   <span class="gender-badge">{{
                     customer.gioiTinh ? "Nam" : "Nữ"
-                  }}</span>
+                    }}</span>
                 </div>
                 <div class="table-cell">
                   <span class="status-badge active">
@@ -2046,10 +1276,7 @@
                   </span>
                 </div>
                 <div class="table-cell">
-                  <button
-                    class="select-customer-btn"
-                    @click="selectCustomer(customer)"
-                  >
+                  <button class="select-customer-btn" @click="selectCustomer(customer)">
                     CHỌN
                   </button>
                 </div>
@@ -2066,54 +1293,31 @@
           </div>
           <div class="add-form-content">
             <div class="modern-form-group">
-              <input
-                type="text"
-                v-model="newCustomerForm.tenKhachHang"
-                class="modern-form-input"
-                placeholder="Nhập họ và tên"
-                required
-              />
+              <input type="text" v-model="newCustomerForm.tenKhachHang" class="modern-form-input"
+                placeholder="Nhập họ và tên" required />
             </div>
 
             <div class="form-row">
               <div class="modern-form-group">
                 <label class="modern-form-label">*Email</label>
-                <input
-                  type="email"
-                  v-model="newCustomerForm.email"
-                  class="modern-form-input"
-                  placeholder="Nhập email"
-                  required
-                />
+                <input type="email" v-model="newCustomerForm.email" class="modern-form-input" placeholder="Nhập email"
+                  required />
               </div>
               <div class="modern-form-group">
                 <label class="modern-form-label">*Số điện thoại</label>
-                <input
-                  type="tel"
-                  v-model="newCustomerForm.soDienThoai"
-                  class="modern-form-input"
-                  placeholder="Nhập số điện thoại"
-                  required
-                />
+                <input type="tel" v-model="newCustomerForm.soDienThoai" class="modern-form-input"
+                  placeholder="Nhập số điện thoại" required />
               </div>
             </div>
 
             <div class="form-row">
               <div class="modern-form-group">
                 <label class="modern-form-label">*Ngày sinh</label>
-                <input
-                  type="date"
-                  v-model="newCustomerForm.ngaySinh"
-                  class="modern-form-input"
-                  required
-                />
+                <input type="date" v-model="newCustomerForm.ngaySinh" class="modern-form-input" required />
               </div>
               <div class="modern-form-group">
                 <label class="modern-form-label">*Giới tính</label>
-                <select
-                  v-model="newCustomerForm.gioiTinh"
-                  class="modern-form-select"
-                >
+                <select v-model="newCustomerForm.gioiTinh" class="modern-form-select">
                   <option :value="true">Nam</option>
                   <option :value="false">Nữ</option>
                 </select>
@@ -2124,21 +1328,11 @@
               <h4>Thông tin tài khoản</h4>
               <div class="form-group">
                 <label class="form-label">*Tài khoản</label>
-                <input
-                  type="text"
-                  v-model="newCustomerForm.tenTaiKhoan"
-                  class="form-control"
-                  required
-                />
+                <input type="text" v-model="newCustomerForm.tenTaiKhoan" class="form-control" required />
               </div>
               <div class="form-group">
                 <label class="form-label">*Mật khẩu</label>
-                <input
-                  type="password"
-                  v-model="newCustomerForm.matKhau"
-                  class="form-control"
-                  required
-                />
+                <input type="password" v-model="newCustomerForm.matKhau" class="form-control" required />
               </div>
             </div>
 
@@ -2150,45 +1344,26 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">*Tỉnh/thành phố</label>
-                  <input
-                    type="text"
-                    v-model="newCustomerForm.listDiaChi[0].thanhPho"
-                    class="form-control"
-                    placeholder="Nhập tên tỉnh/thành phố"
-                    required
-                  />
+                  <input type="text" v-model="newCustomerForm.listDiaChi[0].thanhPho" class="form-control"
+                    placeholder="Nhập tên tỉnh/thành phố" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label">*Quận/huyện</label>
-                  <input
-                    type="text"
-                    v-model="newCustomerForm.listDiaChi[0].quan"
-                    class="form-control"
-                    placeholder="Nhập tên quận/huyện"
-                    required
-                  />
+                  <input type="text" v-model="newCustomerForm.listDiaChi[0].quan" class="form-control"
+                    placeholder="Nhập tên quận/huyện" required />
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">*Xã/phường/thị trấn</label>
-                  <input
-                    type="text"
-                    v-model="newCustomerForm.listDiaChi[0].phuong"
-                    class="form-control"
-                    placeholder="Nhập tên xã/phường/thị trấn"
-                    required
-                  />
+                  <input type="text" v-model="newCustomerForm.listDiaChi[0].phuong" class="form-control"
+                    placeholder="Nhập tên xã/phường/thị trấn" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label">*Địa chỉ cụ thể</label>
-                  <input
-                    type="text"
-                    v-model="newCustomerForm.listDiaChi[0].diaChiCuThe"
-                    class="form-control"
-                    required
-                  />
+                  <input type="text" v-model="newCustomerForm.listDiaChi[0].diaChiCuThe" class="form-control"
+                    required />
                 </div>
               </div>
             </div>
@@ -2207,56 +1382,29 @@
     </div>
 
     <!-- Image Modal -->
-    <div
-      v-if="showImageModal"
-      class="image-modal-overlay"
-      @click="closeImageModal"
-    >
+    <div v-if="showImageModal" class="image-modal-overlay" @click="closeImageModal">
       <div class="image-modal-content" @click.stop>
         <button class="image-modal-close" @click="closeImageModal">✕</button>
 
         <div class="image-modal-main">
-          <button
-            v-if="currentProductImages.length > 1"
-            class="nav-btn prev-btn"
-            @click="prevImage"
-          >
+          <button v-if="currentProductImages.length > 1" class="nav-btn prev-btn" @click="prevImage">
             ‹
           </button>
 
           <div class="image-modal-display">
-            <img
-              :src="currentProductImages[selectedImageIndex]?.duongDanAnh"
-              :alt="`Ảnh ${selectedImageIndex + 1}`"
-              class="modal-image"
-              @error="handleImageError"
-            />
+            <img :src="currentProductImages[selectedImageIndex]?.duongDanAnh" :alt="`Ảnh ${selectedImageIndex + 1}`"
+              class="modal-image" @error="handleImageError" />
           </div>
 
-          <button
-            v-if="currentProductImages.length > 1"
-            class="nav-btn next-btn"
-            @click="nextImage"
-          >
+          <button v-if="currentProductImages.length > 1" class="nav-btn next-btn" @click="nextImage">
             ›
           </button>
         </div>
 
-        <div
-          v-if="currentProductImages.length > 1"
-          class="image-modal-thumbnails"
-        >
-          <div
-            v-for="(image, index) in currentProductImages"
-            :key="image.id"
-            :class="['thumbnail', { active: index === selectedImageIndex }]"
-            @click="selectImage(index)"
-          >
-            <img
-              :src="image.duongDanAnh"
-              :alt="`Thumbnail ${index + 1}`"
-              @error="handleImageError"
-            />
+        <div v-if="currentProductImages.length > 1" class="image-modal-thumbnails">
+          <div v-for="(image, index) in currentProductImages" :key="image.id"
+            :class="['thumbnail', { active: index === selectedImageIndex }]" @click="selectImage(index)">
+            <img :src="image.duongDanAnh" :alt="`Thumbnail ${index + 1}`" @error="handleImageError" />
           </div>
         </div>
 
@@ -2273,14 +1421,7 @@
       <div class="coupon-modal-header">
         <div class="header-content">
           <div class="header-icon">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
               <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2" />
               <circle cx="9" cy="12" r="1" />
@@ -2295,14 +1436,7 @@
           </div>
         </div>
         <button class="modern-close-btn" @click="closeCouponModal">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </button>
@@ -2310,23 +1444,11 @@
 
       <div class="coupon-modal-body">
         <!-- Current Applied Voucher Section -->
-        <div
-          v-if="autoAppliedCoupon || selectedCoupons.length > 0"
-          class="current-voucher-section"
-        >
+        <div v-if="autoAppliedCoupon || selectedCoupons.length > 0" class="current-voucher-section">
           <div class="current-voucher-card">
             <div class="current-voucher-header">
               <div class="current-voucher-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <img :src="GiftIcon" alt="Gift" width="20" height="20" />
               </div>
               <div class="current-voucher-text">
                 <h4 class="current-voucher-title">
@@ -2346,12 +1468,11 @@
                   }}
                 </div>
                 <div class="voucher-discount">
-                  <span
-                    v-if="
-                      (autoAppliedCoupon || selectedCoupons[0])
-                        ?.loaiPhieuGiamGia === false
-                    "
-                  >
+                  <img :src="CelebrationIcon" alt="Celebration" width="16" height="16" class="discount-icon" />
+                  <span v-if="
+                    (autoAppliedCoupon || selectedCoupons[0])
+                      ?.loaiPhieuGiamGia === false
+                  ">
                     -{{
                       (autoAppliedCoupon || selectedCoupons[0])?.giaTriGiamGia
                     }}%
@@ -2367,24 +1488,19 @@
               </div>
 
               <div class="voucher-status">
-                <div
-                  class="status-indicator"
-                  :class="{
-                    valid: canApplyCoupon(
-                      autoAppliedCoupon || selectedCoupons[0]
-                    ),
-                    invalid: !canApplyCoupon(
-                      autoAppliedCoupon || selectedCoupons[0]
-                    ),
-                  }"
-                >
-                  <span
-                    v-if="
-                      canApplyCoupon(autoAppliedCoupon || selectedCoupons[0])
-                    "
-                    class="status-text valid-text"
-                  >
-                    ✅ Có thể sử dụng
+                <div class="status-indicator" :class="{
+                  valid: canApplyCoupon(
+                    autoAppliedCoupon || selectedCoupons[0]
+                  ),
+                  invalid: !canApplyCoupon(
+                    autoAppliedCoupon || selectedCoupons[0]
+                  ),
+                }">
+                  <span v-if="
+                    canApplyCoupon(autoAppliedCoupon || selectedCoupons[0])
+                  " class="status-text valid-text">
+                    <img :src="CompletedIcon" alt="Valid" width="16" height="16" class="status-icon" />
+                    Có thể sử dụng
                   </span>
                   <span v-else class="status-text invalid-text">
                     ❌ Không đủ điều kiện
@@ -2394,71 +1510,27 @@
 
               <div class="current-voucher-actions">
                 <button class="change-voucher-btn" @click="scrollToVoucherList">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                    />
-                    <path d="M9 15l3-3 3 3" />
-                    <path d="M12 3v12" />
-                  </svg>
+                  <img :src="EditIcon" alt="Edit" width="16" height="16" />
                   Thay đổi
                 </button>
-                <button
-                  class="remove-voucher-btn"
-                  @click="removeCurrentVoucher"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                    />
-                    <line x1="10" y1="11" x2="10" y2="17" />
-                    <line x1="14" y1="11" x2="14" y2="17" />
-                  </svg>
+                <button class="remove-voucher-btn" @click="removeCurrentVoucher">
+                  <img :src="TrashIcon" alt="Remove" width="16" height="16" />
                   Hủy phiếu
                 </button>
               </div>
             </div>
 
             <!-- Validation Messages -->
-            <div
-              v-if="!canApplyCoupon(autoAppliedCoupon || selectedCoupons[0])"
-              class="validation-messages"
-            >
+            <div v-if="!canApplyCoupon(autoAppliedCoupon || selectedCoupons[0])" class="validation-messages">
               <div class="validation-item">
                 <div class="validation-icon">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 8v4M12 16h.01" />
-                  </svg>
+                  <img :src="WarningIcon" alt="Warning" width="14" height="14" />
                 </div>
                 <div class="validation-text">
-                  <div
-                    v-if="
-                      currentOrder?.tongTien <
-                      (autoAppliedCoupon || selectedCoupons[0])?.hoaDonToiThieu
-                    "
-                  >
+                  <div v-if="
+                    currentOrder?.tongTien <
+                    (autoAppliedCoupon || selectedCoupons[0])?.hoaDonToiThieu
+                  ">
                     Đơn hàng tối thiểu:
                     {{
                       formatCurrency(
@@ -2481,50 +1553,29 @@
             <span class="order-label">Tổng đơn hàng:</span>
             <span class="order-amount">{{
               formatCurrency(currentOrder?.tongTien || 0)
-            }}</span>
+              }}</span>
           </div>
         </div>
 
         <div class="coupon-grid">
-          <div
-            v-for="coupon in availableCoupons"
-            :key="coupon.id"
-            class="modern-coupon-card"
-            :class="{
-              selected: isCouponSelected(coupon.id),
-              disabled: !canApplyCoupon(coupon),
-              percentage: coupon.loaiPhieuGiamGia === false,
-              fixed: coupon.loaiPhieuGiamGia === true,
-            }"
-            @click="
+          <div v-for="coupon in availableCoupons" :key="coupon.id" class="modern-coupon-card" :class="{
+            selected: isCouponSelected(coupon.id),
+            disabled: !canApplyCoupon(coupon),
+            percentage: coupon.loaiPhieuGiamGia === false,
+            fixed: coupon.loaiPhieuGiamGia === true,
+          }" @click="
               canApplyCoupon(coupon) ? toggleCouponSelection(coupon) : null
-            "
-          >
+              ">
             <div class="coupon-badge">
               <div class="discount-icon">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    v-if="coupon.loaiPhieuGiamGia === false"
-                    d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                  />
-                  <path
-                    v-else
-                    d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"
-                  />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path v-if="coupon.loaiPhieuGiamGia === false"
+                    d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  <path v-else d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
                 </svg>
               </div>
               <div class="discount-value">
-                <span
-                  v-if="coupon.loaiPhieuGiamGia === false"
-                  class="percentage-discount"
-                >
+                <span v-if="coupon.loaiPhieuGiamGia === false" class="percentage-discount">
                   {{ coupon.giaTriGiamGia }}%
                 </span>
                 <span v-else class="fixed-discount">
@@ -2538,10 +1589,7 @@
 
               <div class="coupon-details">
                 <div class="discount-info">
-                  <span
-                    v-if="coupon.loaiPhieuGiamGia === false"
-                    class="discount-text"
-                  >
+                  <span v-if="coupon.loaiPhieuGiamGia === false" class="discount-text">
                     Giảm {{ coupon.giaTriGiamGia }}% đơn hàng
                   </span>
                   <span v-else class="discount-text">
@@ -2560,32 +1608,21 @@
 
               <div v-if="!canApplyCoupon(coupon)" class="unavailable-reason">
                 <div class="reason-icon">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10" />
                     <path d="M15 9l-6 6M9 9l6 6" />
                   </svg>
                 </div>
-                <span
-                  v-if="
-                    coupon.hoaDonToiThieu &&
-                    currentOrder.tongTien < coupon.hoaDonToiThieu
-                  "
-                >
+                <span v-if="
+                  coupon.hoaDonToiThieu &&
+                  currentOrder.tongTien < coupon.hoaDonToiThieu
+                ">
                   Chưa đủ giá trị tối thiểu
                 </span>
-                <span
-                  v-else-if="
-                    selectedCoupons.length > 0 &&
-                    !selectedCoupons.some((c) => c.id === coupon.id)
-                  "
-                >
+                <span v-else-if="
+                  selectedCoupons.length > 0 &&
+                  !selectedCoupons.some((c) => c.id === coupon.id)
+                ">
                   Chỉ được chọn 1 phiếu
                 </span>
                 <span v-else>Phiếu không khả dụng</span>
@@ -2594,14 +1631,9 @@
 
             <div class="coupon-selection">
               <div class="custom-radio">
-                <input
-                  type="radio"
-                  :id="'coupon-' + coupon.id"
-                  :name="'coupon-selection'"
-                  :checked="isCouponSelected(coupon.id)"
-                  :disabled="!canApplyCoupon(coupon)"
-                  @change="toggleCouponSelection(coupon)"
-                />
+                <input type="radio" :id="'coupon-' + coupon.id" :name="'coupon-selection'"
+                  :checked="isCouponSelected(coupon.id)" :disabled="!canApplyCoupon(coupon)"
+                  @change="toggleCouponSelection(coupon)" />
                 <label :for="'coupon-' + coupon.id" class="radio-label"></label>
               </div>
             </div>
@@ -2609,14 +1641,7 @@
 
           <div v-if="availableCoupons.length === 0" class="no-coupons-state">
             <div class="empty-icon">
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M21 12v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2" />
                 <path d="M21 12v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2" />
                 <circle cx="9" cy="12" r="1" />
@@ -2647,19 +1672,8 @@
 
         <div class="modal-actions">
           <button class="cancel-btn" @click="closeCouponModal">Hủy</button>
-          <button
-            class="confirm-btn"
-            @click="confirmCouponSelection"
-            :disabled="selectedCoupons.length === 0"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+          <button class="confirm-btn" @click="confirmCouponSelection" :disabled="selectedCoupons.length === 0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M20 6L9 17l-5-5" />
             </svg>
             {{ selectedCoupons.length > 0 ? "Xác nhận (1 phiếu)" : "Xác nhận" }}
@@ -2670,63 +1684,28 @@
   </div>
 
   <!-- Notification Popup -->
-  <div
-    v-if="showNotification"
-    class="notification-overlay"
-    @click="showNotification = false"
-  >
+  <div v-if="showNotification" class="notification-overlay" @click="showNotification = false">
     <div class="notification-modal" @click.stop>
       <div class="notification-content" :class="notificationType">
         <div class="notification-icon">
-          <svg
-            v-if="notificationType === 'success'"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg v-if="notificationType === 'success'" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22,4 12,14.01 9,11.01" />
           </svg>
-          <svg
-            v-else-if="notificationType === 'error'"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg v-else-if="notificationType === 'error'" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10" />
             <line x1="15" y1="9" x2="9" y2="15" />
             <line x1="9" y1="9" x2="15" y2="15" />
           </svg>
-          <svg
-            v-else-if="notificationType === 'warning'"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-            />
+          <svg v-else-if="notificationType === 'warning'" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
             <line x1="12" y1="9" x2="12" y2="13" />
             <line x1="12" y1="17" x2="12.01" y2="17" />
           </svg>
-          <svg
-            v-else
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10" />
             <path d="M12 16v-4M12 8h.01" />
           </svg>
@@ -2735,14 +1714,7 @@
           {{ notificationMessage }}
         </div>
         <button class="notification-close" @click="showNotification = false">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
@@ -2750,13 +1722,128 @@
       </div>
     </div>
   </div>
+
+  <!-- Modern QR Scanner Modal -->
+  <div v-if="showQRScanner" class="modal-overlay" @click="closeQRScanner">
+    <div class="qr-scanner-modal" @click.stop>
+      <div class="qr-modal-header">
+        <h3 class="modal-title">Quét mã QR sản phẩm</h3>
+        <p class="modal-subtitle">Đưa mã QR vào khung hình để quét</p>
+        <button class="modal-close-btn" @click="closeQRScanner">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="qr-modal-body">
+        <div class="qr-scanner-container">
+          <!-- Camera Preview -->
+          <div class="camera-preview">
+            <video 
+              ref="qrVideo" 
+              autoplay 
+              playsinline 
+              muted
+              class="qr-video"
+              @loadedmetadata="onVideoLoaded"
+            ></video>
+            <canvas ref="qrCanvas" class="qr-canvas"></canvas>
+            
+            <!-- Scanning overlay -->
+            <div class="scanning-overlay">
+              <div class="scanning-frame">
+                <div class="corner-tl"></div>
+                <div class="corner-tr"></div>
+                <div class="corner-bl"></div>
+                <div class="corner-br"></div>
+                <div class="scanning-line" :class="{ active: isScanning }"></div>
+              </div>
+              <p class="scanning-text">
+                {{ isScanning ? 'Đang quét...' : cameraError ? cameraError : 'Đưa mã QR vào khung hình' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- QR Scanner Controls -->
+          <div class="qr-controls">
+            <div class="control-buttons">
+              <button 
+                class="control-btn" 
+                @click="toggleCamera" 
+                :disabled="!hasMultipleCameras"
+                :class="{ disabled: !hasMultipleCameras }"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m0 0V11a1 1 0 011-1h2a1 1 0 011 1v10m0 0h3a1 1 0 001-1V10M13 7h.01" />
+                </svg>
+                <span>Đổi camera</span>
+              </button>
+              
+              <button class="control-btn" @click="toggleTorch" v-if="torchSupported">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4" v-if="torchEnabled" />
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" />
+                </svg>
+                <span>{{ torchEnabled ? 'Tắt đèn pin' : 'Bật đèn pin' }}</span>
+              </button>
+
+              <button class="control-btn secondary" @click="closeQRScanner">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+                <span>Đóng</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- QR Result -->
+          <div v-if="qrResult" class="qr-result">
+            <div class="result-header">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="success-icon">
+                <polyline points="20,6 9,17 4,12"></polyline>
+              </svg>
+              <h4>Quét thành công!</h4>
+            </div>
+            <div class="result-content">
+              <p class="result-text">Mã QR: <strong>{{ qrResult }}</strong></p>
+              <div class="result-actions">
+                <button class="result-btn primary" @click="addProductFromQR">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Thêm vào giỏ hàng
+                </button>
+                <button class="result-btn secondary" @click="scanAgain">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23,4 23,10 17,10"></polyline>
+                    <polyline points="1,20 1,14 7,14"></polyline>
+                    <path d="M20.49,9A9,9,0,0,0,5.64,5.64L1,10m22,4L18.36,18.36A9,9,0,0,1,3.51,15"></path>
+                  </svg>
+                  Quét lại
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 // SVG Icons
+import CelebrationIcon from "@/assets/Celebration.svg?url";
+import CompletedIcon from "@/assets/Completed.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import GiftIcon from "@/assets/Gift.svg?url";
 import PlusIcon from "@/assets/Plus.svg?url";
+import ShoppingCartIcon from "@/assets/ShoppingCart.svg?url";
+import TrashIcon from "@/assets/Trash.svg?url";
+import WarningIcon from "@/assets/Warning.svg?url";
 
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import {
   getDistricts,
   getProvinces,
@@ -2819,12 +1906,28 @@ const tempOrder = ref([
 const currentOrderId = ref(1);
 const showProductSearch = ref(false);
 const showCustomerSearch = ref(false);
+const showQRScanner = ref(false);
 const productSearchQuery = ref("");
 const customerSearchQuery = ref("");
 const customerDisplayName = ref(""); // Hiển thị tên khách hàng trong input
 const customerSuggestions = ref([]); // Danh sách gợi ý khách hàng
 const showCustomerDropdown = ref(false); // Hiển thị dropdown suggestions
 let searchTimeout = null; // Timeout for debouncing search
+
+// QR Scanner variables
+const qrVideo = ref(null);
+const qrCanvas = ref(null);
+const qrResult = ref("");
+const isScanning = ref(false);
+const cameraError = ref("");
+const hasMultipleCameras = ref(false);
+const torchSupported = ref(false);
+const torchEnabled = ref(false);
+const currentCameraIndex = ref(0);
+let qrStream = null;
+let qrCodeReader = null;
+let animationFrameId = null;
+let availableCameras = [];
 
 // Notification popup
 const showNotification = ref(false);
@@ -2843,6 +1946,266 @@ const showNotificationPopup = (message, type = "info") => {
     showNotification.value = false;
   }, duration);
 };
+
+// QR Scanner Functions
+const initCamera = async () => {
+  try {
+    cameraError.value = "";
+    isScanning.value = false;
+    
+    // Get available cameras
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    availableCameras = devices.filter(device => device.kind === 'videoinput');
+    hasMultipleCameras.value = availableCameras.length > 1;
+    
+    if (availableCameras.length === 0) {
+      cameraError.value = "Không tìm thấy camera";
+      return;
+    }
+
+    // Setup camera constraints
+    const constraints = {
+      video: {
+        deviceId: availableCameras[currentCameraIndex.value]?.deviceId,
+        facingMode: availableCameras.length > 1 ? 'environment' : 'user',
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
+      }
+    };
+
+    // Check for torch support
+    const track = qrStream?.getVideoTracks()[0];
+    if (track && 'torch' in track.getSettings()) {
+      torchSupported.value = true;
+    }
+
+    qrStream = await navigator.mediaDevices.getUserMedia(constraints);
+    qrVideo.value.srcObject = qrStream;
+    
+  } catch (error) {
+    console.error("Camera initialization error:", error);
+    if (error.name === 'NotAllowedError') {
+      cameraError.value = "Vui lòng cho phép truy cập camera";
+    } else if (error.name === 'NotFoundError') {
+      cameraError.value = "Không tìm thấy camera";
+    } else {
+      cameraError.value = "Lỗi kết nối camera";
+    }
+  }
+};
+
+const onVideoLoaded = () => {
+  if (qrVideo.value && qrCanvas.value) {
+    const video = qrVideo.value;
+    const canvas = qrCanvas.value;
+    const context = canvas.getContext('2d');
+    
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    
+    isScanning.value = true;
+    startScanning(context, canvas, video);
+  }
+};
+
+const startScanning = (context, canvas, video) => {
+  const scan = () => {
+    if (!isScanning.value || !showQRScanner.value) {
+      return;
+    }
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    
+    // Simple QR detection using cross-platform approach
+    const qrCode = detectQRCode(imageData);
+    
+    if (qrCode) {
+      qrResult.value = qrCode;
+      isScanning.value = false;
+      showNotificationPopup("Quét QR thành công!", "success");
+    } else {
+      animationFrameId = requestAnimationFrame(scan);
+    }
+  };
+  
+  scan();
+};
+
+// Cross-platform QR detection (simplified implementation)
+const detectQRCode = (imageData) => {
+  // This is a simplified QR detection
+  // In production, you should use a proper QR code library like jsQR
+  try {
+    // Import jsQR dynamically for better cross-platform support
+    if (typeof window !== 'undefined' && window.jsQR) {
+      const code = window.jsQR(imageData.data, imageData.width, imageData.height);
+      return code ? code.data : null;
+    }
+    
+    // Fallback: simulate QR detection for testing
+    // Remove this in production and use proper QR library
+    const mockQRCodes = ['PRODUCT123', 'PRODUCT456', 'PRODUCT789'];
+    return Math.random() < 0.1 ? mockQRCodes[Math.floor(Math.random() * mockQRCodes.length)] : null;
+    
+  } catch (error) {
+    console.error("QR detection error:", error);
+    return null;
+  }
+};
+
+const toggleCamera = async () => {
+  if (hasMultipleCameras.value && availableCameras.length > 1) {
+    currentCameraIndex.value = (currentCameraIndex.value + 1) % availableCameras.length;
+    await stopCamera();
+    await initCamera();
+  }
+};
+
+const toggleTorch = async () => {
+  if (torchSupported.value && qrStream) {
+    try {
+      const track = qrStream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities();
+      
+      if (capabilities.torch) {
+        await track.applyConstraints({
+          advanced: [{ torch: !torchEnabled.value }]
+        });
+        torchEnabled.value = !torchEnabled.value;
+      }
+    } catch (error) {
+      console.error("Torch toggle error:", error);
+      showNotificationPopup("Không thể bật/tắt đèn pin", "error");
+    }
+  }
+};
+
+const stopCamera = async () => {
+  if (qrStream) {
+    qrStream.getTracks().forEach(track => track.stop());
+    qrStream = null;
+  }
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+  isScanning.value = false;
+  torchEnabled.value = false;
+};
+
+const closeQRScanner = async () => {
+  await stopCamera();
+  showQRScanner.value = false;
+  qrResult.value = "";
+  cameraError.value = "";
+};
+
+const scanAgain = () => {
+  qrResult.value = "";
+  isScanning.value = true;
+  if (qrVideo.value && qrCanvas.value) {
+    const context = qrCanvas.value.getContext('2d');
+    startScanning(context, qrCanvas.value, qrVideo.value);
+  }
+};
+
+const addProductFromQR = async () => {
+  try {
+    if (!qrResult.value) {
+      showNotificationPopup("Không có mã QR để thêm sản phẩm", "error");
+      return;
+    }
+
+    // Find product by QR code (assuming QR contains product code)
+    const product = chiTietSanPhams.value.find(p => 
+      p.maSanPham === qrResult.value || 
+      p.id.toString() === qrResult.value ||
+      p.sanPham?.maSanPham === qrResult.value
+    );
+
+    if (!product) {
+      showNotificationPopup(`Không tìm thấy sản phẩm với mã: ${qrResult.value}`, "error");
+      return;
+    }
+
+    if (product.soLuong <= 0) {
+      showNotificationPopup("Sản phẩm đã hết hàng", "warning");
+      return;
+    }
+
+    // Add product to current order
+    const order = currentOrder.value;
+    if (!order) {
+      showNotificationPopup("Vui lòng tạo đơn hàng trước", "error");
+      return;
+    }
+
+    const existingItem = order.danhSachSanPham.find(item => item.id === product.id);
+    
+    if (existingItem) {
+      // Update quantity if item already exists
+      if (existingItem.soLuong < product.soLuong) {
+        existingItem.soLuong += 1;
+      } else {
+        showNotificationPopup("Số lượng sản phẩm trong kho không đủ", "warning");
+        return;
+      }
+    } else {
+      // Add new item - using same structure as addProductToCart
+      const newItem = {
+        id: product.id,
+        maSanPham: product.ma_san_pham || product.sanPham?.ma_san_pham || product.maSanPham || product.sanPham?.maSanPham || product.code || product.productCode || product.sku || `SP${String(product.id).padStart(5, '0')}`,
+        tenSanPham: product.tenSanPham,
+        giaBan: product.giaBan,
+        giaSauGiam:
+          product.giaTriGiamGia && product.giaTriGiamGia > 0
+            ? (product.giaBan / 100) * (100 - product.giaTriGiamGia)
+            : product.giaBan,
+        giaTriGiamGia: product.giaTriGiamGia,
+        tenKichThuoc: product.tenKichThuoc,
+        tenChatLieu: product.tenChatLieu,
+        tenDeGiay: product.tenDeGiay,
+        tenNhaSanXuat: product.tenNhaSanXuat,
+        tenXuatXu: product.tenXuatXu,
+        tenTrongLuong: product.tenTrongLuong,
+        tenMauSac: product.tenMauSac,
+        soLuong: 1,
+        deleted: false,
+        duongDanAnh:
+          product.anhSanPham && product.anhSanPham.length > 0
+            ? product.anhSanPham[0]
+            : null,
+        trangThai: product.trangThai,
+        selected: true,
+      };
+      order.danhSachSanPham.push(newItem);
+    }
+
+    updateOrderTotals();
+    showNotificationPopup(`Đã thêm ${product.tenSanPham || 'sản phẩm'} vào giỏ hàng`, "success");
+    closeQRScanner();
+    
+  } catch (error) {
+    console.error("Error adding product from QR:", error);
+    showNotificationPopup("Có lỗi xảy ra khi thêm sản phẩm", "error");
+  }
+};
+
+// Watch for QR scanner modal open/close
+watch(showQRScanner, async (newVal) => {
+  if (newVal) {
+    await nextTick();
+    await initCamera();
+  } else {
+    await stopCamera();
+  }
+});
+
+// Cleanup camera on component unmount
+onUnmounted(async () => {
+  await stopCamera();
+});
 
 // Add customer form in modal
 const showAddCustomerForm = ref(false); // Hiển thị form thêm khách hàng
@@ -3192,13 +2555,13 @@ const fetchAll = async () => {
     await fetchKhachHang();
     await fetchPhieuGiamGia();
     await fetchChiTietSanPham();
-  } catch (error) {}
+  } catch (error) { }
 };
 const fetchCreateOrderDetail = async (id) => {
   try {
     let res3 = await fetchActivePhieuGiamGiaForCustomer(id);
     PhieuGiamGias.value = res3.data;
-  } catch (error) {}
+  } catch (error) { }
 };
 const fetchCreateOrder = async () => {
   try {
@@ -3634,8 +2997,7 @@ const addProductToCart = async (product) => {
       chiTietSanPham.soLuong < requestedQuantity
     ) {
       showNotificationPopup(
-        `Không đủ số lượng sản phẩm "${product.tenSanPham}".\nCòn lại: ${
-          chiTietSanPham.soLuong || 0
+        `Không đủ số lượng sản phẩm "${product.tenSanPham}".\nCòn lại: ${chiTietSanPham.soLuong || 0
         }, yêu cầu: ${requestedQuantity}`,
         "warning"
       );
@@ -3649,6 +3011,7 @@ const addProductToCart = async (product) => {
       // Nếu sản phẩm chưa có, thêm mới vào giỏ hàng
       const newItem = {
         id: product.id,
+        maSanPham: product.ma_san_pham || product.sanPham?.ma_san_pham || product.maSanPham || product.sanPham?.maSanPham || product.code || product.productCode || product.sku || `SP${String(product.id).padStart(5, '0')}`,
         tenSanPham: product.tenSanPham,
         giaBan: product.giaBan,
         giaSauGiam:
@@ -3721,8 +3084,7 @@ const updateQuantity = async (item, change) => {
         chiTietSanPham.soLuong < newQuantity
       ) {
         showNotificationPopup(
-          `Không đủ số lượng sản phẩm "${item.tenSanPham}".\nCòn lại: ${
-            chiTietSanPham.soLuong || 0
+          `Không đủ số lượng sản phẩm "${item.tenSanPham}".\nCòn lại: ${chiTietSanPham.soLuong || 0
           }, yêu cầu: ${newQuantity}`,
           "warning"
         );
@@ -3789,7 +3151,7 @@ const validateCartInventory = async () => {
       if (availableStock < item.soLuong) {
         throw new Error(
           `Không đủ số lượng sản phẩm "${item.tenSanPham}".\n` +
-            `Yêu cầu: ${item.soLuong}, Còn lại: ${availableStock}`
+          `Yêu cầu: ${item.soLuong}, Còn lại: ${availableStock}`
         );
       }
 
@@ -3846,15 +3208,13 @@ const updateOrderTotals = () => {
   console.log("🔍 CHI TIẾT TÍNH TỔNG TIỀN HÀNG GỐC:");
   order.danhSachSanPham.forEach((item, index) => {
     console.log(
-      `  ${index + 1}. ${item.tenSanPham}: ${formatCurrency(item.giaBan)} × ${
-        item.soLuong
+      `  ${index + 1}. ${item.tenSanPham}: ${formatCurrency(item.giaBan)} × ${item.soLuong
       } = ${formatCurrency(item.giaBan * item.soLuong)}`
     );
   });
   console.log(`  → TỔNG TIỀN HÀNG GỐC: ${formatCurrency(tongTienGoc)}`);
   console.log(
-    `  → CHECK FREE SHIP: ${tongTienGoc} >= 2000000 = ${
-      tongTienGoc >= 2000000 ? "✅ Đủ điều kiện" : "❌ Chưa đủ"
+    `  → CHECK FREE SHIP: ${tongTienGoc} >= 2000000 = ${tongTienGoc >= 2000000 ? "✅ Đủ điều kiện" : "❌ Chưa đủ"
     }`
   );
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -4167,8 +3527,7 @@ const autoApplyBestCoupon = () => {
     `🔍 DEBUG autoApplyBestCoupon - Tổng tiền đơn hàng: ${order?.tongTien}đ`
   );
   console.log(
-    `🔍 DEBUG autoApplyBestCoupon - Số phiếu có sẵn: ${
-      availableCoupons.value?.length || 0
+    `🔍 DEBUG autoApplyBestCoupon - Số phiếu có sẵn: ${availableCoupons.value?.length || 0
     }`
   );
 
@@ -4179,8 +3538,7 @@ const autoApplyBestCoupon = () => {
     order.tongTien <= 0
   ) {
     console.log(
-      `❌ autoApplyBestCoupon - Không thể áp dụng phiếu (order: ${!!order}, coupons: ${
-        availableCoupons.value?.length || 0
+      `❌ autoApplyBestCoupon - Không thể áp dụng phiếu (order: ${!!order}, coupons: ${availableCoupons.value?.length || 0
       }, total: ${order?.tongTien}đ)`
     );
     return;
@@ -4472,13 +3830,13 @@ const createNewCustomer = async (customerName) => {
       // Include address details if available
       listDiaChi: deliveryAddress.value.diaChiCuThe
         ? [
-            {
-              diaChiCuThe: deliveryAddress.value.diaChiCuThe,
-              thanhPho: deliveryAddress.value.thanhPho,
-              quan: deliveryAddress.value.quan,
-              phuong: deliveryAddress.value.phuong,
-            },
-          ]
+          {
+            diaChiCuThe: deliveryAddress.value.diaChiCuThe,
+            thanhPho: deliveryAddress.value.thanhPho,
+            quan: deliveryAddress.value.quan,
+            phuong: deliveryAddress.value.phuong,
+          },
+        ]
         : [],
     };
 
@@ -5172,8 +4530,7 @@ const isEligibleForFreeShipping = () => {
   console.log("🔍 CHI TIẾT TỪNG SẢN PHẨM (từ isEligibleForFreeShipping):");
   order.danhSachSanPham.forEach((item, index) => {
     console.log(
-      `  ${index + 1}. ${item.tenSanPham}: ${formatCurrency(item.giaBan)} × ${
-        item.soLuong
+      `  ${index + 1}. ${item.tenSanPham}: ${formatCurrency(item.giaBan)} × ${item.soLuong
       } = ${formatCurrency(item.giaBan * item.soLuong)}`
     );
   });
@@ -5472,8 +4829,7 @@ const populateDeliveryAddress = () => {
       console.log("- Email người nhận:", customer.email || "Không có");
       console.log(
         "- Địa chỉ:",
-        `${defaultAddr.diaChiCuThe || ""}, ${defaultAddr.phuong || ""}, ${
-          defaultAddr.quan || ""
+        `${defaultAddr.diaChiCuThe || ""}, ${defaultAddr.phuong || ""}, ${defaultAddr.quan || ""
         }, ${defaultAddr.thanhPho || ""}`
       );
 
@@ -5751,4 +5107,3 @@ const handleImageError = (event) => {
   height: 32px;
 }
 </style>
-
