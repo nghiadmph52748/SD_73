@@ -1683,43 +1683,52 @@
     </div>
   </div>
 
-  <!-- Notification Popup -->
-  <div v-if="showNotification" class="notification-overlay" @click="showNotification = false">
-    <div class="notification-modal" @click.stop>
-      <div class="notification-content" :class="notificationType">
-        <div class="notification-icon">
-          <svg v-if="notificationType === 'success'" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
+  <!-- Modern Slide-out Notification -->
+  <div v-if="showNotification" class="slide-notification-container">
+    <div class="slide-notification" :class="[notificationType, isNotificationSliding ? 'slide-out' : 'slide-in']" @click.stop>
+      <div class="notification-icon-wrapper">
+        <div class="notification-icon" :class="notificationType">
+          <svg v-if="notificationType === 'success'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22,4 12,14.01 9,11.01" />
           </svg>
-          <svg v-else-if="notificationType === 'error'" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
+          <svg v-else-if="notificationType === 'error'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <circle cx="12" cy="12" r="10" />
             <line x1="15" y1="9" x2="9" y2="15" />
             <line x1="9" y1="9" x2="15" y2="15" />
           </svg>
-          <svg v-else-if="notificationType === 'warning'" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
+          <svg v-else-if="notificationType === 'warning'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
             <line x1="12" y1="9" x2="12" y2="13" />
             <line x1="12" y1="17" x2="12.01" y2="17" />
           </svg>
-          <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <circle cx="12" cy="12" r="10" />
             <path d="M12 16v-4M12 8h.01" />
           </svg>
         </div>
-        <div class="notification-text">
+      </div>
+      
+      <div class="notification-content-wrapper">
+        <div class="notification-title" :class="notificationType">
+          <span v-if="notificationType === 'success'">Thành công!</span>
+          <span v-else-if="notificationType === 'error'">Có lỗi!</span>
+          <span v-else-if="notificationType === 'warning'">Cảnh báo!</span>
+          <span v-else>Thông báo</span>
+        </div>
+        <div class="notification-message">
           {{ notificationMessage }}
         </div>
-        <button class="notification-close" @click="showNotification = false">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
       </div>
+
+      <button class="slide-notification-close" @click="hideNotification">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <div class="notification-progress-bar" :class="notificationType" v-if="!isNotificationSliding"></div>
     </div>
   </div>
 
@@ -1933,17 +1942,28 @@ let availableCameras = [];
 const showNotification = ref(false);
 const notificationMessage = ref("");
 const notificationType = ref("info"); // success, error, warning, info
+const isNotificationSliding = ref(false); // For slide animation control
+
+// Function to hide notification with slide-out animation
+const hideNotification = () => {
+  isNotificationSliding.value = true; // Trigger slide-out animation
+  setTimeout(() => {
+    showNotification.value = false;
+    isNotificationSliding.value = false;
+  }, 450); // Wait for slide-out animation to complete (increased from 300ms)
+};
 
 // Function to show notification
 const showNotificationPopup = (message, type = "info") => {
   notificationMessage.value = message;
   notificationType.value = type;
   showNotification.value = true;
+  isNotificationSliding.value = false; // Reset animation state
 
   // Auto hide after 5 seconds for success and info, 8 seconds for error and warning
   const duration = type === "success" || type === "info" ? 5000 : 8000;
   setTimeout(() => {
-    showNotification.value = false;
+    hideNotification();
   }, duration);
 };
 
@@ -1998,7 +2018,7 @@ const onVideoLoaded = () => {
   if (qrVideo.value && qrCanvas.value) {
     const video = qrVideo.value;
     const canvas = qrCanvas.value;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
     
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -2105,7 +2125,7 @@ const scanAgain = () => {
   qrResult.value = "";
   isScanning.value = true;
   if (qrVideo.value && qrCanvas.value) {
-    const context = qrCanvas.value.getContext('2d');
+    const context = qrCanvas.value.getContext('2d', { willReadFrequently: true });
     startScanning(context, qrCanvas.value, qrVideo.value);
   }
 };
@@ -2117,12 +2137,31 @@ const addProductFromQR = async () => {
       return;
     }
 
-    // Find product by QR code (assuming QR contains product code)
-    const product = chiTietSanPhams.value.find(p => 
-      p.maSanPham === qrResult.value || 
-      p.id.toString() === qrResult.value ||
-      p.sanPham?.maSanPham === qrResult.value
-    );
+    // Helper function to get product code (same logic as used elsewhere)
+    const getProductCode = (product) => {
+      return product.ma_san_pham || 
+             product.sanPham?.ma_san_pham || 
+             product.maSanPham || 
+             product.sanPham?.maSanPham || 
+             product.code || 
+             product.productCode || 
+             product.sku || 
+             `SP${String(product.id).padStart(5, '0')}`;
+    };
+
+    // Find product by QR code with comprehensive matching
+    const product = ChiTietSanPhams.value.find(p => {
+      const productCode = getProductCode(p);
+      return productCode === qrResult.value ||
+             p.id.toString() === qrResult.value ||
+             // Additional checks for different code formats
+             p.maSanPham === qrResult.value ||
+             p.sanPham?.maSanPham === qrResult.value ||
+             // Handle cases where QR might be just the ID part (e.g., "1" instead of "SP00001")
+             (qrResult.value.startsWith('SP') && p.id.toString() === qrResult.value.replace('SP', '').replace(/^0+/, '')) ||
+             // Handle lowercase variations
+             productCode.toLowerCase() === qrResult.value.toLowerCase();
+    });
 
     if (!product) {
       showNotificationPopup(`Không tìm thấy sản phẩm với mã: ${qrResult.value}`, "error");

@@ -866,10 +866,10 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { dichVuPhieuGiamGia } from "../../services/GiamGia/dichVuPhieuGiamGia.js";
 import { fetchAllPhieuGiamGiaCaNhan } from "../../services/GiamGia/PhieuGiamGiaCaNhanService.js";
 import {
-    fetchCreatePhieuGiamGia,
-    fetchDeletePhieuGiamGia,
-    fetchUpdatePhieuGiamGia,
-    fetchUpdateStatusPhieuGiamGia
+  fetchCreatePhieuGiamGia,
+  fetchDeletePhieuGiamGia,
+  fetchUpdatePhieuGiamGia,
+  fetchUpdateStatusPhieuGiamGia
 } from "../../services/GiamGia/PhieuGiamGiaService.js";
 import { fetchAllKhachHang } from "../../services/KhachHang/KhachHangService.js";
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel.js";
