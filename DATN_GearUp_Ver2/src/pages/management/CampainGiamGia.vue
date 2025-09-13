@@ -942,38 +942,37 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch, nextTick } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import {
-    fetchAllChiTietDotGiamGia,
-    fetchCreateChiTietDotGiamGia,
-    fetchUpdateStatusChiTietDotGiamGia,
+  fetchAllChiTietDotGiamGia,
+  fetchCreateChiTietDotGiamGia,
+  fetchUpdateStatusChiTietDotGiamGia,
 } from "../../services/GiamGia/ChiTietDotGiamGiaService";
 import {
-    fetchAllDotGiamGia,
-    fetchCreateDotGiamGia,
-    fetchDeleteDotGiamGia,
-    fetchUpdateDotGiamGia
+  fetchAllDotGiamGia,
+  fetchCreateDotGiamGia,
+  fetchDeleteDotGiamGia,
+  fetchUpdateDotGiamGia
 } from "../../services/GiamGia/DotGiamGiaService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel";
 
 // Import icons
-import ViewIcon from "@/assets/View.svg";
-import EditIcon from "@/assets/Edit.svg";
-import TrashIcon from "@/assets/Trash.svg";
 import CancelIcon from "@/assets/Cancel.svg";
-import WarningIcon from "@/assets/Warning.svg";
-import TagIcon from "@/assets/TagLabel.svg";
-import SuccessIcon from "@/assets/Success.svg";
-import MoneyIcon from "@/assets/Money.svg";
-import StatisticsIcon from "@/assets/Statistics.svg";
-import ClockIcon from "@/assets/Clock.svg";
-import ClipboardIcon from "@/assets/Clipboard.svg";
-import DateIcon from "@/assets/Date.svg";
-import PlusIcon from "@/assets/Plus.svg";
-import InfoIcon from "@/assets/Info.svg";
 import ChecklistIcon from "@/assets/Checklist.svg";
+import ClipboardIcon from "@/assets/Clipboard.svg";
+import ClockIcon from "@/assets/Clock.svg";
+import DateIcon from "@/assets/Date.svg";
+import EditIcon from "@/assets/Edit.svg";
+import MoneyIcon from "@/assets/Money.svg";
+import PlusIcon from "@/assets/Plus.svg";
 import SearchIcon from "@/assets/Search.svg";
+import StatisticsIcon from "@/assets/Statistics.svg";
+import SuccessIcon from "@/assets/Success.svg";
+import TagIcon from "@/assets/TagLabel.svg";
+import TrashIcon from "@/assets/Trash.svg";
+import ViewIcon from "@/assets/View.svg";
+import WarningIcon from "@/assets/Warning.svg";
 
 // Reactive data
 const searchQuery = ref("");

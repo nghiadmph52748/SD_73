@@ -12,14 +12,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DotGiamGiaService extends GenericCrudService<DotGiamGia, Integer, DotGiamGiaResponse, DotGiamGiaRequest> {
-    public DotGiamGiaService(Class<DotGiamGia> entity, Class<DotGiamGiaResponse> dotGiamGiaResponseClass, Class<DotGiamGiaRequest> dotGiamGiaRequestClass, JpaRepository<DotGiamGia, Integer> repository) {
+    public DotGiamGiaService(Class<DotGiamGia> entity, Class<DotGiamGiaResponse> dotGiamGiaResponseClass,
+            Class<DotGiamGiaRequest> dotGiamGiaRequestClass, JpaRepository<DotGiamGia, Integer> repository) {
         super(entity, dotGiamGiaResponseClass, dotGiamGiaRequestClass, repository);
     }
 
     @Autowired
     DotGiamGiaRepository repository;
 
-    public void updateStatus(Integer id){
+    public void updateStatus(Integer id) {
         DotGiamGia e = repository.findById(id).orElseThrow(() -> new ApiException("DotGiamGia not found", "404"));
         e.setDeleted(true);
         repository.save(e);

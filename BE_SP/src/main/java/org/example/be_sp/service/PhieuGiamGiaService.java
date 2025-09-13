@@ -36,11 +36,13 @@ public class PhieuGiamGiaService {
     }
 
     public PhieuGiamGiaResponse getByIdResponse(Integer id) {
-        return phieuGiamGiaRepository.findById(id).map(PhieuGiamGiaResponse::new).orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
+        return phieuGiamGiaRepository.findById(id).map(PhieuGiamGiaResponse::new)
+                .orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
     }
 
     public PagingResponse<PhieuGiamGiaResponse> paging(Integer page, Integer size) {
-        return new PagingResponse<>(phieuGiamGiaRepository.findAll(PageRequest.of(page, size)).map(PhieuGiamGiaResponse::new), page);
+        return new PagingResponse<>(
+                phieuGiamGiaRepository.findAll(PageRequest.of(page, size)).map(PhieuGiamGiaResponse::new), page);
     }
 
     public void add(PhieuGiamGiaRequest request) {
@@ -64,15 +66,15 @@ public class PhieuGiamGiaService {
     public void update(Integer id, PhieuGiamGiaRequest request) {
         // Fetch existing entity to preserve generated fields
         PhieuGiamGia existingPgg = phieuGiamGiaRepository.findById(id)
-            .orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
-        
+                .orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
+
         // Map request to new entity
         PhieuGiamGia updatedPgg = MapperUtils.map(request, PhieuGiamGia.class);
         updatedPgg.setId(id);
-        
+
         // Preserve the generated maPhieuGiamGia field
         updatedPgg.setMaPhieuGiamGia(existingPgg.getMaPhieuGiamGia());
-        
+
         PhieuGiamGia saved = phieuGiamGiaRepository.save(updatedPgg);
 
         List<PhieuGiamGiaCaNhan> existingPersonalCoupons = phieuGiamGiaCaNhanRepository.findByIdPhieuGiamGiaId(id);
@@ -80,7 +82,7 @@ public class PhieuGiamGiaService {
             existing.setDeleted(true);
             phieuGiamGiaCaNhanRepository.save(existing);
         }
-        
+
         // Create new personal coupons if specified
         if (request.getIdKhachHang() != null && !request.getIdKhachHang().isEmpty()) {
             for (Integer idKhachHang : request.getIdKhachHang()) {
@@ -101,7 +103,7 @@ public class PhieuGiamGiaService {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.getById(id);
         phieuGiamGia.setTrangThai(!phieuGiamGia.getTrangThai()); // Toggle trangThai status (active/inactive)
         phieuGiamGiaRepository.save(phieuGiamGia);
-        
+
         // Also update personal coupons if they exist
         if (phieuGiamGia.getPhieuGiamGiaCaNhans() != null && !phieuGiamGia.getPhieuGiamGiaCaNhans().isEmpty()) {
             for (PhieuGiamGiaCaNhan pggcn : phieuGiamGia.getPhieuGiamGiaCaNhans()) {
@@ -113,12 +115,12 @@ public class PhieuGiamGiaService {
 
     public void delete(Integer id) {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
-            .orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
-        
+                .orElseThrow(() -> new ApiException("PhieuGiamGia not found", "404"));
+
         // Soft delete the coupon
         phieuGiamGia.setDeleted(true);
         phieuGiamGiaRepository.save(phieuGiamGia);
-        
+
         // Also soft delete associated personal coupons
         List<PhieuGiamGiaCaNhan> personalCoupons = phieuGiamGiaCaNhanRepository.findByIdPhieuGiamGiaId(id);
         for (PhieuGiamGiaCaNhan pggcn : personalCoupons) {
@@ -128,9 +130,12 @@ public class PhieuGiamGiaService {
     }
 
     public List<PhieuGiamGiaResponse> getActiveCouponsForCustomer(Integer idKhachHang) {
-        KhachHang khachHang = khachHangRepository.findById(idKhachHang).orElseThrow(() -> new ApiException("KhachHang not found", "404"));
-        List<PhieuGiamGia> activeCoupons = phieuGiamGiaRepository.findAllByDeletedFalseAndTrangThaiTrueAndLoaiPhieuGiamGiaTrue(false,true,true);
-        List<PhieuGiamGiaCaNhan> personalCoupons = phieuGiamGiaCaNhanRepository.findAllByIdKhachHangAndDeletedAndTrangThai(khachHang, false, true);
+        KhachHang khachHang = khachHangRepository.findById(idKhachHang)
+                .orElseThrow(() -> new ApiException("KhachHang not found", "404"));
+        List<PhieuGiamGia> activeCoupons = phieuGiamGiaRepository
+                .findAllByDeletedFalseAndTrangThaiTrueAndLoaiPhieuGiamGiaTrue(false, true, true);
+        List<PhieuGiamGiaCaNhan> personalCoupons = phieuGiamGiaCaNhanRepository
+                .findAllByIdKhachHangAndDeletedAndTrangThai(khachHang, false, true);
         List<PhieuGiamGiaResponse> result = new ArrayList<>();
         for (PhieuGiamGia coupon : activeCoupons) {
             result.add(new PhieuGiamGiaResponse(coupon));

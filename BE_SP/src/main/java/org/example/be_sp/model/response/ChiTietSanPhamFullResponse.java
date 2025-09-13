@@ -43,7 +43,8 @@ public class ChiTietSanPhamFullResponse {
         }
         if (s.getChiTietSanPhamAnhs() != null) {
             this.anhSanPham = s.getChiTietSanPhamAnhs().stream()
-                    .filter(anh -> anh != null && anh.getIdAnhSanPham() != null && Boolean.TRUE.equals(anh.getTrangThai()) && Boolean.FALSE.equals(anh.getDeleted()))
+                    .filter(anh -> anh != null && anh.getIdAnhSanPham() != null
+                            && Boolean.TRUE.equals(anh.getTrangThai()) && Boolean.FALSE.equals(anh.getDeleted()))
                     .map(anh -> anh.getIdAnhSanPham().getDuongDanAnh())
                     .filter(duongDan -> duongDan != null)
                     .collect(Collectors.toList());
@@ -89,12 +90,16 @@ public class ChiTietSanPhamFullResponse {
         this.giaBan = s.getGiaBan();
         this.trangThai = s.getTrangThai();
         if (s.getChiTietDotGiamGias() != null) {
-            this.tenDotGiamGia = s.getChiTietDotGiamGias().stream().filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.FALSE.equals(ct.getDeleted()) && Boolean.TRUE.equals(ct.getTrangThai()))
+            this.tenDotGiamGia = s.getChiTietDotGiamGias().stream()
+                    .filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.FALSE.equals(ct.getDeleted())
+                            && Boolean.TRUE.equals(ct.getTrangThai()))
                     .map(ct -> ct.getIdDotGiamGia().getTenDotGiamGia())
                     .filter(ten -> ten != null)
                     .findFirst()
                     .orElse(null);
-            this.giaTriGiamGia = s.getChiTietDotGiamGias().stream().filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.FALSE.equals(ct.getDeleted()) && Boolean.TRUE.equals(ct.getTrangThai()))
+            this.giaTriGiamGia = s.getChiTietDotGiamGias().stream()
+                    .filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.FALSE.equals(ct.getDeleted())
+                            && Boolean.TRUE.equals(ct.getTrangThai()))
                     .map(ct -> ct.getIdDotGiamGia().getGiaTriGiamGia())
                     .filter(giaTri -> giaTri != null)
                     .findFirst()
@@ -104,7 +109,9 @@ public class ChiTietSanPhamFullResponse {
             this.giaTriGiamGia = null;
         }
         if (s.getChiTietDotGiamGias() != null) {
-            this.idDotGiamGia = s.getChiTietDotGiamGias().stream().filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.FALSE.equals(ct.getDeleted()) && Boolean.TRUE.equals(ct.getTrangThai()))
+            this.idDotGiamGia = s.getChiTietDotGiamGias().stream()
+                    .filter(ct -> ct != null && ct.getIdDotGiamGia() != null && Boolean.FALSE.equals(ct.getDeleted())
+                            && Boolean.TRUE.equals(ct.getTrangThai()))
                     .map(ct -> ct.getIdDotGiamGia().getId())
                     .filter(id -> id != null)
                     .findFirst()
