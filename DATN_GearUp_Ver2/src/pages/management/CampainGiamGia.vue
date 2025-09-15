@@ -233,15 +233,6 @@
                 </div>
               </td>
             </tr>
-            <tr v-if="filteredCampaigns.length === 0">
-              <td colspan="11" class="text-center empty-state">
-                <div class="empty-message">
-                  <span class="empty-icon"><!-- icon: empty-mailbox --></span>
-                  <p>Không có dữ liệu chiến dịch</p>
-                  <small>Hãy tạo chiến dịch đầu tiên để bắt đầu</small>
-                </div>
-              </td>
-            </tr>
           </tbody>
         </table>
       </div>
@@ -2694,7 +2685,14 @@ const bulkDeleteCampaigns = async () => {
 .coupons-table {
   width: 100% !important;
   table-layout: fixed !important;
-  min-width: 850px !important;
+  min-width: 900px !important;
+  font-size: 0.875rem !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  background: white !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 .coupons-table th,
@@ -2708,26 +2706,43 @@ const bulkDeleteCampaigns = async () => {
   vertical-align: top !important;
 }
 
-/* Force specific column widths */
-.col-checkbox { width: 2.5% !important; min-width: 30px !important; max-width: 40px !important; text-align: center !important; padding: 6px 2px !important; }
-.col-stt { width: 4% !important; min-width: 40px !important; max-width: 60px !important; text-align: center !important; }
-.col-ma { width: 8% !important; max-width: 100px !important; }
-.col-loai { width: 18% !important; max-width: 200px !important; text-align: left !important; }
+/* Table header styling - match PhieuGiamGia */
+.coupons-table thead th {
+  background: #f8fafc !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  padding: 8px 3px !important;
+  font-weight: 600 !important;
+  font-size: 0.7rem !important;
+  color: #64748b !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+/* Force specific column widths - Total: 100% with checkbox column */
+.col-checkbox { width: 3% !important; min-width: 35px !important; max-width: 45px !important; text-align: center !important; padding: 6px 2px !important; }
+.col-stt { width: 4% !important; min-width: 50px !important; max-width: 70px !important; text-align: center !important; }
+.col-ma { width: 8% !important; min-width: 90px !important; max-width: 120px !important; text-align: center !important; }
+.col-loai { width: 18% !important; min-width: 180px !important; max-width: 220px !important; text-align: left !important; }
 /* FORCE Phần trăm giảm column - HIGHEST PRIORITY */
 .coupons-table .col-giatri,
 .coupons-table th.col-giatri,
 .coupons-table td.col-giatri {
-  width: 5% !important; 
-  min-width: 45px !important;
-  max-width: 55px !important;
-  padding: 8px 2px !important;
+  width: 8% !important; 
+  min-width: 80px !important;
+  max-width: 100px !important;
+  padding: 8px 4px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
 }
-.col-batdau { width: 10% !important; max-width: 110px !important; }
-.col-ketthuc { width: 10% !important; max-width: 110px !important; }
-.col-trangthai { width: 10% !important; max-width: 105px !important; }
-.col-ngaytao { width: 10% !important; max-width: 110px !important; }
-.col-ngaycapnhat { width: 10% !important; max-width: 110px !important; }
-.col-hanhdong { width: 10% !important; max-width: 120px !important; }
+.col-batdau { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
+.col-ketthuc { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
+.col-trangthai { width: 10% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
+.col-ngaytao { width: 10% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
+.col-ngaycapnhat { width: 12% !important; min-width: 120px !important; max-width: 150px !important; text-align: center !important; }
+.col-hanhdong { width: 10% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
 
 /* Checkbox styling */
 .select-all-checkbox,
