@@ -1,91 +1,246 @@
 <template>
   <div class="discount-coupons-container">
+    <!-- Filter Title -->
+    <h2 class="tieu-de-bo-loc">Bộ lọc</h2>
+    
     <!-- Filter Section -->
-    <div class="filter-section">
-      <!-- Search Bar Row -->
-      <div class="search-row">
-        <div class="search-box">
-            <input
-              v-model="searchQuery"
-              type="text"
-            placeholder="Tìm kiếm tên phiếu giảm giá, mã hoặc tên phiếu giảm giá..."
-            class="search-input"
-            />
+    <div class="bo-loc-section">
+      <!-- Header with Description and Buttons -->
+      <div class="bo-loc-header">
+        <div class="mo-ta-bo-loc">
+          Sử dụng các bộ lọc dưới đây để tìm kiếm phiếu giảm giá
+        </div>
+        <button class="xoa-toan-bo-bo-loc-btn" @click="clearFilters">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          Xóa toàn bộ bộ lọc
+        </button>
+        <button 
+          class="xoa-toan-bo-bo-loc-btn bulk-delete-btn" 
+          @click="bulkDeleteCoupons"
+          :disabled="selectedCoupons.length === 0"
+          :class="{ 'btn-disabled': selectedCoupons.length === 0 }"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6"/>
+          </svg>
+          Xóa nhiều phiếu ({{ selectedCoupons.length }})
+        </button>
+        <button class="xoa-toan-bo-bo-loc-btn" @click="exportData">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Xuất báo cáo
+        </button>
+        <button class="xoa-toan-bo-bo-loc-btn" @click="openAddModal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Tạo mới
+        </button>
+      </div>
+
+      <!-- Filter Grid - Main Row -->
+      <div class="luoi-bo-loc">
+        <!-- Mã phiếu giảm giá -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Mã phiếu giảm giá</label>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Lọc mã"
+            class="dau-vao-bo-loc"
+          />
+        </div>
+
+        <!-- Loại giảm giá -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Loại giảm giá</label>
+          <select v-model="selectedType" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn loại giảm giá</option>
+            <option value="percent">Phần trăm (%)</option>
+            <option value="fixed">Số tiền cố định</option>
+          </select>
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Trạng thái</label>
+          <select v-model="selectedStatus" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn trạng thái</option>
+            <option value="active">Đang diễn ra</option>
+            <option value="expired">Hết hạn</option>
+            <option value="upcoming">Sắp diễn ra</option>
+            <option value="deleted">Đã xóa</option>
+          </select>
+        </div>
+
+        <!-- Loại phiếu -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Loại phiếu</label>
+          <select v-model="selectedType2" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn loại phiếu</option>
+            <option value="public">Mọi người</option>
+            <option value="private">Khách hàng cụ thể</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Second Row - Range Sliders -->
+      <div class="luoi-bo-loc luoi-bo-loc-dong-hai">
+        <!-- Giá trị giảm (%) -->
+        <div class="nhom-bo-loc nhom-bo-loc-pham-vi">
+          <label class="nhan-nhom-bo-loc">Giá trị giảm (%)</label>
+          <div class="container-pham-vi">
+            <div class="container-thanh-truot-pham-vi" :style="discountValueTrack">
+              <input 
+                type="range" 
+                v-model="safeDiscountValueMin" 
+                min="0" 
+                max="100" 
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-thieu"
+              >
+              <input 
+                type="range" 
+                v-model="safeDiscountValueMax" 
+                min="0" 
+                max="100" 
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-da"
+              >
+            </div>
+            <div class="nhan-pham-vi">
+              <span>{{ safeDiscountValueMin == 0 ? '0%' : safeDiscountValueMin + '%' }}</span>
+              <span>{{ safeDiscountValueMax }}%</span>
+            </div>
           </div>
         </div>
 
-      <!-- Filter Controls -->
-      <div class="filter-controls">
-        <div class="filter-row">
-          <div class="filter-item">
-            <label class="filter-label">Kiểu giảm giá</label>
-            <select v-model="selectedType" class="filter-select">
-              <option value="">Tất cả kiểu</option>
-              <option value="percent">Phần trăm (%)</option>
-              <option value="fixed">Số tiền cố định</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Đối tượng</label>
-            <select v-model="selectedType2" class="filter-select">
-              <option value="">Tất cả đối tượng</option>
-              <option value="public">Mọi người</option>
-              <option value="private">Khách hàng cụ thể</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Hiện trạng</label>
-            <select v-model="selectedStatus" class="filter-select">
-              <option value="">Tất cả hiện trạng</option>
-              <option value="active">Đang diễn ra</option>
-              <option value="expired">Hết hạn</option>
-              <option value="upcoming">Sắp diễn ra</option>
-              <option value="deleted">Đã xóa</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Trạng thái hoạt động</label>
-            <select v-model="selectedActiveStatus" class="filter-select">
-              <option value="">Tất cả trạng thái</option>
-              <option value="active">Hoạt động</option>
-              <option value="inactive">Ngừng hoạt động</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Từ ngày</label>
-            <input
-              type="date"
-              v-model="fromDate"
-              class="filter-select"
-            />
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Đến ngày</label>
-            <input
-              type="date"
-              v-model="toDate"
-              class="filter-select"
-            />
-          </div>
+        <!-- Giá trị giảm (VNĐ) -->
+        <div class="nhom-bo-loc nhom-bo-loc-pham-vi">
+          <label class="nhan-nhom-bo-loc">Giá trị giảm (VNĐ)</label>
+          <div class="container-pham-vi">
+            <div class="container-thanh-truot-pham-vi" :style="discountAmountTrack">
+              <input 
+                type="range" 
+                v-model="safeDiscountAmountMin" 
+                min="0" 
+                max="1000000" 
+                step="10000"
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-thieu"
+              >
+              <input 
+                type="range" 
+                v-model="safeDiscountAmountMax" 
+                min="0" 
+                max="1000000" 
+                step="10000"
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-da"
+              >
+            </div>
+            <div class="nhan-pham-vi">
+              <span>{{ safeDiscountAmountMin == 0 ? '-' : formatCurrency(safeDiscountAmountMin) }}</span>
+              <span>{{ formatCurrency(safeDiscountAmountMax) }}</span>
+            </div>
           </div>
         </div>
 
-      <!-- Action Buttons Row -->
-      <div class="action-buttons-row">
-        <button class="reset-btn" @click="clearFilters">
-            Đặt lại
-          </button>
-        <button class="export-btn" @click="exportData">
-            Xuất báo cáo
-          </button>
-        <button class="create-btn" @click="openAddModal">
-            Tạo mới
-          </button>
+        <!-- Đơn hàng tối thiểu -->
+        <div class="nhom-bo-loc nhom-bo-loc-pham-vi">
+          <label class="nhan-nhom-bo-loc">Đơn hàng tối thiểu</label>
+          <div class="container-pham-vi">
+            <div class="container-thanh-truot-pham-vi" :style="minOrderTrack">
+              <input 
+                type="range" 
+                v-model="safeMinOrderMin" 
+                min="0" 
+                max="30000000" 
+                step="100000"
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-thieu"
+              >
+              <input 
+                type="range" 
+                v-model="safeMinOrderMax" 
+                min="0" 
+                max="30000000" 
+                step="100000"
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-da"
+              >
+            </div>
+            <div class="nhan-pham-vi">
+              <span>{{ safeMinOrderMin == 0 ? '-' : formatCurrency(safeMinOrderMin) }}</span>
+              <span>{{ formatCurrency(safeMinOrderMax) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Số lượng phiếu -->
+        <div class="nhom-bo-loc nhom-bo-loc-pham-vi">
+          <label class="nhan-nhom-bo-loc">Số lượng phiếu</label>
+          <div class="container-pham-vi">
+            <div class="container-thanh-truot-pham-vi" :style="quantityTrack">
+              <input 
+                type="range" 
+                v-model="safeQuantityMin" 
+                min="0" 
+                max="1000" 
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-thieu"
+              >
+              <input 
+                type="range" 
+                v-model="safeQuantityMax" 
+                min="0" 
+                max="1000" 
+                class="thanh-truot-pham-vi thanh-truot-pham-vi-toi-da"
+              >
+            </div>
+            <div class="nhan-pham-vi">
+              <span>{{ safeQuantityMin == 0 ? '0' : safeQuantityMin }}</span>
+              <span>{{ safeQuantityMax }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third Row - Date Filters -->
+      <div class="luoi-bo-loc luoi-bo-loc-dong-ba">
+        <!-- Ngày bắt đầu -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Ngày bắt đầu</label>
+          <input
+            type="date"
+            v-model="fromDate"
+            class="dau-vao-ngay"
+            placeholder="dd/mm/yyyy"
+          />
+        </div>
+
+        <!-- Ngày kết thúc -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Ngày kết thúc</label>
+          <input
+            type="date"
+            v-model="toDate"
+            class="dau-vao-ngay"
+            placeholder="dd/mm/yyyy"
+          />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Search Section Below Filter -->
+    <div class="phan-tim-kiem-duoi">
+      <div class="hop-tim-kiem-duoi">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bieu-tuong-tim-kiem">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          v-model="searchQueryBottom"
+          placeholder="Tìm kiếm..."
+          class="dau-vao-tim-kiem-duoi"
+        />
       </div>
     </div>
 
@@ -95,96 +250,100 @@
         <table class="coupons-table">
           <thead>
             <tr>
-              <th>STT</th>
-              <th>TÊN</th>
-              <th>ĐỐI TƯỢNG</th>
-              <th>LOẠI GIẢM</th>
-              <th>GIÁ TRỊ GIẢM</th>
-              <th>SỐ TIỀN TỐI THIỂU</th>
-              <th>SỐ TIỀN GIẢM TỐI ĐA</th>
-              <th>THỜI GIAN</th>
-              <th>SỐ LƯỢNG DÙNG</th>
-              <th>MÔ TẢ</th>
-              <th>HIỆN TRẠNG</th>
-              <th>TRẠNG THÁI</th>
-              <th>THAO TÁC</th>
+              <th class="col-checkbox">
+                <input 
+                  type="checkbox" 
+                  class="select-all-checkbox"
+                  @change="toggleSelectAll"
+                  :checked="isAllSelected"
+                  :indeterminate="isIndeterminate"
+                >
+              </th>
+              <th class="col-stt">STT</th>
+              <th class="col-ma">Mã phiếu</th>
+              <th class="col-ten">Tên phiếu giảm giá</th>
+              <th class="col-loai">Loại giảm</th>
+              <th class="col-giatri">Giá trị giảm</th>
+              <th class="col-batdau">Bắt đầu</th>
+              <th class="col-ketthuc">Kết thúc</th>
+              <th class="col-soluong">Số lượng</th>
+              <th class="col-trangthai">Trạng thái</th>
+              <th class="col-hanhdong">Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(coupon, index) in filteredCoupons" :key="coupon.id">
-              <td>{{ index + 1 }}</td>
-              <td class="coupon-name">{{ coupon.tenPhieuGiamGia }}</td>
-              <td>
-                {{
-                  getCustomerCountForCoupon(coupon.id) > 0
-                    ? `${getCustomerCountForCoupon(coupon.id)} khách hàng`
-                    : "Mọi người"
-                }}
+              <td class="col-checkbox">
+                <input 
+                  type="checkbox" 
+                  class="row-checkbox"
+                  :value="coupon.id"
+                  v-model="selectedCouponIds"
+                  @change="updateSelectedCoupons"
+                >
               </td>
-              <td>
-                {{ !coupon.loaiPhieuGiamGia ? "%" : "VND" }}
+              <td class="col-stt">{{ index + 1 }}</td>
+              <td class="col-ma">
+                <div class="coupon-code">{{ coupon.maPhieuGiamGia }}</div>
               </td>
-              <td class="discount-value">
-                {{
-                  !coupon.loaiPhieuGiamGia
-                    ? coupon.giaTriGiamGia + "%"
-                    : formatCurrency(coupon.giaTriGiamGia)
-                }}
+              <td class="col-ten">
+                <div class="coupon-name">{{ coupon.tenPhieuGiamGia }}</div>
               </td>
-              <td>{{ formatCurrency(coupon.hoaDonToiThieu || 0) }}</td>
-              <td>{{ formatCurrency(coupon.soTienToiDa || 0) }}</td>
-              <td class="date-range">
-                {{ formatDate(coupon.ngayBatDau) }} -
-                {{ formatDate(coupon.ngayKetThuc) }}
+              <td class="col-loai">
+                <div class="coupon-type">
+                  <span class="type-label">{{ !coupon.loaiPhieuGiamGia ? "Giảm theo phần trăm" : "Giảm số tiền" }}</span>
+                  <span class="type-icon">{{ !coupon.loaiPhieuGiamGia ? "%" : "VNĐ" }}</span>
+                </div>
               </td>
-              <td>{{ coupon.soLuongDung }}</td>
-              <td class="description">{{ coupon.moTa }}</td>
-              <td>
+              <td class="col-giatri">
+                <div class="discount-value-detailed" style="display: flex; justify-content: center; align-items: center; height: 100%; text-align: center;">
+                  <strong style="text-align: center; margin: 0 auto; display: block; width: 100%;">{{ !coupon.loaiPhieuGiamGia ? coupon.giaTriGiamGia + "%" : formatCurrency(coupon.giaTriGiamGia) }}</strong>
+                </div>
+              </td>
+              <td class="col-batdau">
+                <div class="date-info-compact">
+                  {{ formatTimeOnly(coupon.ngayBatDau) }} / {{ formatDateOnly(coupon.ngayBatDau) }}
+                </div>
+              </td>
+              <td class="col-ketthuc">
+                <div class="date-info-compact">
+                  {{ formatTimeOnly(coupon.ngayKetThuc) }} / {{ formatDateOnly(coupon.ngayKetThuc) }}
+                </div>
+              </td>
+              <td class="col-soluong">
+                <div class="quantity-info">
+                  {{ coupon.soLuongDung || 0 }}
+                </div>
+              </td>
+              <td class="col-trangthai">
                 <span
-                :class="[
-                    'status-badge',
+                  :class="[
+                    'status-badge-detailed',
                     coupon.deleted ? 'status-deleted' : 
                     (getDetailedStatus(coupon) === 'Đang diễn ra' ? 'status-active' : 
                     (getDetailedStatus(coupon) === 'Sắp diễn ra' ? 'status-upcoming' : 'status-expired')),
-                ]"
-              >
-                {{ getDetailedStatus(coupon) }}
+                  ]"
+                >
+                  {{ getDetailedStatus(coupon) }}
                 </span>
               </td>
-              <td>
-                <span
-                :class="[
-                    'status-badge',
-                    coupon.deleted ? 'status-deleted' : (coupon.trangThai ? 'status-active' : 'status-inactive'),
-                ]"
-              >
-                {{ getSimpleStatus(coupon) }}
-                </span>
-              </td>
-              <td>
-                <div class="action-buttons">
+              <td class="col-hanhdong">
+                <div class="action-buttons-compact">
                   <button
-                    class="action-btn view-btn"
-                    @click="viewCoupon(coupon)"
-                    title="Xem chi tiết"
-                  >
-                    <img :src="ViewIcon" alt="View" class="action-icon" />
-                  </button>
-                  <button
-                    class="action-btn edit-btn"
+                    class="action-btn-compact edit-btn"
                     @click="editCoupon(coupon)"
                     title="Chỉnh sửa"
                   >
-                    <img :src="EditIcon" alt="Edit" class="action-icon" />
+                    <img :src="EditIcon" alt="Edit" class="action-icon-compact" />
                   </button>
                   <button
-                    class="action-btn delete-btn"
+                    class="action-btn-compact delete-btn"
                     @click="fetchUpdateStatusPGG(coupon.id)"
                     title="Xóa"
                     :disabled="coupon.deleted"
                     :style="{ opacity: coupon.deleted ? 0.3 : 1 }"
                   >
-                    <img :src="TrashIcon" alt="Delete" class="action-icon" />
+                    <img :src="TrashIcon" alt="Delete" class="action-icon-compact" />
                   </button>
                 </div>
               </td>
@@ -893,12 +1052,23 @@ import WarningIcon from "@/assets/Warning.svg";
 // ===== REACTIVE DATA =====
 // Search and filter data
 const searchQuery = ref("");
+const searchQueryBottom = ref("");
 const fromDate = ref("");
 const toDate = ref("");
 const selectedType = ref("");
 const selectedType2 = ref("");
 const selectedStatus = ref("");
 const selectedActiveStatus = ref("");
+
+// Range filter data
+const discountValueMin = ref(0);
+const discountValueMax = ref(100);
+const discountAmountMin = ref(0);
+const discountAmountMax = ref(1000000);
+const minOrderMin = ref(0);
+const minOrderMax = ref(30000000);
+const quantityMin = ref(0);
+const quantityMax = ref(1000);
 
 // Modal control data
 const showAddModal = ref(false);
@@ -972,6 +1142,21 @@ const customers = ref([]);
 // ===== CUSTOMER SELECTION =====
 const searchCustomerQuery = ref("");
 const selectedCustomers = ref([]);
+
+// ===== BULK SELECTION =====
+const selectedCouponIds = ref([]);
+const selectedCoupons = computed(() => {
+  return filteredCoupons.value.filter(coupon => selectedCouponIds.value.includes(coupon.id));
+});
+
+// Computed properties for select all functionality
+const isAllSelected = computed(() => {
+  return filteredCoupons.value.length > 0 && selectedCouponIds.value.length === filteredCoupons.value.length;
+});
+
+const isIndeterminate = computed(() => {
+  return selectedCouponIds.value.length > 0 && selectedCouponIds.value.length < filteredCoupons.value.length;
+});
 // fetch data
 // ===== FETCH FUNCTIONS =====
 const fetchPGG = async () => {
@@ -1089,12 +1274,21 @@ const allFilteredCoupons = computed(() => {
   
   let filtered = coupons.value;
 
-  // Filter by search query
+  // Filter by coupon code (from filter section)
   if (searchQuery.value) {
+    filtered = filtered.filter((coupon) =>
+      coupon.maPhieuGiamGia
+        ?.toLowerCase()
+        .includes(searchQuery.value.toLowerCase())
+    );
+  }
+
+  // Filter by coupon name (from bottom search)
+  if (searchQueryBottom.value) {
     filtered = filtered.filter((coupon) =>
       coupon.tenPhieuGiamGia
         ?.toLowerCase()
-        .includes(searchQuery.value.toLowerCase())
+        .includes(searchQueryBottom.value.toLowerCase())
     );
   }
 
@@ -1169,6 +1363,40 @@ const allFilteredCoupons = computed(() => {
       }
       
       return passesDateFilter;
+    });
+  }
+
+  // Filter by discount percentage range
+  if (discountValueMin.value > 0 || discountValueMax.value < 100) {
+    filtered = filtered.filter((coupon) => {
+      if (coupon.loaiPhieuGiamGia) return true; // Skip fixed amount coupons
+      const discountValue = coupon.giaTriGiamGia || 0;
+      return discountValue >= discountValueMin.value && discountValue <= discountValueMax.value;
+    });
+  }
+
+  // Filter by discount amount range (VND)
+  if (discountAmountMin.value > 0 || discountAmountMax.value < 1000000) {
+    filtered = filtered.filter((coupon) => {
+      if (!coupon.loaiPhieuGiamGia) return true; // Skip percentage coupons
+      const discountAmount = coupon.giaTriGiamGia || 0;
+      return discountAmount >= discountAmountMin.value && discountAmount <= discountAmountMax.value;
+    });
+  }
+
+  // Filter by minimum order amount range
+  if (minOrderMin.value > 0 || minOrderMax.value < 30000000) {
+    filtered = filtered.filter((coupon) => {
+      const minOrder = coupon.hoaDonToiThieu || 0;
+      return minOrder >= minOrderMin.value && minOrder <= minOrderMax.value;
+    });
+  }
+
+  // Filter by quantity range
+  if (quantityMin.value > 0 || quantityMax.value < 1000) {
+    filtered = filtered.filter((coupon) => {
+      const quantity = coupon.soLuongDung || 0;
+      return quantity >= quantityMin.value && quantity <= quantityMax.value;
     });
   }
 
@@ -1258,6 +1486,32 @@ const formatDate = (dateString) => {
 
 const formatDateTime = (dateString) => {
   return new Date(dateString).toLocaleString("vi-VN");
+};
+
+// Additional formatting functions for the new table design
+const formatDateOnly = (dateString) => {
+  if (!dateString) return 'N/A';
+  try {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  } catch (error) {
+    return 'N/A';
+  }
+};
+
+const formatTimeOnly = (dateString) => {
+  if (!dateString) return 'N/A';
+  try {
+    const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  } catch (error) {
+    return 'N/A';
+  }
 };
 
 // ===== STATUS METHODS =====
@@ -2137,6 +2391,111 @@ const formDebugInfo = computed(() => {
   };
 });
 
+// Range slider computed properties to ensure min doesn't exceed max
+const safeDiscountValueMin = computed({
+  get: () => Math.min(discountValueMin.value, discountValueMax.value - 1),
+  set: (val) => {
+    discountValueMin.value = Math.min(val, discountValueMax.value - 1);
+  }
+});
+
+const safeDiscountValueMax = computed({
+  get: () => Math.max(discountValueMax.value, discountValueMin.value + 1),
+  set: (val) => {
+    discountValueMax.value = Math.max(val, discountValueMin.value + 1);
+  }
+});
+
+const safeDiscountAmountMin = computed({
+  get: () => Math.min(discountAmountMin.value, discountAmountMax.value - 1000),
+  set: (val) => {
+    discountAmountMin.value = Math.min(val, discountAmountMax.value - 1000);
+  }
+});
+
+const safeDiscountAmountMax = computed({
+  get: () => Math.max(discountAmountMax.value, discountAmountMin.value + 1000),
+  set: (val) => {
+    discountAmountMax.value = Math.max(val, discountAmountMin.value + 1000);
+  }
+});
+
+const safeMinOrderMin = computed({
+  get: () => Math.min(minOrderMin.value, minOrderMax.value - 100000),
+  set: (val) => {
+    minOrderMin.value = Math.min(val, minOrderMax.value - 100000);
+  }
+});
+
+const safeMinOrderMax = computed({
+  get: () => Math.max(minOrderMax.value, minOrderMin.value + 100000),
+  set: (val) => {
+    minOrderMax.value = Math.max(val, minOrderMin.value + 100000);
+  }
+});
+
+const safeQuantityMin = computed({
+  get: () => Math.min(quantityMin.value, quantityMax.value - 1),
+  set: (val) => {
+    quantityMin.value = Math.min(val, quantityMax.value - 1);
+  }
+});
+
+const safeQuantityMax = computed({
+  get: () => Math.max(quantityMax.value, quantityMin.value + 1),
+  set: (val) => {
+    quantityMax.value = Math.max(val, quantityMin.value + 1);
+  }
+});
+
+// Slider selected range background style helpers
+const discountValueTrack = computed(() => {
+  const min = Number(safeDiscountValueMin.value);
+  const max = Number(safeDiscountValueMax.value);
+  const start = (min / 100) * 100; // percent based
+  const end = (max / 100) * 100;
+  return {
+    '--selected-start': `${start}%`,
+    '--selected-end': `${end}%`
+  };
+});
+
+const discountAmountTrack = computed(() => {
+  const rangeMax = 1000000;
+  const min = Number(safeDiscountAmountMin.value);
+  const max = Number(safeDiscountAmountMax.value);
+  const start = (min / rangeMax) * 100;
+  const end = (max / rangeMax) * 100;
+  return {
+    '--selected-start': `${start}%`,
+    '--selected-end': `${end}%`
+  };
+});
+
+const minOrderTrack = computed(() => {
+  const rangeMax = 30000000;
+  const min = Number(safeMinOrderMin.value);
+  const max = Number(safeMinOrderMax.value);
+  const start = (min / rangeMax) * 100;
+  const end = (max / rangeMax) * 100;
+  return {
+    '--selected-start': `${start}%`,
+    '--selected-end': `${end}%`
+  };
+});
+
+const quantityTrack = computed(() => {
+  const rangeMax = 1000;
+  const min = Number(safeQuantityMin.value);
+  const max = Number(safeQuantityMax.value);
+  const start = (min / rangeMax) * 100;
+  const end = (max / rangeMax) * 100;
+  return {
+    '--selected-start': `${start}%`,
+    '--selected-end': `${end}%`
+  };
+});
+
 // Minimum start date (today)
 const minStartDate = computed(() => {
   const today = new Date();
@@ -2153,6 +2512,80 @@ const minEndDate = computed(() => {
   minEnd.setDate(startDate.getDate() + 1);
   return minEnd.toISOString().split('T')[0];
 });
+
+// ===== BULK SELECTION METHODS =====
+/**
+ * Toggle select all checkboxes
+ */
+const toggleSelectAll = () => {
+  if (isAllSelected.value) {
+    // Deselect all
+    selectedCouponIds.value = [];
+  } else {
+    // Select all current page items
+    selectedCouponIds.value = filteredCoupons.value.map(coupon => coupon.id);
+  }
+};
+
+/**
+ * Update selected coupons when individual checkbox changes
+ */
+const updateSelectedCoupons = () => {
+  // This is automatically handled by v-model, but we can add extra logic here if needed
+};
+
+/**
+ * Bulk delete selected coupons
+ */
+const bulkDeleteCoupons = async () => {
+  if (selectedCoupons.value.length === 0) {
+    notificationData.value = {
+      type: "warning",
+      title: "Cảnh báo",
+      message: "Vui lòng chọn ít nhất một phiếu giảm giá để xóa.",
+      details: null,
+    };
+    showNotificationModal.value = true;
+    return;
+  }
+
+  // Show confirmation
+  const confirmed = confirm(`Bạn có chắc chắn muốn xóa ${selectedCoupons.value.length} phiếu giảm giá đã chọn?`);
+  if (!confirmed) return;
+
+  try {
+    // Delete each selected coupon
+    const deletePromises = selectedCoupons.value.map(coupon => 
+      fetchUpdateStatusPGG(coupon.id)
+    );
+    
+    await Promise.all(deletePromises);
+    
+    // Clear selection
+    selectedCouponIds.value = [];
+    
+    // Show success notification
+    notificationData.value = {
+      type: "success",
+      title: "Thành công",
+      message: `Đã xóa ${selectedCoupons.value.length} phiếu giảm giá thành công!`,
+      details: null,
+    };
+    showNotificationModal.value = true;
+    
+    // Refresh data
+    await fetchPGG();
+  } catch (error) {
+    console.error("Error bulk deleting coupons:", error);
+    notificationData.value = {
+      type: "error",
+      title: "Lỗi",
+      message: "Có lỗi xảy ra khi xóa phiếu giảm giá. Vui lòng thử lại.",
+      details: error.message,
+    };
+    showNotificationModal.value = true;
+  }
+};
 
 /**
  * Reset form về trạng thái ban đầu
@@ -2211,6 +2644,16 @@ const clearFilters = () => {
   selectedActiveStatus.value = "";
   fromDate.value = "";
   toDate.value = "";
+  
+  // Reset range filters
+  discountValueMin.value = 0;
+  discountValueMax.value = 100;
+  discountAmountMin.value = 0;
+  discountAmountMax.value = 1000000;
+  minOrderMin.value = 0;
+  minOrderMax.value = 30000000;
+  quantityMin.value = 0;
+  quantityMax.value = 1000;
 };
 
 /**
@@ -2375,5 +2818,278 @@ onMounted(() => {
 
 <style>
 @import '@/styles/cssGiamGia/phieuGiamGia.css';
+</style>
+
+<style scoped>
+.discount-coupons-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+/* Override any conflicting table styles - CRITICAL */
+.coupons-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  min-width: 900px !important;
+  font-size: 0.875rem !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  background: white !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.coupons-table th,
+.coupons-table td {
+  padding: 8px 3px !important;
+  font-size: 0.8rem !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.3 !important;
+  vertical-align: top !important;
+}
+
+/* Table header styling */
+.coupons-table thead th {
+  background: #f8fafc !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  padding: 8px 3px !important;
+  font-weight: 600 !important;
+  font-size: 0.7rem !important;
+  color: #64748b !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+/* Table body styling */
+.coupons-table tbody tr {
+  border-bottom: 1px solid #f1f5f9 !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.coupons-table tbody tr:hover {
+  background: #f8fafc !important;
+}
+
+/* Force specific column widths - Total: 100% */
+.col-checkbox { width: 3% !important; min-width: 35px !important; max-width: 50px !important; text-align: center !important; }
+.col-stt { width: 4% !important; min-width: 40px !important; max-width: 60px !important; text-align: center !important; }
+.col-ma { width: 9% !important; min-width: 90px !important; max-width: 120px !important; text-align: center !important; }
+.col-ten { width: 22% !important; min-width: 180px !important; max-width: 250px !important; text-align: left !important; }
+.col-loai { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
+.col-giatri { width: 8% !important; min-width: 70px !important; max-width: 90px !important; text-align: center !important; padding: 8px 8px !important; }
+.col-batdau { width: 11% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
+.col-ketthuc { width: 11% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
+.col-soluong { width: 7% !important; min-width: 60px !important; max-width: 80px !important; text-align: center !important; }
+.col-trangthai { width: 9% !important; min-width: 85px !important; max-width: 110px !important; text-align: center !important; }
+.col-hanhdong { width: 8% !important; min-width: 80px !important; max-width: 100px !important; text-align: center !important; }
+
+/* Coupon code styling */
+.coupon-code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  font-size: 0.75rem !important;
+  color: #475569 !important;
+  background: #f1f5f9 !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+}
+
+/* Coupon name styling */
+.coupon-name {
+  font-size: 0.8rem !important;
+  color: #374151 !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  text-align: left !important;
+  padding-left: 4px !important;
+}
+
+/* Coupon type styling */
+.coupon-type {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1px !important;
+  line-height: 1.1 !important;
+}
+
+.type-label {
+  font-size: 0.65rem !important;
+  color: #0ea5e9 !important;
+  font-weight: 500 !important;
+}
+
+.type-icon {
+  background: #0ea5e9 !important;
+  color: white !important;
+  border-radius: 3px !important;
+  padding: 1px 4px !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+}
+
+/* Discount value styling - COMPACT */
+.discount-value-detailed {
+  max-width: 50px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.discount-value-detailed strong {
+  color: #16a34a !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+/* Quantity info */
+.quantity-info {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  color: #374151 !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+}
+
+/* Checkbox styling */
+.select-all-checkbox,
+.row-checkbox {
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer !important;
+  accent-color: #4ade80 !important;
+}
+
+.select-all-checkbox:indeterminate {
+  accent-color: #f59e0b !important;
+}
+
+/* Bulk delete button */
+.bulk-delete-btn {
+  background-color: #ef4444 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+}
+
+.bulk-delete-btn:hover:not(.btn-disabled) {
+  background-color: #dc2626 !important;
+  border-color: #b91c1c !important;
+}
+
+.bulk-delete-btn.btn-disabled {
+  background-color: #9ca3af !important;
+  border-color: #6b7280 !important;
+  color: #d1d5db !important;
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+}
+
+/* Date info styling */
+.date-info-compact {
+  font-size: 0.75rem !important;
+  color: #374151 !important;
+  font-weight: 500 !important;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Status badges for detailed view */
+.status-badge-detailed {
+  padding: 4px 8px !important;
+  border-radius: 12px !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  min-width: 80px !important;
+}
+
+.status-badge-detailed.status-active {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+}
+
+.status-badge-detailed.status-upcoming {
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+.status-badge-detailed.status-expired {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.status-badge-detailed.status-inactive {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+}
+
+.status-badge-detailed.status-deleted {
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+}
+
+/* Compact action buttons */
+.action-buttons-compact {
+  display: flex !important;
+  gap: 3px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+}
+
+.action-btn-compact {
+  width: 26px !important;
+  height: 26px !important;
+  border: 1px solid #e5e7eb !important;
+  background: white !important;
+  border-radius: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.action-icon-compact {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.action-btn-compact.edit-btn:hover {
+  border-color: #f59e0b !important;
+  background: #fef3c7 !important;
+}
+
+.action-btn-compact.delete-btn:hover {
+  border-color: #ef4444 !important;
+  background: #fef2f2 !important;
+}
+
+/* Table container optimized for full viewport */
+.table-container {
+  width: 100% !important;
+  margin: 0 2rem !important;
+  border-radius: 8px !important;
+  overflow: visible !important;
+}
+
+.table-wrapper {
+  width: 100% !important;
+  overflow-x: auto !important;
+  border-radius: 8px !important;
+}
 </style>
 
