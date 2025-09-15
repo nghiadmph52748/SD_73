@@ -5301,3 +5301,37 @@ h3 .icon-svg {
   min-width: 160px !important;
   text-align: center !important;
 }
+
+/* ===== CSS CHO NÚT HỦY BỎ TRONG POPUP THÊM XUẤT XỨ ===== */
+/* Nút Hủy bỏ trong popup thêm xuất xứ - nền trắng, chữ xanh lá cây */
+.xuat-xu-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.xuat-xu-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.xuat-xu-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ xuất xứ - màu xanh lá cây */
+.xuat-xu-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ xuất xứ khi hover - màu xám */
+.xuat-xu-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
