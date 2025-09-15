@@ -389,6 +389,23 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup thông báo bên phải màn hình -->
+    <div class="notification-container">
+      <div 
+        v-if="showNotification" 
+        :class="['notification-popup', notificationType, showNotification ? 'show' : '']"
+      >
+        <div class="notification-header">
+          <h4 class="notification-title">{{ notificationTitle }}</h4>
+          <button @click="closeNotification" class="notification-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <p class="notification-message">{{ notificationMessage }}</p>
+        <div class="notification-progress"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -422,6 +439,12 @@ const editSuccessMessage = ref(null);
 const showDeleteModal = ref(false);
 const deleteItemId = ref(null);
 const deleteItemName = ref("");
+
+// Biến cho popup thông báo
+const showNotification = ref(false);
+const notificationType = ref('success');
+const notificationTitle = ref('');
+const notificationMessage = ref('');
 
 // Search và Filter
 const searchQuery = ref("");
@@ -480,8 +503,8 @@ const handleFilter = () => {
 };
 
 const fetchCreate = async () => {
-  if (!newXuatXu.value.tenXuatXu) {
-    errorMessage.value = "Vui lòng nhập tên xuất xứ";
+  if (!newXuatXu.value.tenXuatXu || newXuatXu.value.tenXuatXu.trim() === '') {
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng nhập tên xuất xứ');
     return;
   }
 
@@ -489,10 +512,42 @@ const fetchCreate = async () => {
   errorMessage.value = null;
 
   try {
-    let res = await fetchCreateXuatXu(newXuatXu.value);
-    if (res.status === "FAILED" && res.code === "410") {
-      return (errorMessage.value = "Tên xuất xứ đã tồn tại");
+    // Chuẩn bị dữ liệu gửi đi
+    const dataToSend = {
+      tenXuatXu: newXuatXu.value.tenXuatXu.trim(),
+      trangThai: newXuatXu.value.trangThai,
+      deleted: false
+    };
+    
+    console.log('Creating xuất xứ with data:', dataToSend);
+    let res = await fetchCreateXuatXu(dataToSend);
+    console.log('Response from API:', res);
+    
+    // Kiểm tra nếu response có status FAILED
+    if (res && res.status === "FAILED") {
+      if (res.code === "410") {
+        showNotificationPopup('error', 'Lỗi', 'Tên xuất xứ đã tồn tại');
+      } else {
+        showNotificationPopup('error', 'Lỗi', res.message || 'Có lỗi xảy ra khi thêm xuất xứ');
+      }
+      return;
     }
+    
+    // Nếu không có lỗi FAILED, coi như thành công
+    // (API có thể trả về status khác hoặc không có field status)
+
+    // Thêm xuất xứ mới vào đầu danh sách
+    const newXuatXuItem = {
+      id: res.data?.id || Date.now(), // Sử dụng ID từ response hoặc timestamp
+      tenXuatXu: dataToSend.tenXuatXu,
+      trangThai: dataToSend.trangThai,
+      deleted: false,
+      ngayTao: new Date().toISOString(),
+      ngaySua: new Date().toISOString()
+    };
+    
+    // Thêm vào đầu danh sách
+    XuatXus.value.unshift(newXuatXuItem);
 
     // Reset form
     newXuatXu.value = {
@@ -501,14 +556,16 @@ const fetchCreate = async () => {
       deleted: false,
     };
 
-    await fetchAll();
-    successMessage.value = "Xuất xứ đã được thêm thành công!";
-    clearSuccessMessage();
     closeAddForm();
+    showNotificationPopup('success', 'Thành công', 'Xuất xứ đã được thêm thành công!');
   } catch (error) {
     console.error("Error creating:", error);
-    errorMessage.value =
-      "Lỗi khi thêm: " + (error.message || "Không thể tạo xuất xứ");
+    console.error("Error details:", {
+      message: error.message,
+      status: error.status,
+      response: error.response
+    });
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể tạo xuất xứ");
   } finally {
     uploading.value = false;
   }
@@ -533,12 +590,10 @@ const fetchUpdate = async () => {
 
     await fetchAll();
     closeDetailModal();
-    editSuccessMessage.value = "Xuất xứ đã được cập nhật thành công!";
-    clearEditSuccessMessage();
+    showNotificationPopup('success', 'Thành công', 'Xuất xứ đã được cập nhật thành công!');
   } catch (error) {
     console.error("Error updating:", error);
-    editErrorMessage.value =
-      "Lỗi khi cập nhật: " + (error.message || "Không thể cập nhật xuất xứ");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể cập nhật xuất xứ");
   } finally {
     uploading.value = false;
   }
@@ -563,16 +618,11 @@ const confirmDelete = async () => {
     uploading.value = true;
     await fetchUpdateStatusXuatXu(deleteItemId.value);
     await fetchAll();
-    successMessage.value = "Xuất xứ đã được xóa thành công!";
-    clearSuccessMessage();
     closeDeleteModal();
+    showNotificationPopup('success', 'Thành công', 'Xuất xứ đã được xóa thành công!');
   } catch (error) {
     console.error("Error deleting origin:", error);
-    errorMessage.value =
-      "Lỗi khi xóa: " + (error.message || "Không thể xóa xuất xứ");
-    setTimeout(() => {
-      errorMessage.value = null;
-    }, 3000);
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể xóa xuất xứ");
   } finally {
     uploading.value = false;
   }
@@ -595,6 +645,24 @@ const closeDetailModal = () => {
   showDetailModal.value = false;
   selectedXuatXu.value = {};
 };
+
+// Methods cho popup thông báo
+const showNotificationPopup = (type, title, message) => {
+  notificationType.value = type;
+  notificationTitle.value = title;
+  notificationMessage.value = message;
+  showNotification.value = true;
+  
+  // Tự động ẩn sau 3 giây
+  setTimeout(() => {
+    closeNotification();
+  }, 3000);
+};
+
+const closeNotification = () => {
+  showNotification.value = false;
+};
+
 
 const editFromDetail = () => {
   showDetailModal.value = false; // Đóng popup detail
@@ -866,9 +934,6 @@ onMounted(fetchAll);
   color: #4b5563 !important;
 }
 
-.table tbody tr:hover {
-  /* background: rgba(74, 222, 128, 0.05) !important; */
-}
 
 /* CSS cho form elements */
 .form-group {

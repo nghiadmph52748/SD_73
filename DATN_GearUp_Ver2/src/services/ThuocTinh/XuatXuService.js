@@ -25,6 +25,9 @@ export const fetchPagingXuatXu = async (page, size) => {
 }
 
 export const fetchCreateXuatXu = async (data) => {
+    console.log('API URL:', `${API}/add`);
+    console.log('Request data:', data);
+    
     const res = await fetch(`${API}/add`, {
         method: "POST",
         headers: {
@@ -32,10 +35,16 @@ export const fetchCreateXuatXu = async (data) => {
         },
         body: JSON.stringify(data),
     });
-    if (!res.ok) {
-        throw new Error("Failed to create origin");
-    }
-    return res.json();
+    
+    console.log('Response status:', res.status);
+    console.log('Response ok:', res.ok);
+    
+    const result = await res.json();
+    console.log('Response data:', result);
+    
+    // Luôn trả về result, không throw error
+    // Để component có thể xử lý response
+    return result;
 }
 
 export const fetchUpdateXuatXu = async (id, data) => {
