@@ -32,17 +32,17 @@ public class TrongLuongController {
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody TrongLuongRequest request) {
         trongLuongService.add(request);
-        return new ResponseObject<>(null, "Thêm thành công");
+        return new ResponseObject<>(true,null, "Thêm thành công");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@RequestBody TrongLuongRequest request, @PathVariable Integer id) {
         trongLuongService.update(id, request);
-        return new ResponseObject<>(null, "Cập nhật thành công");
+        return new ResponseObject<>(true,null, "Cập nhật thành công");
     }
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable Integer id) {
         trongLuongService.updateStatus(id);
-        return new ResponseObject<>(null, "Cập nhật trạng thái thành công");
+        return new ResponseObject<>(true,null, "Cập nhật trạng thái thành công");
     }
 }

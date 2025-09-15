@@ -6,6 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.Nationalized;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -57,6 +59,11 @@ public class ChiTietSanPham {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_trong_luong", nullable = false)
     private TrongLuong idTrongLuong;
+
+    @Generated(GenerationTime.ALWAYS)
+    @ColumnDefault("CONCAT('CTS', RIGHT(CONCAT('00000', CAST(ID AS VARCHAR(5))), 5))")
+    @Column(name = "ma_chi_tiet_san_pham", length = 20)
+    private String maChiTietSanPham;
 
     @ColumnDefault("0")
     @Column(name = "so_luong")

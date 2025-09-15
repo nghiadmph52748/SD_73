@@ -1,6 +1,7 @@
 package org.example.be_sp.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,8 +46,12 @@ public class GenericCrudService<E, ID, response, request> {
     }
 
     public E add(request request) {
-        E entity = MapperUtils.map(request, this.entity);
-        return repository.save(entity);
+        try {
+            E entity = MapperUtils.map(request, this.entity);
+            return repository.save(entity);
+        } catch (Exception e) {
+            throw new ApiException("đã tồn tại: " + entity, "410");
+        }
     }
 
     public E update(ID id, request request) {

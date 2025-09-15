@@ -11,65 +11,65 @@
       <!-- Modern Filter Section -->
       <div class="filter-section">
         <!-- <div class="filter-card"> -->
-          <div class="filter-content">
-            <!-- Search và Actions cùng dòng -->
-            <div class="search-actions-row">
-              <div class="search-section">
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  placeholder="Tìm kiếm theo mã SP, tên SP"
-                  class="search-input"
-                />
-                <button
-                  v-if="searchQuery"
-                  @click="searchQuery = ''"
-                  class="clear-btn"
-                ></button>
-              </div>
-              <div class="header-actions">
-                <button class="btn-export" @click="showExportConfirm">
-                  Xuất Excel
-                </button>
-                <router-link to="/products/add" class="btn-export">
-                  Thêm sản phẩm
-                </router-link>
-              </div>
+        <div class="filter-content">
+          <!-- Search và Actions cùng dòng -->
+          <div class="search-actions-row">
+            <div class="search-section">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Tìm kiếm theo mã SP, tên SP"
+                class="search-input"
+              />
+              <button
+                v-if="searchQuery"
+                @click="searchQuery = ''"
+                class="clear-btn"
+              ></button>
             </div>
-            <div class="filter-group">
-              <label class="filter-label"> Trạng thái: </label>
-              <div class="radio-group">
-                <label class="radio-item">
-                  <input
-                    type="radio"
-                    v-model="selectedTrangThai"
-                    value=""
-                    name="trangThai"
-                  />
-                  <span class="radio-text">Tất cả trạng thái</span>
-                </label>
-                <label class="radio-item">
-                  <input
-                    type="radio"
-                    v-model="selectedTrangThai"
-                    value="true"
-                    name="trangThai"
-                  />
-                  <span class="radio-text">Đang bán</span>
-                </label>
-                <label class="radio-item">
-                  <input
-                    type="radio"
-                    v-model="selectedTrangThai"
-                    value="false"
-                    name="trangThai"
-                  />
-                  <span class="radio-text">Tạm ngừng bán</span>
-                </label>
-              </div>
+            <div class="header-actions">
+              <button class="btn-export" @click="showExportConfirm">
+                Xuất Excel
+              </button>
+              <router-link to="/products/add" class="btn-export">
+                Thêm sản phẩm
+              </router-link>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label"> Trạng thái: </label>
+            <div class="radio-group">
+              <label class="radio-item">
+                <input
+                  type="radio"
+                  v-model="selectedTrangThai"
+                  value=""
+                  name="trangThai"
+                />
+                <span class="radio-text">Tất cả trạng thái</span>
+              </label>
+              <label class="radio-item">
+                <input
+                  type="radio"
+                  v-model="selectedTrangThai"
+                  value="true"
+                  name="trangThai"
+                />
+                <span class="radio-text">Đang bán</span>
+              </label>
+              <label class="radio-item">
+                <input
+                  type="radio"
+                  v-model="selectedTrangThai"
+                  value="false"
+                  name="trangThai"
+                />
+                <span class="radio-text">Tạm ngừng bán</span>
+              </label>
             </div>
           </div>
         </div>
+      </div>
       <!-- </div> -->
     </div>
 
@@ -108,7 +108,6 @@
               <th>Tên sản phẩm</th>
               <th>Số lượng biến thể</th>
               <th>Khoảng giá</th>
-              <th>Ngày tạo</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
@@ -130,7 +129,14 @@
               <td>{{ startIndex + i + 1 }}</td>
               <td>{{ product.maSanPham }}</td>
               <td>
-                <div v-if="editingProducts.has(product.id)" class="inline-edit">
+                <div
+                  v-if="editingProducts.has(product.id)"
+                  class="inline-edit"
+                  style="
+                    text-align: left !important;
+                    justify-content: flex-start !important;
+                  "
+                >
                   <input
                     v-model="editingProducts.get(product.id).tenSanPham"
                     class="edit-input"
@@ -147,8 +153,13 @@
               <td style="text-align: center !important">
                 {{ product.soLuongBienThe }}
               </td>
-              <td>{{ product.giaNhoNhat !== null && product.giaLonNhat !== null ? product.giaNhoNhat + " - " + product.giaLonNhat : "N/A" }}</td>
-              <td>{{ product.createAt }}</td>
+              <td>
+                {{
+                  product.giaNhoNhat !== null && product.giaLonNhat !== null
+                    ? product.giaNhoNhat + " - " + product.giaLonNhat
+                    : "N/A"
+                }}
+              </td>
               <td>
                 <div v-if="editingProducts.has(product.id)" class="inline-edit">
                   <select
@@ -182,7 +193,7 @@
         </table>
 
         <!-- Pagination -->
-        <div class="pagination-wrapper">
+        <div v-if="totalPages > 1" class="pagination-wrapper">
           <div class="pagination-info">
             Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của
             {{ totalProducts }} sản phẩm
@@ -193,7 +204,20 @@
               @click="previousPage"
               :disabled="currentPage === 1"
             >
-              ❮ Trước
+              <svg
+                class="icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                ></path>
+              </svg>
+              Trước
             </button>
             <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
             <button
@@ -201,8 +225,27 @@
               @click="nextPage"
               :disabled="currentPage === totalPages"
             >
-              Sau ❯
+              Sau
+              <svg
+                class="icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
             </button>
+          </div>
+        </div>
+        <!-- Pagination Info khi chỉ có 1 trang -->
+        <div v-else-if="filteredProducts.length > 0" class="pagination-wrapper">
+          <div class="pagination-info">
+            Hiển thị tất cả {{ filteredProducts.length }} sản phẩm
           </div>
         </div>
       </div>
@@ -231,7 +274,7 @@
     </div>
 
     <!-- Confirm Modal cho Hoàn thành cập nhật -->
-        <!-- Confirm Modal cho Cập nhật -->
+    <!-- Confirm Modal cho Cập nhật -->
     <div
       v-if="showConfirmUpdateModal"
       class="them-san-pham-page custom-confirm-dialog"
@@ -244,7 +287,7 @@
           chọn?
         </p>
         <div class="confirm-buttons">
-          <button class="btn btn-secondary" @click="closeConfirmUpdateModal">
+          <button class="btn" @click="closeConfirmUpdateModal">
             Hủy
           </button>
           <button class="btn btn-primary" @click="confirmUpdateProducts">
@@ -264,7 +307,7 @@
         <h3>Xác nhận xuất Excel</h3>
         <p>Bạn có chắc chắn muốn xuất danh sách sản phẩm ra file Excel?</p>
         <div class="confirm-buttons">
-          <button class="btn btn-secondary" @click="closeConfirmExportModal">
+          <button class="btn" @click="closeConfirmExportModal">
             Hủy
           </button>
           <button class="btn btn-primary" @click="confirmExportExcel">

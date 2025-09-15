@@ -9,11 +9,20 @@ export const fetchAllChiTietSanPham = async () => {
 }
 
 export const fetchAllChiTietSanPhamBySanPhamId = async (id) => {
-  const res = await fetch(`${API}/list/${id}`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch product details");
+  let res;
+  if(id) {
+    res = await fetch(`${API}/list/${id}`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch product details");
+    }
+  } else {
+    res = await fetch(`${API}/playlist`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch product details");
+    }
   }
-  return res.json();
+  const responseData = await res.json();
+  return responseData;
 }
 
 export const fetchOneChiTietSanPham = async (id) => {
@@ -132,8 +141,6 @@ export const fetchUpdateChiTietSanPham = async (id, data) => {
     updateAt: new Date().toISOString().split('T')[0],
     updateBy: data.updateBy || 1
   };
-
-
   try {
     const res = await fetch(`${API}/update/${id}`, {
       method: "PUT",
@@ -142,14 +149,11 @@ export const fetchUpdateChiTietSanPham = async (id, data) => {
       },
       body: JSON.stringify(requestData),
     });
-
-
     if (!res.ok) {
       const errorText = await res.text();
       console.error(`❌ API Error ${res.status}:`, errorText);
       throw new Error(`Failed to update product detail: ${res.status} - ${errorText}`);
     }
-
     const responseData = await res.json();
     return responseData;
   } catch (error) {

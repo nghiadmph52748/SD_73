@@ -83,74 +83,69 @@ const isLoginPage = computed(() => route.path === "/login");
 const currentPageTitle = computed(() => {
   const pathTitles = {
     // Main routes
-    '/': 'Bảng điều khiển',
-    '/dashboard': 'Bảng điều khiển', 
-    '/login': 'Đăng nhập',
+    "/": "Bảng điều khiển",
+    "/dashboard": "Bảng điều khiển",
+    "/login": "Đăng nhập",
 
     // User Management
-    '/users/nhan-vien': 'Quản lý nhân viên',
-    '/users/khach-hang': 'Quản lý khách hàng',
+    "/users/nhan-vien": "Quản lý nhân viên",
+    "/users/khach-hang": "Quản lý khách hàng",
 
     // Product Management
-    '/products': 'Quản lý sản phẩm',
-    '/products/add': 'Thêm sản phẩm mới',
-    '/products/xuat-xu': 'Quản lý xuất xứ',
-    '/products/nha-san-xuat': 'Quản lý nhà sản xuất', 
-    '/products/mau-sac': 'Quản lý màu sắc',
-    '/products/kich-thuoc': 'Quản lý kích thước',
-    '/products/de-giay': 'Quản lý đế giày',
-    '/products/chat-lieu': 'Quản lý chất liệu',
-    '/products/trong-luong': 'Quản lý trọng lượng',
-    '/products/anh-san-pham': 'Quản lý ảnh sản phẩm',
+    "/products": "Quản lý sản phẩm",
+    "/products/add": "Thêm sản phẩm mới",
+    "/products/details": "Chi tiết sản phẩm",
+    "/products/xuat-xu": "Quản lý xuất xứ",
+    "/products/nha-san-xuat": "Quản lý nhà sản xuất",
+    "/products/mau-sac": "Quản lý màu sắc",
+    "/products/kich-thuoc": "Quản lý kích thước",
+    "/products/de-giay": "Quản lý đế giày",
+    "/products/chat-lieu": "Quản lý chất liệu",
+    "/products/trong-luong": "Quản lý trọng lượng",
+    "/products/anh-san-pham": "Quản lý ảnh sản phẩm",
 
     // Sales & Orders
-    '/sales/pos': 'Hệ thống bán hàng (POS)',
-    '/sales/orders': 'Quản lý đơn hàng',
-    '/sales/returns': 'Quản lý đơn trả hàng',
+    "/sales/pos": "Hệ thống bán hàng (POS)",
+    "/sales/orders": "Quản lý đơn hàng",
+    "/sales/returns": "Quản lý đơn trả hàng",
 
     // Marketing & Promotions
-    '/marketing/discounts': 'Giảm Giá',
-    '/marketing/campaigns': 'Khuyến Mãi',
-    '/marketing/vouchers': 'Quản lý phiếu người dùng',
+    "/marketing/discounts": "Giảm Giá",
+    "/marketing/campaigns": "Khuyến Mãi",
+    "/marketing/vouchers": "Quản lý phiếu người dùng",
 
     // Customer Engagement
-    '/customers/carts': 'Quản lý giỏ hàng',
-    '/customers/favorites': 'Quản lý danh sách yêu thích',
-    '/customers/reviews': 'Quản lý đánh giá sản phẩm',
-    '/customers/comments': 'Quản lý bình luận',
+    "/customers/carts": "Quản lý giỏ hàng",
+    "/customers/favorites": "Quản lý danh sách yêu thích",
+    "/customers/reviews": "Quản lý đánh giá sản phẩm",
+    "/customers/comments": "Quản lý bình luận",
 
     // Communication
-    '/communication/notifications': 'Quản lý thông báo hệ thống',
-    '/communication/contacts': 'Quản lý liên hệ khách hàng',
+    "/communication/notifications": "Quản lý thông báo hệ thống",
+    "/communication/contacts": "Quản lý liên hệ khách hàng",
 
     // Inventory Management
-    '/inventory/imports': 'Quản lý phiếu nhập kho',
+    "/inventory/imports": "Quản lý phiếu nhập kho",
 
     // Analytics & System
-    '/analytics/price-history': 'Quản lý lịch sử giá bán',
-    '/system/activity-logs': 'Nhật ký hoạt động hệ thống',
+    "/analytics/price-history": "Quản lý lịch sử giá bán",
+    "/system/activity-logs": "Nhật ký hoạt động hệ thống",
 
     // Legacy routes (redirected routes should show target page title)
-    '/orders': 'Quản lý đơn hàng',
-    '/pos': 'Hệ thống bán hàng (POS)',
-    '/employees': 'Quản lý nhân viên', 
-    '/customers': 'Quản lý khách hàng',
-    '/discounts': 'Giảm Giá',
-    '/returns': 'Quản lý đơn trả hàng',
-    '/reviews': 'Quản lý đánh giá sản phẩm'
+    "/orders": "Quản lý đơn hàng",
+    "/pos": "Hệ thống bán hàng (POS)",
+    "/employees": "Quản lý nhân viên",
+    "/customers": "Quản lý khách hàng",
+    "/discounts": "Giảm Giá",
+    "/returns": "Quản lý đơn trả hàng",
+    "/reviews": "Quản lý đánh giá sản phẩm",
   };
-  
+
   // Handle dynamic routes like /products/details/:id
-  if (route.path.startsWith('/products/details/')) {
-    return 'Chi tiết sản phẩm';
+  if (route.path.startsWith("/products/details/")) {
+    return "Chi tiết sản phẩm";
   }
-  
-  // Debug: Log current route to console (can be removed later)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Current route path:', route.path);
-    console.log('Available paths:', Object.keys(pathTitles));
-  }
-  
+
   return pathTitles[route.path] || `Trang không xác định (${route.path})`;
 });
 
@@ -182,59 +177,60 @@ const displayName = computed(() => {
 const pageTitle = computed(() => {
   const titleMap = {
     // Main routes
-    '/': 'Bảng điều khiển',
-    '/dashboard': 'Bảng điều khiển',
-    '/login': 'Đăng nhập',
+    "/": "Bảng điều khiển",
+    "/dashboard": "Bảng điều khiển",
+    "/login": "Đăng nhập",
 
     // User Management
-    '/users/nhan-vien': 'Quản lý nhân viên',
-    '/users/khach-hang': 'Quản lý khách hàng',
+    "/users/nhan-vien": "Quản lý nhân viên",
+    "/users/khach-hang": "Quản lý khách hàng",
 
     // Product Management
-    '/products': 'Quản lý sản phẩm',
-    '/products/add': 'Thêm sản phẩm mới',
-    '/products/xuat-xu': 'Quản lý xuất xứ',
-    '/products/nha-san-xuat': 'Quản lý nhà sản xuất',
-    '/products/mau-sac': 'Quản lý màu sắc',
-    '/products/kich-thuoc': 'Quản lý kích thước',
-    '/products/de-giay': 'Quản lý đế giày',
-    '/products/chat-lieu': 'Quản lý chất liệu',
-    '/products/trong-luong': 'Quản lý trọng lượng',
-    '/products/anh-san-pham': 'Quản lý ảnh sản phẩm',
+    "/products": "Quản lý sản phẩm",
+    "/products/add": "Thêm sản phẩm mới",
+    "/products/details": "Chi tiết sản phẩm",
+    "/products/xuat-xu": "Quản lý xuất xứ",
+    "/products/nha-san-xuat": "Quản lý nhà sản xuất",
+    "/products/mau-sac": "Quản lý màu sắc",
+    "/products/kich-thuoc": "Quản lý kích thước",
+    "/products/de-giay": "Quản lý đế giày",
+    "/products/chat-lieu": "Quản lý chất liệu",
+    "/products/trong-luong": "Quản lý trọng lượng",
+    "/products/anh-san-pham": "Quản lý ảnh sản phẩm",
 
     // Sales & Orders
-    '/sales/pos': 'Hệ thống bán hàng (POS)',
-    '/sales/orders': 'Quản lý đơn hàng',
-    '/sales/returns': 'Quản lý đơn trả hàng',
+    "/sales/pos": "Hệ thống bán hàng (POS)",
+    "/sales/orders": "Quản lý đơn hàng",
+    "/sales/returns": "Quản lý đơn trả hàng",
 
     // Marketing & Promotions
-    '/marketing/discounts': 'Giảm Giá',
-    '/marketing/campaigns': 'Khuyến Mãi',
-    '/marketing/vouchers': 'Quản lý phiếu người dùng',
+    "/marketing/discounts": "Giảm Giá",
+    "/marketing/campaigns": "Khuyến Mãi",
+    "/marketing/vouchers": "Quản lý phiếu người dùng",
 
     // Customer Engagement
-    '/customers/carts': 'Quản lý giỏ hàng',
-    '/customers/favorites': 'Quản lý danh sách yêu thích',
-    '/customers/reviews': 'Quản lý đánh giá sản phẩm',
-    '/customers/comments': 'Quản lý bình luận',
+    "/customers/carts": "Quản lý giỏ hàng",
+    "/customers/favorites": "Quản lý danh sách yêu thích",
+    "/customers/reviews": "Quản lý đánh giá sản phẩm",
+    "/customers/comments": "Quản lý bình luận",
 
     // Communication
-    '/communication/notifications': 'Quản lý thông báo hệ thống',
-    '/communication/contacts': 'Quản lý liên hệ khách hàng',
+    "/communication/notifications": "Quản lý thông báo hệ thống",
+    "/communication/contacts": "Quản lý liên hệ khách hàng",
 
     // Inventory Management
-    '/inventory/imports': 'Quản lý phiếu nhập kho',
+    "/inventory/imports": "Quản lý phiếu nhập kho",
 
     // Analytics & System
-    '/analytics/price-history': 'Quản lý lịch sử giá bán',
-    '/system/activity-logs': 'Nhật ký hoạt động hệ thống',
+    "/analytics/price-history": "Quản lý lịch sử giá bán",
+    "/system/activity-logs": "Nhật ký hoạt động hệ thống",
   };
-  
+
   // Handle dynamic routes
-  if (route.path.startsWith('/products/details/')) {
-    return 'Chi tiết sản phẩm';
+  if (route.path.startsWith("/products/details/")) {
+    return "Chi tiết sản phẩm";
   }
-  
+
   return titleMap[route.path] || "GearUp Admin";
 });
 
@@ -275,6 +271,7 @@ const menuItems = [
     hasSubmenu: true,
     submenu: [
       { path: "/products", name: "Danh sách sản phẩm" },
+      { path: "/products/details", name: "Chi tiết sản phẩm" },
       {
         name: "Thuộc tính sản phẩm",
         hasSubSubmenu: true,
@@ -478,18 +475,22 @@ const closeMobileMenu = () => {
 const toggleSubmenu = (menuName) => {
   // If sidebar is collapsed, navigate to first page in submenu instead of toggling
   if (!sidebarOpen.value) {
-    const menuItem = menuItems.find(item => item.name === menuName);
+    const menuItem = menuItems.find((item) => item.name === menuName);
     if (menuItem && menuItem.submenu && menuItem.submenu.length > 0) {
       // Find first submenu item with a path
-      const firstItem = menuItem.submenu.find(subitem => subitem.path);
+      const firstItem = menuItem.submenu.find((subitem) => subitem.path);
       if (firstItem) {
         router.push(firstItem.path);
         return;
       }
       // If no direct path found, check for sub-submenu
-      const firstSubSubmenu = menuItem.submenu.find(subitem => subitem.hasSubSubmenu && subitem.subSubmenu);
+      const firstSubSubmenu = menuItem.submenu.find(
+        (subitem) => subitem.hasSubSubmenu && subitem.subSubmenu
+      );
       if (firstSubSubmenu && firstSubSubmenu.subSubmenu.length > 0) {
-        const firstSubSubItem = firstSubSubmenu.subSubmenu.find(subsubitem => subsubitem.path);
+        const firstSubSubItem = firstSubSubmenu.subSubmenu.find(
+          (subsubitem) => subsubitem.path
+        );
         if (firstSubSubItem) {
           router.push(firstSubSubItem.path);
           return;
@@ -497,7 +498,7 @@ const toggleSubmenu = (menuName) => {
       }
     }
   }
-  
+
   // Normal toggle behavior when sidebar is open
   expandedMenus.value[menuName] = !expandedMenus.value[menuName];
 };
@@ -782,11 +783,17 @@ const checkMobile = () => {
           <!-- Breadcrumb Navigation -->
           <nav class="breadcrumb-nav">
             <div class="breadcrumb-container">
-              <a href="#" class="breadcrumb-item home" @click.prevent="router.push('/')">
+              <a
+                href="#"
+                class="breadcrumb-item home"
+                @click.prevent="router.push('/')"
+              >
                 Trang chủ
               </a>
               <span class="breadcrumb-separator">/</span>
-              <span class="breadcrumb-item current">{{ currentPageTitle }}</span>
+              <span class="breadcrumb-item current">{{
+                currentPageTitle
+              }}</span>
             </div>
           </nav>
         </div>
@@ -794,88 +801,88 @@ const checkMobile = () => {
         <div class="header-right">
           <!-- Notification Button moved to header-right -->
           <button class="notification-button" @click="toggleNotifications">
-              <div class="bell-icon-container">
-                <!-- Clean Bell Icon -->
-                <svg
-                  class="bell-icon"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
-                </svg>
-                <div
-                  v-if="unreadNotifications > 0"
-                  :key="unreadNotifications"
-                  class="notification-count"
-                  :class="{ updating: isCountUpdating }"
-                >
-                  {{ unreadNotifications > 9 ? "9+" : unreadNotifications }}
-                </div>
+            <div class="bell-icon-container">
+              <!-- Clean Bell Icon -->
+              <svg
+                class="bell-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+              </svg>
+              <div
+                v-if="unreadNotifications > 0"
+                :key="unreadNotifications"
+                class="notification-count"
+                :class="{ updating: isCountUpdating }"
+              >
+                {{ unreadNotifications > 9 ? "9+" : unreadNotifications }}
               </div>
+            </div>
           </button>
 
           <!-- Notifications Dropdown -->
           <div
-              v-if="showNotifications"
-              class="notifications-dropdown"
-              @click.stop
-            >
-              <div class="notifications-header">
-                <h3>Thông báo</h3>
-                <button
-                  v-if="unreadNotifications > 0"
-                  class="mark-all-read"
-                  @click="markAllAsRead"
+            v-if="showNotifications"
+            class="notifications-dropdown"
+            @click.stop
+          >
+            <div class="notifications-header">
+              <h3>Thông báo</h3>
+              <button
+                v-if="unreadNotifications > 0"
+                class="mark-all-read"
+                @click="markAllAsRead"
+              >
+                Đánh dấu đã đọc
+              </button>
+            </div>
+
+            <div class="notifications-list">
+              <div v-if="notifications.length === 0" class="no-notifications">
+                <i class="empty-icon"><!-- icon: empty-mailbox --></i>
+                <p>Không có thông báo mới</p>
+              </div>
+
+              <div v-else>
+                <div
+                  v-for="notification in notifications"
+                  :key="notification.id"
+                  class="notification-item"
+                  :class="{ unread: !notification.isRead }"
+                  @click="markAsRead(notification.id)"
                 >
-                  Đánh dấu đã đọc
-                </button>
-              </div>
-
-              <div class="notifications-list">
-                <div v-if="notifications.length === 0" class="no-notifications">
-                  <i class="empty-icon"><!-- icon: empty-mailbox --></i>
-                  <p>Không có thông báo mới</p>
-                </div>
-
-                <div v-else>
-                  <div
-                    v-for="notification in notifications"
-                    :key="notification.id"
-                    class="notification-item"
-                    :class="{ unread: !notification.isRead }"
-                    @click="markAsRead(notification.id)"
-                  >
-                    <div class="notification-icon">
-                      {{ notification.icon }}
-                    </div>
-                    <div class="notification-content">
-                      <div class="notification-title">
-                        {{ notification.title }}
-                      </div>
-                      <div class="notification-message">
-                        {{ notification.message }}
-                      </div>
-                      <div class="notification-time">
-                        {{ formatTimeAgo(notification.timestamp) }}
-                      </div>
-                    </div>
-                    <div v-if="!notification.isRead" class="unread-indicator" />
+                  <div class="notification-icon">
+                    {{ notification.icon }}
                   </div>
+                  <div class="notification-content">
+                    <div class="notification-title">
+                      {{ notification.title }}
+                    </div>
+                    <div class="notification-message">
+                      {{ notification.message }}
+                    </div>
+                    <div class="notification-time">
+                      {{ formatTimeAgo(notification.timestamp) }}
+                    </div>
+                  </div>
+                  <div v-if="!notification.isRead" class="unread-indicator" />
                 </div>
               </div>
+            </div>
 
-              <div class="notifications-footer">
-                <button class="view-all-btn" @click="viewAllNotifications">
-                  Xem tất cả thông báo
-                </button>
-              </div>
+            <div class="notifications-footer">
+              <button class="view-all-btn" @click="viewAllNotifications">
+                Xem tất cả thông báo
+              </button>
+            </div>
           </div>
 
           <div class="user-profile" @click="toggleUserDropdown">
@@ -931,13 +938,23 @@ const checkMobile = () => {
         <div class="modal-header-redesigned">
           <div class="header-top">
             <div class="notification-icon-redesigned">
-              <svg class="bell-icon-redesigned" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                class="bell-icon-redesigned"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
               </svg>
             </div>
             <div class="notification-title-redesigned">
-              <h2 class="notification-title-text-redesigned">Trung tâm thông báo</h2>
+              <h2 class="notification-title-text-redesigned">
+                Trung tâm thông báo
+              </h2>
               <p class="notification-count-text">
                 {{ notifications.length }} thông báo
                 <span v-if="unreadNotifications > 0" class="unread-count-badge">
@@ -945,21 +962,41 @@ const checkMobile = () => {
                 </span>
               </p>
             </div>
-            <button class="notification-close-redesigned" @click="closeAllNotificationsModal">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button
+              class="notification-close-redesigned"
+              @click="closeAllNotificationsModal"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </button>
           </div>
-          
-          <div class="header-actions-redesigned" v-if="notifications.length > 0">
+
+          <div
+            class="header-actions-redesigned"
+            v-if="notifications.length > 0"
+          >
             <button
               v-if="unreadNotifications > 0"
               class="action-btn primary-action"
               @click="markAllAsRead"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <polyline points="20,6 9,17 4,12"></polyline>
               </svg>
               Đánh dấu đã đọc
@@ -968,9 +1005,18 @@ const checkMobile = () => {
               class="action-btn secondary-action"
               @click="clearAllNotifications"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <polyline points="3,6 5,6 21,6"></polyline>
-                <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                <path
+                  d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"
+                ></path>
               </svg>
               Xóa tất cả
             </button>
@@ -1028,7 +1074,11 @@ const checkMobile = () => {
                   :class="`type-${notification.type}`"
                 >
                   <div class="type-icon-container">
-                    <span class="type-icon" :class="getIconClass(notification.type)">{{ notification.icon }}</span>
+                    <span
+                      class="type-icon"
+                      :class="getIconClass(notification.type)"
+                      >{{ notification.icon }}</span
+                    >
                   </div>
                   <span class="type-label">{{
                     getTypeLabel(notification.type)
@@ -1144,7 +1194,7 @@ const checkMobile = () => {
   font-size: 1.25rem;
   font-weight: 700;
   color: #4ade80;
-  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-family: "Arial", "Helvetica", sans-serif;
 }
 
 /* Navigation Menu */
@@ -1298,7 +1348,7 @@ const checkMobile = () => {
   overflow: hidden;
   transition: max-height 0.3s ease;
   background-color: #ffffff;
-  border-left: 2px solid #e5e7eb;
+  /* border-left: 2px solid #e5e7eb; */
   margin-left: 1rem;
 }
 
@@ -1553,11 +1603,11 @@ const checkMobile = () => {
   .breadcrumb-container {
     padding: 0.25rem 0.5rem;
   }
-  
+
   .breadcrumb-item {
     font-size: 0.8125rem;
   }
-  
+
   .breadcrumb-separator {
     margin: 0 0.5rem;
   }
@@ -1568,11 +1618,11 @@ const checkMobile = () => {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
   }
-  
+
   .breadcrumb-item {
     font-size: 0.75rem;
   }
-  
+
   .breadcrumb-separator {
     margin: 0 0.375rem;
   }
@@ -1583,7 +1633,7 @@ const checkMobile = () => {
   font-size: 1.5rem;
   font-weight: 600;
   color: #000000;
-  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-family: "Arial", "Helvetica", sans-serif;
 }
 
 .header-right {
@@ -1653,7 +1703,8 @@ const checkMobile = () => {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   z-index: 1000;
   min-width: 250px;
   max-width: 300px;
@@ -2096,10 +2147,8 @@ const checkMobile = () => {
 .notifications-modal {
   background: white;
   border-radius: 1rem;
-  box-shadow: 
-    0 20px 40px -8px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.08);
   width: 90vw;
   max-width: 600px;
   max-height: 80vh;
@@ -2256,13 +2305,17 @@ const checkMobile = () => {
 }
 
 .action-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -2440,13 +2493,17 @@ const checkMobile = () => {
 }
 
 .notifications-modal .filter-tab::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -2478,7 +2535,6 @@ const checkMobile = () => {
   box-shadow: 0 8px 24px rgba(74, 222, 128, 0.4) !important;
 }
 
-
 .tab-label {
   font-weight: inherit;
   line-height: 1;
@@ -2505,8 +2561,7 @@ const checkMobile = () => {
 .tab-badge.badge-unread {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
-  box-shadow: 
-    0 0 0 2px rgba(239, 68, 68, 0.2),
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2),
     0 4px 12px rgba(239, 68, 68, 0.3);
   animation: pulse 2s infinite;
 }
@@ -2517,16 +2572,15 @@ const checkMobile = () => {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
-    box-shadow: 
-      0 0 0 2px rgba(239, 68, 68, 0.2),
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2),
       0 4px 12px rgba(239, 68, 68, 0.3);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 
-      0 0 0 4px rgba(239, 68, 68, 0.3),
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3),
       0 6px 16px rgba(239, 68, 68, 0.4);
   }
 }
@@ -2790,11 +2844,7 @@ const checkMobile = () => {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    #4ade80 0%,
-    #22c55e 100%
-  );
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   border: 2px solid #ffffff;
@@ -2959,3 +3009,4 @@ const checkMobile = () => {
   }
 }
 </style>
+

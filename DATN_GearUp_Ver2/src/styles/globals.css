@@ -926,7 +926,7 @@
   overflow: hidden;
   transition: max-height 0.3s ease;
   background-color: #ffffff;
-  border-left: 2px solid #e5e7eb;
+  /* border-left: 2px solid #e5e7eb; */
   margin-left: 1rem;
 }
 

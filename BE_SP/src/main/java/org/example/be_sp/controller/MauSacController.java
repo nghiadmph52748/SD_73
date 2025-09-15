@@ -32,17 +32,17 @@ public class MauSacController {
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody MauSacRequest mauSacRequest) {
         mauSacService.add(mauSacRequest);
-        return new ResponseObject<>(null, "Thêm mới màu sắc thành công");
+        return new ResponseObject<>(true,null, "Thêm mới màu sắc thành công");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@PathVariable Integer id, @RequestBody MauSacRequest mauSacRequest) {
         mauSacService.update(id, mauSacRequest);
-        return new ResponseObject<>(null, "Cập nhật màu sắc thành công");
+        return new ResponseObject<>(true,null, "Cập nhật màu sắc thành công");
     }
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable Integer id) {
         mauSacService.updateStatus(id);
-        return new ResponseObject<>(null, "Cập nhật trạng thái màu sắc thành công");
+        return new ResponseObject<>(true,null, "Cập nhật trạng thái màu sắc thành công");
     }
 }

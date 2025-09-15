@@ -495,7 +495,7 @@ a:hover {
   border-collapse: collapse;
   background-color: white;
   font-family: var(--font-family-base);
-  border: 1px solid var(--border-color);
+  /* border: 1px solid var(--border-color); */
 }
 
 .table th,

@@ -42,6 +42,6 @@ public class SanPhamController {
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable Integer id) {
         sanPhamService.updateStatus(id);
-        return new ResponseObject<>(null, "Xoa san pham thanh cong");
+        return new ResponseObject<>(true,null, "Xoa san pham thanh cong");
     }
 }
