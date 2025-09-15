@@ -185,7 +185,7 @@
                     class="btn btn-secondary btn-sm"
                     title="Cập nhật"
                   >
-                    Cập nhật
+                    Chi tiết
                   </button>
                   <button
                     v-on:click="fetchDelete(value.id)"
