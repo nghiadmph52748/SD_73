@@ -294,14 +294,14 @@ const menuItems = [
 
   // Discounts Section
   {
-    name: "GIẢM GIÁ & KHUYẾN MÃI",
+    name: "GIẢM GIÁ",
     iconSvg: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12.79 21L3 11.21V2H11.21L21 11.79L12.79 21ZM4.41 4H6.58V5.17C6.58 5.72 7.03 6.17 7.58 6.17S8.58 5.72 8.58 5.17V4H10.76L19 12.24L12.79 18.45L4.55 10.21L4.41 4Z"/>
     </svg>`,
     hasSubmenu: true,
     submenu: [
-      { path: "/marketing/discounts", name: "Giảm Giá" },
-      { path: "/marketing/campaigns", name: "Khuyến Mãi" },
+      { path: "/marketing/discounts", name: "Phiếu Giảm Giá" },
+      { path: "/marketing/campaigns", name: "Đợt GIảm Giá" },
     ],
   },
 
