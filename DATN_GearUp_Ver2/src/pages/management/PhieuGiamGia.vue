@@ -933,6 +933,89 @@
       </div>
     </div>
 
+    <!-- Bulk Delete Confirmation Modal -->
+    <div
+      v-if="showBulkDeleteModal"
+      class="modal-overlay-new"
+      @click="closeBulkDeleteModal"
+    >
+      <div class="modal-content-new delete-modal-minimal bulk-delete-modal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="delete-header-minimal">
+          <div class="header-info-minimal">
+            <div class="delete-icon-minimal">
+              <img :src="WarningIcon" alt="Warning" class="header-icon" />
+            </div>
+            <div class="delete-title-minimal">
+              <h3>Xác nhận xóa nhiều phiếu giảm giá</h3>
+              <div class="delete-status-minimal">
+                <img :src="TrashIcon" alt="Delete" class="status-icon-minimal" />
+                <span class="status-text-minimal">XÓA NHIỀU PHIẾU</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeBulkDeleteModal">
+            <span>×</span>
+          </button>
+        </div>
+
+        <!-- Minimal Body -->
+        <div class="delete-body-minimal" v-if="bulkDeleteData">
+          <!-- Bulk Info Card -->
+          <div class="coupon-info-card-minimal">
+            <div class="info-header-minimal">
+              <img :src="TagIcon" alt="Coupons" class="info-icon-minimal" />
+              <span>Danh sách phiếu giảm giá sẽ bị xóa</span>
+            </div>
+            <div class="info-content-minimal">
+              <div class="bulk-delete-list">
+                <div 
+                  v-for="(coupon, index) in bulkDeleteData.coupons.slice(0, 5)" 
+                  :key="coupon.id"
+                  class="bulk-item"
+                >
+                  <div class="bulk-item-icon">
+                    <img :src="TagIcon" alt="Coupon" class="coupon-icon" />
+                  </div>
+                  <div class="bulk-item-content">
+                    <div class="bulk-item-header">
+                      <span class="bulk-item-index">{{ index + 1 }}.</span>
+                      <h4 class="bulk-item-name">{{ coupon.tenPhieuGiamGia }}</h4>
+                    </div>
+                    <div class="bulk-item-details">
+                      <span class="bulk-item-code">Mã: {{ coupon.maPhieuGiamGia || 'N/A' }}</span>
+                      <span class="bulk-item-value">
+                        Giá trị: {{ !coupon.loaiPhieuGiamGia ? coupon.giaTriGiamGia + '%' : formatCurrency(coupon.giaTriGiamGia) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="bulk-item-warning">
+                    <img :src="WarningIcon" alt="Warning" class="warning-icon" />
+                  </div>
+                </div>
+                <div v-if="bulkDeleteData.coupons.length > 5" class="bulk-more">
+                  <img :src="WarningIcon" alt="More" class="more-icon" />
+                  <span>... và {{ bulkDeleteData.coupons.length - 5 }} phiếu khác sẽ bị xóa</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Minimal Footer -->
+        <div class="delete-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeBulkDeleteModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy bỏ</span>
+          </button>
+          <button class="delete-btn-minimal" @click="confirmBulkDelete">
+            <img :src="TrashIcon" alt="Delete" class="btn-icon-minimal" />
+            <span>Xác nhận xóa</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Save Confirmation Modal -->
     <div
       v-if="showConfirmSaveModal"
@@ -1076,12 +1159,14 @@ const showEditModal = ref(false);
 const showDetailModal = ref(false);
 const showNotificationModal = ref(false);
 const showDeleteModal = ref(false);
+const showBulkDeleteModal = ref(false);
 const showConfirmSaveModal = ref(false);
 
 // Selected data
 const selectedCoupon = ref(null);
 const editingCoupon = ref(null);
 const deleteCouponData = ref(null);
+const bulkDeleteData = ref(null);
 
 // Notification data
 const notificationData = ref({
@@ -1867,6 +1952,14 @@ const closeDeleteModal = () => {
 };
 
 /**
+ * Đóng popup xác nhận xóa nhiều
+ */
+const closeBulkDeleteModal = () => {
+  showBulkDeleteModal.value = false;
+  bulkDeleteData.value = null;
+};
+
+/**
  * Mở popup xác nhận lưu
  */
 const openConfirmSaveModal = () => {
@@ -2535,9 +2628,9 @@ const updateSelectedCoupons = () => {
 };
 
 /**
- * Bulk delete selected coupons
+ * Open bulk delete confirmation modal
  */
-const bulkDeleteCoupons = async () => {
+const bulkDeleteCoupons = () => {
   if (selectedCoupons.value.length === 0) {
     notificationData.value = {
       type: "warning",
@@ -2549,13 +2642,25 @@ const bulkDeleteCoupons = async () => {
     return;
   }
 
-  // Show confirmation
-  const confirmed = confirm(`Bạn có chắc chắn muốn xóa ${selectedCoupons.value.length} phiếu giảm giá đã chọn?`);
-  if (!confirmed) return;
+  // Store bulk delete data for modal
+  bulkDeleteData.value = {
+    count: selectedCoupons.value.length,
+    coupons: [...selectedCoupons.value]
+  };
+  
+  // Show bulk delete confirmation modal
+  showBulkDeleteModal.value = true;
+};
+
+/**
+ * Confirm bulk delete - actual deletion
+ */
+const confirmBulkDelete = async () => {
+  if (!bulkDeleteData.value) return;
 
   try {
     // Delete each selected coupon
-    const deletePromises = selectedCoupons.value.map(coupon => 
+    const deletePromises = bulkDeleteData.value.coupons.map(coupon => 
       fetchUpdateStatusPGG(coupon.id)
     );
     
@@ -2568,10 +2673,13 @@ const bulkDeleteCoupons = async () => {
     notificationData.value = {
       type: "success",
       title: "Thành công",
-      message: `Đã xóa ${selectedCoupons.value.length} phiếu giảm giá thành công!`,
+      message: `Đã xóa ${bulkDeleteData.value.count} phiếu giảm giá thành công!`,
       details: null,
     };
     showNotificationModal.value = true;
+    
+    // Close bulk delete modal
+    closeBulkDeleteModal();
     
     // Refresh data
     await fetchPGG();
@@ -2584,6 +2692,9 @@ const bulkDeleteCoupons = async () => {
       details: error.message,
     };
     showNotificationModal.value = true;
+    
+    // Close bulk delete modal even on error
+    closeBulkDeleteModal();
   }
 };
 
@@ -3093,3 +3204,217 @@ onMounted(() => {
 }
 </style>
 
+
+
+/* Bulk Delete Modal Styles */
+.bulk-delete-list {
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 12px;
+  background-color: #fef2f2;
+  padding: 16px;
+  border: 2px solid #fecaca;
+}
+
+.bulk-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 2px solid #fca5a5;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+  transition: all 0.2s ease;
+}
+
+.bulk-item:last-child {
+  margin-bottom: 0;
+}
+
+.bulk-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.15);
+}
+
+.bulk-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.bulk-item-icon .coupon-icon {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.bulk-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bulk-item-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bulk-item-index {
+  font-weight: 700;
+  color: #ef4444;
+  font-size: 0.875rem;
+  background: #fee2e2;
+  padding: 2px 8px;
+  border-radius: 6px;
+  min-width: fit-content;
+}
+
+.bulk-item-name {
+  font-weight: 600;
+  color: #374151;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.bulk-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bulk-item-code {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.bulk-item-value {
+  font-size: 0.875rem;
+  color: #059669;
+  font-weight: 600;
+}
+
+.bulk-item-warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #fef3c7;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.bulk-item-warning .warning-icon {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(65%) sepia(100%) saturate(1000%) hue-rotate(15deg);
+}
+
+.bulk-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #dc2626;
+  font-weight: 600;
+  font-style: italic;
+  padding: 16px;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border-radius: 12px;
+  border: 2px dashed #fca5a5;
+  text-align: center;
+}
+
+.bulk-more .more-icon {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) saturate(100%) invert(15%) sepia(91%) saturate(2671%) hue-rotate(349deg) brightness(90%) contrast(97%);
+}
+
+/* Modal Header Styles - Fixed Alignment */
+.delete-modal-minimal .delete-header-minimal {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 20px 24px !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  background: linear-gradient(135deg, #fef2f2, #fecaca) !important;
+}
+
+.delete-modal-minimal .header-info-minimal {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex: 1 !important;
+}
+
+.delete-modal-minimal .delete-icon-minimal {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 48px !important;
+  height: 48px !important;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  border-radius: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+.delete-modal-minimal .delete-icon-minimal .header-icon {
+  width: 24px !important;
+  height: 24px !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+.delete-modal-minimal .delete-title-minimal {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  flex: 1 !important;
+  min-height: 48px !important;
+}
+
+.delete-modal-minimal .delete-title-minimal h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #374151 !important;
+  line-height: 1.4 !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+}
+
+.delete-modal-minimal .close-btn-minimal {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.delete-modal-minimal .close-btn-minimal:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  transform: scale(1.05) !important;
+}

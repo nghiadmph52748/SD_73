@@ -3576,6 +3576,11 @@ body {
   overflow: hidden !important;
 }
 
+/* Larger width for bulk delete modal when it has many items */
+.bulk-delete-modal {
+  max-width: 650px !important;
+}
+
 .delete-header-minimal {
   padding: 2rem 2rem 1.5rem 2rem;
   background: #e2e8f0;
@@ -3625,6 +3630,26 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+/* Scrollbar styling for delete body */
+.delete-body-minimal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.delete-body-minimal::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.delete-body-minimal::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.delete-body-minimal::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .warning-card-minimal {
@@ -3678,6 +3703,32 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+/* Scrollbar styling for info content */
+.info-content-minimal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.info-content-minimal::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 3px;
+}
+
+.info-content-minimal::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.info-content-minimal::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .info-row-minimal {
@@ -3742,6 +3793,18 @@ body {
   .delete-modal-minimal {
     max-width: 95vw !important;
     margin: 1rem !important;
+  }
+  
+  .bulk-delete-modal {
+    max-width: 95vw !important;
+  }
+  
+  .delete-body-minimal {
+    padding: 1.5rem;
+  }
+  
+  .bulk-delete-list {
+    max-height: 250px;
   }
 
   .form-header-minimal,
@@ -4011,10 +4074,170 @@ body {
     flex-direction: column;
   }
 
-  .confirm-btn-minimal,
-  .cancel-btn-minimal {
-    width: 100%;
-    justify-content: center;
+.confirm-btn-minimal,
+.cancel-btn-minimal {
+  width: 100%;
+  justify-content: center;
+}
+}
+
+/* Bulk Delete List Styles */
+.bulk-delete-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+/* Scrolling is now handled by info-content-minimal parent container */
+
+.bulk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.bulk-item:hover {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.bulk-item-icon {
+  background: #4ade80;
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.coupon-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.bulk-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bulk-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bulk-item-index {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.bulk-item-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.bulk-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.bulk-item-code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.bulk-item-value {
+  font-weight: 500;
+  color: #166534;
+}
+
+.bulk-item-warning {
+  background: #ef4444;
+  border-radius: 50%;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.warning-icon {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) invert(1);
+}
+
+.bulk-more {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #92400e;
+  font-weight: 600;
+  text-align: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);
+  margin-top: 0.5rem;
+}
+
+.bulk-more:hover {
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+  border-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+}
+
+.more-icon {
+  width: 16px;
+  height: 16px;
+  filter: invert(40%) sepia(85%) saturate(1320%) hue-rotate(15deg) brightness(95%) contrast(105%);
+  transition: transform 0.2s ease;
+}
+
+.bulk-more:hover .more-icon {
+  transform: scale(1.1);
+}
+
+/* Responsive Design for Bulk Delete Items */
+@media (max-width: 768px) {
+  .bulk-item {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+  
+  .bulk-item-header {
+    align-items: center;
+  }
+  
+  .bulk-item-details {
+    gap: 0.125rem;
+  }
+  
+  .bulk-item-warning {
+    align-self: center;
+    margin-top: 0.5rem;
   }
 }
 
@@ -4082,6 +4305,58 @@ body {
   border-color: #9ca3af;
   color: #374151;
   transform: translateY(-1px);
+}
+
+/* Disabled state for bulk delete and other filter buttons */
+.xoa-toan-bo-bo-loc-btn:disabled,
+.xoa-toan-bo-bo-loc-btn.btn-disabled {
+  background: #ffffff !important;
+  color: #9ca3af !important;
+  border-color: #e5e7eb !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+  transform: none !important;
+}
+
+.xoa-toan-bo-bo-loc-btn:disabled:hover,
+.xoa-toan-bo-bo-loc-btn.btn-disabled:hover {
+  background: #ffffff !important;
+  color: #9ca3af !important;
+  border-color: #e5e7eb !important;
+  transform: none !important;
+  opacity: 0.6 !important;
+}
+
+/* Special styling for bulk delete button */
+.bulk-delete-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.bulk-delete-btn:hover:not(:disabled):not(.btn-disabled) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+}
+
+.bulk-delete-btn:disabled,
+.bulk-delete-btn.btn-disabled {
+  background: #9ca3af !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.bulk-delete-btn:disabled:hover,
+.bulk-delete-btn.btn-disabled:hover {
+  background: #9ca3af !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .mo-ta-bo-loc {

@@ -904,6 +904,89 @@
       </div>
     </div>
 
+    <!-- Bulk Delete Confirmation Modal -->
+    <div
+      v-if="showBulkDeleteModal"
+      class="modal-overlay-new"
+      @click="closeBulkDeleteModal"
+    >
+      <div class="modal-content-new delete-modal-minimal bulk-delete-modal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="delete-header-minimal">
+          <div class="header-info-minimal">
+            <div class="delete-icon-minimal">
+              <img :src="WarningIcon" alt="Warning" class="header-icon" />
+            </div>
+            <div class="delete-title-minimal">
+              <h3>Xác nhận xóa nhiều đợt giảm giá</h3>
+              <div class="delete-status-minimal">
+                <img :src="TrashIcon" alt="Delete" class="status-icon-minimal" />
+                <span class="status-text-minimal">XÓA NHIỀU ĐỢT GIẢM GIÁ</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeBulkDeleteModal">
+            <span>×</span>
+          </button>
+        </div>
+
+        <!-- Minimal Body -->
+        <div class="delete-body-minimal" v-if="bulkDeleteData">
+          <!-- Campaign Info Card -->
+          <div class="coupon-info-card-minimal">
+            <div class="info-header-minimal">
+              <img :src="TagIcon" alt="Campaigns" class="info-icon-minimal" />
+              <span>Danh sách đợt giảm giá sẽ bị xóa</span>
+            </div>
+            <div class="info-content-minimal">
+              <div class="bulk-delete-list">
+                <div 
+                  v-for="(campaign, index) in bulkDeleteData.campaigns.slice(0, 5)" 
+                  :key="campaign.id"
+                  class="bulk-item"
+                >
+                  <div class="bulk-item-icon">
+                    <img :src="TagIcon" alt="Campaign" class="coupon-icon" />
+                  </div>
+                  <div class="bulk-item-content">
+                    <div class="bulk-item-header">
+                      <span class="bulk-item-index">{{ index + 1 }}.</span>
+                      <h4 class="bulk-item-name">{{ campaign.tenDotGiamGia }}</h4>
+                    </div>
+                    <div class="bulk-item-details">
+                      <span class="bulk-item-code">Mã: {{ campaign.maDotGiamGia || 'N/A' }}</span>
+                      <span class="bulk-item-value">
+                        Giá trị: {{ formatDiscountValue(campaign.giaTriGiamGia) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="bulk-item-warning">
+                    <img :src="WarningIcon" alt="Warning" class="warning-icon" />
+                  </div>
+                </div>
+                <div v-if="bulkDeleteData.campaigns.length > 5" class="bulk-more">
+                  <img :src="WarningIcon" alt="More" class="more-icon" />
+                  <span>... và {{ bulkDeleteData.campaigns.length - 5 }} đợt giảm giá khác sẽ bị xóa</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Minimal Footer -->
+        <div class="delete-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeBulkDeleteModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy bỏ</span>
+          </button>
+          <button class="delete-btn-minimal" @click="confirmBulkDelete">
+            <img :src="TrashIcon" alt="Delete" class="btn-icon-minimal" />
+            <span>Xác nhận xóa</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Save Confirmation Modal -->
     <div
       v-if="showConfirmSaveModal"
@@ -1039,12 +1122,14 @@ const showDetailModal = ref(false);
 const showApplyModal = ref(false);
 const showNotificationModal = ref(false);
 const showDeleteModal = ref(false);
+const showBulkDeleteModal = ref(false);
 const showConfirmSaveModal = ref(false);
 const editingCampaign = ref(null);
 const selectedCampaign = ref(null);
 const applyingCampaign = ref(null);
 const selectedProducts = ref([]);
 const deleteCampaignData = ref(null);
+const bulkDeleteData = ref(null);
 
 // Auto-update status indicators
 const statusAutoUpdated = ref(false);
@@ -2617,9 +2702,9 @@ const updateSelectedCampaigns = () => {
 };
 
 /**
- * Bulk delete selected campaigns
+ * Open bulk delete confirmation modal
  */
-const bulkDeleteCampaigns = async () => {
+const bulkDeleteCampaigns = () => {
   if (selectedCampaigns.value.length === 0) {
     notificationData.value = {
       type: "warning",
@@ -2631,13 +2716,33 @@ const bulkDeleteCampaigns = async () => {
     return;
   }
 
-  // Show confirmation
-  const confirmed = confirm(`Bạn có chắc chắn muốn xóa ${selectedCampaigns.value.length} đợt giảm giá đã chọn?`);
-  if (!confirmed) return;
+  // Store bulk delete data for modal
+  bulkDeleteData.value = {
+    count: selectedCampaigns.value.length,
+    campaigns: [...selectedCampaigns.value]
+  };
+  
+  // Show bulk delete confirmation modal
+  showBulkDeleteModal.value = true;
+};
+
+/**
+ * Close bulk delete modal
+ */
+const closeBulkDeleteModal = () => {
+  showBulkDeleteModal.value = false;
+  bulkDeleteData.value = null;
+};
+
+/**
+ * Confirm bulk delete - actual deletion
+ */
+const confirmBulkDelete = async () => {
+  if (!bulkDeleteData.value) return;
 
   try {
     // Delete each selected campaign
-    const deletePromises = selectedCampaigns.value.map(campaign => 
+    const deletePromises = bulkDeleteData.value.campaigns.map(campaign => 
       deleteCampaign(campaign.id)
     );
     
@@ -2650,10 +2755,13 @@ const bulkDeleteCampaigns = async () => {
     notificationData.value = {
       type: "success",
       title: "Thành công",
-      message: `Đã xóa ${selectedCampaigns.value.length} đợt giảm giá thành công!`,
+      message: `Đã xóa ${bulkDeleteData.value.count} đợt giảm giá thành công!`,
       details: null,
     };
     showNotificationModal.value = true;
+    
+    // Close bulk delete modal
+    closeBulkDeleteModal();
     
     // Refresh data
     await fetchDGG();
@@ -2666,6 +2774,9 @@ const bulkDeleteCampaigns = async () => {
       details: error.message,
     };
     showNotificationModal.value = true;
+    
+    // Close bulk delete modal even on error
+    closeBulkDeleteModal();
   }
 };
 

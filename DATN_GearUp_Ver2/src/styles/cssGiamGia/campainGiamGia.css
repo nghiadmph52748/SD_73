@@ -3542,6 +3542,226 @@ button.create-btn:hover {
   }
 }
 
+/* ===== BULK DELETE MODAL STYLES ===== */
+
+/* Bulk Delete Modal */
+.bulk-delete-modal {
+  max-width: 700px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+/* Scrollable info-content-minimal for bulk delete modal */
+.bulk-delete-modal .info-content-minimal {
+  max-height: 350px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.bulk-delete-modal .info-content-minimal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bulk-delete-modal .info-content-minimal::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.bulk-delete-modal .info-content-minimal::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.bulk-delete-modal .info-content-minimal::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Bulk delete list container */
+.bulk-delete-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+
+/* Individual bulk item styling */
+.bulk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.bulk-item:hover {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.bulk-item-icon {
+  background: #4ade80;
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bulk-item-icon .coupon-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.bulk-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bulk-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bulk-item-index {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.bulk-item-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.bulk-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.bulk-item-code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-weight: 500;
+}
+
+.bulk-item-value {
+  font-weight: 500;
+  color: #166534;
+}
+
+.bulk-item-warning {
+  background: #ef4444;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 28px;
+  min-height: 28px;
+  position: relative;
+}
+
+.bulk-item-warning .warning-icon {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) invert(1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* More items indicator */
+.bulk-more {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #92400e;
+  font-weight: 600;
+  text-align: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);
+  margin-top: 0.5rem;
+}
+
+.bulk-more:hover {
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+  border-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+}
+
+.bulk-more .more-icon {
+  width: 16px;
+  height: 16px;
+  filter: invert(40%) sepia(85%) saturate(1320%) hue-rotate(15deg) brightness(95%) contrast(105%);
+  transition: transform 0.2s ease;
+}
+
+.bulk-more:hover .more-icon {
+  transform: scale(1.1);
+}
+
+/* Responsive Design for Bulk Delete Modal */
+@media (max-width: 768px) {
+  .bulk-delete-modal {
+    max-width: 95vw !important;
+    margin: 1rem;
+  }
+
+  .bulk-delete-list {
+    max-height: 250px;
+  }
+
+  .bulk-item {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+  
+  .bulk-item-header {
+    align-items: center;
+  }
+  
+  .bulk-item-details {
+    gap: 0.125rem;
+  }
+  
+  .bulk-item-warning {
+    align-self: center;
+    margin-top: 0.5rem;
+  }
+
+  .bulk-more {
+    padding: 0.75rem;
+    text-align: center;
+  }
+}
+
 /* Responsive Design for Vietnamese Classes */
 @media (max-width: 1400px) {
   .luoi-bo-loc {
