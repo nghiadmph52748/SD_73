@@ -5422,7 +5422,8 @@ h3 .icon-svg {
   flex: 1;
 }
 
-/* Nút đóng popup thông báo */
+
+/* Nút đóng popup thông báo cũ (giữ lại để tương thích) */
 .notification-close {
   background: none;
   border: none;

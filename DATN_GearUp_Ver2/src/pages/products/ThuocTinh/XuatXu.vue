@@ -398,9 +398,6 @@
       >
         <div class="notification-header">
           <h4 class="notification-title">{{ notificationTitle }}</h4>
-          <button @click="closeNotification" class="notification-close">
-            <i class="fas fa-times"></i>
-          </button>
         </div>
         <p class="notification-message">{{ notificationMessage }}</p>
         <div class="notification-progress"></div>
