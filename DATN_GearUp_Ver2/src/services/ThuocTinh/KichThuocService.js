@@ -22,7 +22,7 @@ export const fetchPagingKichThuoc = async (page, size) => {
     return res.json();
 }
 export const fetchCreateKichThuoc = async (data) => {
-    const res = await fetch(`${API}/add`, {
+    let res = await fetch(`${API}/add`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

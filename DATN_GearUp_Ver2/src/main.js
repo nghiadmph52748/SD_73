@@ -71,6 +71,7 @@ const routes = [
   // Product Management
   { path: '/products', component: ProductManagement },
   { path: '/products/add', component: ThemSanPham },
+  { path: '/products/details', component: ProductDetails },
   { path: '/products/details/:id', component: ProductDetails },
   { path: '/products/xuat-xu', component: XuatXu },
   { path: '/products/nha-san-xuat', component: NhaSanXuat },

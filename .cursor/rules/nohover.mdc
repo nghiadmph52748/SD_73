@@ -8,3 +8,6 @@ nói gì làm nấy, không làm thừa, không làm thiếu.
 không override css, nếu trùng thì tạo class mới để css.
 không sử dụng icon đằng sau tên class.
 Không sử dụng icon trong khi response, nói ngắn gọn tránh phí token
+Không được sử dụng màu đen làm background
+không được sử dụng gradient
+

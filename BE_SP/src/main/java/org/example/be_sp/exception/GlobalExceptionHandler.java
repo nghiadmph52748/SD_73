@@ -30,10 +30,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<?> handleApiException(ApiException ex) {
         Map<String, Object> response = new HashMap<>();
-        response.put("status", "FAILED");
-        response.put("code", ex.getCode());
-        response.put("message", ex.getMessage());
-
+        if (ex.getCode().equals("510")){
+            response.put("status", "FAILED");
+            response.put("code", ex.getCode());
+            response.put("message", "Lỗi unique do " + ex.getMessage());
+        }else {
+            response.put("status", "FAILED");
+            response.put("code", ex.getCode());
+            response.put("message", ex.getMessage());
+        }
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

@@ -6,6 +6,8 @@ import org.example.be_sp.service.NhaSanXuatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
+
 @RestController
 @RequestMapping("/api/nha-san-xuat-management")
 @CrossOrigin(origins = "*")
@@ -31,18 +33,18 @@ public class NhaSanXuatController {
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody NhaSanXuatRequest request) {
         nhaSanXuatService.add(request);
-        return new ResponseObject<>(null, "Them moi thanh cong");
+        return new ResponseObject<>(true,null, "Them moi thanh cong");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@PathVariable Integer id, @RequestBody NhaSanXuatRequest request) {
         nhaSanXuatService.update(id, request);
-        return new ResponseObject<>(null, "Cap nhat thanh cong");
+        return new ResponseObject<>(true,null, "Cap nhat thanh cong");
     }
 
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable Integer id) {
         nhaSanXuatService.updateStatus(id);
-        return new ResponseObject<>(null, "Xoa nha san xuat thanh cong");
+        return new ResponseObject<>(true,null, "Xoa nha san xuat thanh cong");
     }
 }

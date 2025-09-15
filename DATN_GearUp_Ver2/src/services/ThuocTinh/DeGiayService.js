@@ -22,13 +22,17 @@ export const fetchPagingDeGiay = async (page, size) => {
     return res.json();
 }
 export const fetchCreateDeGiay = async (data) => {
-    await fetch(`${API}/add`, {
+    let res = await fetch(`${API}/add`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
     });
+    if (!res.ok) {
+        throw new Error("Failed to create insole");
+    }
+    return res.json();
 }
 export const fetchUpdateDeGiay = async (id, data) => {
     const res = await fetch(`${API}/update/${id}`, {

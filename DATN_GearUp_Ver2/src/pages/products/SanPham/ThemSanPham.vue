@@ -292,178 +292,195 @@
             <h3>Biến thể sản phẩm</h3>
           </div>
           <div class="section-content">
-            <div
-              v-for="(mauSac, mauIndex) in selectedMauSacs"
-              :key="mauIndex"
-              class="variant-table-container"
-            >
+            <div class="variant-table-container">
               <div class="variant-header">
-                <h4 class="variant-table-title">
-                  Biến thể sản phẩm - {{ mauSac.tenMauSac }}
-                </h4>
+                <h4 class="variant-table-title">Biến thể sản phẩm</h4>
                 <button
-                  v-if="getSelectedVariantsCount(mauIndex) >= 2"
-                  @click="showQuickEditPopup(mauIndex)"
-                  class="btn-outline"
+                  @click="showQuickAddPopup()"
+                  class="btn-primary"
                   type="button"
                 >
-                  Sửa nhanh
+                  Thêm nhanh
                 </button>
               </div>
               <div class="variant-table">
                 <table>
                   <thead>
                     <tr>
-                      <th width="50">
-                        <input
-                          type="checkbox"
-                          :checked="isAllVariantsSelected(mauIndex)"
-                          @change="toggleAllVariants(mauIndex, $event)"
-                        />
-                      </th>
-                      <th width="10%">Tên sản phẩm</th>
-                      <th width="10%">Kích thước</th>
-                      <th width="10%">Trọng lượng</th>
-                      <th width="10%">Số lượng</th>
-                      <th width="15%">Giá bán</th>
-                      <th width="35%">Ảnh (0/5)</th>
-                      <th width="10%">Thao tác</th>
+                      <th width="20%">Màu sắc</th>
+                      <th width="18%">Tên sản phẩm</th>
+                      <th width="6%">Kích thước</th>
+                      <th width="7%">Trọng lượng</th>
+                      <th width="7%">Số lượng</th>
+                      <th width="12%">Giá bán</th>
+                      <th width="17%">Ảnh (0/5)</th>
+                      <th width="11%">Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      v-for="(kichThuoc, kichIndex) in selectedKichThuocs"
-                      :key="kichIndex"
+                    <!-- Hiển thị tất cả variants của tất cả màu -->
+                    <template
+                      v-for="(mauSac, mauIndex) in selectedMauSacs"
+                      :key="`mau-${mauIndex}`"
                     >
-                      <td>
-                        <input
-                          type="checkbox"
-                          :checked="isVariantSelected(mauIndex, kichIndex)"
-                          @change="toggleVariant(mauIndex, kichIndex, $event)"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          v-model="
-                            productVariants[mauIndex][kichIndex].tenSanPham
-                          "
-                          type="text"
-                          class="variant-input-s"
-                          placeholder="Nhập tên sản phẩm"
-                          readonly
-                        />
-                      </td>
-                      <td>
-                        <input
-                          v-model="
-                            productVariants[mauIndex][kichIndex].kichThuoc
-                          "
-                          type="text"
-                          class="variant-input-s"
-                          placeholder="Nhập kích thước"
-                          readonly
-                        />
-                      </td>
-                      <td>
-                        <input
-                          v-model="
-                            productVariants[mauIndex][kichIndex].trongLuong
-                          "
-                          type="text"
-                          class="variant-input"
-                          placeholder="0"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          v-model="productVariants[mauIndex][kichIndex].soLuong"
-                          type="number"
-                          min="0"
-                          class="variant-input"
-                          placeholder="0"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          v-model="productVariants[mauIndex][kichIndex].giaBan"
-                          type="number"
-                          min="0"
-                          step="1000"
-                          class="variant-input"
-                          placeholder="0"
-                        />
-                      </td>
-                      <td>
-                        <div class="variant-image-section">
-                          <div class="image-preview-grid">
+                      <tr
+                        v-for="(variant, variantIndex) in productVariants[
+                          mauIndex
+                        ] || []"
+                        :key="`variant-${mauIndex}-${variantIndex}`"
+                      >
+                        <!-- Cột màu sắc -->
+                        <td>
+                          <span class="color-display" :title="mauSac.tenMauSac">
                             <div
-                              v-for="(anh, anhIndex) in productVariants[
-                                mauIndex
-                              ][kichIndex].anh"
-                              :key="anhIndex"
-                              class="image-preview-item"
-                            >
-                              <img
-                                :src="anh.url || getAnhUrl(anh)"
-                                alt="Ảnh sản phẩm"
-                                class="variant-thumbnail"
-                                @error="handleImageError($event, anh)"
-                              />
-                              <button
-                                @click="
-                                  removeVariantImage(
-                                    mauIndex,
-                                    kichIndex,
-                                    anhIndex
-                                  )
-                                "
-                                class="remove-image-btn"
-                                type="button"
+                              class="color-indicator"
+                              :style="{
+                                backgroundColor: getColorFromName(
+                                  mauSac.tenMauSac
+                                ),
+                              }"
+                              :title="`Màu: ${mauSac.tenMauSac}`"
+                            ></div>
+                            {{ mauSac.tenMauSac }}
+                          </span>
+                        </td>
+                        <!-- Cột tên sản phẩm -->
+                        <td>
+                          <input
+                            :value="
+                              variant.tenSanPham || productForm.tenSanPham
+                            "
+                            type="text"
+                            class="variant-input-s"
+                            placeholder="Nhập tên sản phẩm"
+                            readonly
+                          />
+                        </td>
+                        <td>
+                          <input
+                            :value="variant.kichThuoc"
+                            type="text"
+                            class="variant-input-s"
+                            placeholder="Nhập kích thước"
+                            readonly
+                          />
+                        </td>
+                        <td>
+                          <input
+                            :value="variant.trongLuong || ''"
+                            @input="
+                              updateVariantField(
+                                mauIndex,
+                                variantIndex,
+                                'trongLuong',
+                                $event.target.value
+                              )
+                            "
+                            type="text"
+                            class="variant-input"
+                            placeholder="0"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            :value="variant.soLuong || 0"
+                            @input="
+                              updateVariantField(
+                                mauIndex,
+                                variantIndex,
+                                'soLuong',
+                                parseInt($event.target.value) || 0
+                              )
+                            "
+                            type="number"
+                            min="0"
+                            class="variant-input"
+                            placeholder="0"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            :value="variant.giaBan || 0"
+                            @input="
+                              updateVariantField(
+                                mauIndex,
+                                variantIndex,
+                                'giaBan',
+                                parseInt($event.target.value) || 0
+                              )
+                            "
+                            type="number"
+                            min="0"
+                            step="1000"
+                            class="variant-input"
+                            placeholder="0"
+                          />
+                        </td>
+                        <td>
+                          <div class="variant-image-section">
+                            <div class="image-preview-grid">
+                              <div
+                                v-for="(anh, anhIndex) in variant.anh || []"
+                                :key="anhIndex"
+                                class="image-preview-item"
                               >
-                                ×
-                              </button>
-                            </div>
-                            <div class="image-selection-info">
-                              <span
-                                v-if="
-                                  getSelectedImageCount(mauIndex, kichIndex) > 0
-                                "
-                                class="image-count-badge"
-                              >
-                                {{
-                                  getSelectedImageCount(mauIndex, kichIndex)
-                                }}/5 ảnh
-                              </span>
-                              <button
-                                v-if="
-                                  productVariants[mauIndex][kichIndex].anh
-                                    .length < 5
-                                "
-                                @click="selectVariantImage(mauIndex, kichIndex)"
-                                class="add-image-btn"
-                                type="button"
-                              >
-                                <span class="add-icon">+</span>
-                                {{
-                                  getSelectedImageCount(mauIndex, kichIndex) > 0
-                                    ? "Thêm ảnh"
-                                    : "Chọn ảnh"
-                                }}
-                              </button>
+                                <img
+                                  :src="anh.url || getAnhUrl(anh)"
+                                  alt="Ảnh sản phẩm"
+                                  class="variant-thumbnail"
+                                  @error="handleImageError($event, anh)"
+                                />
+                                <button
+                                  @click="
+                                    removeVariantImage(
+                                      mauIndex,
+                                      variantIndex,
+                                      anhIndex
+                                    )
+                                  "
+                                  class="remove-image-btn"
+                                  type="button"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                              <div class="image-selection-info">
+                                <span
+                                  v-if="(variant.anh || []).length > 0"
+                                  class="image-count-badge"
+                                >
+                                  {{ (variant.anh || []).length }}/5 ảnh
+                                </span>
+                                <button
+                                  v-if="(variant.anh || []).length < 5"
+                                  @click="
+                                    selectVariantImage(mauIndex, variantIndex)
+                                  "
+                                  class="add-image-btn"
+                                  type="button"
+                                >
+                                  <span class="add-icon">+</span>
+                                  {{
+                                    (variant.anh || []).length > 0
+                                      ? "Thêm ảnh"
+                                      : "Chọn ảnh"
+                                  }}
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                      <td>
-                        <button
-                          @click="removeVariant(mauIndex, kichIndex)"
-                          class="remove-variant-btn"
-                          type="button"
-                        >
-                          Xóa
-                        </button>
-                      </td>
-                    </tr>
+                        </td>
+                        <td>
+                          <button
+                            @click="removeVariant(mauIndex, variantIndex)"
+                            class="remove-variant-btn"
+                            type="button"
+                          >
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
@@ -504,7 +521,8 @@
       </div>
     </div>
 
-    <!-- Success Notification -->
+    <!-- Success Notification - Không còn sử dụng, thay bằng popup thông báo bên phải -->
+    <!--
     <div
       v-if="showSuccessModal"
       class="success-modal-overlay"
@@ -528,6 +546,7 @@
         </div>
       </div>
     </div>
+    -->
 
     <!-- Popup chọn màu sắc -->
     <div
@@ -655,23 +674,23 @@
       </div>
     </div>
 
-    <!-- Popup sửa nhanh biến thể -->
+    <!-- Popup thêm nhanh biến thể -->
     <div
-      v-if="showQuickEditModal"
+      v-if="showQuickAddModal"
       class="popup-overlay"
-      @click="closeQuickEditModal"
+      @click="closeQuickAddModal"
     >
       <div class="popup-content quick-edit-popup" @click.stop>
         <div class="popup-header">
-          <h3>Sửa nhanh biến thể sản phẩm</h3>
-          <button @click="closeQuickEditModal" class="close-btn">×</button>
+          <h3>Thêm nhanh cho tất cả biến thể</h3>
+          <button @click="closeQuickAddModal" class="close-btn">×</button>
         </div>
         <div class="popup-body">
           <div class="quick-edit-form">
             <div class="form-field">
               <label class="form-label">Trọng lượng:</label>
               <input
-                v-model="quickEditForm.trongLuong"
+                v-model="quickAddForm.trongLuong"
                 type="text"
                 class="form-input"
                 placeholder="Nhập trọng lượng"
@@ -680,7 +699,7 @@
             <div class="form-field">
               <label class="form-label">Số lượng:</label>
               <input
-                v-model="quickEditForm.soLuong"
+                v-model="quickAddForm.soLuong"
                 type="number"
                 min="0"
                 class="form-input"
@@ -688,9 +707,9 @@
               />
             </div>
             <div class="form-field">
-              <label class="form-label">Đơn giá:</label>
+              <label class="form-label">Giá bán:</label>
               <input
-                v-model="quickEditForm.giaBan"
+                v-model="quickAddForm.giaBan"
                 type="number"
                 min="0"
                 step="1000"
@@ -701,8 +720,8 @@
           </div>
         </div>
         <div class="popup-footer">
-          <button @click="closeQuickEditModal" class="btn-outline">Đóng</button>
-          <button @click="applyQuickEdit" class="btn-primary">Áp dụng</button>
+          <button @click="closeQuickAddModal" class="btn-outline">Đóng</button>
+          <button @click="applyQuickAdd" class="btn-primary">Áp dụng</button>
         </div>
       </div>
     </div>
@@ -731,6 +750,36 @@
             Hủy
           </button>
           <button @click="confirmDeleteVariant" class="btn-danger">Xóa</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup thông báo bên phải - hỗ trợ nhiều thông báo -->
+    <div
+      v-if="notificationPositions.length > 0"
+      class="notification-popup-overlay"
+    >
+      <div
+        v-for="notification in notificationPositions"
+        :key="notification.id"
+        class="notification-popup-content"
+        :class="[
+          `notification-${notification.type}`,
+          { 'notification-closing': notification.isClosing },
+        ]"
+        :style="{ top: `${notification.top}px`, transition: 'top 0.3s ease' }"
+      >
+        <div class="notification-header">
+          <h4>{{ notification.title }}</h4>
+          <button
+            @click="closeNotificationPopup(notification.id)"
+            class="notification-close-btn"
+          >
+            ×
+          </button>
+        </div>
+        <div class="notification-body">
+          <p>{{ notification.message }}</p>
         </div>
       </div>
     </div>
@@ -776,7 +825,9 @@
                     @error="handleImageError($event, anh)"
                   />
                   <div class="anh-overlay">
-                    <span v-if="isAnhSelected(anh)" class="checkmark"><!-- icon: checkmark --></span>
+                    <span v-if="isAnhSelected(anh)" class="checkmark"
+                      ><!-- icon: checkmark --></span
+                    >
                   </div>
                   <div class="anh-name">{{ getAnhName(anh) }}</div>
                 </div>
@@ -895,8 +946,9 @@ import {
 } from "../../../services/ThuocTinh/XuatXuService";
 
 const router = useRouter();
-const showSuccessModal = ref(false);
-const successMessage = ref("");
+// Success modal - Không còn sử dụng, thay bằng popup thông báo bên phải
+// const showSuccessModal = ref(false);
+// const successMessage = ref("");
 const createdProductId = ref(null);
 
 // Confirm modal variables
@@ -951,6 +1003,14 @@ const selectedAnhFromFile = ref([]);
 
 // Lưu trữ trạng thái ảnh đã chọn cho từng biến thể
 const variantImageSelections = ref(new Map()); // key: "mauIndex-kichIndex", value: {database: [], files: []}
+
+// Function to update variant field safely
+const updateVariantField = (mauIndex, variantIndex, field, value) => {
+  const variant = productVariants.value[mauIndex]?.[variantIndex];
+  if (variant) {
+    variant[field] = value;
+  }
+};
 
 // Search for popups
 const mauSacSearch = ref("");
@@ -1022,12 +1082,11 @@ const resetForm = () => {
   selectedMauSacs.value = [];
   selectedKichThuocs.value = [];
   productVariants.value = [];
-  quickEditState.value.clear();
 
-  // Reset quick edit modal
-  showQuickEditModal.value = false;
+  // Reset quick add modal
+  showQuickAddModal.value = false;
   currentEditingMauIndex.value = null;
-  quickEditForm.value = {
+  quickAddForm.value = {
     trongLuong: "",
     soLuong: 0,
     giaBan: 0,
@@ -1288,38 +1347,30 @@ const createNewTenSanPham = async () => {
   // Việc tạo sản phẩm mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
   selectedProductFromDropdown.value = null; // Reset vì tạo sản phẩm mới
   showTenSanPhamDropdown.value = false;
-  console.log("📝 Đã lưu tên sản phẩm mới:", productForm.value.tenSanPham);
 };
 
 const createNewNhaSanXuat = async () => {
   // Chỉ đóng dropdown và để tên nhà sản xuất trong form
   // Việc tạo nhà sản xuất mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
   showNhaSanXuatDropdown.value = false;
-  console.log(
-    "📝 Đã lưu tên nhà sản xuất mới:",
-    productForm.value.tenNhaSanXuat
-  );
 };
 
 const createNewXuatXu = async () => {
   // Chỉ đóng dropdown và để tên xuất xứ trong form
   // Việc tạo xuất xứ mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
   showXuatXuDropdown.value = false;
-  console.log("📝 Đã lưu tên xuất xứ mới:", productForm.value.tenXuatXu);
 };
 
 const createNewChatLieu = async () => {
   // Chỉ đóng dropdown và để tên chất liệu trong form
   // Việc tạo chất liệu mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
   showChatLieuDropdown.value = false;
-  console.log("📝 Đã lưu tên chất liệu mới:", productForm.value.tenChatLieu);
 };
 
 const createNewDeGiay = async () => {
   // Chỉ đóng dropdown và để tên đế giày trong form
   // Việc tạo đế giày mới sẽ được xử lý khi nhấn nút "Thêm sản phẩm"
   showDeGiayDropdown.value = false;
-  console.log("📝 Đã lưu tên đế giày mới:", productForm.value.tenDeGiay);
 };
 
 // Popup functions
@@ -1365,7 +1416,7 @@ const selectKichThuocFromPopup = (kichThuoc) => {
 
 const createNewMauSacFromPopup = async () => {
   if (!newMauSacName.value.trim()) {
-    showAlert("Thiếu thông tin", "Vui lòng nhập tên màu sắc!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập tên màu sắc!", "error");
     return;
   }
 
@@ -1386,14 +1437,12 @@ const createNewMauSacFromPopup = async () => {
   ) {
     selectedMauSacs.value.push(newMauSac);
   }
-
-  console.log("📝 Đã thêm màu sắc mới:", newMauSacName.value);
   closeMauSacPopup();
 };
 
 const createNewKichThuocFromPopup = async () => {
   if (!newKichThuocName.value.trim()) {
-    showAlert("Thiếu thông tin", "Vui lòng nhập tên kích thước!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập tên kích thước!", "error");
     return;
   }
 
@@ -1414,19 +1463,38 @@ const createNewKichThuocFromPopup = async () => {
   ) {
     selectedKichThuocs.value.push(newKichThuoc);
   }
-
-  console.log("📝 Đã thêm kích thước mới:", newKichThuocName.value);
   closeKichThuocPopup();
 };
 
-// Quick edit state
-const quickEditState = ref(new Set());
-
-// Quick edit modal state
-const showQuickEditModal = ref(false);
+// Quick add modal state
+const showQuickAddModal = ref(false);
 const showDeleteConfirmModal = ref(false);
 const currentEditingMauIndex = ref(null);
-const quickEditForm = ref({
+
+// Notification popup state - multiple notifications support
+const notifications = ref([]);
+let notificationId = 0;
+const windowWidth = ref(
+  typeof window !== "undefined" ? window.innerWidth : 1024
+);
+
+// Computed để tính vị trí cho mỗi thông báo
+const notificationPositions = computed(() => {
+  return notifications.value.map((notification, index) => {
+    // Lấy baseTop dựa trên screen size
+    let baseTop = 90; // Desktop default
+    if (windowWidth.value <= 480) {
+      baseTop = 80;
+    } else if (windowWidth.value <= 768) {
+      baseTop = 100;
+    }
+    return {
+      ...notification,
+      top: baseTop + index * 120,
+    };
+  });
+});
+const quickAddForm = ref({
   trongLuong: "",
   soLuong: 0,
   giaBan: 0,
@@ -1437,112 +1505,110 @@ const deleteConfirmInfo = ref("");
 const deleteConfirmData = ref({ mauIndex: -1, kichIndex: -1 });
 
 // Variant management functions
-const isVariantSelected = (mauIndex, kichIndex) => {
-  return quickEditState.value.has(`${mauIndex}-${kichIndex}`);
+
+// Quick add functions
+const showQuickAddPopup = () => {
+  currentEditingMauIndex.value = null; // Không cần mauIndex cụ thể
+
+  // Reset form về giá trị trống để user nhập mới
+  quickAddForm.value = {
+    trongLuong: "",
+    soLuong: 0,
+    giaBan: 0,
+  };
+
+  showQuickAddModal.value = true;
 };
 
-const isAllVariantsSelected = (mauIndex) => {
-  return selectedKichThuocs.value.every((_, kichIndex) =>
-    isVariantSelected(mauIndex, kichIndex)
-  );
+// Function để map tên màu sang màu CSS
+const getColorFromName = (tenMau) => {
+  if (!tenMau) return "#6b7280"; // Màu xám mặc định
+
+  const mauLower = tenMau.toLowerCase();
+
+  // Map màu phổ biến
+  const colorMap = {
+    đỏ: "#ef4444",
+    red: "#ef4444",
+    xanh: "#3b82f6",
+    blue: "#3b82f6",
+    đen: "#000000",
+    black: "#000000",
+    trắng: "#ffffff",
+    white: "#ffffff",
+    vàng: "#fbbf24",
+    yellow: "#fbbf24",
+    tím: "#a855f7",
+    purple: "#a855f7",
+    hồng: "#ec4899",
+    pink: "#ec4899",
+    cam: "#f97316",
+    orange: "#f97316",
+    xám: "#6b7280",
+    gray: "#6b7280",
+    grey: "#6b7280",
+    nâu: "#92400e",
+    brown: "#92400e",
+    be: "#f59e0b",
+    cream: "#fef3c7",
+  };
+
+  return colorMap[mauLower] || "#6b7280"; // Trả về màu xám nếu không tìm thấy
 };
 
-const getSelectedVariantsCount = (mauIndex) => {
-  let count = 0;
-  selectedKichThuocs.value.forEach((_, kichIndex) => {
-    if (isVariantSelected(mauIndex, kichIndex)) {
-      count++;
-    }
-  });
-  return count;
-};
-
-const toggleVariant = (mauIndex, kichIndex, event) => {
-  const key = `${mauIndex}-${kichIndex}`;
-  if (event.target.checked) {
-    quickEditState.value.add(key);
-  } else {
-    quickEditState.value.delete(key);
-  }
-};
-
-const toggleAllVariants = (mauIndex, event) => {
-  if (event.target.checked) {
-    selectedKichThuocs.value.forEach((_, kichIndex) => {
-      quickEditState.value.add(`${mauIndex}-${kichIndex}`);
-    });
-  } else {
-    selectedKichThuocs.value.forEach((_, kichIndex) => {
-      quickEditState.value.delete(`${mauIndex}-${kichIndex}`);
-    });
-  }
-};
-
-// Quick edit functions
-const showQuickEditPopup = (mauIndex) => {
-  currentEditingMauIndex.value = mauIndex;
-
-  // Lấy giá trị từ biến thể đầu tiên đã chọn để làm mặc định
-  const firstSelectedVariant = getFirstSelectedVariant(mauIndex);
-  if (firstSelectedVariant) {
-    // Đọc trọng lượng từ table, nếu chưa có thì để trống
-    const trongLuongFromTable = getTrongLuongFromTable(mauIndex, 0); // Lấy từ kích thước đầu tiên
-    quickEditForm.value.trongLuong =
-      trongLuongFromTable || firstSelectedVariant.trongLuong || "";
-    quickEditForm.value.soLuong = firstSelectedVariant.soLuong || 0;
-    quickEditForm.value.giaBan = firstSelectedVariant.giaBan || 0;
-  }
-
-  showQuickEditModal.value = true;
-};
-
-const getFirstSelectedVariant = (mauIndex) => {
-  for (
-    let kichIndex = 0;
-    kichIndex < selectedKichThuocs.value.length;
-    kichIndex++
-  ) {
-    if (isVariantSelected(mauIndex, kichIndex)) {
-      return productVariants.value[mauIndex][kichIndex];
-    }
-  }
-  return null;
-};
-
-const closeQuickEditModal = () => {
-  showQuickEditModal.value = false;
+const closeQuickAddModal = () => {
+  showQuickAddModal.value = false;
   currentEditingMauIndex.value = null;
-  quickEditForm.value = {
+  quickAddForm.value = {
     trongLuong: "",
     soLuong: 0,
     giaBan: 0,
   };
 };
 
-const applyQuickEdit = () => {
-  if (currentEditingMauIndex.value === null) return;
-
-  const mauIndex = currentEditingMauIndex.value;
-
-  // Áp dụng giá trị cho tất cả biến thể đã chọn
-  selectedKichThuocs.value.forEach((_, kichIndex) => {
-    if (isVariantSelected(mauIndex, kichIndex)) {
-      // Đọc trọng lượng từ table trước, nếu chưa có thì sử dụng giá trị từ form
-      const existingTrongLuong = getTrongLuongFromTable(mauIndex, kichIndex);
-      productVariants.value[mauIndex][kichIndex].trongLuong =
-        existingTrongLuong || quickEditForm.value.trongLuong;
-      productVariants.value[mauIndex][kichIndex].soLuong =
-        quickEditForm.value.soLuong;
-      productVariants.value[mauIndex][kichIndex].giaBan =
-        quickEditForm.value.giaBan;
+const applyQuickAdd = () => {
+  // Áp dụng giá trị cho TẤT CẢ biến thể của TẤT CẢ màu sắc
+  for (let mauIndex = 0; mauIndex < selectedMauSacs.value.length; mauIndex++) {
+    const variants = productVariants.value[mauIndex] || [];
+    for (let variantIndex = 0; variantIndex < variants.length; variantIndex++) {
+      const variant = variants[variantIndex];
+      if (variant) {
+        // Chỉ cập nhật nếu user đã nhập giá trị (không để trống)
+        if (quickAddForm.value.trongLuong.trim()) {
+          variant.trongLuong = quickAddForm.value.trongLuong;
+        }
+        if (quickAddForm.value.soLuong > 0) {
+          variant.soLuong = quickAddForm.value.soLuong;
+        }
+        if (quickAddForm.value.giaBan > 0) {
+          variant.giaBan = quickAddForm.value.giaBan;
+        }
+      }
     }
-  });
+  }
 
-  closeQuickEditModal();
+  closeQuickAddModal();
 };
 
 // Image management functions
-const selectVariantImage = (mauIndex, kichIndex) => {
+const selectVariantImage = (mauIndex, variantIndex) => {
+  const variant = productVariants.value[mauIndex]?.[variantIndex];
+
+  if (!variant) {
+    console.log("❌ Không tìm thấy variant để chọn ảnh");
+    return;
+  }
+
+  // Tìm kichIndex tương ứng trong selectedKichThuocs
+  const kichIndex = selectedKichThuocs.value.findIndex(
+    (kichThuoc) => kichThuoc?.tenKichThuoc === variant.kichThuoc
+  );
+
+  if (kichIndex === -1) {
+    console.log("❌ Không tìm thấy kích thước trong selectedKichThuocs");
+    return;
+  }
+
   currentEditingVariant.value = { mauIndex, kichIndex };
 
   // Khôi phục trạng thái đã chọn trước đó cho biến thể này
@@ -1565,23 +1631,41 @@ const selectVariantImage = (mauIndex, kichIndex) => {
   showAnhPopup.value = true;
 };
 
-const removeVariantImage = (mauIndex, kichIndex, anhIndex) => {
+const removeVariantImage = (mauIndex, variantIndex, anhIndex) => {
+  const variant = productVariants.value[mauIndex]?.[variantIndex];
   if (
-    productVariants.value[mauIndex] &&
-    productVariants.value[mauIndex][kichIndex]
+    variant &&
+    variant.anh &&
+    anhIndex >= 0 &&
+    anhIndex < variant.anh.length
   ) {
-    productVariants.value[mauIndex][kichIndex].anh.splice(anhIndex, 1);
+    variant.anh.splice(anhIndex, 1);
   }
 };
 
 // Function xóa biến thể sản phẩm
-const removeVariant = (mauIndex, kichIndex) => {
+const removeVariant = (mauIndex, variantIndex) => {
+  const variant = productVariants.value[mauIndex]?.[variantIndex];
+
+  if (!variant) {
+    console.log("❌ Không tìm thấy variant để xóa");
+    return;
+  }
+
+  // Tìm kichIndex tương ứng trong selectedKichThuocs
+  const kichIndex = selectedKichThuocs.value.findIndex(
+    (kichThuoc) => kichThuoc?.tenKichThuoc === variant.kichThuoc
+  );
+
+  if (kichIndex === -1) {
+    console.log("❌ Không tìm thấy kích thước trong selectedKichThuocs");
+    return;
+  }
+
   // Hiển thị popup confirm
   deleteConfirmInfo.value = `Màu: ${
     selectedMauSacs.value[mauIndex]?.tenMauSac || "N/A"
-  } - Kích thước: ${
-    selectedKichThuocs.value[kichIndex]?.tenKichThuoc || "N/A"
-  }`;
+  } - Kích thước: ${variant.kichThuoc}`;
   deleteConfirmData.value = { mauIndex, kichIndex };
   showDeleteConfirmModal.value = true;
 };
@@ -1596,23 +1680,184 @@ const closeDeleteConfirmModal = () => {
 // Function xác nhận xóa biến thể
 const confirmDeleteVariant = () => {
   const { mauIndex, kichIndex } = deleteConfirmData.value;
+  console.log("🚀 Bắt đầu xóa biến thể:", { mauIndex, kichIndex });
 
   if (mauIndex >= 0 && kichIndex >= 0) {
-    // Xóa biến thể khỏi mảng
-    productVariants.value[mauIndex].splice(kichIndex, 1);
+    // Lấy thông tin kích thước cần xóa
+    const kichThuocToDelete = selectedKichThuocs.value[kichIndex];
+    const mauSacToDeleteFrom = selectedMauSacs.value[mauIndex];
 
-    // Xóa kích thước khỏi danh sách đã chọn
-    selectedKichThuocs.value.splice(kichIndex, 1);
+    console.log("📋 Thông tin cần xóa:", {
+      kichThuocToDelete: kichThuocToDelete?.tenKichThuoc,
+      mauSacToDeleteFrom: mauSacToDeleteFrom?.tenMauSac,
+      selectedKichThuocs: selectedKichThuocs.value.map((k) => k?.tenKichThuoc),
+      selectedMauSacs: selectedMauSacs.value.map((m) => m?.tenMauSac),
+    });
 
-    // Nếu không còn kích thước nào, xóa cả màu sắc
-    if (selectedKichThuocs.value.length === 0) {
+    if (!kichThuocToDelete || !mauSacToDeleteFrom) {
+      console.log("❌ Lỗi: Không tìm thấy thông tin biến thể cần xóa");
+      closeDeleteConfirmModal();
+      setTimeout(() => {
+        showAlert("Lỗi", "Không tìm thấy thông tin biến thể cần xóa", "error");
+      }, 100);
+      return;
+    }
+
+    // 1. Xóa biến thể khỏi mảng productVariants của màu hiện tại
+    console.log("🔍 Trước khi xóa:", {
+      mauIndex,
+      kichThuocToDelete: kichThuocToDelete.tenKichThuoc,
+      productVariantsTruoc:
+        productVariants.value[mauIndex]?.map((v) => v?.kichThuoc) || [],
+    });
+
+    productVariants.value[mauIndex] = productVariants.value[mauIndex].filter(
+      (variant) =>
+        variant && variant.kichThuoc !== kichThuocToDelete.tenKichThuoc
+    );
+
+    console.log("✅ Sau khi xóa biến thể:", {
+      productVariantsSau:
+        productVariants.value[mauIndex]?.map((v) => v?.kichThuoc) || [],
+    });
+
+    // 2. Kiểm tra xem màu này còn biến thể nào không
+    console.log("🔍 Kiểm tra màu còn biến thể:", {
+      mauIndex,
+      length: productVariants.value[mauIndex].length,
+    });
+
+    if (productVariants.value[mauIndex].length === 0) {
+      console.log("🗑️ Xóa toàn bộ màu vì không còn biến thể");
+
+      // Nếu màu này không còn biến thể nào, xóa màu này khỏi danh sách
       selectedMauSacs.value.splice(mauIndex, 1);
       productVariants.value.splice(mauIndex, 1);
+
+      console.log("✅ Đã xóa màu khỏi danh sách");
+
+      // Đóng popup trước
+      closeDeleteConfirmModal();
+
+      // Thông báo xóa thành công sau khi UI đã cập nhật
+      setTimeout(() => {
+        showAlert(
+          "Thành công",
+          `Đã xóa toàn bộ biến thể của màu ${mauSacToDeleteFrom.tenMauSac}`,
+          "success"
+        );
+      }, 100);
+    } else {
+      // 3. Kiểm tra xem kích thước này còn được sử dụng bởi màu nào khác không
+      let isUsedByOtherColors = false;
+      console.log(
+        "🔍 Kiểm tra kích thước còn dùng ở màu khác:",
+        kichThuocToDelete.tenKichThuoc
+      );
+
+      // Duyệt qua tất cả các màu còn lại (không bao gồm màu hiện tại)
+      for (let i = 0; i < productVariants.value.length; i++) {
+        if (i !== mauIndex && productVariants.value[i]) {
+          console.log(
+            `   Kiểm tra màu ${i}:`,
+            productVariants.value[i].map((v) => v?.kichThuoc)
+          );
+
+          // Kiểm tra xem màu này có biến thể với kích thước cần xóa không
+          const hasThisSize = productVariants.value[i].some(
+            (variant) =>
+              variant && variant.kichThuoc === kichThuocToDelete.tenKichThuoc
+          );
+
+          if (hasThisSize) {
+            isUsedByOtherColors = true;
+            console.log(`   ✅ Màu ${i} vẫn dùng kích thước này`);
+            break;
+          }
+        }
+      }
+
+      console.log("📊 Kết quả kiểm tra:", { isUsedByOtherColors });
+
+      // 4. Nếu kích thước này không còn được sử dụng bởi màu nào khác, xóa khỏi selectedKichThuocs
+      if (!isUsedByOtherColors) {
+        console.log("🗑️ Xóa kích thước khỏi selectedKichThuocs");
+
+        // Tìm và xóa kích thước khỏi selectedKichThuocs
+        console.log("🔍 Tìm kích thước trong selectedKichThuocs:", {
+          tenKichThuoc: kichThuocToDelete.tenKichThuoc,
+          selectedKichThuocs: selectedKichThuocs.value.map(
+            (k) => k?.tenKichThuoc
+          ),
+        });
+
+        const sizeIndexInList = selectedKichThuocs.value.findIndex(
+          (kichThuoc) =>
+            kichThuoc &&
+            kichThuoc.tenKichThuoc === kichThuocToDelete.tenKichThuoc
+        );
+
+        console.log("📍 Vị trí tìm được:", sizeIndexInList);
+
+        if (sizeIndexInList >= 0) {
+          // Lưu tên kích thước trước khi xóa để thông báo
+          const deletedSizeName =
+            selectedKichThuocs.value[sizeIndexInList].tenKichThuoc;
+
+          console.log("🗑️ Xóa kích thước:", deletedSizeName);
+
+          selectedKichThuocs.value.splice(sizeIndexInList, 1);
+
+          console.log("✅ Đã xóa khỏi selectedKichThuocs, danh sách còn:", {
+            selectedKichThuocs: selectedKichThuocs.value.map(
+              (k) => k?.tenKichThuoc
+            ),
+          });
+
+          // Đóng popup trước
+          closeDeleteConfirmModal();
+
+          // Thông báo xóa thành công sau khi UI đã cập nhật
+          setTimeout(() => {
+            showAlert(
+              "Thành công",
+              `Đã xóa kích thước ${deletedSizeName} khỏi màu ${mauSacToDeleteFrom.tenMauSac}`,
+              "success"
+            );
+          }, 100);
+        } else {
+          console.log(
+            "❌ Không tìm thấy kích thước trong selectedKichThuocs để xóa"
+          );
+        }
+      } else {
+        console.log(
+          "📋 Kích thước vẫn còn dùng ở màu khác, không xóa khỏi selectedKichThuocs"
+        );
+
+        // Đóng popup trước
+        closeDeleteConfirmModal();
+
+        // Thông báo xóa thành công nhưng kích thước vẫn còn trong các màu khác
+        setTimeout(() => {
+          showAlert(
+            "Thành công",
+            `Đã xóa kích thước ${kichThuocToDelete.tenKichThuoc} khỏi màu ${mauSacToDeleteFrom.tenMauSac}. Kích thước này vẫn còn trong các màu khác.`,
+            "success"
+          );
+        }, 100);
+      }
     }
   }
 
-  // Đóng popup
-  closeDeleteConfirmModal();
+  console.log("🎉 Kết thúc xóa biến thể, trạng thái cuối cùng:", {
+    selectedMauSacs: selectedMauSacs.value.map((m) => m?.tenMauSac),
+    selectedKichThuocs: selectedKichThuocs.value.map((k) => k?.tenKichThuoc),
+    productVariants: productVariants.value.map((pv, i) => ({
+      mauIndex: i,
+      variants: pv?.map((v) => v?.kichThuoc) || [],
+    })),
+  });
 };
 
 const formatPrice = (price) => {
@@ -1622,7 +1867,101 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
+// Hàm hiển thị alert thông tin - hỗ trợ nhiều thông báo
+const showAlert = (title, message, type = "info") => {
+  const id = ++notificationId;
+  const newNotification = {
+    id,
+    title,
+    message,
+    type,
+    isClosing: false,
+    createdAt: Date.now(),
+  };
+
+  notifications.value.push(newNotification);
+
+  // Tự động ẩn sau 5 giây
+  setTimeout(() => {
+    closeNotificationPopup(id);
+  }, 5000);
+};
+
+// Function đóng popup thông báo cụ thể với animation
+const closeNotificationPopup = (id) => {
+  const notification = notifications.value.find((n) => n.id === id);
+  if (notification) {
+    notification.isClosing = true;
+
+    // Đợi animation kết thúc rồi xóa khỏi mảng
+    setTimeout(() => {
+      notifications.value = notifications.value.filter((n) => n.id !== id);
+    }, 300); // Thời gian animation slideOutRight
+  }
+};
+
+// Helper functions để truy cập an toàn các thuộc tính variant
+const getVariantAnh = (mauIndex, kichIndex) => {
+  const variant = productVariants.value[mauIndex]?.[kichIndex];
+  return variant?.anh || [];
+};
+
+const hasVariantAnh = (mauIndex, kichIndex) => {
+  const anh = getVariantAnh(mauIndex, kichIndex);
+  return anh.length > 0;
+};
+
+const getVariantAnhLength = (mauIndex, kichIndex) => {
+  const anh = getVariantAnh(mauIndex, kichIndex);
+  return anh.length;
+};
+
 // Helper functions để lấy ID từ tên
+// Hàm kiểm tra sản phẩm đã tồn tại dựa trên tên và các thuộc tính (chỉ tìm kiếm, không tạo mới)
+const getExistingSanPhamId = () => {
+  if (!productForm.value.tenSanPham || !productForm.value.tenSanPham.trim())
+    return null;
+
+  try {
+    // Tìm ID nhà sản xuất đã tồn tại (không tạo mới)
+    const existingNhaSanXuat = nhaSanXuats.value.find(
+      (item) =>
+        item.tenNhaSanXuat.toLowerCase() ===
+        productForm.value.tenNhaSanXuat.toLowerCase()
+    );
+
+    // Tìm ID xuất xứ đã tồn tại (không tạo mới)
+    const existingXuatXu = xuatXus.value.find(
+      (item) =>
+        item.tenXuatXu.toLowerCase() ===
+        productForm.value.tenXuatXu.toLowerCase()
+    );
+
+    // Nếu thiếu thông tin thuộc tính thì không thể tìm sản phẩm
+    if (!existingNhaSanXuat || !existingXuatXu) {
+      return null;
+    }
+
+    // Tìm sản phẩm đã tồn tại với tên và thuộc tính giống hệt
+    const existingSanPham = tenSanPhams.value.find(
+      (sanPham) =>
+        sanPham.tenSanPham.toLowerCase() ===
+          productForm.value.tenSanPham.toLowerCase() &&
+        sanPham.idNhaSanXuat === existingNhaSanXuat.id &&
+        sanPham.idXuatXu === existingXuatXu.id
+    );
+
+    if (existingSanPham) {
+      return existingSanPham.id;
+    }
+
+    return null; // Không tìm thấy sản phẩm tồn tại
+  } catch (error) {
+    console.error("Lỗi khi kiểm tra sản phẩm tồn tại:", error);
+    return null;
+  }
+};
+
 const getNhaSanXuatId = async (tenNhaSanXuat) => {
   if (!tenNhaSanXuat || !tenNhaSanXuat.trim()) return null;
 
@@ -1871,18 +2210,6 @@ const getTrongLuongId = async (trongLuong) => {
 };
 
 // Helper function để đọc trọng lượng từ table và thêm vào nếu chưa có
-const getTrongLuongFromTable = (mauIndex, kichIndex) => {
-  if (
-    productVariants.value[mauIndex] &&
-    productVariants.value[mauIndex][kichIndex]
-  ) {
-    const trongLuong = productVariants.value[mauIndex][kichIndex].trongLuong;
-    if (trongLuong && trongLuong.trim()) {
-      return trongLuong.trim();
-    }
-  }
-  return null;
-};
 
 // Đóng tất cả dropdown
 const closeAllDropdowns = () => {
@@ -1932,10 +2259,6 @@ const handleClickOutside = (event) => {
 
 // Function to add variants to existing product
 const addVariantsToExistingProduct = async (existingProductId) => {
-  console.log(
-    "🔄 Bắt đầu addVariantsToExistingProduct với ID:",
-    existingProductId
-  );
   try {
     const idDeGiay = await getDeGiayId(productForm.value.tenDeGiay);
     const idChatLieu = await getChatLieuId(productForm.value.tenChatLieu);
@@ -1951,7 +2274,15 @@ const addVariantsToExistingProduct = async (existingProductId) => {
     // Tạo biến thể cho sản phẩm đã tồn tại
     for (let i = 0; i < selectedMauSacs.value.length; i++) {
       for (let j = 0; j < selectedKichThuocs.value.length; j++) {
-        const variant = productVariants.value[i][j];
+        const variant = productVariants.value[i]?.[j];
+
+        // Chỉ tạo variant nếu nó thực sự tồn tại
+        if (!variant) {
+          console.log(
+            `⚠️ Bỏ qua variant không tồn tại khi thêm vào sản phẩm: màu ${i}, kích thước ${j}`
+          );
+          continue;
+        }
 
         const trongLuongId = await getTrongLuongId(variant.trongLuong);
 
@@ -2019,40 +2350,54 @@ const addVariantsToExistingProduct = async (existingProductId) => {
             const failedUploads = [];
             uploadResults.forEach((result) => {
               if (result.success) {
-                if (result.anhSanPhamIds && Array.isArray(result.anhSanPhamIds)) {
+                if (
+                  result.anhSanPhamIds &&
+                  Array.isArray(result.anhSanPhamIds)
+                ) {
                   // Backend trả về list ID (multiple images)
-                  result.anhSanPhamIds.forEach(id => anhIdsToLink.push(id));
-                  console.log(`✅ ${result.anhSanPhamIds.length} ảnh từ ${result.originalAnh.name} sẽ được link với sản phẩm`);
+                  result.anhSanPhamIds.forEach((id) => anhIdsToLink.push(id));
                 } else if (result.anhSanPhamId) {
                   // Backward compatibility - single ID hoặc temp ID
                   anhIdsToLink.push(result.anhSanPhamId);
-                  console.log(`✅ Ảnh ${result.originalAnh.name} sẽ được link với sản phẩm`);
                 } else {
-                  console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID`);
+                  console.warn(
+                    `⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID`
+                  );
                   failedUploads.push(result.originalAnh.name);
                 }
               } else if (!result.success) {
-                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thất bại: ${result.error}`);
+                console.warn(
+                  `⚠️ Ảnh ${result.originalAnh.name} upload thất bại: ${result.error}`
+                );
                 failedUploads.push(result.originalAnh.name);
               } else {
-                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID để link`);
+                console.warn(
+                  `⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID để link`
+                );
                 failedUploads.push(result.originalAnh.name);
               }
             });
 
             // Thông báo cho user về ảnh upload thất bại
             if (failedUploads.length > 0) {
-              console.warn(`🚨 ${failedUploads.length} ảnh không thể upload:`, failedUploads.join(", "));
+              console.warn(
+                `🚨 ${failedUploads.length} ảnh không thể upload:`,
+                failedUploads.join(", ")
+              );
             }
 
             if (anhIdsToLink.length > 0) {
               // Chỉ gửi ID thực (số nguyên), loại bỏ temp ID string
-              const realAnhIdsToLink = anhIdsToLink.filter(id => typeof id === 'number' || (typeof id === 'string' && !id.startsWith('temp_')));
-
-              console.log("📤 Gửi link với ID thực:", realAnhIdsToLink);
+              const realAnhIdsToLink = anhIdsToLink.filter(
+                (id) =>
+                  typeof id === "number" ||
+                  (typeof id === "string" && !id.startsWith("temp_"))
+              );
 
               if (realAnhIdsToLink.length === 0) {
-                console.warn("⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này");
+                console.warn(
+                  "⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này"
+                );
                 return;
               }
 
@@ -2078,22 +2423,13 @@ const addVariantsToExistingProduct = async (existingProductId) => {
 
     // Lưu ID sản phẩm đã chọn từ dropdown
     createdProductId.value = selectedProductFromDropdown.value.id;
-    console.log("✅ Đã lưu ID sản phẩm từ dropdown:", createdProductId.value);
 
-    // Hiển thị thông báo thành công trong thời gian ngắn
-    successMessage.value = `Đã thêm biến thể mới cho sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" thành công!`;
-    showSuccessModal.value = true;
-    console.log("🎉 Thành công thêm biến thể! Sẽ chuyển hướng sau 1.5 giây");
-
-    // Tự động chuyển hướng sau 1.5 giây
-    setTimeout(() => {
-      console.log(
-        "🔄 Đang chuyển hướng đến:",
-        `/products/details/${createdProductId.value}`
-      );
-      showSuccessModal.value = false;
-      router.push(`/products/details/${createdProductId.value}`);
-    }, 1500);
+    // Hiển thị popup thông báo thành công bên phải
+    showAlert(
+      "Thành công",
+      `Đã thêm biến thể mới cho sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" thành công!`,
+      "success"
+    );
 
     // Reset form after successful creation
     resetForm();
@@ -2109,80 +2445,83 @@ const addVariantsToExistingProduct = async (existingProductId) => {
 
 // Confirm create product function
 const confirmCreateProduct = () => {
-  console.log("🔍 Bắt đầu confirmCreateProduct");
-
   // Validate basic form before showing confirm
   if (!productForm.value.tenSanPham.trim()) {
-    showAlert("Thiếu thông tin", "Vui lòng nhập tên sản phẩm!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập tên sản phẩm!", "error");
     return;
   }
 
   if (!productForm.value.tenNhaSanXuat.trim()) {
-    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn nhà sản xuất!");
+    showAlert(
+      "Thiếu thông tin",
+      "Vui lòng nhập hoặc chọn nhà sản xuất!",
+      "error"
+    );
     return;
   }
 
   if (!productForm.value.tenXuatXu.trim()) {
-    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn xuất xứ!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn xuất xứ!", "error");
     return;
   }
 
   if (!productForm.value.tenChatLieu.trim()) {
-    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn chất liệu!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn chất liệu!", "error");
     return;
   }
 
   if (!productForm.value.tenDeGiay.trim()) {
-    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn đế giày!");
+    showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn đế giày!", "error");
     return;
   }
 
   if (selectedMauSacs.value.length === 0) {
-    showAlert("Thiếu thông tin", "Vui lòng chọn ít nhất một màu sắc!");
+    showAlert("Thiếu thông tin", "Vui lòng chọn ít nhất một màu sắc!", "error");
     return;
   }
 
   if (selectedKichThuocs.value.length === 0) {
-    showAlert("Thiếu thông tin", "Vui lòng chọn ít nhất một kích thước!");
+    showAlert(
+      "Thiếu thông tin",
+      "Vui lòng chọn ít nhất một kích thước!",
+      "error"
+    );
     return;
   }
 
   // Validate variants
   for (let i = 0; i < selectedMauSacs.value.length; i++) {
     for (let j = 0; j < selectedKichThuocs.value.length; j++) {
-      const variant = productVariants.value[i][j];
-      if (!variant.trongLuong || !variant.trongLuong.trim()) {
+      const variant = productVariants.value[i]?.[j];
+      if (variant && (!variant.trongLuong || !variant.trongLuong.trim())) {
         showAlert(
           "Thiếu thông tin",
-          `Vui lòng nhập trọng lượng cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`
+          `Vui lòng nhập trọng lượng cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`,
+          "error"
         );
         return;
       }
-      if (variant.soLuong <= 0) {
+      if (variant && variant.soLuong <= 0) {
         showAlert(
           "Thiếu thông tin",
-          `Vui lòng nhập số lượng > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`
+          `Vui lòng nhập số lượng > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`,
+          "error"
         );
         return;
       }
-      if (variant.giaBan <= 0) {
+      if (variant && variant.giaBan <= 0) {
         showAlert(
           "Thiếu thông tin",
-          `Vui lòng nhập giá bán > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`
+          `Vui lòng nhập giá bán > 0 cho biến thể ${selectedMauSacs.value[i].tenMauSac} - ${selectedKichThuocs.value[j].tenKichThuoc}!`,
+          "error"
         );
         return;
       }
     }
   }
 
-  console.log("✅ Validation passed, checking product selection");
-
   // Kiểm tra xem có sản phẩm được chọn từ dropdown không
   if (selectedProductFromDropdown.value) {
-    console.log(
-      "📦 Product selected from dropdown:",
-      selectedProductFromDropdown.value.tenSanPham
-    );
     // Show confirm for adding variants to existing product
     const variantCount =
       selectedMauSacs.value.length * selectedKichThuocs.value.length;
@@ -2190,29 +2529,48 @@ const confirmCreateProduct = () => {
       "Thêm biến thể cho sản phẩm hiện có",
       `Sản phẩm "${selectedProductFromDropdown.value.tenSanPham}" đã tồn tại. Bạn có muốn thêm ${variantCount} biến thể mới cho sản phẩm này không?`,
       () => {
-        console.log("🔄 Calling addVariantsToExistingProduct");
         addVariantsToExistingProduct(selectedProductFromDropdown.value.id);
       }
     );
   } else {
-    console.log("🆕 No product selected from dropdown, creating new product");
-    // Show confirm for creating new product
-    const variantCount =
-      selectedMauSacs.value.length * selectedKichThuocs.value.length;
-    showConfirm(
-      "Xác nhận tạo sản phẩm",
-      `Bạn có muốn tạo sản phẩm "${productForm.value.tenSanPham}" với ${variantCount} biến thể không?`,
-      () => {
-        console.log("🔄 Calling saveProduct for new product");
-        saveProduct();
+    // Kiểm tra xem sản phẩm với tên và thuộc tính đã nhập có tồn tại không
+    const existingProductId = getExistingSanPhamId();
+
+    if (existingProductId) {
+      // Sản phẩm đã tồn tại, thêm biến thể mới
+      const variantCount =
+        selectedMauSacs.value.length * selectedKichThuocs.value.length;
+      showConfirm(
+        "Thêm biến thể cho sản phẩm hiện có",
+        `Sản phẩm "${productForm.value.tenSanPham}" với các thuộc tính đã nhập đã tồn tại. Bạn có muốn thêm ${variantCount} biến thể mới cho sản phẩm này không?`,
+        () => {
+          addVariantsToExistingProduct(existingProductId);
+        }
+      );
+    } else {
+      // Sản phẩm chưa tồn tại, tạo mới
+      // Đếm số variant thực sự tồn tại (không phải tất cả combinations)
+      let variantCount = 0;
+      for (let i = 0; i < selectedMauSacs.value.length; i++) {
+        for (let j = 0; j < selectedKichThuocs.value.length; j++) {
+          if (productVariants.value[i]?.[j]) {
+            variantCount++;
+          }
+        }
       }
-    );
+      showConfirm(
+        "Xác nhận tạo sản phẩm",
+        `Bạn có muốn tạo sản phẩm "${productForm.value.tenSanPham}" với ${variantCount} biến thể không?`,
+        () => {
+          saveProduct();
+        }
+      );
+    }
   }
 };
 
 // Save product function
 const saveProduct = async () => {
-  console.log("🔄 Bắt đầu saveProduct - tạo sản phẩm mới");
   try {
     // Form validation has been moved to confirmCreateProduct function
     // This function now only handles creating NEW products (not existing ones)
@@ -2273,10 +2631,17 @@ const saveProduct = async () => {
 
     // Lưu ID sản phẩm vừa tạo ngay lập tức
     createdProductId.value = sanPhamId;
-    console.log("✅ Đã lưu ID sản phẩm:", createdProductId.value);
     for (let i = 0; i < selectedMauSacs.value.length; i++) {
       for (let j = 0; j < selectedKichThuocs.value.length; j++) {
-        const variant = productVariants.value[i][j];
+        const variant = productVariants.value[i]?.[j];
+
+        // Chỉ tạo variant nếu nó thực sự tồn tại
+        if (!variant) {
+          console.log(
+            `⚠️ Bỏ qua variant không tồn tại: màu ${i}, kích thước ${j}`
+          );
+          continue;
+        }
 
         const trongLuongId = await getTrongLuongId(variant.trongLuong);
         const idDeGiay = await getDeGiayId(productForm.value.tenDeGiay);
@@ -2363,30 +2728,31 @@ const saveProduct = async () => {
             const failedUploads = [];
             uploadResults.forEach((result) => {
               if (result.success) {
-                if (result.anhSanPhamIds && Array.isArray(result.anhSanPhamIds)) {
+                if (
+                  result.anhSanPhamIds &&
+                  Array.isArray(result.anhSanPhamIds)
+                ) {
                   // Backend trả về list ID (multiple images)
-                  result.anhSanPhamIds.forEach(id => anhIdsToLink.push(id));
-                  console.log(`✅ ${result.anhSanPhamIds.length} ảnh từ ${result.originalAnh.name} sẽ được link với sản phẩm`);
+                  result.anhSanPhamIds.forEach((id) => anhIdsToLink.push(id));
                 } else if (result.anhSanPhamId) {
                   // Backward compatibility - single ID hoặc temp ID
                   anhIdsToLink.push(result.anhSanPhamId);
-                  console.log(`✅ Ảnh ${result.originalAnh.name} sẽ được link với sản phẩm`);
                 } else {
-                  console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID`);
                   failedUploads.push(result.originalAnh.name);
                 }
               } else if (!result.success) {
-                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thất bại: ${result.error}`);
                 failedUploads.push(result.originalAnh.name);
               } else {
-                console.warn(`⚠️ Ảnh ${result.originalAnh.name} upload thành công nhưng không có ID để link`);
                 failedUploads.push(result.originalAnh.name);
               }
             });
 
             // Thông báo cho user về ảnh upload thất bại
             if (failedUploads.length > 0) {
-              console.warn(`🚨 ${failedUploads.length} ảnh không thể upload:`, failedUploads.join(", "));
+              console.warn(
+                `🚨 ${failedUploads.length} ảnh không thể upload:`,
+                failedUploads.join(", ")
+              );
               // Có thể hiển thị toast notification ở đây
             }
 
@@ -2394,12 +2760,16 @@ const saveProduct = async () => {
             if (anhIdsToLink.length > 0) {
               try {
                 // Chỉ gửi ID thực (số nguyên), loại bỏ temp ID string
-                const realAnhIdsToLink = anhIdsToLink.filter(id => typeof id === 'number' || (typeof id === 'string' && !id.startsWith('temp_')));
-
-                console.log("📤 Gửi link với ID thực:", realAnhIdsToLink);
+                const realAnhIdsToLink = anhIdsToLink.filter(
+                  (id) =>
+                    typeof id === "number" ||
+                    (typeof id === "string" && !id.startsWith("temp_"))
+                );
 
                 if (realAnhIdsToLink.length === 0) {
-                  console.warn("⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này");
+                  console.warn(
+                    "⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này"
+                  );
                   return;
                 }
 
@@ -2409,7 +2779,10 @@ const saveProduct = async () => {
                     `ID chi tiết sản phẩm không hợp lệ: ${createdVariant.id}`
                   );
                 }
-                if (!Array.isArray(realAnhIdsToLink) || realAnhIdsToLink.length === 0) {
+                if (
+                  !Array.isArray(realAnhIdsToLink) ||
+                  realAnhIdsToLink.length === 0
+                ) {
                   throw new Error(
                     `Danh sách ID ảnh không hợp lệ: ${JSON.stringify(
                       realAnhIdsToLink
@@ -2451,20 +2824,8 @@ const saveProduct = async () => {
       }
     }
 
-    // Hiển thị thông báo thành công trong thời gian ngắn
-    successMessage.value = "Sản phẩm mới đã được tạo thành công!";
-    showSuccessModal.value = true;
-    console.log("🎉 Thành công! Sẽ chuyển hướng sau 1.5 giây");
-
-    // Tự động chuyển hướng sau 1.5 giây
-    setTimeout(() => {
-      console.log(
-        "🔄 Đang chuyển hướng đến:",
-        `/products/details/${createdProductId.value}`
-      );
-      showSuccessModal.value = false;
-      router.push(`/products/details/${createdProductId.value}`);
-    }, 1500);
+    // Hiển thị popup thông báo thành công bên phải
+    showAlert("Thành công", "Sản phẩm mới đã được tạo thành công!", "success");
 
     // Reset form after successful creation
     resetForm();
@@ -2488,11 +2849,12 @@ const saveProduct = async () => {
   }
 };
 
-const closeSuccessModal = () => {
-  showSuccessModal.value = false;
-  successMessage.value = "";
-  createdProductId.value = null;
-};
+// Success modal function - Không còn sử dụng
+// const closeSuccessModal = () => {
+//   showSuccessModal.value = false;
+//   successMessage.value = "";
+//   createdProductId.value = null;
+// };
 
 // Confirm modal functions
 const showConfirm = (title, message, callback) => {
@@ -2510,17 +2872,21 @@ const closeConfirmModal = () => {
 };
 
 const confirmAction = () => {
-  console.log("✅ Confirm action triggered");
   if (onConfirmCallback.value) {
-    console.log("🔄 Executing confirm callback");
     onConfirmCallback.value();
-  } else {
-    console.log("❌ No confirm callback found");
   }
   closeConfirmModal();
 };
 
+// Window resize handler for notifications
+const handleWindowResize = () => {
+  windowWidth.value = window.innerWidth;
+};
+
 onMounted(async () => {
+  // Add window resize listener
+  window.addEventListener("resize", handleWindowResize);
+
   // Initialize form
   resetForm();
 
@@ -2584,6 +2950,7 @@ const cleanupBlobUrls = () => {
 // Cleanup event listener và blob URLs
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
+  window.removeEventListener("resize", handleWindowResize);
   cleanupBlobUrls();
 });
 
@@ -2673,7 +3040,10 @@ const handleFileSelect = async (event) => {
           type: file.type,
         });
       } catch (error) {
-        console.error(`<!-- icon: close --> Lỗi convert file ${file.name} sang base64:`, error);
+        console.error(
+          `<!-- icon: close --> Lỗi convert file ${file.name} sang base64:`,
+          error
+        );
         invalidFiles.push(file.name);
       }
     } else {
@@ -2718,7 +3088,11 @@ const applyAnhSelection = () => {
       }),
     ];
 
-    productVariants.value[mauIndex][kichIndex].anh = anhData;
+    // Cập nhật ảnh cho biến thể
+    const variant = productVariants.value[mauIndex]?.[kichIndex];
+    if (variant) {
+      variant.anh = anhData;
+    }
 
     // Lưu trạng thái đã chọn cho biến thể này
     const variantKey = `${mauIndex}-${kichIndex}`;
@@ -2761,11 +3135,9 @@ const getSelectedImageCount = (mauIndex, kichIndex) => {
   }
 
   // Nếu chưa có trạng thái lưu, đếm từ productVariants
-  if (
-    productVariants.value[mauIndex] &&
-    productVariants.value[mauIndex][kichIndex]
-  ) {
-    return productVariants.value[mauIndex][kichIndex].anh.length;
+  const anh = getVariantAnh(mauIndex, kichIndex);
+  if (anh) {
+    return anh.length;
   }
 
   return 0;
@@ -2815,14 +3187,19 @@ const uploadMultipleImages = async (images) => {
 
         const uploadResponse = await fetchCreateAnhSanPhamFromCloud(formData);
 
-        console.log("📤 Upload response:", uploadResponse);
-
         // Kiểm tra response format từ API backend
         // Backend trả về: { data: [id1, id2, ...], message: "..." }
-        if (uploadResponse && uploadResponse.message && uploadResponse.message.includes("thành công")) {
+        if (
+          uploadResponse &&
+          uploadResponse.message &&
+          uploadResponse.message.includes("thành công")
+        ) {
           // Upload thành công, backend trả về list ID
-          if (uploadResponse.data && Array.isArray(uploadResponse.data) && uploadResponse.data.length > 0) {
-            console.log("✅ Upload ảnh thành công:", uploadResponse.message, "- ID list:", uploadResponse.data);
+          if (
+            uploadResponse.data &&
+            Array.isArray(uploadResponse.data) &&
+            uploadResponse.data.length > 0
+          ) {
             return {
               success: true,
               anhSanPhamIds: uploadResponse.data, // List ID từ backend
@@ -2830,9 +3207,9 @@ const uploadMultipleImages = async (images) => {
             };
           } else {
             // Fallback: nếu không có data hoặc data rỗng, tạo temp ID
-            console.warn("⚠️ Backend không trả về ID, tạo temp ID");
-            const tempId = `temp_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-            console.log("✅ Upload ảnh thành công:", uploadResponse.message, "- Tạo temp ID:", tempId);
+            const tempId = `temp_${Date.now()}_${Math.floor(
+              Math.random() * 1000
+            )}`;
             return {
               success: true,
               anhSanPhamId: tempId, // ID tạm thời
@@ -2841,13 +3218,16 @@ const uploadMultipleImages = async (images) => {
           }
         } else if (uploadResponse && uploadResponse.message) {
           // Có message nhưng không phải success
-          console.error("<!-- icon: close --> Upload ảnh thất bại:", uploadResponse.message);
+          console.error(
+            "<!-- icon: close --> Upload ảnh thất bại:",
+            uploadResponse.message
+          );
           return {
             success: false,
             error: uploadResponse.message,
             originalAnh: anh,
           };
-        } else if (uploadResponse && typeof uploadResponse === 'object') {
+        } else if (uploadResponse && typeof uploadResponse === "object") {
           // Response object nhưng không có message
           console.warn("⚠️ Upload response không có message:", uploadResponse);
           return {
@@ -2856,7 +3236,10 @@ const uploadMultipleImages = async (images) => {
             originalAnh: anh,
           };
         } else {
-          console.error("<!-- icon: close --> Upload ảnh thất bại - Response không hợp lệ:", uploadResponse);
+          console.error(
+            "<!-- icon: close --> Upload ảnh thất bại - Response không hợp lệ:",
+            uploadResponse
+          );
           return {
             success: false,
             error: "Response không hợp lệ",
@@ -3225,8 +3608,7 @@ const isValidImageUrl = (url) => {
 }
 
 .add-attribute-btn:hover {
-  background: #6b7682;
-  color: white;
+  transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
 }
 
@@ -3464,8 +3846,8 @@ const isValidImageUrl = (url) => {
 
 .variant-table th,
 .variant-table td {
-  padding: 12px;
-  text-align: left;
+  padding: 6px;
+  text-align: center;
   border-bottom: 1px solid #eee;
   word-wrap: break-word;
 }
@@ -3520,6 +3902,23 @@ const isValidImageUrl = (url) => {
 .variant-table th:nth-child(1),
 .variant-table td:nth-child(1) {
   width: 50px;
+  text-align: center;
+}
+
+/* Căn giữa nội dung cột màu sắc */
+.color-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.color-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
 }
 
 .variant-table th:nth-child(2),
@@ -3722,7 +4121,7 @@ const isValidImageUrl = (url) => {
 }
 
 .btn-primary:hover {
-  background: var(--accent-color-dark);
+  /* background: var(--accent-color-dark); */
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
 }
@@ -4183,6 +4582,7 @@ const isValidImageUrl = (url) => {
   max-width: 500px;
   max-height: 80vh;
   overflow-y: auto;
+  border-radius: 10px;
 }
 
 .attribute-popup-header {
@@ -4192,6 +4592,150 @@ const isValidImageUrl = (url) => {
 
 .attribute-popup-body {
   padding: 20px;
+}
+
+/* CSS cho popup thông báo bên phải */
+.notification-popup-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2000;
+}
+
+.notification-popup-content {
+  position: fixed;
+  right: 20px;
+  width: 350px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid #4ade80;
+  pointer-events: auto;
+  animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2001;
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-popup-content.notification-closing {
+  animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.notification-popup-content:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-popup-content.notification-success {
+  border-left-color: #4ade80;
+}
+
+.notification-popup-content.notification-error {
+  border-left-color: #f44336;
+}
+
+.notification-popup-content.notification-info {
+  border-left-color: #2196f3;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.notification-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.notification-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.notification-close-btn:hover {
+  background-color: #f5f5f5;
+  color: #666;
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+.notification-close-btn:active {
+  transform: scale(0.95);
+}
+
+.notification-body {
+  padding: 12px 16px;
+}
+
+.notification-body p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-5%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Responsive cho popup thông báo */
+@media (max-width: 768px) {
+  .notification-popup-content {
+    right: 15px;
+    left: 15px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-popup-content {
+    right: 10px;
+    left: 10px;
+  }
 }
 </style>
 

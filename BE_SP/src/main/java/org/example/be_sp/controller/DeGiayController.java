@@ -31,17 +31,17 @@ public class DeGiayController {
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody DeGiayRequest deGiayRequest) {
         deGiayService.add(deGiayRequest);
-        return new ResponseObject<>(null,"Thêm đế giày thành công");
+        return new ResponseObject<>(true,null,"Thêm đế giày thành công");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@RequestBody DeGiayRequest deGiayRequest, @PathVariable Integer id) {
         deGiayService.update(id, deGiayRequest);
-        return new ResponseObject<>(null,"Cập nhật đế giày thành công");
+        return new ResponseObject<>(true,null,"Cập nhật đế giày thành công");
     }
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable Integer id) {
         deGiayService.updateStatus(id);
-        return new ResponseObject<>(null, "Cập nhật trạng thái đế giày thành");
+        return new ResponseObject<>(true,null, "Cập nhật trạng thái đế giày thành");
     }
 }

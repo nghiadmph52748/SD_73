@@ -1,6 +1,22 @@
 /* CSS cho trang Quản lý sản phẩm - Search và Actions cùng dòng */
 /* Scope all rules to .them-san-pham-page to prevent global conflicts */
 
+:root {
+  --text-primary: #000000;
+  --text-secondary: #1e293b;
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --border-color: #cbd5e1;
+  --accent-color: #16a34a;
+  --success-color: #059669;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --info-color: #2563eb;
+  --header-bg: #ffffff;
+  --header-text: #000000;
+  --filter-bg: white;
+  --filter-border: transparent;
+}
 /* Container chính cho search và actions */
 .them-san-pham-page .search-actions-row {
   display: flex;
@@ -8,6 +24,30 @@
   gap: 20px;
   flex-wrap: nowrap;
   width: 100%;
+}
+
+.btn.btn-danger {
+  background-color: red !important;
+}
+
+.btn.btn-danger:hover {
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4) !important;
+}
+
+.btn.btn-outline {
+  background: white !important;
+  color: var(--accent-color) !important;
+  border: 2px solid #d1d5db !important;
+}
+
+.chi-tiet-san-pham-page {
+  margin: 20px;
+}
+
+.filter-section {
+  margin: 0 !important;
+  margin-bottom: 2rem !important;
+  padding: 0 !important;
 }
 
 /* Phần search input */
@@ -33,8 +73,8 @@
 
 .them-san-pham-page .search-input:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 .them-san-pham-page .input-icon {

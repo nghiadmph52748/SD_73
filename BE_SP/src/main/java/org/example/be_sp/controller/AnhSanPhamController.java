@@ -61,7 +61,8 @@ public class AnhSanPhamController {
             List<Integer> savedIds = anhSanPhamService.addAnhSanPhamFromCloud(request);
             return ResponseEntity.ok(new ResponseObject<>(savedIds, "Thêm ảnh sản phẩm thành công"));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new ResponseObject<>(null, "Lỗi khi thêm ảnh sản phẩm: " + e.getMessage()));
+            return ResponseEntity.status(500).body(new ResponseObject<>(false,null,
+                    "Lỗi khi thêm ảnh sản phẩm: " + e.getMessage()));
         }
     }
 
@@ -87,7 +88,7 @@ public class AnhSanPhamController {
             AnhSanPham savedAnhSanPham = anhSanPhamService.addAnhSanPham(request);
             return new ResponseObject<>(savedAnhSanPham.getId(), "Thêm ảnh sản phẩm thành công");
         } catch (Exception e) {
-            return new ResponseObject<>(null, "Lỗi khi thêm ảnh sản phẩm: " + e.getMessage());
+            return new ResponseObject<>(false,null, "Lỗi khi thêm ảnh sản phẩm: " + e.getMessage());
         }
     }
 
@@ -113,7 +114,7 @@ public class AnhSanPhamController {
             AnhSanPham updatedAnhSanPham = anhSanPhamService.updateAnhSanPham(id, request);
             return new ResponseObject<>(updatedAnhSanPham.getId(), "Cập nhật ảnh sản phẩm thành công");
         } catch (Exception e) {
-            return new ResponseObject<>(null, "Lỗi khi cập nhật ảnh sản phẩm: " + e.getMessage());
+            return new ResponseObject<>(true,null, "Lỗi khi cập nhật ảnh sản phẩm: " + e.getMessage());
         }
     }
 
@@ -127,13 +128,13 @@ public class AnhSanPhamController {
       request.setDeleted(deleted);
       request.setTrangThai(trangThai);
       anhSanPhamService.updateMultiImageCloud(id, request);
-      return new ResponseObject<>(null, "Cập nhật ảnh sản phẩm thành công");
+      return new ResponseObject<>(true,null, "Cập nhật ảnh sản phẩm thành công");
     }
 
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable int id) {
         anhSanPhamService.updateStatus(id);
-        return new ResponseObject<>(null, "Cập nhật trạng thái ảnh sản phẩm thành công");
+        return new ResponseObject<>(true,null, "Cập nhật trạng thái ảnh sản phẩm thành công");
     }
 
     // Endpoint test để kiểm tra file upload

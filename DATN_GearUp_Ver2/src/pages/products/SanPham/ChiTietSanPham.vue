@@ -1,155 +1,164 @@
 <template>
-  <div class="product-management">
-    <div class="breadcrumb-nav">
-      <RouterLink :to="`/products`" class="product-link">
-        <span class="product-text">Sản phẩm</span>
-      </RouterLink>
-      <span class="breadcrumb-separator">/</span>
-      <span class="current-breadcrumb">{{ currentProductName }}</span>
+  <div class="chi-tiet-san-pham-page">
+    <div class="product-management">
+      <div class="breadcrumb-nav">
+        <RouterLink :to="`/products`" class="product-link">
+          <span class="product-text">Sản phẩm</span>
+        </RouterLink>
+        <span class="breadcrumb-separator">/</span>
+        <span class="current-breadcrumb">{{
+          currentProductName ? currentProductName : "Chi tiết sản phẩm"
+        }}</span>
+      </div>
     </div>
-  </div>
 
-  <!-- Modern Filter Section -->
-  <div class="filter-section">
-    <div class="filter-card">
-      <div class="filter-content">
-        <div class="search-section">
-          <div class="input-group">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Tìm kiếm tên sản phẩm, màu sắc, kích thước..."
-              class="form-control search-input"
-            />
+    <!-- Modern Filter Section -->
+    <div class="filter-section">
+      <div class="filter-card">
+        <div class="filter-content">
+          <div class="search-section">
+            <div class="input-group">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Tìm kiếm tên sản phẩm, màu sắc, kích thước..."
+                class="form-control search-input"
+              />
+              <button
+                v-if="searchQuery"
+                @click="searchQuery = ''"
+                class="clear-btn"
+              >
+                <span>✕</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="filters-grid">
+            <div class="filter-group">
+              <label class="filter-label">Màu sắc</label>
+              <select v-model="selectedMauSac" class="form-select">
+                <option value="">Tất cả màu sắc</option>
+                <option
+                  v-for="color in mauSacs"
+                  :key="color.id"
+                  :value="color.id"
+                >
+                  {{ color.tenMauSac }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Kích thước</label>
+              <select v-model="selectedKichThuoc" class="form-select">
+                <option value="">Tất cả kích thước</option>
+                <option
+                  v-for="size in kichThuocs"
+                  :key="size.id"
+                  :value="size.id"
+                >
+                  {{ size.tenKichThuoc }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Chất liệu</label>
+              <select v-model="selectedChatLieu" class="form-select">
+                <option value="">Tất cả chất liệu</option>
+                <option
+                  v-for="material in chatLieus"
+                  :key="material.id"
+                  :value="material.id"
+                >
+                  {{ material.tenChatLieu }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Đế giày</label>
+              <select v-model="selectedDeGiay" class="form-select">
+                <option value="">Tất cả đế giày</option>
+                <option v-for="sole in deGiays" :key="sole.id" :value="sole.id">
+                  {{ sole.tenDeGiay }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="filters-grid-2">
+            <div class="filter-group">
+              <label class="filter-label">Trọng lượng</label>
+              <select v-model="selectedTrongLuong" class="form-select">
+                <option value="">Tất cả trọng lượng</option>
+                <option
+                  v-for="weight in trongLuongs"
+                  :key="weight.id"
+                  :value="weight.id"
+                >
+                  {{ weight.tenTrongLuong }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Trạng thái</label>
+              <select v-model="statusFilter" class="form-select">
+                <option value="">Tất cả trạng thái</option>
+                <option value="false">Hoạt động</option>
+                <option value="true">Ngừng hoạt động</option>
+              </select>
+            </div>
+
+            <div class="filter-actions">
+              <button
+                @click="clearFiltersForEdit"
+                class="btn btn-outline btn-sm"
+              >
+                Đặt lại
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Details Table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="table-header-content">
+          <h3 class="table-title">Danh sách biến thể sản phẩm</h3>
+          <div class="table-actions">
             <button
-              v-if="searchQuery"
-              @click="searchQuery = ''"
-              class="clear-btn"
+              v-if="hasCheckedChiTietSanPhams"
+              @click="saveAllCheckedChiTietSanPhamsFromPopup"
+              class="btn-save-all"
+              title="Cập nhật tất cả chi tiết sản phẩm đã chọn"
             >
-              <span>✕</span>
+              Hoàn thành cập nhật ({{ checkedChiTietSanPhamsCount }})
             </button>
-          </div>
-        </div>
-
-        <div class="filters-grid">
-          <div class="filter-group">
-            <label class="filter-label">Màu sắc</label>
-            <select v-model="selectedMauSac" class="form-select">
-              <option value="">Tất cả màu sắc</option>
-              <option
-                v-for="color in mauSacs"
-                :key="color.id"
-                :value="color.id"
-              >
-                {{ color.tenMauSac }}
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Kích thước</label>
-            <select v-model="selectedKichThuoc" class="form-select">
-              <option value="">Tất cả kích thước</option>
-              <option
-                v-for="size in kichThuocs"
-                :key="size.id"
-                :value="size.id"
-              >
-                {{ size.tenKichThuoc }}
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Chất liệu</label>
-            <select v-model="selectedChatLieu" class="form-select">
-              <option value="">Tất cả chất liệu</option>
-              <option
-                v-for="material in chatLieus"
-                :key="material.id"
-                :value="material.id"
-              >
-                {{ material.tenChatLieu }}
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Đế giày</label>
-            <select v-model="selectedDeGiay" class="form-select">
-              <option value="">Tất cả đế giày</option>
-              <option v-for="sole in deGiays" :key="sole.id" :value="sole.id">
-                {{ sole.tenDeGiay }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="filters-grid-2">
-          <div class="filter-group">
-            <label class="filter-label">Trọng lượng</label>
-            <select v-model="selectedTrongLuong" class="form-select">
-              <option value="">Tất cả trọng lượng</option>
-              <option
-                v-for="weight in trongLuongs"
-                :key="weight.id"
-                :value="weight.id"
-              >
-                {{ weight.tenTrongLuong }}
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Trạng thái</label>
-            <select v-model="statusFilter" class="form-select">
-              <option value="">Tất cả trạng thái</option>
-              <option value="false">Hoạt động</option>
-              <option value="true">Ngừng hoạt động</option>
-            </select>
-          </div>
-
-          <div class="filter-actions">
-            <button @click="clearFiltersForEdit" class="btn btn-outline">
-              Đặt lại
+            <button
+              v-if="currentProductName"
+              @click="toggleShowAllVariants"
+              :class="[
+                'btn-toggle-variants',
+                { 'showing-all': showAllVariants },
+              ]"
+              :title="
+                showAllVariants
+                  ? 'Hiển thị biến thể sản phẩm hiện tại'
+                  : 'Hiển thị toàn bộ biến thể sản phẩm'
+              "
+            >
+              {{ toggleVariantsButtonText }}
             </button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Product Details Table -->
-  <div class="card">
-    <div class="card-header">
-      <div class="table-header-content">
-        <h3 class="table-title">Danh sách biến thể sản phẩm</h3>
-        <div class="table-actions">
-          <button
-            v-if="hasCheckedChiTietSanPhams"
-            @click="saveAllCheckedChiTietSanPhamsFromPopup"
-            class="btn-save-all"
-            title="Cập nhật tất cả chi tiết sản phẩm đã chọn"
-          >
-            Hoàn thành cập nhật ({{ checkedChiTietSanPhamsCount }})
-          </button>
-          <button
-            @click="toggleShowAllVariants"
-            :class="['btn-toggle-variants', { 'showing-all': showAllVariants }]"
-            :title="
-              showAllVariants
-                ? 'Hiển thị biến thể sản phẩm hiện tại'
-                : 'Hiển thị toàn bộ biến thể sản phẩm'
-            "
-          >
-            {{ toggleVariantsButtonText }}
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="table-content-wrapper">
-      <div class="table-container">
-        <table class="product-table">
+      <div class="card-body">
+        <table class="table">
           <thead>
             <tr>
               <th class="stt-col">
@@ -180,7 +189,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="(detail) in paginatedDetails"
+              v-for="detail in paginatedDetails"
               :key="detail.id"
               :class="{ 'editing-row': editingChiTietSanPhams.has(detail.id) }"
             >
@@ -192,9 +201,7 @@
                   @click.stop
                 />
               </td>
-              <td
-                class="ma-col"
-              >
+              <td class="ma-col">
                 {{ detail.maChiTietSanPham }}
               </td>
               <td
@@ -215,7 +222,7 @@
                     "
                     :alt="detail.tenSanPham || detail.sanPham?.tenSanPham"
                     class="product-image"
-                    style="width: 100px; height: 100px;"
+                    style="width: 60px; height: 60px"
                     :key="`image-${detail.id}-${imageDataKey.timestamp}`"
                   />
                   <span
@@ -346,30 +353,22 @@
               </td>
               <td class="action-col">
                 <div class="action-buttons">
-                  <div v-if="editingChiTietSanPhams.has(detail.id)">
+                  <div class="action-buttons">
                     <button
-                      @click="saveInlineEdit(detail.id)"
-                      class="btn btn-success btn-sm"
-                      title="Hoàn thành cập nhật"
+                      @click="startEdit(detail)"
+                      class="btn btn-secondary btn-sm"
+                      title="Cập nhật"
                     >
-                      <!-- icon: checkmark -->
+                      Chi tiết
                     </button>
                     <button
-                      @click="cancelInlineEdit(detail.id)"
+                      @click="deleteChiTietSanPham(detail)"
                       class="btn btn-danger btn-sm"
-                      title="Hủy bỏ"
+                      title="Xóa biến thể"
                     >
-                      ✕
+                      Xoá
                     </button>
                   </div>
-                  <button
-                    v-else
-                    @click="startEdit(detail)"
-                    class="btn btn-secondary"
-                    title="Chỉnh sửa"
-                  >
-                    Edit
-                  </button>
                 </div>
               </td>
             </tr>
@@ -378,44 +377,149 @@
             </tr>
           </tbody>
         </table>
-      </div>
 
-      <!-- Pagination -->
-      <div v-if="totalPages > 1" class="pagination-wrapper">
-        <div class="pagination-info">
-          Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của
-          {{ filteredDetails.length }} chi tiết sản phẩm ({{ pageSize }}
-          dòng/trang)
+        <!-- Pagination -->
+        <div v-if="totalPages > 1" class="pagination-wrapper">
+          <div class="pagination-info">
+            Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của
+            {{ filteredDetails.length }} chi tiết sản phẩm ({{ pageSize }}
+            dòng/trang)
+          </div>
+          <div class="pagination">
+            <button
+              @click="previousPageForEdit"
+              :disabled="currentPage === 1"
+              class="btn btn-outline btn-sm"
+            >
+              <svg
+                class="icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                ></path>
+              </svg>
+              Trước
+            </button>
+            <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+            <button
+              @click="nextPageForEdit"
+              :disabled="currentPage === totalPages"
+              class="btn btn-outline btn-sm"
+            >
+              Sau
+              <svg
+                class="icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </div>
-        <div class="pagination">
-          <button
-            @click="previousPageForEdit"
-            :disabled="currentPage === 1"
-            class="btn btn-outline btn-sm"
-          >
-            ❮ Trước
-          </button>
-          <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-          <button
-            @click="nextPageForEdit"
-            :disabled="currentPage === totalPages"
-            class="btn btn-outline btn-sm"
-          >
-            Sau ❯
-          </button>
-        </div>
-      </div>
-
-      <!-- Pagination Info khi chỉ có 1 trang -->
-      <div v-else-if="filteredDetails.length > 0" class="pagination-wrapper">
-        <div class="pagination-info">
-          Hiển thị tất cả {{ filteredDetails.length }} chi tiết sản phẩm
+        <!-- Pagination Info khi chỉ có 1 trang -->
+        <div v-else-if="filteredDetails.length > 0" class="pagination-wrapper">
+          <div class="pagination-info">
+            Hiển thị tất cả {{ filteredDetails.length }} chi tiết sản phẩm
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Popup thông báo thành công -->
+  <!-- Popup xác nhận xóa -->
+  <div
+    v-if="showDeletePopup"
+    class="delete-popup-overlay"
+    @click="closeDeletePopup"
+  >
+    <div class="delete-popup" @click.stop>
+      <div class="delete-popup-header">
+        <h3>Xác nhận xóa</h3>
+        <button @click="closeDeletePopup" class="close-btn">×</button>
+      </div>
+      <div class="delete-popup-content">
+        <p>Bạn có chắc chắn muốn xóa biến thể này?</p>
+        <div class="delete-details" v-if="deleteDetail">
+          <div class="detail-row">
+            <span class="detail-label">Sản phẩm:</span>
+            <span class="detail-value">{{
+              deleteDetail.tenSanPham || "N/A"
+            }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Màu sắc:</span>
+            <span class="detail-value">{{
+              deleteDetail.tenMauSac || "N/A"
+            }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Kích thước:</span>
+            <span class="detail-value">{{
+              deleteDetail.tenKichThuoc || "N/A"
+            }}</span>
+          </div>
+        </div>
+        <div class="delete-warning">
+          ⚠️ Lưu ý: Chỉ biến thể này sẽ bị xóa, các biến thể khác của sản phẩm
+          sẽ được giữ nguyên.
+        </div>
+        <div class="delete-popup-actions">
+          <button @click="closeDeletePopup" class="btn-delete-cancel">
+            Hủy
+          </button>
+          <button @click="confirmDelete" class="btn-delete-confirm">
+            Xóa biến thể
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup thông báo bên phải - hỗ trợ nhiều thông báo -->
+  <div
+    v-if="notificationPositions.length > 0"
+    class="notification-popup-overlay"
+  >
+    <div
+      v-for="notification in notificationPositions"
+      :key="notification.id"
+      class="notification-popup-content"
+      :class="[
+        `notification-${notification.type}`,
+        { 'notification-closing': notification.isClosing },
+      ]"
+      :style="{ top: `${notification.top}px`, transition: 'top 0.3s ease' }"
+    >
+      <div class="notification-header">
+        <h4>{{ notification.title }}</h4>
+        <button
+          @click="closeNotificationPopup(notification.id)"
+          class="notification-close-btn"
+        >
+          ×
+        </button>
+      </div>
+      <div class="notification-body">
+        <p>{{ notification.message }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup thông báo thành công - Không còn sử dụng, thay bằng popup thông báo bên phải -->
+  <!--
   <div
     v-if="showSuccessPopup"
     class="success-popup-overlay"
@@ -431,6 +535,7 @@
       </div>
     </div>
   </div>
+  -->
 
   <!-- Popup Edit Chi Tiết Sản Phẩm -->
   <div v-if="showEditPopup" class="edit-popup-overlay" @click="closeEditPopup">
@@ -630,7 +735,7 @@
               <div class="image-actions">
                 <button
                   @click="openImageSelectorForEdit"
-                  class="btn btn-outline"
+                  class="btn btn-outline btn-sm"
                   type="button"
                   :disabled="
                     currentEditingDetail.images &&
@@ -654,7 +759,7 @@
                   />
                   <button
                     @click="triggerFileUploadForEdit"
-                    class="btn btn-outline"
+                    class="btn btn-outline btn-sm"
                     type="button"
                     :disabled="
                       currentEditingDetail.images &&
@@ -679,7 +784,10 @@
         </div>
 
         <!-- Upload Progress Section -->
-        <div v-if="isUploadingImages || Object.keys(uploadProgress).length > 0" class="upload-progress-section">
+        <div
+          v-if="isUploadingImages || Object.keys(uploadProgress).length > 0"
+          class="upload-progress-section"
+        >
           <div class="upload-progress-header">
             <h4>📤 Trạng thái upload ảnh</h4>
             <button
@@ -708,16 +816,28 @@
                 ></div>
               </div>
               <div class="progress-status">
-                <span v-if="progress.status === 'uploading'" class="status-uploading">
+                <span
+                  v-if="progress.status === 'uploading'"
+                  class="status-uploading"
+                >
                   ⏳ Đang upload...
                 </span>
-                <span v-else-if="progress.status === 'success'" class="status-success">
+                <span
+                  v-else-if="progress.status === 'success'"
+                  class="status-success"
+                >
                   ✅ Thành công
                 </span>
-                <span v-else-if="progress.status === 'error'" class="status-error">
+                <span
+                  v-else-if="progress.status === 'error'"
+                  class="status-error"
+                >
                   ❌ Lỗi: {{ progress.error }}
                 </span>
-                <span v-else-if="progress.status === 'timeout'" class="status-timeout">
+                <span
+                  v-else-if="progress.status === 'timeout'"
+                  class="status-timeout"
+                >
                   ⏰ Timeout
                 </span>
               </div>
@@ -731,7 +851,9 @@
         </div>
 
         <div class="edit-popup-actions">
-          <button @click="closeEditPopup" class="btn btn-outline">Hủy</button>
+          <button @click="closeEditPopup" class="btn btn-outline btn-sm">
+            Hủy
+          </button>
           <button
             @click="saveEditPopupFromPopup"
             class="btn btn-primary"
@@ -739,7 +861,13 @@
             :title="saveButtonTooltip"
           >
             <span v-if="isSaveDisabled" class="btn-loading-icon">⏳</span>
-            {{ isSaveDisabled ? 'Đang upload...' : 'Lưu' }}
+            {{
+              isRefreshingData
+                ? "Đang cập nhật..."
+                : isSaveDisabled
+                ? "Đang upload..."
+                : "Lưu"
+            }}
           </button>
         </div>
       </div>
@@ -808,7 +936,10 @@
         </div>
       </div>
       <div class="image-selector-actions">
-        <button @click="closeImageSelectorForEdit" class="btn btn-outline">
+        <button
+          @click="closeImageSelectorForEdit"
+          class="btn btn-outline btn-sm"
+        >
           Hủy
         </button>
         <button
@@ -823,7 +954,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import {
   fetchAllChiTietDotGiamGia,
@@ -862,6 +993,133 @@ import { fetchAllMauSac } from "../../../services/ThuocTinh/MauSacService";
 import { fetchAllNhaSanXuat } from "../../../services/ThuocTinh/NhaSanXuatService";
 import { fetchAllTrongLuong } from "../../../services/ThuocTinh/TrongLuongService";
 import { fetchAllXuatXu } from "../../../services/ThuocTinh/XuatXuService";
+// Hàm tìm ID từ tên thuộc tính
+const findIdByName = async (type, name) => {
+  try {
+    if (!name || name.trim() === "") return 1; // Default ID
+
+    let data = [];
+
+    switch (type) {
+      case "sanPham":
+        if (sanPhams.value.length === 0) {
+          const response = await fetchAllSanPham();
+          sanPhams.value = response.data || [];
+        }
+        data = sanPhams.value;
+        break;
+      case "mauSac":
+        if (mauSacs.value.length === 0) {
+          const response = await fetchAllMauSac();
+          mauSacs.value = response.data || [];
+        }
+        data = mauSacs.value;
+        break;
+      case "kichThuoc":
+        if (kichThuocs.value.length === 0) {
+          const response = await fetchAllKichThuoc();
+          kichThuocs.value = response.data || [];
+        }
+        data = kichThuocs.value;
+        break;
+      case "chatLieu":
+        if (chatLieus.value.length === 0) {
+          const response = await fetchAllChatLieu();
+          chatLieus.value = response.data || [];
+        }
+        data = chatLieus.value;
+        break;
+      case "deGiay":
+        if (deGiays.value.length === 0) {
+          const response = await fetchAllDeGiay();
+          deGiays.value = response.data || [];
+        }
+        data = deGiays.value;
+        break;
+      case "trongLuong":
+        if (trongLuongs.value.length === 0) {
+          const response = await fetchAllTrongLuong();
+          trongLuongs.value = response.data || [];
+        }
+        data = trongLuongs.value;
+        break;
+      default:
+        return 1; // Default ID
+    }
+
+    // Tìm item có tên trùng khớp
+    const foundItem = data.find((item) => {
+      const itemName =
+        item.tenSanPham ||
+        item.tenMauSac ||
+        item.tenKichThuoc ||
+        item.tenChatLieu ||
+        item.tenDeGiay ||
+        item.tenTrongLuong;
+      return (
+        itemName && itemName.trim().toLowerCase() === name.trim().toLowerCase()
+      );
+    });
+
+    return foundItem ? foundItem.id : 1; // Trả về ID nếu tìm thấy, ngược lại trả về 1
+  } catch (error) {
+    console.error(`Lỗi khi tìm ID cho ${type} với tên "${name}":`, error);
+    return 1; // Default ID nếu có lỗi
+  }
+};
+
+// Hàm xóa chi tiết sản phẩm an toàn
+const deleteChiTietSanPham = async (detail) => {
+  if (!detail || !detail.id) {
+    console.error("❌ Không tìm thấy chi tiết sản phẩm để xóa");
+    return;
+  }
+
+  // Hiển thị popup xác nhận
+  deleteDetail.value = detail;
+  showDeletePopup.value = true;
+};
+
+// Hàm xác nhận xóa
+const confirmDelete = async () => {
+  const detail = deleteDetail.value;
+  if (!detail || !detail.id) {
+    console.error("❌ Không tìm thấy chi tiết sản phẩm để xóa");
+    return;
+  }
+
+  try {
+    // Cập nhật trạng thái deleted = true thay vì xóa hoàn toàn
+    const response = await fetchUpdateStatusChiTietSanPham(detail.id);
+
+    if (response && response.success !== false) {
+      console.log("✅ Đã xóa thành công biến thể:", detail.id);
+
+      // Refresh dữ liệu chỉ của sản phẩm hiện tại
+      if (currentProduct.value?.id) {
+        await refreshImageData();
+      }
+
+      // Hiển thị popup thông báo thành công bên phải
+      showAlert("Thành công", "Đã xóa biến thể thành công!", "success");
+    } else {
+      throw new Error("API trả về kết quả không thành công");
+    }
+  } catch (error) {
+    console.error("❌ Lỗi khi xóa biến thể:", error);
+    alert(`Lỗi khi xóa biến thể: ${error.message || "Lỗi không xác định"}`);
+  } finally {
+    // Đóng popup xác nhận
+    closeDeletePopup();
+  }
+};
+
+// Hàm đóng popup xóa
+const closeDeletePopup = () => {
+  showDeletePopup.value = false;
+  deleteDetail.value = null;
+};
+
 // Reactive data
 const searchQuery = ref("");
 const selectedSanPham = ref("");
@@ -881,7 +1139,12 @@ const pageSize = ref(10);
 const selectedImages = ref([]);
 const selectedImageIds = ref([]);
 const availableImages = ref([]);
-const showSuccessPopup = ref(false);
+// Notification popup state - multiple notifications support
+const notifications = ref([]);
+let notificationId = 0;
+const windowWidth = ref(
+  typeof window !== "undefined" ? window.innerWidth : 1024
+);
 
 // Loading states cho upload
 const isUploadingImages = ref(false);
@@ -889,16 +1152,24 @@ const uploadProgress = ref({});
 const uploadTimeout = 30000; // 30 giây timeout
 const maxRetries = 2;
 
-// Computed property để kiểm tra trạng thái upload
+// Loading state cho refresh data
+const isRefreshingData = ref(false);
+
+// Computed property để kiểm tra trạng thái upload và refresh
 const isSaveDisabled = computed(() => {
   // Disable nếu đang upload ảnh
   if (isUploadingImages.value) {
     return true;
   }
 
+  // Disable nếu đang refresh data
+  if (isRefreshingData.value) {
+    return true;
+  }
+
   // Disable nếu có file đang upload nhưng chưa hoàn thành
   const uploadingFiles = Object.values(uploadProgress.value).filter(
-    progress => progress.status === 'uploading'
+    (progress) => progress.status === "uploading"
   );
 
   return uploadingFiles.length > 0;
@@ -907,12 +1178,18 @@ const isSaveDisabled = computed(() => {
 // Computed property để lấy tooltip cho nút lưu
 const saveButtonTooltip = computed(() => {
   if (isSaveDisabled.value) {
+    // Kiểm tra trạng thái refresh data trước
+    if (isRefreshingData.value) {
+      return "Đang cập nhật dữ liệu, vui lòng đợi hoàn thành";
+    }
+
+    // Sau đó kiểm tra upload
     const uploadingCount = Object.values(uploadProgress.value).filter(
-      progress => progress.status === 'uploading'
+      (progress) => progress.status === "uploading"
     ).length;
 
     if (uploadingCount > 0) {
-      return `Đang upload ảnh, vui lòng đợi hoàn thành`;
+      return `Đang upload ${uploadingCount} ảnh, vui lòng đợi hoàn thành`;
     }
 
     return "Đang xử lý upload ảnh, vui lòng đợi";
@@ -924,7 +1201,7 @@ const saveButtonTooltip = computed(() => {
 // Biến lưu trữ trạng thái ban đầu của ảnh để so sánh
 const initialImageIds = ref([]);
 const initialImages = ref([]);
-const successMessage = ref("");
+// const successMessage = ref(""); // Không còn sử dụng, thay bằng popup thông báo bên phải
 
 // Hàm upload với timeout và retry
 const uploadImageWithRetry = async (formData, fileName, retryCount = 0) => {
@@ -932,67 +1209,69 @@ const uploadImageWithRetry = async (formData, fileName, retryCount = 0) => {
   const timeoutId = setTimeout(() => controller.abort(), uploadTimeout);
 
   try {
-    console.log(`📤 Upload attempt ${retryCount + 1}/${maxRetries + 1} cho file: ${fileName}`);
-
     // Cập nhật progress
     uploadProgress.value[fileName] = {
-      status: 'uploading',
+      status: "uploading",
       progress: 50,
-      attempt: retryCount + 1
+      attempt: retryCount + 1,
     };
 
     const response = await fetchCreateAnhSanPhamFromCloud(formData, {
       signal: controller.signal,
-      retryCount
+      retryCount,
     });
 
     clearTimeout(timeoutId);
 
     // Cập nhật progress thành công
     uploadProgress.value[fileName] = {
-      status: 'success',
+      status: "success",
       progress: 100,
-      attempt: retryCount + 1
+      attempt: retryCount + 1,
     };
 
     return response;
-
   } catch (error) {
     clearTimeout(timeoutId);
 
-    if (error.name === 'AbortError') {
-      console.warn(`⏰ Upload timeout cho file: ${fileName} (attempt ${retryCount + 1})`);
+    if (error.name === "AbortError") {
+      console.warn(
+        `⏰ Upload timeout cho file: ${fileName} (attempt ${retryCount + 1})`
+      );
 
       // Cập nhật progress timeout
       uploadProgress.value[fileName] = {
-        status: 'timeout',
+        status: "timeout",
         progress: 0,
         attempt: retryCount + 1,
-        error: 'Timeout'
+        error: "Timeout",
       };
-
     } else {
-      console.error(`❌ Upload failed cho file: ${fileName} (attempt ${retryCount + 1}):`, error);
+      console.error(
+        `❌ Upload failed cho file: ${fileName} (attempt ${retryCount + 1}):`,
+        error
+      );
 
       // Cập nhật progress lỗi
       uploadProgress.value[fileName] = {
-        status: 'error',
+        status: "error",
         progress: 0,
         attempt: retryCount + 1,
-        error: error.message
+        error: error.message,
       };
     }
 
     // Retry logic
     if (retryCount < maxRetries) {
-      console.log(`🔄 Retry upload cho file: ${fileName} sau 2 giây...`);
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Đợi 2 giây trước retry
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Đợi 2 giây trước retry
 
       return uploadImageWithRetry(formData, fileName, retryCount + 1);
     }
 
     // Nếu hết retry thì throw error
-    throw new Error(`Upload failed after ${maxRetries + 1} attempts: ${error.message}`);
+    throw new Error(
+      `Upload failed after ${maxRetries + 1} attempts: ${error.message}`
+    );
   }
 };
 const sanPhams = ref([]);
@@ -1011,6 +1290,10 @@ const currentEditingDetail = ref({});
 const showImageSelectorForEdit = ref(false);
 const selectedImagesForEdit = ref([]);
 const availableImagesForEdit = ref([]);
+
+// Biến cho popup xóa
+const showDeletePopup = ref(false);
+const deleteDetail = ref(null);
 
 // Biến cho file upload
 const fileInput = ref(null);
@@ -1051,13 +1334,29 @@ const chiTietDotGiamGias = ref([]);
 // SETUP & LIFECYCLE
 // ========================================
 
-onMounted(async () => {
-  const id = route.params.id;
+// Window resize handler for notifications
+const handleWindowResize = () => {
+  windowWidth.value = window.innerWidth;
+};
 
-  if (!id) {
-    alert("Không tìm thấy ID sản phẩm!");
-    return;
+// Hàm xử lý keyboard shortcuts
+const handleKeydown = (event) => {
+  // Ctrl+R hoặc F5 để refresh all data
+  if ((event.ctrlKey && event.key === "r") || event.key === "F5") {
+    event.preventDefault();
+    console.log("🔄 Keyboard shortcut detected: Refreshing all data...");
+    refreshAllData();
   }
+};
+
+onMounted(async () => {
+  // Add window resize listener
+  window.addEventListener("resize", handleWindowResize);
+  // Add keyboard shortcut listener
+  window.addEventListener("keydown", handleKeydown);
+
+  const id = route.params.id ? route.params.id : null;
+  console.log("id", id);
 
   try {
     // 1. Fetch sản phẩm và các thuộc tính cơ bản
@@ -1074,7 +1373,11 @@ onMounted(async () => {
     await fetchDotGiamGia();
 
     // 2. Fetch chi tiết sản phẩm TRƯỚC
-    await fetchChiTietSanPham(id);
+    if (id != null) {
+      await fetchChiTietSanPham(id);
+    } else {
+      await fetchChiTietSanPham();
+    }
 
     // 3. Fetch chi tiết đợt giảm giá SAU khi đã có chi tiết sản phẩm
     await fetchChiTietDotGiamGia();
@@ -1083,14 +1386,21 @@ onMounted(async () => {
   }
 });
 
+// Cleanup event listeners
+onUnmounted(() => {
+  window.removeEventListener("resize", handleWindowResize);
+  window.removeEventListener("keydown", handleKeydown);
+});
+
 // ========================================
 // COMPUTED PROPERTIES
 // ========================================
 
 const currentProduct = computed(() => {
-  return sanPhams.value.find(
-    (sanPham) => sanPham.id === parseInt(route.params.id)
-  );
+  const routeId = parseInt(route.params.id);
+  const foundProduct = sanPhams.value.find((sanPham) => sanPham.id === routeId);
+
+  return foundProduct;
 });
 
 const currentEditingDetailImages = computed(() => {
@@ -1101,9 +1411,25 @@ const currentEditingDetailImagesCount = computed(() => {
   return currentEditingDetailImages.value.length;
 });
 
-
 const imageLimitReached = computed(() => {
   return currentEditingDetailImagesCount.value >= 5;
+});
+
+// Computed để tính vị trí cho mỗi thông báo
+const notificationPositions = computed(() => {
+  return notifications.value.map((notification, index) => {
+    // Lấy baseTop dựa trên screen size
+    let baseTop = 90; // Desktop default
+    if (windowWidth.value <= 480) {
+      baseTop = 80;
+    } else if (windowWidth.value <= 768) {
+      baseTop = 100;
+    }
+    return {
+      ...notification,
+      top: baseTop + index * 120,
+    };
+  });
 });
 
 // ========================================
@@ -1119,9 +1445,7 @@ const fetchSanPham = async () => {
 
 const fetchAnhSanPham = async () => {
   try {
-    console.log("🔄 Gọi fetchAllAnhSanPham...");
     const response = await fetchAllAnhSanPham();
-    console.log("📊 Response từ fetchAllAnhSanPham:", response);
 
     // Xử lý nhiều format response khác nhau
     let anhData = [];
@@ -1133,9 +1457,7 @@ const fetchAnhSanPham = async () => {
       anhData = response.data;
     }
 
-    console.log("📊 anhData xử lý được:", anhData);
     anhSanPhams.value = anhData;
-    console.log("📊 anhSanPhams.value sau khi gán:", anhSanPhams.value);
   } catch (error) {
     console.error("❌ Lỗi trong fetchAnhSanPham:", error);
   }
@@ -1143,9 +1465,7 @@ const fetchAnhSanPham = async () => {
 
 const fetchChiTietSanPhamAnh = async () => {
   try {
-    console.log("🔄 Gọi fetchAllChiTietSanPhamAnh...");
     const response = await fetchAllChiTietSanPhamAnh();
-    console.log("📊 Response từ fetchAllChiTietSanPhamAnh:", response);
 
     // Xử lý nhiều format response khác nhau
     let anhData = [];
@@ -1157,9 +1477,7 @@ const fetchChiTietSanPhamAnh = async () => {
       anhData = response.data;
     }
 
-    console.log("📊 anhData xử lý được:", anhData);
     chiTietSanPhamAnhs.value = anhData;
-    console.log("📊 chiTietSanPhamAnhs.value sau khi gán:", chiTietSanPhamAnhs.value);
   } catch (error) {
     console.error("❌ Lỗi trong fetchChiTietSanPhamAnh:", error);
   }
@@ -1234,7 +1552,9 @@ const fetchChiTietSanPham = async (id) => {
       const response = await fetchAllChiTietSanPham();
       chiTietSanPhams.value = response.data || [];
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("❌ Lỗi trong fetchChiTietSanPham:", error);
+  }
 };
 
 const fetchChiTietDotGiamGia = async () => {
@@ -1317,10 +1637,18 @@ const uploadNewImagesForPopup = async (imageFiles, chiTietSanPhamId) => {
 
       const response = await fetchCreateAnhSanPhamFromCloud(formData);
 
-      if (response && response.message && response.message.includes("thành công")) {
+      if (
+        response &&
+        response.message &&
+        response.message.includes("thành công")
+      ) {
         // Backend trả về list ID (multiple images)
         let imageIds = [];
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        if (
+          response.data &&
+          Array.isArray(response.data) &&
+          response.data.length > 0
+        ) {
           imageIds = response.data;
         } else {
           // Fallback: tạo temp ID nếu không có ID thực
@@ -1333,12 +1661,16 @@ const uploadNewImagesForPopup = async (imageFiles, chiTietSanPhamId) => {
         // Tự động tạo liên kết trong ChiTietSanPhamAnh
         try {
           // Chỉ gửi ID thực (số nguyên), loại bỏ temp ID string
-          const realImageIds = imageIds.filter(id => typeof id === 'number' || (typeof id === 'string' && !id.startsWith('temp_')));
-
-          console.log("📤 Gửi link với ID thực:", realImageIds);
+          const realImageIds = imageIds.filter(
+            (id) =>
+              typeof id === "number" ||
+              (typeof id === "string" && !id.startsWith("temp_"))
+          );
 
           if (realImageIds.length === 0) {
-            console.warn("⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này");
+            console.warn(
+              "⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này"
+            );
             return;
           }
 
@@ -1405,18 +1737,82 @@ const validateImageFile = (file) => {
   return true;
 };
 
-const refreshImageData = async () => {
+// Hàm refresh toàn bộ dữ liệu (bao gồm tất cả thuộc tính và dữ liệu sản phẩm)
+const refreshAllData = async () => {
+  if (isRefreshingData.value) {
+    console.log("⏳ Refresh already in progress, skipping...");
+    return;
+  }
+
   try {
-    console.log("🔄 Refreshing image data...");
-    await fetchChiTietSanPhamAnh();
-    await fetchAnhSanPham();
-    // Cũng cần refresh chi tiết sản phẩm để sync với database
-    if (route.params.id) {
-      await fetchChiTietSanPham(route.params.id);
+    isRefreshingData.value = true;
+    console.log("🔄 Starting full data refresh...");
+
+    // Refresh tất cả thuộc tính song song
+    const thuocTinhPromises = [
+      fetchMauSac(),
+      fetchKichThuoc(),
+      fetchDeGiay(),
+      fetchChatLieu(),
+      fetchTrongLuong(),
+      fetchNhaSanXuat(),
+      fetchXuatXu(),
+      fetchDotGiamGia(),
+    ];
+
+    // Refresh dữ liệu sản phẩm và ảnh song song
+    const productPromises = [
+      fetchSanPham(),
+      fetchAnhSanPham(),
+      fetchChiTietSanPhamAnh(),
+    ];
+
+    // Thực hiện tất cả API calls song song
+    await Promise.all([...thuocTinhPromises, ...productPromises]);
+
+    // Refresh chi tiết sản phẩm của sản phẩm hiện tại (nếu có)
+    const id = route.params.id ? route.params.id : null;
+    if (id) {
+      await fetchChiTietSanPham(id);
+    } else {
+      await fetchChiTietSanPham();
     }
-    console.log("✅ Image data refreshed successfully");
+
+    // Refresh chi tiết đợt giảm giá
+    await fetchChiTietDotGiamGia();
+
+    console.log("✅ Full data refresh completed successfully");
+  } catch (error) {
+    console.error("❌ Error refreshing all data:", error);
+  } finally {
+    isRefreshingData.value = false;
+  }
+};
+
+const refreshImageData = async () => {
+  if (isRefreshingData.value) {
+    console.log("⏳ Refresh already in progress, skipping...");
+    return;
+  }
+
+  try {
+    isRefreshingData.value = true;
+    console.log("🔄 Starting data refresh...");
+
+    // Chạy các API calls song song để tăng tốc độ
+    const promises = [fetchChiTietSanPhamAnh(), fetchAnhSanPham()];
+
+    // Chỉ thêm fetchChiTietSanPham nếu có currentProduct.id
+    if (currentProduct.value?.id) {
+      promises.push(fetchChiTietSanPham(currentProduct.value.id));
+    }
+
+    await Promise.all(promises);
+    console.log("✅ Refresh image data completed successfully");
   } catch (error) {
     console.error("❌ Error refreshing image data:", error);
+  } finally {
+    isRefreshingData.value = false;
   }
 };
 
@@ -1566,19 +1962,26 @@ const handleSmartImageUpdate = async (chiTietSanPhamId) => {
     // 2. Xử lý ảnh mới được thêm (chỉ tạo liên kết cho ảnh thực sự mới)
     if (comparison.addedImageIds.length > 0) {
       // Kiểm tra trùng lặp và chỉ tạo liên kết cho ảnh mới thực sự
-      const { uniqueImageIds } =
-        await checkAndHandleDuplicateImages(comparison.addedImageIds);
+      const { uniqueImageIds } = await checkAndHandleDuplicateImages(
+        comparison.addedImageIds
+      );
 
       // Chỉ thêm những ảnh mới thực sự (không có liên kết nào trước đó)
       if (uniqueImageIds.length > 0) {
         // Kiểm tra xem ảnh đã có liên kết chưa
         const existingLinks = await fetchAllChiTietSanPhamAnh();
-        const existingImageIds = existingLinks.data
-          ?.filter(link => link.idChiTietSanPham === chiTietSanPhamId && !link.deleted)
-          ?.map(link => link.idAnhSanPham) || [];
+        const existingImageIds =
+          existingLinks.data
+            ?.filter(
+              (link) =>
+                link.idChiTietSanPham === chiTietSanPhamId && !link.deleted
+            )
+            ?.map((link) => link.idAnhSanPham) || [];
 
         // Chỉ tạo liên kết cho ảnh chưa có liên kết
-        const trulyNewImageIds = uniqueImageIds.filter(id => !existingImageIds.includes(id));
+        const trulyNewImageIds = uniqueImageIds.filter(
+          (id) => !existingImageIds.includes(id)
+        );
 
         if (trulyNewImageIds.length > 0) {
           const requestData = {
@@ -1679,11 +2082,13 @@ const saveEditPopupFromPopup = async () => {
   // Kiểm tra trạng thái upload trước khi lưu
   if (isSaveDisabled.value) {
     const uploadingCount = Object.values(uploadProgress.value).filter(
-      progress => progress.status === 'uploading'
+      (progress) => progress.status === "uploading"
     ).length;
 
     if (uploadingCount > 0) {
-      alert(`Vui lòng đợi ${uploadingCount} ảnh đang upload hoàn thành trước khi lưu!`);
+      alert(
+        `Vui lòng đợi ${uploadingCount} ảnh đang upload hoàn thành trước khi lưu!`
+      );
     } else {
       alert("Vui lòng đợi quá trình upload ảnh hoàn thành trước khi lưu!");
     }
@@ -1702,7 +2107,6 @@ const saveEditPopupFromPopup = async () => {
         (nsx) => nsx.tenNhaSanXuat === currentEditingDetail.value.tenNhaSanXuat
       );
 
-
     const xuatXu =
       xuatXus.value.find(
         (xx) => xx.id === currentEditingDetail.value.idXuatXu?.id
@@ -1712,12 +2116,14 @@ const saveEditPopupFromPopup = async () => {
       ) ||
       // Fallback: nếu không tìm thấy, thử tìm tên không dấu
       xuatXus.value.find(
-        (xx) => xx.tenXuatXu === currentEditingDetail.value.tenXuatXu?.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        (xx) =>
+          xx.tenXuatXu ===
+          currentEditingDetail.value.tenXuatXu
+            ?.normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
       ) ||
       // Fallback cuối: chọn xuất xứ đầu tiên có sẵn
       xuatXus.value[0];
-
-
 
     // Tìm thông tin chất liệu dựa trên tên nếu không có id
     const chatLieu =
@@ -1784,20 +2190,24 @@ const saveEditPopupFromPopup = async () => {
       deleted: currentProduct.value?.deleted || false,
     };
 
-
     // Kiểm tra dữ liệu trước khi update
     if (!sanPhamData.idNhaSanXuat) {
-      console.error("❌ Thiếu thông tin nhà sản xuất trong sanPhamData:", sanPhamData);
+      console.error(
+        "❌ Thiếu thông tin nhà sản xuất trong sanPhamData:",
+        sanPhamData
+      );
       alert("Không thể cập nhật sản phẩm: Thiếu thông tin nhà sản xuất!");
       return;
     }
 
     if (!sanPhamData.idXuatXu) {
-      console.error("❌ Thiếu thông tin xuất xứ trong sanPhamData:", sanPhamData);
+      console.error(
+        "❌ Thiếu thông tin xuất xứ trong sanPhamData:",
+        sanPhamData
+      );
       alert("Không thể cập nhật sản phẩm: Thiếu thông tin xuất xứ!");
       return;
     }
-
 
     // Kiểm tra chất liệu
     if (!chatLieu?.id) {
@@ -1839,15 +2249,35 @@ const saveEditPopupFromPopup = async () => {
     }
 
     // Log trước khi cập nhật
-    // Cập nhật sản phẩm
-    if (sanPhamData.id) {
-      await fetchUpdateSanPham(sanPhamData.id, sanPhamData);
+    // Cập nhật sản phẩm - nếu id = null thì tìm id từ tên sản phẩm
+    let productIdToUpdate = sanPhamData.id;
+
+    if (!productIdToUpdate) {
+      // Tìm ID sản phẩm dựa vào tên sản phẩm
+      productIdToUpdate = await findIdByName("sanPham", sanPhamData.tenSanPham);
+      console.log(
+        `🔍 Tìm thấy ID sản phẩm cho "${sanPhamData.tenSanPham}":`,
+        productIdToUpdate
+      );
+
+      if (!productIdToUpdate) {
+        console.error(
+          "❌ Không tìm thấy ID sản phẩm để cập nhật:",
+          sanPhamData.tenSanPham
+        );
+        alert(
+          "Không thể cập nhật sản phẩm: Không tìm thấy sản phẩm trong hệ thống!"
+        );
+        return;
+      }
     }
+
+    await fetchUpdateSanPham(productIdToUpdate, sanPhamData);
 
     // Chuẩn bị dữ liệu chi tiết sản phẩm
     const chiTietSanPhamData = {
       id: currentEditingDetail.value.id,
-      idSanPham: currentProduct.value?.id,
+      idSanPham: productIdToUpdate, // Sử dụng ID đã tìm được
       idMauSac: mauSac?.id || null,
       idKichThuoc: kichThuoc?.id || null,
       idDeGiay: deGiay?.id || null,
@@ -1858,7 +2288,6 @@ const saveEditPopupFromPopup = async () => {
       trangThai: currentEditingDetail.value.trangThai || 1,
       deleted: currentEditingDetail.value.deleted || false,
     };
-
 
     // Cập nhật chi tiết sản phẩm
     await fetchUpdateChiTietSanPham(chiTietSanPhamData.id, chiTietSanPhamData);
@@ -1937,21 +2366,25 @@ const saveEditPopupFromPopup = async () => {
 
     // Refresh dữ liệu - chỉ lấy chi tiết sản phẩm của sản phẩm hiện tại
     await refreshImageData();
-    await fetchChiTietSanPham(route.params.id);
 
     // Reset trạng thái ban đầu sau khi edit thành công
     initialImageIds.value = [];
     initialImages.value = [];
 
-    console.log("✅ Cập nhật chi tiết sản phẩm thành công!");
-
-    // Hiển thị thông báo thành công
-    showSuccessPopupForEdit("Cập nhật chi tiết sản phẩm thành công!");
+    // Hiển thị popup thông báo thành công bên phải
+    showAlert(
+      "Thành công",
+      "Cập nhật chi tiết sản phẩm thành công!",
+      "success"
+    );
 
     // Đóng popup
     closeEditPopup();
   } catch (error) {
-    console.error("❌ LỖI: Có lỗi xảy ra khi cập nhật chi tiết sản phẩm:", error);
+    console.error(
+      "❌ LỖI: Có lỗi xảy ra khi cập nhật chi tiết sản phẩm:",
+      error
+    );
     console.error("🔍 Chi tiết lỗi:", error.message);
     console.error("📊 Stack trace:", error.stack);
     alert("Có lỗi xảy ra khi cập nhật: " + error.message);
@@ -1964,8 +2397,10 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
       !selectedChiTietSanPhams.value ||
       selectedChiTietSanPhams.value.length === 0
     ) {
-      showSuccessNotificationForEdit(
-        "Vui lòng chọn ít nhất một chi tiết sản phẩm để cập nhật!"
+      showAlert(
+        "Cảnh báo",
+        "Vui lòng chọn ít nhất một chi tiết sản phẩm để cập nhật!",
+        "error"
       );
       return;
     }
@@ -1983,7 +2418,6 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
       display: flex !important;
       justify-content: center !important;
       align-items: center !important;
-      background: rgba(0, 0, 0, 0.6) !important;
     `;
 
     confirmDialog.innerHTML = `
@@ -1995,7 +2429,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
               background: linear-gradient(135deg, #ffffff, #ffffff);
               padding: 2.5rem;
               border-radius: 20px;
-              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
+              // box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
               text-align: center;
               max-width: 450px;
               width: 90%;
@@ -2033,17 +2467,42 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
               const editingItem = editingChiTietSanPhams.value.get(selectedId);
               const originalItem =
                 originalChiTietSanPhams.value.get(selectedId);
-
               if (editingItem && originalItem) {
+                // Tìm ID từ tên các thuộc tính
+                const idSanPham = await findIdByName(
+                  "sanPham",
+                  originalItem.tenSanPham
+                );
+                const idMauSac = await findIdByName(
+                  "mauSac",
+                  originalItem.tenMauSac
+                );
+                const idKichThuoc = await findIdByName(
+                  "kichThuoc",
+                  originalItem.tenKichThuoc
+                );
+                const idDeGiay = await findIdByName(
+                  "deGiay",
+                  originalItem.tenDeGiay
+                );
+                const idChatLieu = await findIdByName(
+                  "chatLieu",
+                  originalItem.tenChatLieu
+                );
+                const idTrongLuong = await findIdByName(
+                  "trongLuong",
+                  originalItem.tenTrongLuong
+                );
+
                 // Chỉ cập nhật 3 trường: soLuong, giaBan, trangThai
                 // Các trường khác giữ nguyên từ dữ liệu gốc
                 const updatedData = {
-                  idSanPham: originalItem.idSanPham || 1,
-                  idMauSac: originalItem.idMauSac || 1,
-                  idKichThuoc: originalItem.idKichThuoc || 1,
-                  idDeGiay: originalItem.idDeGiay || 1,
-                  idChatLieu: originalItem.idChatLieu || 1,
-                  idTrongLuong: originalItem.idTrongLuong || 1,
+                  idSanPham: idSanPham,
+                  idMauSac: idMauSac,
+                  idKichThuoc: idKichThuoc,
+                  idDeGiay: idDeGiay,
+                  idChatLieu: idChatLieu,
+                  idTrongLuong: idTrongLuong,
                   soLuong: editingItem.soLuong || originalItem.soLuong || 0,
                   giaBan: editingItem.giaBan || originalItem.giaBan || 0,
                   trangThai:
@@ -2101,8 +2560,10 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
             }
 
             if (itemsToUpdate.length === 0) {
-              showSuccessNotificationForEdit(
-                "Không có dữ liệu nào để cập nhật!"
+              showAlert(
+                "Cảnh báo",
+                "Không có dữ liệu nào để cập nhật!",
+                "error"
               );
               resolve();
               return;
@@ -2118,18 +2579,24 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
             const failedUpdates = results.filter((result) => !result.success);
 
             if (failedUpdates.length > 0) {
-              showSuccessNotificationForEdit(
-                `Cập nhật ${successfulUpdates.length}/${itemsToUpdate.length} items thành công. ${failedUpdates.length} items thất bại.`
+              showAlert(
+                "Kết quả cập nhật",
+                `Cập nhật ${successfulUpdates.length}/${itemsToUpdate.length} items thành công. ${failedUpdates.length} items thất bại.`,
+                successfulUpdates.length === itemsToUpdate.length
+                  ? "success"
+                  : "error"
               );
             } else {
-              showSuccessNotificationForEdit(
-                `Cập nhật thành công ${successfulUpdates.length} chi tiết sản phẩm!`
+              showAlert(
+                "Thành công",
+                `Cập nhật thành công ${successfulUpdates.length} chi tiết sản phẩm!`,
+                "success"
               );
             }
 
             // Bước 4: Refresh dữ liệu và reset trạng thái
-            await fetchChiTietSanPham(route.params.id);
-
+            await refreshImageData();
+            refreshAllData();
             // Reset các trạng thái
             editingChiTietSanPhams.value.clear();
             originalChiTietSanPhams.value.clear();
@@ -2142,8 +2609,10 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
               "<!-- icon: close --> Lỗi trong quá trình cập nhật hàng loạt:",
               error
             );
-            showSuccessNotificationForEdit(
-              "Có lỗi xảy ra trong quá trình cập nhật!"
+            showAlert(
+              "Lỗi",
+              "Có lỗi xảy ra trong quá trình cập nhật!",
+              "error"
             );
           }
 
@@ -2160,7 +2629,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
       "<!-- icon: close --> Lỗi trong saveAllCheckedChiTietSanPhamsFromPopup:",
       error
     );
-    showSuccessNotificationForEdit("Có lỗi xảy ra!");
+    showAlert("Lỗi", "Có lỗi xảy ra!", "error");
   }
 };
 
@@ -2168,19 +2637,15 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
 // UI HELPER FUNCTIONS
 // ========================================
 
-const showSuccessPopupForEdit = (message) => {
-  successMessage.value = message;
-  showSuccessPopup.value = true;
+// Function cũ - không còn sử dụng, thay bằng popup thông báo bên phải
+// const showSuccessPopupForEdit = (message) => {
+//   successMessage.value = message;
+//   showSuccessPopup.value = true;
 
-  setTimeout(() => {
-    showSuccessPopup.value = false;
-  }, 3000);
-};
-
-
-
-
-
+//   setTimeout(() => {
+//     showSuccessPopup.value = false;
+//   }, 3000);
+// };
 
 const getCheckedCountForEdit = () => {
   return chiTietSanPhams.value.filter((chiTiet) => chiTiet.checked).length;
@@ -2190,12 +2655,9 @@ const getTotalCountForEdit = () => {
   return chiTietSanPhams.value.length;
 };
 
-
 // ========================================
 // IMAGE UI FUNCTIONS
 // ========================================
-
-
 
 const handleImageSelectionForEdit = (event) => {
   const selectedFiles = Array.from(event.target.files);
@@ -2255,19 +2717,9 @@ const handleImageUploadForEdit = (event) => {
   event.target.value = "";
 };
 
-
-
-
-
 // ========================================
 // EVENT HANDLERS
 // ========================================
-
-
-
-
-
-
 
 // ========================================
 // UTILITY FUNCTIONS
@@ -2408,7 +2860,7 @@ const isIndeterminate = computed(() => {
 
 // Computed để lấy thông tin sản phẩm hiện tại
 const currentProductName = computed(() => {
-  return currentProduct.value?.tenSanPham || "Không xác định";
+  return currentProduct.value?.tenSanPham || null;
 });
 
 // Ref để theo dõi thay đổi dữ liệu ảnh và đảm bảo table re-render
@@ -2421,23 +2873,37 @@ const imageDataKey = ref({
 
 // Methods
 
+// Hàm hiển thị alert thông tin - hỗ trợ nhiều thông báo
+const showAlert = (title, message, type = "info") => {
+  const id = ++notificationId;
+  const newNotification = {
+    id,
+    title,
+    message,
+    type,
+    isClosing: false,
+    createdAt: Date.now(),
+  };
 
+  notifications.value.push(newNotification);
 
-
-
-// Hàm hiển thị popup thành công
-const showSuccessNotificationForEdit = (message) => {
-  successMessage.value = message;
-  showSuccessPopup.value = true;
-  // Tự động đóng popup sau 3 giây
+  // Tự động ẩn sau 5 giây
   setTimeout(() => {
-    showSuccessPopup.value = false;
-  }, 3000);
+    closeNotificationPopup(id);
+  }, 5000);
 };
 
-// Hàm đóng popup thành công
-const closeSuccessPopupForEdit = () => {
-  showSuccessPopup.value = false;
+// Function đóng popup thông báo cụ thể với animation
+const closeNotificationPopup = (id) => {
+  const notification = notifications.value.find((n) => n.id === id);
+  if (notification) {
+    notification.isClosing = true;
+
+    // Đợi animation kết thúc rồi xóa khỏi mảng
+    setTimeout(() => {
+      notifications.value = notifications.value.filter((n) => n.id !== id);
+    }, 300); // Thời gian animation slideOutRight
+  }
 };
 
 const clearFiltersForEdit = () => {
@@ -2452,7 +2918,6 @@ const clearFiltersForEdit = () => {
   statusFilter.value = "";
   currentPage.value = 1;
 };
-
 
 const previousPageForEdit = () => {
   if (currentPage.value > 1) {
@@ -2530,7 +2995,6 @@ const removeSelectedImageForEditPopup = (index) => {
   selectedImagesForEdit.value.splice(index, 1);
 };
 
-
 const confirmImageSelectionForEditPopup = () => {
   // Cập nhật ảnh trong currentEditingDetail
   currentEditingDetail.value.images = [...selectedImagesForEdit.value];
@@ -2588,14 +3052,20 @@ const handleFileUploadForEdit = async (event) => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("loaiAnh", file.name.split(".").pop());
-
-      console.log(`🚀 Bắt đầu upload ảnh: ${file.name}`);
       const uploadResponse = await uploadImageWithRetry(formData, file.name);
 
-      if (uploadResponse && uploadResponse.message && uploadResponse.message.includes("thành công")) {
+      if (
+        uploadResponse &&
+        uploadResponse.message &&
+        uploadResponse.message.includes("thành công")
+      ) {
         // Backend trả về list ID (multiple images)
         let imageIds = [];
-        if (uploadResponse.data && Array.isArray(uploadResponse.data) && uploadResponse.data.length > 0) {
+        if (
+          uploadResponse.data &&
+          Array.isArray(uploadResponse.data) &&
+          uploadResponse.data.length > 0
+        ) {
           imageIds = uploadResponse.data;
         } else {
           // Fallback: tạo temp ID nếu không có ID thực
@@ -2608,14 +3078,21 @@ const handleFileUploadForEdit = async (event) => {
         // Tự động tạo liên kết trong ChiTietSanPhamAnh
         try {
           // Chỉ gửi ID thực (số nguyên), loại bỏ temp ID string
-          const realImageIds = imageIds.filter(id => typeof id === 'number' || (typeof id === 'string' && !id.startsWith('temp_')));
-
-          console.log("📤 Gửi link với ID thực:", realImageIds);
+          const realImageIds = imageIds.filter(
+            (id) =>
+              typeof id === "number" ||
+              (typeof id === "string" && !id.startsWith("temp_"))
+          );
 
           if (realImageIds.length === 0) {
-            console.warn("⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này");
+            console.warn(
+              "⚠️ Không có ID thực để tạo liên kết, bỏ qua bước này"
+            );
             // Vẫn cập nhật UI để hiển thị ảnh đã upload
-            if (currentEditingDetail.value.images && Array.isArray(currentEditingDetail.value.images)) {
+            if (
+              currentEditingDetail.value.images &&
+              Array.isArray(currentEditingDetail.value.images)
+            ) {
               const imageIndex = currentEditingDetail.value.images.findIndex(
                 (img) => img.id === tempImage.id
               );
@@ -2644,7 +3121,10 @@ const handleFileUploadForEdit = async (event) => {
 
           if (linkResponse.success) {
             // Cập nhật ảnh tạm thành ảnh thật
-            if (currentEditingDetail.value.images && Array.isArray(currentEditingDetail.value.images)) {
+            if (
+              currentEditingDetail.value.images &&
+              Array.isArray(currentEditingDetail.value.images)
+            ) {
               const imageIndex = currentEditingDetail.value.images.findIndex(
                 (img) => img.id === tempImage.id
               );
@@ -2667,7 +3147,10 @@ const handleFileUploadForEdit = async (event) => {
               imageId
             );
             // Nếu tạo link thất bại, xóa ảnh tạm
-            if (currentEditingDetail.value.images && Array.isArray(currentEditingDetail.value.images)) {
+            if (
+              currentEditingDetail.value.images &&
+              Array.isArray(currentEditingDetail.value.images)
+            ) {
               const imageIndex = currentEditingDetail.value.images.findIndex(
                 (img) => img.id === tempImage.id
               );
@@ -2684,7 +3167,10 @@ const handleFileUploadForEdit = async (event) => {
             linkError
           );
           // Nếu có lỗi, xóa ảnh tạm
-          if (currentEditingDetail.value.images && Array.isArray(currentEditingDetail.value.images)) {
+          if (
+            currentEditingDetail.value.images &&
+            Array.isArray(currentEditingDetail.value.images)
+          ) {
             const imageIndex = currentEditingDetail.value.images.findIndex(
               (img) => img.id === tempImage.id
             );
@@ -2700,7 +3186,10 @@ const handleFileUploadForEdit = async (event) => {
           uploadResponse
         );
         // Nếu upload thất bại, xóa ảnh tạm
-        if (currentEditingDetail.value.images && Array.isArray(currentEditingDetail.value.images)) {
+        if (
+          currentEditingDetail.value.images &&
+          Array.isArray(currentEditingDetail.value.images)
+        ) {
           const imageIndex = currentEditingDetail.value.images.findIndex(
             (img) => img.id === tempImage.id
           );
@@ -2720,7 +3209,9 @@ const handleFileUploadForEdit = async (event) => {
   isUploadingImages.value = false;
 
   // Clear upload progress after 5 seconds if all successful
-  const allSuccessful = Object.values(uploadProgress.value).every(p => p.status === 'success');
+  const allSuccessful = Object.values(uploadProgress.value).every(
+    (p) => p.status === "success"
+  );
   if (allSuccessful && Object.keys(uploadProgress.value).length > 0) {
     setTimeout(() => {
       uploadProgress.value = {};
@@ -2744,11 +3235,13 @@ const removeImageFromPopup = async (index) => {
     // Update status deleted cho bản ghi ChiTietSanPhamAnh nếu ảnh đã tồn tại trong database
     if (imageToRemove.id && !imageToRemove.isNew) {
       try {
-
         // Tìm bản ghi ChiTietSanPhamAnh tương ứng
         const allChiTietAnhRecords = await fetchAllChiTietSanPhamAnh();
 
-        if (!allChiTietAnhRecords.data || !Array.isArray(allChiTietAnhRecords.data)) {
+        if (
+          !allChiTietAnhRecords.data ||
+          !Array.isArray(allChiTietAnhRecords.data)
+        ) {
           console.error("❌ Không thể lấy danh sách ChiTietSanPhamAnh");
           return;
         }
@@ -2762,8 +3255,9 @@ const removeImageFromPopup = async (index) => {
 
         if (recordToDelete) {
           // Update status deleted = true
-          const updateResult = await fetchUpdateStatusChiTietSanPhamAnh(recordToDelete.id);
-          console.log(`✅ Đã xóa ảnh khỏi database`);
+          const updateResult = await fetchUpdateStatusChiTietSanPhamAnh(
+            recordToDelete.id
+          );
 
           // Refresh dữ liệu để cập nhật UI
           await fetchChiTietSanPhamAnh();
@@ -2775,8 +3269,6 @@ const removeImageFromPopup = async (index) => {
             chiTietSanPhamsLength: chiTietSanPhams.value?.length || 0,
             timestamp: Date.now(),
           };
-        } else {
-          console.log(`⚠️ Không tìm thấy bản ghi ChiTietSanPhamAnh để xóa (idChiTietSanPham: ${currentEditingDetail.value.id}, idAnhSanPham: ${imageToRemove.id})`);
         }
       } catch (error) {
         console.error("❌ Lỗi khi cập nhật status deleted:", error);
@@ -2799,14 +3291,14 @@ const removeImageFromPopup = async (index) => {
     // Xóa ảnh khỏi danh sách hiển thị
     currentEditingDetail.value.images.splice(index, 1);
 
-    console.log(`🗑️  Đã xóa ảnh, còn ${currentEditingDetail.value.images.length} ảnh`);
-
     // Đồng bộ hóa selectedImageIds với currentEditingDetail.images
     syncSelectedImageIdsWithCurrentImages();
 
     // Cập nhật initialImages để phản ánh thay đổi
     if (initialImages.value && initialImages.value.length > 0) {
-      const imageIndex = initialImages.value.findIndex(img => img.id === imageToRemove.id);
+      const imageIndex = initialImages.value.findIndex(
+        (img) => img.id === imageToRemove.id
+      );
       if (imageIndex > -1) {
         initialImages.value.splice(imageIndex, 1);
       }
@@ -2819,7 +3311,6 @@ const removeImageFromPopup = async (index) => {
 // Hàm xóa trạng thái upload progress
 const clearUploadProgress = () => {
   uploadProgress.value = {};
-  console.log("🧹 Đã xóa trạng thái upload progress");
 };
 
 // Method để lấy ảnh cho một chi tiết sản phẩm
@@ -2839,69 +3330,54 @@ const getImagesForChiTietSanPhamForEdit = (chiTietSanPhamId) => {
       return [];
     }
 
-    // Kiểm tra xem chi tiết sản phẩm có trường anhSanPham không (theo ChiTietSanPhamFullResponse)
-    console.log(`🔍 Debug chi tiết sản phẩm ${chiTietSanPhamId}:`, chiTietSanPham);
-    console.log(`🔍 anhSanPham của chi tiết ${chiTietSanPhamId}:`, chiTietSanPham.anhSanPham);
-
     // Backend đã filter anhSanPham theo trangThai=true & deleted=false, sử dụng trực tiếp
     if (chiTietSanPham.anhSanPham && Array.isArray(chiTietSanPham.anhSanPham)) {
-      console.log(`✅ Chi tiết ${chiTietSanPhamId} có anhSanPham từ backend: ${chiTietSanPham.anhSanPham.length} ảnh`);
-
       // Sử dụng trực tiếp anhSanPham từ backend (đã được filter)
       const images = chiTietSanPham.anhSanPham.map((duongDanAnh, index) => {
-          // Tìm ảnh trong anhSanPhams dựa trên duongDanAnh
-          let realId = null;
-          let anhSanPhamData = null;
+        // Tìm ảnh trong anhSanPhams dựa trên duongDanAnh
+        let realId = null;
+        let anhSanPhamData = null;
 
-          if (anhSanPhams.value && Array.isArray(anhSanPhams.value)) {
-            anhSanPhamData = anhSanPhams.value.find(
-              (anh) => anh.duongDanAnh === duongDanAnh
-            );
-            if (anhSanPhamData && anhSanPhamData.id) {
-              realId = anhSanPhamData.id;
-            }
+        if (anhSanPhams.value && Array.isArray(anhSanPhams.value)) {
+          anhSanPhamData = anhSanPhams.value.find(
+            (anh) => anh.duongDanAnh === duongDanAnh
+          );
+          if (anhSanPhamData && anhSanPhamData.id) {
+            realId = anhSanPhamData.id;
           }
+        }
 
-          // Nếu không tìm thấy ID thực, tạo ID giả
-          if (!realId) {
-            realId = `direct_${chiTietSanPhamId}_${index}`;
-          }
+        // Nếu không tìm thấy ID thực, tạo ID giả
+        if (!realId) {
+          realId = `direct_${chiTietSanPhamId}_${index}`;
+        }
 
-          return {
-            id: realId,
-            duongDanAnh: duongDanAnh,
-            loaiAnh: anhSanPhamData ? anhSanPhamData.loaiAnh : "product",
-            moTa: anhSanPhamData
-              ? anhSanPhamData.moTa
-              : `Ảnh ${index + 1} của chi tiết sản phẩm ${chiTietSanPhamId}`,
-            file: null,
-            url: null,
-            isNew: false,
-          };
-        });
-
+        return {
+          id: realId,
+          duongDanAnh: duongDanAnh,
+          loaiAnh: anhSanPhamData ? anhSanPhamData.loaiAnh : "product",
+          moTa: anhSanPhamData
+            ? anhSanPhamData.moTa
+            : `Ảnh ${index + 1} của chi tiết sản phẩm ${chiTietSanPhamId}`,
+          file: null,
+          url: null,
+          isNew: false,
+        };
+      });
 
       return images;
-    } else {
-      console.log(`❌ Chi tiết ${chiTietSanPhamId} không có anhSanPham hoặc không phải array`);
-      console.log(`📊 chiTietSanPham.anhSanPham:`, chiTietSanPham.anhSanPham);
     }
-
-    // Fallback: sử dụng cách cũ nếu không có anhSanPham trực tiếp
-    console.log(`🔄 Sử dụng fallback cho chi tiết ${chiTietSanPhamId}`);
     if (!chiTietSanPhamAnhs.value || !anhSanPhams.value) {
-      console.log(`❌ Không có dữ liệu để fallback: chiTietSanPhamAnhs=${!!chiTietSanPhamAnhs.value}, anhSanPhams=${!!anhSanPhams.value}`);
       return [];
     }
 
     // Lọc các liên kết ảnh active cho chi tiết sản phẩm này (theo backend logic)
     const imageLinks = chiTietSanPhamAnhs.value.filter(
-      (item) => item.idChiTietSanPham === chiTietSanPhamId &&
-                item.trangThai === true &&
-                item.deleted === false
+      (item) =>
+        item.idChiTietSanPham === chiTietSanPhamId &&
+        item.trangThai === true &&
+        item.deleted === false
     );
-
-    console.log(`🔗 Image links sau khi lọc cho ${chiTietSanPhamId}:`, imageLinks);
 
     // Map để lấy thông tin ảnh đầy đủ
     const images = imageLinks
@@ -2909,8 +3385,6 @@ const getImagesForChiTietSanPhamForEdit = (chiTietSanPhamId) => {
         const anhSanPham = anhSanPhams.value.find(
           (anh) => anh.id === item.idAnhSanPham
         );
-
-        console.log(`🔍 Tìm anhSanPham cho ID ${item.idAnhSanPham}:`, anhSanPham);
 
         if (anhSanPham && anhSanPham.duongDanAnh) {
           return {
@@ -2926,8 +3400,6 @@ const getImagesForChiTietSanPhamForEdit = (chiTietSanPhamId) => {
         return null;
       })
       .filter((img) => img !== null);
-
-    console.log(`✅ Kết quả fallback cho ${chiTietSanPhamId}: ${images.length} ảnh`, images);
 
     return images;
   } catch (error) {
@@ -3003,10 +3475,18 @@ const uploadNewImagesForInline = async (imageFiles) => {
       const response = await fetchCreateAnhSanPhamFromCloud(formData);
 
       // Đảm bảo trả về đúng ID từ response
-      if (response && response.message && response.message.includes("thành công")) {
+      if (
+        response &&
+        response.message &&
+        response.message.includes("thành công")
+      ) {
         // Backend trả về list ID (multiple images)
         let imageId;
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        if (
+          response.data &&
+          Array.isArray(response.data) &&
+          response.data.length > 0
+        ) {
           imageId = response.data[0]; // Sử dụng ID đầu tiên
         } else {
           // Fallback: tạo temp ID nếu không có ID thực
@@ -3100,7 +3580,7 @@ const validateImageFileForInline = (file) => {
   }
 
   // Kiểm tra tên file
-  if (!file.name || file.name.length > 100) {
+  if (!file.name || file.name.length > 250) {
     throw new Error(
       `Tên file ${file.name} quá dài! Vui lòng đổi tên file ngắn hơn.`
     );
@@ -3133,15 +3613,17 @@ const checkImageStatusForInline = async (chiTietSanPhamId) => {
 // Hàm cập nhật ảnh cho chi tiết sản phẩm (wrapper function)
 const refreshImageDataForInline = async () => {
   try {
-    console.log("🔄 Refreshing image data for inline edit...");
-    // Refresh dữ liệu ảnh và liên kết
-    await fetchAnhSanPham();
-    await fetchChiTietSanPhamAnh();
+    console.log("🔄 Starting inline data refresh...");
 
-    // Cũng cần refresh chi tiết sản phẩm để đảm bảo sync với database
-    if (route.params.id) {
-      await fetchChiTietSanPham(route.params.id);
+    // Chạy các API calls song song để tăng tốc độ
+    const promises = [fetchAnhSanPham(), fetchChiTietSanPhamAnh()];
+
+    // Chỉ thêm fetchChiTietSanPham nếu có currentProduct.id
+    if (currentProduct.value?.id) {
+      promises.push(fetchChiTietSanPham(currentProduct.value.id));
     }
+
+    await Promise.all(promises);
 
     // Force Vue re-render
     imageDataKey.value = {
@@ -3149,7 +3631,8 @@ const refreshImageDataForInline = async () => {
       anhSanPhamsLength: anhSanPhams.value?.length || 0,
       timestamp: Date.now(),
     };
-    console.log("✅ Inline image data refreshed successfully");
+
+    console.log("✅ Inline data refresh completed successfully");
   } catch (error) {
     console.error("❌ Error refreshing inline image data:", error);
   }
@@ -3161,27 +3644,16 @@ const startEdit = async (detail) => {
   // Chỉ mở popup edit, không kích hoạt inline edit
   showEditPopup.value = true;
 
-  // Refresh dữ liệu ảnh để đảm bảo có dữ liệu mới nhất
-  console.log("🔄 Refresh dữ liệu ảnh trước khi mở popup...");
-  console.log(`📊 Trước refresh - anhSanPhams.length: ${anhSanPhams.value?.length || 0}`);
-  console.log(`📊 Trước refresh - chiTietSanPhamAnhs.length: ${chiTietSanPhamAnhs.value?.length || 0}`);
-
   await fetchAnhSanPham();
   await fetchChiTietSanPhamAnh();
 
-  console.log(`📊 Sau refresh - anhSanPhams.length: ${anhSanPhams.value?.length || 0}`);
-  console.log(`📊 Sau refresh - chiTietSanPhamAnhs.length: ${chiTietSanPhamAnhs.value?.length || 0}`);
-
   // Kiểm tra chi tiết sản phẩm trong danh sách
-  const chiTietSanPham = chiTietSanPhams.value?.find(item => item.id === detail.id);
-  console.log(`📊 Chi tiết sản phẩm ${detail.id}:`, chiTietSanPham);
-  console.log(`📊 anhSanPham của chi tiết sản phẩm:`, chiTietSanPham?.anhSanPham);
+  const chiTietSanPham = chiTietSanPhams.value?.find(
+    (item) => item.id === detail.id
+  );
 
   // Lấy ảnh hiện tại của chi tiết sản phẩm
   const currentImages = getImagesForChiTietSanPhamForEdit(detail.id);
-
-  console.log(`🖼️ Mở popup edit - Số lượng ảnh hiện tại: ${currentImages.length}`);
-  console.log(`🖼️ Danh sách ảnh:`, currentImages);
 
   currentEditingDetail.value = {
     ...detail,
@@ -3236,7 +3708,7 @@ const saveInlineEdit = async (detailId) => {
     // Chỉ cập nhật 3 trường: soLuong, giaBan, trangThai
     // Các trường khác giữ nguyên từ dữ liệu gốc
     const updatedData = {
-      idSanPham: parseInt(route.params.id),
+      idSanPham: currentProduct.value?.id,
       idMauSac: originalDetail?.idMauSac || 1,
       idKichThuoc: originalDetail?.idKichThuoc || 1,
       idDeGiay: originalDetail?.idDeGiay || 1,
@@ -3258,15 +3730,18 @@ const saveInlineEdit = async (detailId) => {
       updateBy: 1,
     };
 
-
     // Reset editing state cho chi tiết sản phẩm này
     editingChiTietSanPhams.value.delete(detailId);
     originalChiTietSanPhams.value.delete(detailId);
 
     // Refresh data
-    await fetchChiTietSanPham(route.params.id);
+    await refreshImageData();
 
-    showSuccessNotificationForEdit("Cập nhật chi tiết sản phẩm thành công!");
+    showAlert(
+      "Thành công",
+      "Cập nhật chi tiết sản phẩm thành công!",
+      "success"
+    );
   } catch (error) {
     alert("Có lỗi xảy ra khi cập nhật!");
   }
@@ -3315,7 +3790,7 @@ const saveAllCheckedChiTietSanPhamsFromInline = async () => {
         // Các trường khác giữ nguyên từ dữ liệu gốc
         const chiTietSanPhamData = {
           id: editingDetail.id,
-          idSanPham: parseInt(route.params.id),
+          idSanPham: currentProduct.value?.id,
           idMauSac: originalDetail?.idMauSac || 1,
           idKichThuoc: originalDetail?.idKichThuoc || 1,
           idChatLieu: originalDetail?.idChatLieu || 1,
@@ -3382,7 +3857,7 @@ const saveAllCheckedChiTietSanPhamsFromInline = async () => {
         }
 
         const sanPhamData = {
-          id: parseInt(route.params.id),
+          id: currentProduct.value?.id,
           idNhaSanXuat: nhaSanXuat.id,
           idXuatXu: xuatXu.id,
           tenSanPham: currentProductName.value,
@@ -3409,10 +3884,12 @@ const saveAllCheckedChiTietSanPhamsFromInline = async () => {
     selectedChiTietSanPhams.value = []; // Xóa toàn bộ checkbox đã tích
 
     // Refresh data
-    await fetchChiTietSanPham(route.params.id);
+    await refreshImageData();
 
-    showSuccessNotificationForEdit(
-      "Cập nhật tất cả chi tiết sản phẩm đã chọn thành công!"
+    showAlert(
+      "Thành công",
+      "Cập nhật tất cả chi tiết sản phẩm đã chọn thành công!",
+      "success"
     );
   } catch (error) {
     console.error(
@@ -3546,7 +4023,6 @@ const toggleSelectAll = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3613,6 +4089,48 @@ const toggleSelectAll = () => {
   line-height: 1;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.action-buttons .btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-buttons .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons .btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.action-buttons .btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.action-buttons .btn-secondary {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.action-buttons .btn-secondary:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
 .available-images-section h4 {
   margin-bottom: 10px;
 }
@@ -3649,7 +4167,6 @@ const toggleSelectAll = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3682,7 +4199,6 @@ const toggleSelectAll = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3901,7 +4417,7 @@ const toggleSelectAll = () => {
 }
 
 .custom-confirm-dialog .btn-secondary:hover {
-  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  /* background: linear-gradient(135deg, #475569 0%, #334155 100%); */
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(100, 116, 139, 0.5);
 }
@@ -3967,7 +4483,6 @@ const toggleSelectAll = () => {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  background: rgba(0, 0, 0, 0.6) !important;
   pointer-events: auto !important;
 }
 
@@ -4012,6 +4527,256 @@ body {
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
   z-index: 1000000 !important;
+}
+
+/* CSS cho table - xóa border và background, giảm font size */
+.table {
+  border: none !important;
+  background: transparent !important;
+  font-size: 12px !important;
+}
+
+.table thead th {
+  border: none !important;
+  background: transparent !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+}
+
+.table tbody td {
+  border: none !important;
+  background: transparent !important;
+  font-size: 12px !important;
+  color: #4b5563 !important;
+}
+
+.table tbody tr {
+  border: none !important;
+  /* background: transparent !important; */
+}
+
+/* Xóa border và background của tất cả elements trong table */
+.table .edit-mode-input,
+.table .edit-mode-select,
+.table .stock-badge,
+.table .price-text,
+.table .giam-gia-value,
+.table .gia-sau-giam-text,
+.table .status-badge,
+.table .color-badge,
+.table .size-badge,
+.table .attribute-text,
+.table .nha-san-xuat-text,
+.table .xuat-xu-text,
+.table .image-preview,
+.table .action-buttons,
+.table .inline-edit,
+.table .no-image,
+.table .form-control,
+.table .form-select,
+.table input,
+.table select,
+.table textarea {
+  border: none !important;
+  background: transparent !important;
+  font-size: 12px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Xóa background của các badge và text elements */
+.table .stock-badge,
+.table .price-text,
+.table .giam-gia-value,
+.table .gia-sau-giam-text,
+.table .status-badge,
+.table .color-badge,
+.table .size-badge,
+.table .attribute-text,
+.table .nha-san-xuat-text,
+.table .xuat-xu-text,
+.table .no-image {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Xóa border và background của inline edit containers */
+.table .inline-edit {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Xóa background của action buttons container */
+.table .action-buttons {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Xóa background của image preview */
+.table .image-preview {
+  background: transparent !important;
+  border: none !important;
+}
+/* Giảm width tất cả các cột trong table - tối ưu siêu cực đại */
+.table .stt-col {
+  width: 12px !important;
+  min-width: 12px !important;
+  max-width: 12px !important;
+}
+
+.table .ma-col {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+}
+
+.table .image-col {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+}
+
+.table .nha-san-xuat-col {
+  width: 20px !important;
+  min-width: 20px !important;
+  max-width: 20px !important;
+}
+
+.table .xuat-xu-col {
+  width: 20px !important;
+  min-width: 20px !important;
+  max-width: 20px !important;
+}
+
+.table .color-col {
+  width: 20px !important;
+  min-width: 20px !important;
+  max-width: 20px !important;
+}
+
+.table .size-col {
+  width: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+}
+
+.table .sole-col {
+  width: 20px !important;
+  min-width: 20px !important;
+  max-width: 20px !important;
+}
+
+.table .material-col {
+  width: 20px !important;
+  min-width: 20px !important;
+  max-width: 20px !important;
+}
+
+.table .weight-col {
+  width: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+}
+
+.table .quantity-col {
+  width: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+}
+
+.table .price-col {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+}
+
+.table .giam-gia-col {
+  width: 15px !important;
+  min-width: 15px !important;
+  max-width: 15px !important;
+}
+
+.table .gia-sau-giam-col {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+}
+
+.table .status-col {
+  width: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+}
+
+.table .action-col {
+  width: 68px !important;
+  min-width: 68px !important;
+  max-width: 68px !important;
+}
+
+/* Cho phép thead text wrap và giảm padding */
+.table thead th {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important; /* Màu tối hơn cho header */
+}
+
+.table tbody td {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  line-height: 1.3 !important;
+  color: #374151 !important; /* Màu thống nhất cho tất cả trường dữ liệu */
+}
+
+/* Không cho phép xuống dòng cho các cột giá cả */
+.table .price-col,
+.table .giam-gia-col,
+.table .gia-sau-giam-col {
+  white-space: nowrap !important;
+  word-wrap: normal !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Màu riêng cho cột giảm giá trong tbody - đã xóa để đồng bộ màu */
+
+/* Đảm bảo header của cột giảm giá có màu thống nhất với các header khác */
+.table thead .giam-gia-col {
+  color: #1f2937 !important; /* Màu header thống nhất */
+}
+
+/* Đảm bảo các cột giá bán, giá sau giảm và trạng thái có màu thống nhất trong tbody */
+.table tbody .price-col,
+.table tbody .gia-sau-giam-col,
+.table tbody .status-col {
+  color: #374151 !important; /* Màu dữ liệu thống nhất */
+}
+
+/* Cho phép xuống dòng ở thead cho cột giảm giá và giá sau giảm */
+.table thead .giam-gia-col,
+.table thead .gia-sau-giam-col {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  line-height: 1.2 !important;
 }
 
 /* CSS cho các nút cơ bản */
@@ -4068,20 +4833,21 @@ body {
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-  color: white;
-  box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3);
+  /* background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); */
+  color: white !important;
+  /* box-shadow: 0 2px 4px rgba(107, 114, 128, 0.3); */
+  white-space: nowrap;
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  /* background: linear-gradient(135deg, #4b5563 0%, #374151 100%); */
   box-shadow: 0 4px 8px rgba(107, 114, 128, 0.4);
 }
 
 .btn-outline {
   background: transparent;
   border: 1px solid #d1d5db;
-  color: #6b7280;
+  color: #ffffff !important;
 }
 
 .btn-outline:hover {
@@ -4093,7 +4859,7 @@ body {
 /* CSS cho action buttons trong inline edit */
 .action-buttons {
   display: flex;
-  gap: 4px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
 }
@@ -4112,7 +4878,9 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: var(--accent-color); /* Sử dụng màu chủ đạo như nút hoàn thành cập nhật */
+  background: var(
+    --accent-color
+  ); /* Sử dụng màu chủ đạo như nút hoàn thành cập nhật */
   color: white !important;
   border: 2px solid var(--accent-color);
   border-radius: 8px;
@@ -4153,4 +4921,645 @@ body {
 .btn-toggle-variants.showing-all:active {
   box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
 }
+
+/* CSS cho nút refresh all data */
+.btn-refresh-all {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-refresh-all:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.btn-refresh-all:active {
+  transform: translateY(0);
+}
+
+.btn-refresh-all:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+}
+
+/* CSS cho popup xác nhận xóa */
+.delete-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.delete-popup {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.delete-popup-header {
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-popup-header h3 {
+  margin: 0;
+  color: #dc2626;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.delete-popup-header .close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.delete-popup-header .close-btn:hover {
+  background: #f3f4f6;
+}
+
+.delete-popup-content {
+  padding: 20px;
+}
+
+.delete-popup-content p {
+  margin: 0 0 15px 0;
+  color: #374151;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.delete-details {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 4px solid #4ade80;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.detail-value {
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.delete-warning {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  color: #92400e;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.delete-popup-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-delete-cancel {
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #6b7280;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-cancel:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn-delete-confirm {
+  padding: 10px 20px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-confirm:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+.btn-delete-confirm:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+/* CSS cho popup thông báo bên phải */
+.notification-popup-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2000;
+}
+
+.notification-popup-content {
+  position: fixed;
+  right: 20px;
+  width: 350px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid #4ade80;
+  pointer-events: auto;
+  animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2001;
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-popup-content.notification-closing {
+  animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.notification-popup-content:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-popup-content.notification-success {
+  border-left-color: #4ade80;
+}
+
+.notification-popup-content.notification-error {
+  border-left-color: #f44336;
+}
+
+.notification-popup-content.notification-info {
+  border-left-color: #2196f3;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.notification-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.notification-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.notification-close-btn:hover {
+  background-color: #f5f5f5;
+  color: #666;
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+.notification-close-btn:active {
+  transform: scale(0.95);
+}
+
+.notification-body {
+  padding: 12px 16px;
+}
+
+.notification-body p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-5%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Responsive cho popup thông báo */
+@media (max-width: 768px) {
+  .notification-popup-content {
+    right: 15px;
+    left: 15px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-popup-content {
+    right: 10px;
+    left: 10px;
+  }
+}
+
+/* CSS cho Upload Progress Section */
+.upload-progress-section {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.upload-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.upload-progress-header h4 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-clear-progress {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  color: #64748b;
+}
+
+.btn-clear-progress:hover {
+  background: #dc2626;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.btn-clear-progress:active {
+  transform: scale(0.95);
+}
+
+.upload-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upload-progress-item {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.upload-progress-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.upload-progress-item.uploading {
+  border-left: 4px solid #3b82f6;
+}
+
+.upload-progress-item.success {
+  border-left: 4px solid #10b981;
+}
+
+.upload-progress-item.error {
+  border-left: 4px solid #ef4444;
+}
+
+.upload-progress-item.timeout {
+  border-left: 4px solid #f59e0b;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.file-name {
+  font-weight: 500;
+  color: #1e293b;
+  font-size: 14px;
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-right: 12px;
+}
+
+.attempt-count {
+  font-size: 12px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: progressShimmer 2s infinite;
+}
+
+.upload-progress-item.success .progress-fill {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.upload-progress-item.error .progress-fill {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.upload-progress-item.timeout .progress-fill {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.progress-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-uploading {
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-uploading::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border: 2px solid #3b82f6;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.status-success {
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-success::before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.status-error {
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-error::before {
+  content: "✕";
+  color: #ef4444;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.status-timeout {
+  color: #f59e0b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-timeout::before {
+  content: "⏱";
+  color: #f59e0b;
+  font-size: 14px;
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes progressShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive for upload progress */
+@media (max-width: 768px) {
+  .upload-progress-section {
+    margin-top: 16px;
+    padding: 16px;
+  }
+
+  .upload-progress-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .upload-progress-header h4 {
+    font-size: 14px;
+  }
+
+  .progress-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .file-name {
+    margin-right: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-progress-section {
+    padding: 12px;
+  }
+
+  .upload-progress-item {
+    padding: 12px;
+  }
+
+  .upload-progress-list {
+    gap: 8px;
+  }
+}
 </style>
+

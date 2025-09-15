@@ -33,18 +33,18 @@ public class XuatXuController {
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody @Valid XuatXuRequest xuatXuRequest) {
         xuatXuService.add(xuatXuRequest);
-        return new ResponseObject<>(null,"Thêm xuất xứ thành công");
+        return new ResponseObject<>(true,null,"Thêm xuất xứ thành công");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@RequestBody @Valid XuatXuRequest xuatXuRequest, @PathVariable Integer id) {
         xuatXuService.update(id, xuatXuRequest);
-        return new ResponseObject<>(null, "Cập nhật xuất xứ thành công");
+        return new ResponseObject<>(true,null, "Cập nhật xuất xứ thành công");
     }
 
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable Integer id) {
         xuatXuService.updateStatus(id);
-        return new ResponseObject<>(null, "Cập nhật trạng thái xuất xứ thành công");
+        return new ResponseObject<>(true,null, "Cập nhật trạng thái xuất xứ thành công");
     }
 }

@@ -42,18 +42,18 @@ public class ChiTietSanPhamController {
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody ChiTietSanPhamRequest request) {
         Integer id = service.add(request);
-        return new ResponseObject<>(id, "Thêm chi tiết sản phẩm thành công");
+        return new ResponseObject<>(true,id, "Thêm chi tiết sản phẩm thành công");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@RequestBody ChiTietSanPhamRequest request, @PathVariable Integer id) {
         service.update(request, id);
-        return new ResponseObject<>(null, "Cập nhật chi tiết sản phẩm thành công");
+        return new ResponseObject<>(true,null, "Cập nhật chi tiết sản phẩm thành công");
     }
 
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable Integer id) {
         service.updateStatus(id);
-        return new ResponseObject<>(null, "Cập nhật trạng thái chi tiết sản phẩm thành công");
+        return new ResponseObject<>(true,null, "Cập nhật trạng thái chi tiết sản phẩm thành công");
     }
 }

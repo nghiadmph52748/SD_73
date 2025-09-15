@@ -32,18 +32,18 @@ public class ChatLieuController {
     @PostMapping("/add")
     public ResponseObject<?> add(@RequestBody ChatLieuRequest chatLieuRequest) {
         chatLieuService.add(chatLieuRequest);
-        return new ResponseObject<>(null, "Thêm mới thành công");
+        return new ResponseObject<>(true,null, "Thêm mới thành công");
     }
 
     @PutMapping("/update/{id}")
     public ResponseObject<?> update(@PathVariable("id") Integer id, @RequestBody ChatLieuRequest chatLieuRequest) {
         chatLieuService.update(id, chatLieuRequest);
-        return new ResponseObject<>(null, "Cập nhật thành công");
+        return new ResponseObject<>(true,null, "Cập nhật thành công");
     }
 
     @PutMapping("/update/status/{id}")
     public ResponseObject<?> updateStatus(@PathVariable ("id") Integer id) {
         chatLieuService.updateStatus(id);
-        return new ResponseObject<>(null, "Cập nhật trạng thái thành công");
+        return new ResponseObject<>(true,null, "Cập nhật trạng thái thành công");
     }
 }

@@ -19,7 +19,7 @@
     <div class="search-filter-section">
       <div class="search-box">
         <div class="search-input-group">
-          <label><i class="fas fa-search"></i> Tìm kiếm:</label>
+          <label>Tìm kiếm:</label>
           <input
             v-model="searchQuery"
             type="text"
@@ -28,21 +28,14 @@
           />
         </div>
         <div class="action-group">
-          <button
-            @click="fetchAll"
-            class="btn-refresh"
-            style="margin-right: 10px"
-          >
-            <i class="fas fa-sync-alt"></i> Làm mới
-          </button>
-          <button @click="showAddForm = true" class="btn-export">
+          <button @click="showAddForm = true" class="btn btn-primary">
             <img src="../../../assets/Plus.svg" alt="Add" class="icon-svg" />
             Thêm Hình Ảnh Mới
           </button>
         </div>
       </div>
       <div class="filter-group">
-        <label><i class="fas fa-filter"></i> Lọc theo trạng thái:</label>
+        <label>Lọc theo trạng thái:</label>
         <div class="radio-filter">
           <label class="radio-label">
             <input
@@ -122,16 +115,6 @@
                   v-model="newAnhSanPham.loaiAnh"
                   type="text"
                   required
-                  class="detail-input"
-                />
-              </div>
-            </div>
-            <div class="detail-row">
-              <div class="detail-label">Mô tả:</div>
-              <div class="detail-value">
-                <input
-                  v-model="newAnhSanPham.moTa"
-                  type="text"
                   class="detail-input"
                 />
               </div>
@@ -225,10 +208,6 @@
           <input v-model="selectedAnhSanPham.loaiAnh" type="text" required />
         </div>
         <div>
-          <label>Mô tả:</label>
-          <input v-model="selectedAnhSanPham.moTa" type="text" />
-        </div>
-        <div>
           <label for="">Trạng thái</label>
           <div class="radio-group">
             <label class="radio-label">
@@ -275,118 +254,135 @@
         </p>
       </form>
     </div>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>STT</th>
-          <th>Ảnh</th>
-          <th>Loại ảnh</th>
-          <th>Mô tả</th>
-          <th>Trạng thái</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Hiển thị message khi không có dữ liệu -->
-        <tr v-if="paginatedAnhSanPhams.length === 0">
-          <td
-            colspan="5"
-            style="text-align: center; padding: 40px; color: #666"
-          >
-            <i
-              class="fas fa-info-circle"
-              style="font-size: 24px; margin-bottom: 10px"
-            ></i>
-            <br />
-            <strong>Không có dữ liệu</strong>
-            <br />
-            <small>Chưa có ảnh sản phẩm nào được tải lên</small>
-          </td>
-        </tr>
-        <tr v-for="(value, i) in paginatedAnhSanPhams" :key="value.id">
-          <td>{{ startIndex + i + 1 }}</td>
-          <td>
-            <img
-              :src="getImageUrl(value.duongDanAnh)"
-              alt="Ảnh sản phẩm"
-              style="width: 100px; height: auto"
-              @error="handleImageError"
-            />
-          </td>
-          <td>{{ value.loaiAnh }}</td>
-          <td>{{ value.moTa }}</td>
-          <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
-          <td>
-            <div class="table-actions">
-              <button
-                v-on:click="fetchDetail(value)"
-                class="btn btn-detail btn-icon btn-sm"
-                title="Xem chi tiết"
-              >
-                Chi tiết
-              </button>
-              <button
-                v-on:click="fetchDelete(value.id)"
-                class="btn btn-delete btn-icon btn-sm"
-                :disabled="uploading"
-                title="Xóa"
-              >
-                Xóa
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Pagination -->
-    <div class="pagination-wrapper">
-      <div class="pagination-info">
-        Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của {{ totalItems }} ảnh
-        sản phẩm
+    <!-- Product Image Table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="table-header-content">
+          <h3 class="table-title">Danh sách ảnh sản phẩm</h3>
+        </div>
       </div>
-      <div class="pagination">
-        <button
-          class="pagination-btn"
-          @click="goToPreviousPage"
-          :disabled="currentPage === 1"
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Ảnh</th>
+              <th>Loại ảnh</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Hiển thị message khi không có dữ liệu -->
+            <tr v-if="paginatedAnhSanPhams.length === 0">
+              <td
+                colspan="5"
+                style="text-align: center; padding: 40px; color: #666"
+              >
+                <i
+                  class="fas fa-info-circle"
+                  style="font-size: 24px; margin-bottom: 10px"
+                ></i>
+                <br />
+                <strong>Không có dữ liệu</strong>
+                <br />
+                <small>Chưa có ảnh sản phẩm nào được tải lên</small>
+              </td>
+            </tr>
+            <tr v-for="(value, i) in paginatedAnhSanPhams" :key="value.id">
+              <td>{{ startIndex + i + 1 }}</td>
+              <td>
+                <img
+                  :src="getImageUrl(value.duongDanAnh)"
+                  alt="Ảnh sản phẩm"
+                  style="width: 100px; height: auto"
+                  @error="handleImageError"
+                />
+              </td>
+              <td>{{ value.loaiAnh }}</td>
+              <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
+              <td>
+                <div class="table-actions">
+                  <button
+                    v-on:click="fetchDetail(value)"
+                    class="btn btn-secondary btn-sm"
+                    title="Cập nhật"
+                  >
+                    Chi tiết
+                  </button>
+                  <button
+                    v-on:click="fetchDelete(value.id)"
+                    class="btn btn-danger btn-sm"
+                    :disabled="uploading"
+                    title="Xóa"
+                  >
+                    Xóa
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div v-if="totalPages > 1" class="pagination-wrapper">
+          <div class="pagination-info">
+            Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của
+            {{ totalItems }} ảnh sản phẩm
+          </div>
+          <div class="pagination">
+            <button
+              class="btn btn-outline btn-sm"
+              @click="goToPreviousPage"
+              :disabled="currentPage === 1"
+            >
+              <svg
+                class="icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                ></path>
+              </svg>
+              Trước
+            </button>
+            <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+            <button
+              class="btn btn-outline btn-sm"
+              @click="goToNextPage"
+              :disabled="currentPage === totalPages"
+            >
+              Sau
+              <svg
+                class="icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <!-- Pagination Info khi chỉ có 1 trang -->
+        <div
+          v-else-if="filteredAnhSanPhams.length > 0"
+          class="pagination-wrapper"
         >
-          <svg
-            class="icon"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-          Trước
-        </button>
-        <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-        <button
-          class="pagination-btn"
-          @click="goToNextPage"
-          :disabled="currentPage === totalPages"
-        >
-          Sau
-          <svg
-            class="icon"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </button>
+          <div class="pagination-info">
+            Hiển thị tất cả {{ filteredAnhSanPhams.length }} ảnh sản phẩm
+          </div>
+        </div>
       </div>
     </div>
 
@@ -442,16 +438,6 @@
                   v-model="selectedAnhSanPham.loaiAnh"
                   type="text"
                   required
-                  class="detail-input"
-                />
-              </div>
-            </div>
-            <div class="detail-row">
-              <div class="detail-label">Mô tả:</div>
-              <div class="detail-value">
-                <input
-                  v-model="selectedAnhSanPham.moTa"
-                  type="text"
                   class="detail-input"
                 />
               </div>
@@ -532,17 +518,12 @@
             </div>
             <h4>Bạn có chắc chắn muốn xóa?</h4>
             <p class="delete-message">
-              Bạn sắp xóa <strong>"{{ deleteItemName }}"</strong>. Hành động này
-              không thể hoàn tác.
+              Bạn sắp xóa 1 ảnh. Hành động này không thể hoàn tác.
             </p>
           </div>
         </div>
         <div class="modal-footer delete-footer">
-          <button
-            class="btn btn-secondary"
-            @click="closeDeleteModal"
-            :disabled="uploading"
-          >
+          <button class="btn btn-secondary" @click="closeDeleteModal" :disabled="uploading">
             <img
               src="../../../assets/Cancel.svg"
               alt="Close"
@@ -551,7 +532,7 @@
             Hủy bỏ
           </button>
           <button
-            class="btn btn-delete"
+            class="btn btn-danger"
             @click="confirmDelete"
             :disabled="uploading"
           >
@@ -1009,4 +990,320 @@ onMounted(fetchAll);
 <style scoped>
 /* CSS đã được chuyển vào productsUnified.css */
 @import "../../../styles/cssSanPham/productsUnified.css";
+
+/* CSS cho các nút cơ bản */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+}
+
+/* Font size 12px cho các button trong cột thao tác */
+.table-actions .btn {
+  font-size: 12px !important;
+  padding: 1.15rem 2rem !important;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 12px;
+  margin: 0 2px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+}
+
+.btn-outline:hover {
+  background: #ffffff;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+/* CSS cho modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 90%;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  padding: 20px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* CSS cho success modal */
+.success-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.success-modal-content {
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  text-align: center;
+  max-width: 450px;
+  width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.success-icon {
+  margin-bottom: 1.5rem;
+}
+
+.success-title {
+  color: #059669;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.success-message {
+  color: #374151;
+  font-size: 16px;
+  margin: 0 0 25px 0;
+  line-height: 1.5;
+}
+
+.success-close-btn {
+  background: #059669;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.success-close-btn:hover {
+  background: #047857;
+}
+
+/* CSS cho table */
+.table {
+  border: none !important;
+  background: transparent !important;
+  /* font-size: 12px !important; */
+}
+
+.table thead th {
+  border: none !important;
+  background: transparent !important;
+  /* font-size: 12px !important; */
+  font-weight: 600 !important;
+  color: #374151 !important;
+}
+
+.table tbody td {
+  border: none !important;
+  background: transparent !important;
+  /* font-size: 12px !important; */
+  color: #4b5563 !important;
+}
+
+/* CSS cho form elements */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* CSS cho confirm dialog */
+.custom-confirm-dialog {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.custom-confirm-dialog .confirm-content {
+  position: relative !important;
+  z-index: 1000000 !important;
+  transform: translateZ(0) !important;
+  will-change: transform !important;
+  background: linear-gradient(135deg, #ffffff, #ffffff) !important;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  text-align: center;
+  max-width: 450px;
+  width: 90%;
+  border: 2px solid #e2e8f0;
+}
+
+.custom-confirm-dialog h3 {
+  margin: 0 0 1.5rem 0;
+  color: #22c55e;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.custom-confirm-dialog p {
+  margin: 0 0 2rem 0;
+  color: #475569;
+  line-height: 1.6;
+  font-size: 1rem;
+  background: rgba(59, 130, 246, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid #3b82f6;
+}
+
+.custom-confirm-dialog .confirm-buttons {
+  display: flex !important;
+  gap: 1rem !important;
+  justify-content: center !important;
+  flex-wrap: nowrap !important;
+}
+
+.custom-confirm-dialog .btn {
+  padding: 0.875rem 2rem !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  border: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-size: 0.95rem !important;
+  min-width: 120px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.custom-confirm-dialog .btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.custom-confirm-dialog .btn:hover::before {
+  left: 100%;
+}
 </style>
+
