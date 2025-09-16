@@ -1332,5 +1332,121 @@ onMounted(fetchAll);
 .custom-confirm-dialog .btn:hover::before {
   left: 100%;
 }
+
+/* ===== CSS CHO POPUP THÔNG BÁO BÊN PHẢI MÀN HÌNH ===== */
+/* Container cho popup thông báo */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10001;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Popup thông báo */
+.notification-popup {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid #22c55e;
+  padding: 20px;
+  margin-bottom: 16px;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animation hiển thị popup */
+.notification-popup.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Animation ẩn popup */
+.notification-popup.hide {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Header popup thông báo */
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+/* Tiêu đề popup thông báo */
+.notification-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  flex: 1;
+}
+
+/* Nội dung popup thông báo */
+.notification-message {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Thanh tiến trình popup thông báo */
+.notification-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #22c55e;
+  border-radius: 0 0 12px 12px;
+  animation: progressBar 3s linear forwards;
+}
+
+@keyframes progressBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Các loại thông báo khác nhau */
+.notification-popup.success {
+  border-left-color: #22c55e;
+}
+
+.notification-popup.success .notification-progress {
+  background: #22c55e;
+}
+
+.notification-popup.error {
+  border-left-color: #ef4444;
+}
+
+.notification-popup.error .notification-progress {
+  background: #ef4444;
+}
+
+.notification-popup.warning {
+  border-left-color: #f59e0b;
+}
+
+.notification-popup.warning .notification-progress {
+  background: #f59e0b;
+}
+
+.notification-popup.info {
+  border-left-color: #3b82f6;
+}
+
+.notification-popup.info .notification-progress {
+  background: #3b82f6;
+}
 </style>
 

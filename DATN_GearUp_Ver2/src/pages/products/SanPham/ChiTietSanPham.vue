@@ -488,33 +488,17 @@
     </div>
   </div>
 
-  <!-- Popup thông báo bên phải - hỗ trợ nhiều thông báo -->
-  <div
-    v-if="notificationPositions.length > 0"
-    class="notification-popup-overlay"
-  >
-    <div
-      v-for="notification in notificationPositions"
-      :key="notification.id"
-      class="notification-popup-content"
-      :class="[
-        `notification-${notification.type}`,
-        { 'notification-closing': notification.isClosing },
-      ]"
-      :style="{ top: `${notification.top}px`, transition: 'top 0.3s ease' }"
+  <!-- Popup thông báo bên phải màn hình -->
+  <div class="notification-container">
+    <div 
+      v-if="showNotification" 
+      :class="['notification-popup', notificationType, showNotification ? 'show' : '']"
     >
       <div class="notification-header">
-        <h4>{{ notification.title }}</h4>
-        <button
-          @click="closeNotificationPopup(notification.id)"
-          class="notification-close-btn"
-        >
-          ×
-        </button>
+        <h4 class="notification-title">{{ notificationTitle }}</h4>
       </div>
-      <div class="notification-body">
-        <p>{{ notification.message }}</p>
-      </div>
+      <p class="notification-message">{{ notificationMessage }}</p>
+      <div class="notification-progress"></div>
     </div>
   </div>
 
@@ -1101,7 +1085,7 @@ const confirmDelete = async () => {
       }
 
       // Hiển thị popup thông báo thành công bên phải
-      showAlert("Thành công", "Đã xóa biến thể thành công!", "success");
+      showNotificationPopup("success", "Thành công", "Đã xóa biến thể thành công!");
     } else {
       throw new Error("API trả về kết quả không thành công");
     }
@@ -1139,12 +1123,11 @@ const pageSize = ref(10);
 const selectedImages = ref([]);
 const selectedImageIds = ref([]);
 const availableImages = ref([]);
-// Notification popup state - multiple notifications support
-const notifications = ref([]);
-let notificationId = 0;
-const windowWidth = ref(
-  typeof window !== "undefined" ? window.innerWidth : 1024
-);
+// Biến cho popup thông báo
+const showNotification = ref(false);
+const notificationType = ref('success');
+const notificationTitle = ref('');
+const notificationMessage = ref('');
 
 // Loading states cho upload
 const isUploadingImages = ref(false);
@@ -1334,10 +1317,6 @@ const chiTietDotGiamGias = ref([]);
 // SETUP & LIFECYCLE
 // ========================================
 
-// Window resize handler for notifications
-const handleWindowResize = () => {
-  windowWidth.value = window.innerWidth;
-};
 
 // Hàm xử lý keyboard shortcuts
 const handleKeydown = (event) => {
@@ -1350,8 +1329,6 @@ const handleKeydown = (event) => {
 };
 
 onMounted(async () => {
-  // Add window resize listener
-  window.addEventListener("resize", handleWindowResize);
   // Add keyboard shortcut listener
   window.addEventListener("keydown", handleKeydown);
 
@@ -1388,7 +1365,6 @@ onMounted(async () => {
 
 // Cleanup event listeners
 onUnmounted(() => {
-  window.removeEventListener("resize", handleWindowResize);
   window.removeEventListener("keydown", handleKeydown);
 });
 
@@ -1415,22 +1391,6 @@ const imageLimitReached = computed(() => {
   return currentEditingDetailImagesCount.value >= 5;
 });
 
-// Computed để tính vị trí cho mỗi thông báo
-const notificationPositions = computed(() => {
-  return notifications.value.map((notification, index) => {
-    // Lấy baseTop dựa trên screen size
-    let baseTop = 90; // Desktop default
-    if (windowWidth.value <= 480) {
-      baseTop = 80;
-    } else if (windowWidth.value <= 768) {
-      baseTop = 100;
-    }
-    return {
-      ...notification,
-      top: baseTop + index * 120,
-    };
-  });
-});
 
 // ========================================
 // DATA FETCHING FUNCTIONS
@@ -2372,11 +2332,7 @@ const saveEditPopupFromPopup = async () => {
     initialImages.value = [];
 
     // Hiển thị popup thông báo thành công bên phải
-    showAlert(
-      "Thành công",
-      "Cập nhật chi tiết sản phẩm thành công!",
-      "success"
-    );
+    showNotificationPopup("success", "Thành công", "Cập nhật chi tiết sản phẩm thành công!");
 
     // Đóng popup
     closeEditPopup();
@@ -2397,11 +2353,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
       !selectedChiTietSanPhams.value ||
       selectedChiTietSanPhams.value.length === 0
     ) {
-      showAlert(
-        "Cảnh báo",
-        "Vui lòng chọn ít nhất một chi tiết sản phẩm để cập nhật!",
-        "error"
-      );
+      showNotificationPopup("error", "Cảnh báo", "Vui lòng chọn ít nhất một chi tiết sản phẩm để cập nhật!");
       return;
     }
 
@@ -2560,11 +2512,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
             }
 
             if (itemsToUpdate.length === 0) {
-              showAlert(
-                "Cảnh báo",
-                "Không có dữ liệu nào để cập nhật!",
-                "error"
-              );
+              showNotificationPopup("error", "Cảnh báo", "Không có dữ liệu nào để cập nhật!");
               resolve();
               return;
             }
@@ -2579,19 +2527,13 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
             const failedUpdates = results.filter((result) => !result.success);
 
             if (failedUpdates.length > 0) {
-              showAlert(
+              showNotificationPopup(
+                successfulUpdates.length === itemsToUpdate.length ? "success" : "error",
                 "Kết quả cập nhật",
-                `Cập nhật ${successfulUpdates.length}/${itemsToUpdate.length} items thành công. ${failedUpdates.length} items thất bại.`,
-                successfulUpdates.length === itemsToUpdate.length
-                  ? "success"
-                  : "error"
+                `Cập nhật ${successfulUpdates.length}/${itemsToUpdate.length} items thành công. ${failedUpdates.length} items thất bại.`
               );
             } else {
-              showAlert(
-                "Thành công",
-                `Cập nhật thành công ${successfulUpdates.length} chi tiết sản phẩm!`,
-                "success"
-              );
+              showNotificationPopup("success", "Thành công", `Cập nhật thành công ${successfulUpdates.length} chi tiết sản phẩm!`);
             }
 
             // Bước 4: Refresh dữ liệu và reset trạng thái
@@ -2609,11 +2551,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
               "<!-- icon: close --> Lỗi trong quá trình cập nhật hàng loạt:",
               error
             );
-            showAlert(
-              "Lỗi",
-              "Có lỗi xảy ra trong quá trình cập nhật!",
-              "error"
-            );
+            showNotificationPopup("error", "Lỗi", "Có lỗi xảy ra trong quá trình cập nhật!");
           }
 
           resolve();
@@ -2629,7 +2567,7 @@ const saveAllCheckedChiTietSanPhamsFromPopup = async () => {
       "<!-- icon: close --> Lỗi trong saveAllCheckedChiTietSanPhamsFromPopup:",
       error
     );
-    showAlert("Lỗi", "Có lỗi xảy ra!", "error");
+    showNotificationPopup("error", "Lỗi", "Có lỗi xảy ra!");
   }
 };
 
@@ -2873,37 +2811,21 @@ const imageDataKey = ref({
 
 // Methods
 
-// Hàm hiển thị alert thông tin - hỗ trợ nhiều thông báo
-const showAlert = (title, message, type = "info") => {
-  const id = ++notificationId;
-  const newNotification = {
-    id,
-    title,
-    message,
-    type,
-    isClosing: false,
-    createdAt: Date.now(),
-  };
-
-  notifications.value.push(newNotification);
-
-  // Tự động ẩn sau 5 giây
+// Methods cho popup thông báo
+const showNotificationPopup = (type, title, message) => {
+  notificationType.value = type;
+  notificationTitle.value = title;
+  notificationMessage.value = message;
+  showNotification.value = true;
+  
+  // Tự động ẩn sau 3 giây
   setTimeout(() => {
-    closeNotificationPopup(id);
-  }, 5000);
+    closeNotification();
+  }, 3000);
 };
 
-// Function đóng popup thông báo cụ thể với animation
-const closeNotificationPopup = (id) => {
-  const notification = notifications.value.find((n) => n.id === id);
-  if (notification) {
-    notification.isClosing = true;
-
-    // Đợi animation kết thúc rồi xóa khỏi mảng
-    setTimeout(() => {
-      notifications.value = notifications.value.filter((n) => n.id !== id);
-    }, 300); // Thời gian animation slideOutRight
-  }
+const closeNotification = () => {
+  showNotification.value = false;
 };
 
 const clearFiltersForEdit = () => {
@@ -3737,11 +3659,7 @@ const saveInlineEdit = async (detailId) => {
     // Refresh data
     await refreshImageData();
 
-    showAlert(
-      "Thành công",
-      "Cập nhật chi tiết sản phẩm thành công!",
-      "success"
-    );
+    showNotificationPopup("success", "Thành công", "Cập nhật chi tiết sản phẩm thành công!");
   } catch (error) {
     alert("Có lỗi xảy ra khi cập nhật!");
   }
@@ -3886,11 +3804,7 @@ const saveAllCheckedChiTietSanPhamsFromInline = async () => {
     // Refresh data
     await refreshImageData();
 
-    showAlert(
-      "Thành công",
-      "Cập nhật tất cả chi tiết sản phẩm đã chọn thành công!",
-      "success"
-    );
+    showNotificationPopup("success", "Thành công", "Cập nhật tất cả chi tiết sản phẩm đã chọn thành công!");
   } catch (error) {
     console.error(
       "Error saving all checked chi tiết sản phẩms from inline:",
@@ -5114,148 +5028,121 @@ body {
   box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
 }
 
-/* CSS cho popup thông báo bên phải */
-.notification-popup-overlay {
+
+/* ===== CSS CHO POPUP THÔNG BÁO BÊN PHẢI MÀN HÌNH ===== */
+/* Container cho popup thông báo */
+.notification-container {
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 20px;
+  right: 20px;
+  z-index: 10001;
+  max-width: 400px;
   width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2000;
 }
 
-.notification-popup-content {
-  position: fixed;
-  right: 20px;
-  width: 350px;
+/* Popup thông báo */
+.notification-popup {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-left: 4px solid #4ade80;
-  pointer-events: auto;
-  animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  z-index: 2001;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid #22c55e;
+  padding: 20px;
+  margin-bottom: 16px;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animation hiển thị popup */
+.notification-popup.show {
   transform: translateX(0);
   opacity: 1;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.notification-popup-content.notification-closing {
-  animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+/* Animation ẩn popup */
+.notification-popup.hide {
+  transform: translateX(100%);
+  opacity: 0;
 }
 
-.notification-popup-content:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.notification-popup-content.notification-success {
-  border-left-color: #4ade80;
-}
-
-.notification-popup-content.notification-error {
-  border-left-color: #f44336;
-}
-
-.notification-popup-content.notification-info {
-  border-left-color: #2196f3;
-}
-
+/* Header popup thông báo */
 .notification-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
-.notification-header h4 {
-  margin: 0;
+/* Tiêu đề popup thông báo */
+.notification-title {
   font-size: 16px;
   font-weight: 600;
-  color: #333;
-}
-
-.notification-close-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #999;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-}
-
-.notification-close-btn:hover {
-  background-color: #f5f5f5;
-  color: #666;
-  transform: scale(1.1);
-  transition: all 0.2s ease;
-}
-
-.notification-close-btn:active {
-  transform: scale(0.95);
-}
-
-.notification-body {
-  padding: 12px 16px;
-}
-
-.notification-body p {
+  color: #111827;
   margin: 0;
+  flex: 1;
+}
+
+/* Nội dung popup thông báo */
+.notification-message {
   font-size: 14px;
-  color: #555;
-  line-height: 1.4;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
 }
 
-@keyframes slideInRight {
-  0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  60% {
-    transform: translateX(-5%);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* Thanh tiến trình popup thông báo */
+.notification-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #22c55e;
+  border-radius: 0 0 12px 12px;
+  animation: progressBar 3s linear forwards;
 }
 
-@keyframes slideOutRight {
-  0% {
-    transform: translateX(0);
-    opacity: 1;
+@keyframes progressBar {
+  from {
+    width: 100%;
   }
-  100% {
-    transform: translateX(100%);
-    opacity: 0;
+  to {
+    width: 0%;
   }
 }
 
-/* Responsive cho popup thông báo */
-@media (max-width: 768px) {
-  .notification-popup-content {
-    right: 15px;
-    left: 15px;
-    width: auto;
-    max-width: none;
-  }
+/* Các loại thông báo khác nhau */
+.notification-popup.success {
+  border-left-color: #22c55e;
 }
 
-@media (max-width: 480px) {
-  .notification-popup-content {
-    right: 10px;
-    left: 10px;
-  }
+.notification-popup.success .notification-progress {
+  background: #22c55e;
+}
+
+.notification-popup.error {
+  border-left-color: #ef4444;
+}
+
+.notification-popup.error .notification-progress {
+  background: #ef4444;
+}
+
+.notification-popup.warning {
+  border-left-color: #f59e0b;
+}
+
+.notification-popup.warning .notification-progress {
+  background: #f59e0b;
+}
+
+.notification-popup.info {
+  border-left-color: #3b82f6;
+}
+
+.notification-popup.info .notification-progress {
+  background: #3b82f6;
 }
 
 /* CSS cho Upload Progress Section */
