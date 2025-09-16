@@ -1,102 +1,134 @@
 <template>
   <div class="discount-campaigns">
+    <!-- Filter Title -->
+    <h2 class="tieu-de-bo-loc">Bộ lọc</h2>
+    
     <!-- Filter Section -->
-    <div class="filter-section">
-      <!-- Search Bar Row -->
-      <div class="search-row">
-        <div class="search-box">
+    <div class="bo-loc-section">
+      <!-- Header with Description and Buttons -->
+      <div class="bo-loc-header">
+        <div class="mo-ta-bo-loc">
+          Sử dụng các bộ lọc dưới đây để tìm kiếm đợt giảm giá
+        </div>
+        <button class="xoa-toan-bo-bo-loc-btn" @click="clearFilters">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          Xóa toàn bộ bộ lọc
+        </button>
+        <button 
+          class="xoa-toan-bo-bo-loc-btn bulk-delete-btn" 
+          @click="bulkDeleteCampaigns"
+          :disabled="selectedCampaigns.length === 0"
+          :class="{ 'btn-disabled': selectedCampaigns.length === 0 }"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6"/>
+          </svg>
+          Xóa nhiều đợt giảm giá ({{ selectedCampaigns.length }})
+        </button>
+        <button class="xoa-toan-bo-bo-loc-btn" @click="exportData">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Xuất báo cáo
+        </button>
+        <button class="xoa-toan-bo-bo-loc-btn" @click="openAddModal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Tạo mới
+        </button>
+      </div>
+
+      <!-- Filter Grid - Main Row -->
+      <div class="luoi-bo-loc">
+        <!-- Tên đợt giảm giá -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Tên đợt giảm giá</label>
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Tìm kiếm tên đợt giảm giá, mã hoặc tên đợt giảm giá..."
-            class="search-input"
+            placeholder="Lọc tên"
+            class="dau-vao-bo-loc"
+          />
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Trạng thái</label>
+          <select v-model="statusFilter" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn trạng thái</option>
+            <option value="upcoming">Sắp diễn ra</option>
+            <option value="active">Đang diễn ra</option>
+            <option value="expired">Đã kết thúc</option>
+          </select>
+        </div>
+
+        <!-- Hiện trạng -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Hiện trạng</label>
+          <select v-model="hienTrangFilter" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn hiện trạng</option>
+            <option value="active">Hoạt động</option>
+            <option value="inactive">Ngừng hoạt động</option>
+          </select>
+        </div>
+
+        <!-- Giá trị giảm -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Giá trị giảm</label>
+          <select v-model="giaTriGiamFilter" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn giá trị giảm</option>
+            <option value="0-10">0% - 10%</option>
+            <option value="10-20">10% - 20%</option>
+            <option value="20-50">20% - 50%</option>
+            <option value="50+">Trên 50%</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Second Row - Date Filters -->
+      <div class="luoi-bo-loc luoi-bo-loc-dong-ba">
+        <!-- Ngày bắt đầu -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Ngày bắt đầu</label>
+          <input
+            type="date"
+            v-model="tuNgayFilter"
+            class="dau-vao-ngay"
+            placeholder="dd/mm/yyyy"
+            :max="denNgayFilter || undefined"
+          />
+        </div>
+
+        <!-- Ngày kết thúc -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Ngày kết thúc</label>
+          <input
+            type="date"
+            v-model="denNgayFilter"
+            class="dau-vao-ngay"
+            placeholder="dd/mm/yyyy"
+            :min="tuNgayFilter || undefined"
           />
         </div>
       </div>
-
-      <!-- Filter Controls -->
-      <div class="filter-controls">
-        <div class="filter-row">
-          <div class="filter-item">
-            <label class="filter-label">Trạng thái</label>
-            <select v-model="statusFilter" class="filter-select">
-              <option value="">Tất cả trạng thái</option>
-              <option value="upcoming">Sắp diễn ra</option>
-              <option value="active">Đang diễn ra</option>
-              <option value="expired">Đã kết thúc</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Hiện trạng</label>
-            <select v-model="hienTrangFilter" class="filter-select">
-              <option value="">Tất cả hiện trạng</option>
-              <option value="active">Hoạt động</option>
-              <option value="inactive">Ngừng hoạt động</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Từ ngày</label>
-            <input 
-              v-model="tuNgayFilter" 
-              type="date" 
-              class="filter-select"
-              :max="denNgayFilter || undefined"
-            />
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Đến ngày</label>
-            <input 
-              v-model="denNgayFilter" 
-              type="date" 
-              class="filter-select"
-              :min="tuNgayFilter || undefined"
-            />
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Giá trị giảm</label>
-            <select v-model="giaTriGiamFilter" class="filter-select">
-              <option value="">Tất cả giá trị</option>
-              <option value="0-10">0% - 10%</option>
-              <option value="10-20">10% - 20%</option>
-              <option value="20-50">20% - 50%</option>
-              <option value="50+">Trên 50%</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label class="filter-label">Sắp xếp</label>
-            <select v-model="sapXepFilter" class="filter-select">
-              <option value="">Mặc định</option>
-              <option value="name">Theo tên</option>
-              <option value="date">Theo ngày</option>
-              <option value="discount">Theo giá trị giảm</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Action Buttons Row -->
-      <div class="action-buttons-row">
-        <div class="filter-info" v-if="hasActiveFilters">
-          <span class="filter-badge">
-            {{ activeFiltersCount }} bộ lọc đang hoạt động
-          </span>
-        </div>
-        <div class="action-buttons">
-          <button class="reset-btn" @click="clearFilters" :disabled="!hasActiveFilters">
-            Đặt lại
-          </button>
-          <button class="export-btn" @click="exportData">
-            Xuất báo cáo
-          </button>
-          <button class="create-btn" @click="openAddModal">
-            Tạo mới
-          </button>
-        </div>
+    </div>
+    
+    <!-- Search Section Below Filter -->
+    <div class="phan-tim-kiem-duoi">
+      <div class="hop-tim-kiem-duoi">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bieu-tuong-tim-kiem">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          v-model="searchQueryBottom"
+          placeholder="Tìm kiếm..."
+          class="dau-vao-tim-kiem-duoi"
+        />
       </div>
     </div>
 
@@ -106,80 +138,98 @@
         <table class="coupons-table">
           <thead>
             <tr>
-              <th>STT</th>
-              <th>TÊN</th>
-              <th>GIÁ TRỊ GIẢM</th>
-              <th>THỜI GIAN</th>
-              <th>HIỆN TRẠNG</th>
-              <th>TRẠNG THÁI</th>
-              <th>THAO TÁC</th>
+              <th class="col-checkbox">
+                <input 
+                  type="checkbox" 
+                  class="select-all-checkbox"
+                  @change="toggleSelectAll"
+                  :checked="isAllSelected"
+                  :indeterminate="isIndeterminate"
+                >
+              </th>
+              <th class="col-stt">STT</th>
+              <th class="col-ma">Mã đợt</th>
+              <th class="col-loai">Tên đợt giảm giá</th>
+              <th class="col-giatri">Phần trăm giảm</th>
+              <th class="col-batdau">Bắt đầu</th>
+              <th class="col-ketthuc">Kết thúc</th>
+              <th class="col-trangthai">Trạng thái</th>
+              <th class="col-ngaytao">Ngày tạo</th>
+              <th class="col-ngaycapnhat">Ngày cập nhật</th>
+              <th class="col-hanhdong">Hành động</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(campaign, index) in filteredCampaigns" :key="campaign.id">
-              <td>{{ startIndex + index + 1 }}</td>
-              <td class="coupon-name">{{ campaign.tenDotGiamGia }}</td>
-              <td class="discount-value">
-                {{ formatDiscountValue(campaign.giaTriGiamGia) }}
+              <td class="col-checkbox">
+                <input 
+                  type="checkbox" 
+                  class="row-checkbox"
+                  :value="campaign.id"
+                  v-model="selectedCampaignIds"
+                  @change="updateSelectedCampaigns"
+                >
               </td>
-              <td class="date-range">
-                {{ formatDateShort(campaign.ngayBatDau) }} -
-                {{ formatDateShort(campaign.ngayKetThuc) }}
+              <td class="col-stt">{{ startIndex + index + 1 }}</td>
+              <td class="col-ma">
+                <div class="campaign-code">{{ campaign.maDotGiamGia || 'N/A' }}</div>
               </td>
-              <td>
+              <td class="col-loai">
+                <div class="campaign-name">{{ campaign.tenDotGiamGia || 'N/A' }}</div>
+              </td>
+              <td class="col-giatri">
+                <div class="discount-value-detailed">
+                  <strong>{{ formatDiscountValue(campaign.giaTriGiamGia) }}</strong>
+                </div>
+              </td>
+              <td class="col-batdau">
+                <div class="date-info-compact">
+                  {{ formatTimeOnly(campaign.ngayBatDau) }} / {{ formatDateOnly(campaign.ngayBatDau) }}
+                </div>
+              </td>
+              <td class="col-ketthuc">
+                <div class="date-info-compact">
+                  {{ formatTimeOnly(campaign.ngayKetThuc) }} / {{ formatDateOnly(campaign.ngayKetThuc) }}
+                </div>
+              </td>
+              <td class="col-trangthai">
                 <span
                   :class="[
-                    'status-badge',
+                    'status-badge-detailed',
                     getCampaignStatusClass(campaign),
                   ]"
                 >
                   {{ getCampaignStatusLabel(campaign) }}
                 </span>
               </td>
-              <td>
-                <span
-                  :class="[
-                    'status-badge',
-                    getCampaignTimeStatusClass(campaign),
-                  ]"
-                >
-                  {{ getCampaignTimeStatus(campaign) }}
-                </span>
+              <td class="col-ngaytao">
+                <div class="date-info-compact">
+                  {{ formatTimeOnly(campaign.createdAt || campaign.ngayBatDau) }} / {{ formatDateOnly(campaign.createdAt || campaign.ngayBatDau) }}
+                </div>
               </td>
-              <td>
-                <div class="action-buttons">
+              <td class="col-ngaycapnhat">
+                <div class="date-info-compact">
+                  {{ formatTimeOnly(campaign.updatedAt || campaign.ngayKetThuc) }} / {{ formatDateOnly(campaign.updatedAt || campaign.ngayKetThuc) }}
+                </div>
+              </td>
+              <td class="col-hanhdong">
+                <div class="action-buttons-compact">
                   <button
-                    class="action-btn view-btn"
-                    @click="viewCampaign(campaign)"
-                    title="Xem chi tiết"
-                  >
-                    <img :src="ViewIcon" alt="View" class="action-icon" />
-                  </button>
-                  <button
-                    class="action-btn edit-btn"
+                    class="action-btn-compact edit-btn"
                     @click="editCampaign(campaign)"
                     title="Chỉnh sửa"
                   >
-                    <img :src="EditIcon" alt="Edit" class="action-icon" />
+                    <img :src="EditIcon" alt="Edit" class="action-icon-compact" />
                   </button>
                   <button
-                    class="action-btn delete-btn"
+                    class="action-btn-compact delete-btn"
                     @click="deleteCampaign(campaign.id)"
                     title="Xóa"
                     :disabled="campaign.deleted"
                     :style="{ opacity: campaign.deleted ? 0.3 : 1 }"
                   >
-                    <img :src="TrashIcon" alt="Delete" class="action-icon" />
+                    <img :src="TrashIcon" alt="Delete" class="action-icon-compact" />
                   </button>
-                </div>
-              </td>
-            </tr>
-            <tr v-if="filteredCampaigns.length === 0">
-              <td colspan="7" class="text-center empty-state">
-                <div class="empty-message">
-                  <span class="empty-icon"><!-- icon: empty-mailbox --></span>
-                  <p>Không có dữ liệu chiến dịch</p>
-                  <small>Hãy tạo chiến dịch đầu tiên để bắt đầu</small>
                 </div>
               </td>
             </tr>
@@ -854,6 +904,89 @@
       </div>
     </div>
 
+    <!-- Bulk Delete Confirmation Modal -->
+    <div
+      v-if="showBulkDeleteModal"
+      class="modal-overlay-new"
+      @click="closeBulkDeleteModal"
+    >
+      <div class="modal-content-new delete-modal-minimal bulk-delete-modal" @click.stop>
+        <!-- Minimal Header -->
+        <div class="delete-header-minimal">
+          <div class="header-info-minimal">
+            <div class="delete-icon-minimal">
+              <img :src="WarningIcon" alt="Warning" class="header-icon" />
+            </div>
+            <div class="delete-title-minimal">
+              <h3>Xác nhận xóa nhiều đợt giảm giá</h3>
+              <div class="delete-status-minimal">
+                <img :src="TrashIcon" alt="Delete" class="status-icon-minimal" />
+                <span class="status-text-minimal">XÓA NHIỀU ĐỢT GIẢM GIÁ</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-btn-minimal" @click="closeBulkDeleteModal">
+            <span>×</span>
+          </button>
+        </div>
+
+        <!-- Minimal Body -->
+        <div class="delete-body-minimal" v-if="bulkDeleteData">
+          <!-- Campaign Info Card -->
+          <div class="coupon-info-card-minimal">
+            <div class="info-header-minimal">
+              <img :src="TagIcon" alt="Campaigns" class="info-icon-minimal" />
+              <span>Danh sách đợt giảm giá sẽ bị xóa</span>
+            </div>
+            <div class="info-content-minimal">
+              <div class="bulk-delete-list">
+                <div 
+                  v-for="(campaign, index) in bulkDeleteData.campaigns.slice(0, 5)" 
+                  :key="campaign.id"
+                  class="bulk-item"
+                >
+                  <div class="bulk-item-icon">
+                    <img :src="TagIcon" alt="Campaign" class="coupon-icon" />
+                  </div>
+                  <div class="bulk-item-content">
+                    <div class="bulk-item-header">
+                      <span class="bulk-item-index">{{ index + 1 }}.</span>
+                      <h4 class="bulk-item-name">{{ campaign.tenDotGiamGia }}</h4>
+                    </div>
+                    <div class="bulk-item-details">
+                      <span class="bulk-item-code">Mã: {{ campaign.maDotGiamGia || 'N/A' }}</span>
+                      <span class="bulk-item-value">
+                        Giá trị: {{ formatDiscountValue(campaign.giaTriGiamGia) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="bulk-item-warning">
+                    <img :src="WarningIcon" alt="Warning" class="warning-icon" />
+                  </div>
+                </div>
+                <div v-if="bulkDeleteData.campaigns.length > 5" class="bulk-more">
+                  <img :src="WarningIcon" alt="More" class="more-icon" />
+                  <span>... và {{ bulkDeleteData.campaigns.length - 5 }} đợt giảm giá khác sẽ bị xóa</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Minimal Footer -->
+        <div class="delete-footer-minimal">
+          <button class="cancel-btn-minimal" @click="closeBulkDeleteModal">
+            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
+            <span>Hủy bỏ</span>
+          </button>
+          <button class="delete-btn-minimal" @click="confirmBulkDelete">
+            <img :src="TrashIcon" alt="Delete" class="btn-icon-minimal" />
+            <span>Xác nhận xóa</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Save Confirmation Modal -->
     <div
       v-if="showConfirmSaveModal"
@@ -976,6 +1109,7 @@ import WarningIcon from "@/assets/Warning.svg";
 
 // Reactive data
 const searchQuery = ref("");
+const searchQueryBottom = ref("");
 const statusFilter = ref("");
 const hienTrangFilter = ref("");
 const tuNgayFilter = ref("");
@@ -988,12 +1122,14 @@ const showDetailModal = ref(false);
 const showApplyModal = ref(false);
 const showNotificationModal = ref(false);
 const showDeleteModal = ref(false);
+const showBulkDeleteModal = ref(false);
 const showConfirmSaveModal = ref(false);
 const editingCampaign = ref(null);
 const selectedCampaign = ref(null);
 const applyingCampaign = ref(null);
 const selectedProducts = ref([]);
 const deleteCampaignData = ref(null);
+const bulkDeleteData = ref(null);
 
 // Auto-update status indicators
 const statusAutoUpdated = ref(false);
@@ -1041,6 +1177,21 @@ const applyFormData = ref({
   idDotGiamGia: null,
   selectedProductIds: [],
 });
+
+// ===== BULK SELECTION =====
+const selectedCampaignIds = ref([]);
+const selectedCampaigns = computed(() => {
+  return filteredCampaigns.value.filter(campaign => selectedCampaignIds.value.includes(campaign.id));
+});
+
+// Computed properties for select all functionality
+const isAllSelected = computed(() => {
+  return filteredCampaigns.value.length > 0 && selectedCampaignIds.value.length === filteredCampaigns.value.length;
+});
+
+const isIndeterminate = computed(() => {
+  return selectedCampaignIds.value.length > 0 && selectedCampaignIds.value.length < filteredCampaigns.value.length;
+});
 const fetchDGG = async () => {
   try {
     const res = await fetchAllDotGiamGia();
@@ -1078,16 +1229,23 @@ const fetchProductsDetails = async () => {
 const filteredCampaigns = computed(() => {
   let filtered = campaigns.value;
 
-  // Search filter
+  // Filter by campaign name (from filter section)
   if (searchQuery.value) {
     filtered = filtered.filter(
       (campaign) =>
         campaign.tenDotGiamGia
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase()) ||
-        campaign.maDotGiamGia
-          .toLowerCase()
+          ?.toLowerCase()
           .includes(searchQuery.value.toLowerCase())
+    );
+  }
+
+  // Filter by campaign name (from bottom search)
+  if (searchQueryBottom.value) {
+    filtered = filtered.filter(
+      (campaign) =>
+        campaign.tenDotGiamGia
+          ?.toLowerCase()
+          .includes(searchQueryBottom.value.toLowerCase())
     );
   }
 
@@ -1868,6 +2026,7 @@ const getProductActiveCampaigns = (productId) => {
 
 const clearFilters = () => {
   searchQuery.value = "";
+  searchQueryBottom.value = "";
   statusFilter.value = "";
   hienTrangFilter.value = "";
   tuNgayFilter.value = "";
@@ -2489,6 +2648,138 @@ const formatDiscountValue = (value) => {
     return `${numValue.toFixed(1)}%`;
   }
 };
+
+// Additional formatting functions for the new detailed table
+const formatCurrency = (amount) => {
+  if (!amount || amount === 0) return '0 đ';
+  return new Intl.NumberFormat('vi-VN').format(amount) + ' đ';
+};
+
+const formatDateOnly = (dateString) => {
+  if (!dateString) return 'N/A';
+  try {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  } catch (error) {
+    return 'N/A';
+  }
+};
+
+const formatTimeOnly = (dateString) => {
+  if (!dateString) return 'N/A';
+  try {
+    const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  } catch (error) {
+    return 'N/A';
+  }
+};
+
+// ===== BULK SELECTION METHODS =====
+/**
+ * Toggle select all checkboxes
+ */
+const toggleSelectAll = () => {
+  if (isAllSelected.value) {
+    // Deselect all
+    selectedCampaignIds.value = [];
+  } else {
+    // Select all current page items
+    selectedCampaignIds.value = filteredCampaigns.value.map(campaign => campaign.id);
+  }
+};
+
+/**
+ * Update selected campaigns when individual checkbox changes
+ */
+const updateSelectedCampaigns = () => {
+  // This is automatically handled by v-model, but we can add extra logic here if needed
+};
+
+/**
+ * Open bulk delete confirmation modal
+ */
+const bulkDeleteCampaigns = () => {
+  if (selectedCampaigns.value.length === 0) {
+    notificationData.value = {
+      type: "warning",
+      title: "Cảnh báo",
+      message: "Vui lòng chọn ít nhất một đợt giảm giá để xóa.",
+      details: null,
+    };
+    showNotificationModal.value = true;
+    return;
+  }
+
+  // Store bulk delete data for modal
+  bulkDeleteData.value = {
+    count: selectedCampaigns.value.length,
+    campaigns: [...selectedCampaigns.value]
+  };
+  
+  // Show bulk delete confirmation modal
+  showBulkDeleteModal.value = true;
+};
+
+/**
+ * Close bulk delete modal
+ */
+const closeBulkDeleteModal = () => {
+  showBulkDeleteModal.value = false;
+  bulkDeleteData.value = null;
+};
+
+/**
+ * Confirm bulk delete - actual deletion
+ */
+const confirmBulkDelete = async () => {
+  if (!bulkDeleteData.value) return;
+
+  try {
+    // Delete each selected campaign
+    const deletePromises = bulkDeleteData.value.campaigns.map(campaign => 
+      deleteCampaign(campaign.id)
+    );
+    
+    await Promise.all(deletePromises);
+    
+    // Clear selection
+    selectedCampaignIds.value = [];
+    
+    // Show success notification
+    notificationData.value = {
+      type: "success",
+      title: "Thành công",
+      message: `Đã xóa ${bulkDeleteData.value.count} đợt giảm giá thành công!`,
+      details: null,
+    };
+    showNotificationModal.value = true;
+    
+    // Close bulk delete modal
+    closeBulkDeleteModal();
+    
+    // Refresh data
+    await fetchDGG();
+  } catch (error) {
+    console.error("Error bulk deleting campaigns:", error);
+    notificationData.value = {
+      type: "error",
+      title: "Lỗi",
+      message: "Có lỗi xảy ra khi xóa đợt giảm giá. Vui lòng thử lại.",
+      details: error.message,
+    };
+    showNotificationModal.value = true;
+    
+    // Close bulk delete modal even on error
+    closeBulkDeleteModal();
+  }
+};
+
 </script>
 
 <style scoped>
@@ -2499,6 +2790,102 @@ const formatDiscountValue = (value) => {
   max-width: 1400px;
   margin: 0 auto;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+/* Override any conflicting table styles - CRITICAL */
+.coupons-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  min-width: 900px !important;
+  font-size: 0.875rem !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  background: white !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.coupons-table th,
+.coupons-table td {
+  padding: 8px 3px !important;
+  font-size: 0.8rem !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.3 !important;
+  vertical-align: top !important;
+}
+
+/* Table header styling - match PhieuGiamGia */
+.coupons-table thead th {
+  background: #f8fafc !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  padding: 8px 3px !important;
+  font-weight: 600 !important;
+  font-size: 0.7rem !important;
+  color: #64748b !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+/* Force specific column widths - Total: 100% with checkbox column */
+.col-checkbox { width: 3% !important; min-width: 35px !important; max-width: 45px !important; text-align: center !important; padding: 6px 2px !important; }
+.col-stt { width: 4% !important; min-width: 50px !important; max-width: 70px !important; text-align: center !important; }
+.col-ma { width: 8% !important; min-width: 90px !important; max-width: 120px !important; text-align: center !important; }
+.col-loai { width: 18% !important; min-width: 180px !important; max-width: 220px !important; text-align: left !important; }
+/* FORCE Phần trăm giảm column - HIGHEST PRIORITY */
+.coupons-table .col-giatri,
+.coupons-table th.col-giatri,
+.coupons-table td.col-giatri {
+  width: 8% !important; 
+  min-width: 80px !important;
+  max-width: 100px !important;
+  padding: 8px 4px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+.col-batdau { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
+.col-ketthuc { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
+.col-trangthai { width: 10% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
+.col-ngaytao { width: 10% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
+.col-ngaycapnhat { width: 12% !important; min-width: 120px !important; max-width: 150px !important; text-align: center !important; }
+.col-hanhdong { width: 10% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
+
+/* Checkbox styling */
+.select-all-checkbox,
+.row-checkbox {
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer !important;
+  accent-color: #4ade80 !important;
+}
+
+.select-all-checkbox:indeterminate {
+  accent-color: #f59e0b !important;
+}
+
+/* Bulk delete button */
+.bulk-delete-btn {
+  background-color: #ef4444 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+}
+
+.bulk-delete-btn:hover:not(.btn-disabled) {
+  background-color: #dc2626 !important;
+  border-color: #b91c1c !important;
+}
+
+.bulk-delete-btn.btn-disabled {
+  background-color: #9ca3af !important;
+  border-color: #6b7280 !important;
+  color: #d1d5db !important;
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
 }
 
 /* page-header styles are now defined in globals.css */
