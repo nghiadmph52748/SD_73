@@ -23,6 +23,7 @@ public class NhanVienResponse {
     private String thanhPho;
     private String quan;
     private String phuong;
+    private Boolean gioiTinh;
     private String diaChiCuThe;
     private Integer idQuyenHan;
     private String tenQuyenHan;
@@ -49,5 +50,7 @@ public class NhanVienResponse {
         this.trangThai = c.getTrangThai();
         this.deleted = c.getDeleted();
         this.idQuyenHan = c.getIdQuyenHan().getId();
+        this.gioiTinh = c.getGioiTinh();
+
     }
 }

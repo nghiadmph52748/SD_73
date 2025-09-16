@@ -73,6 +73,9 @@ public class NhanVien {
     @Column(name = "dia_chi_cu_the")
     private String diaChiCuThe;
 
+    @Column(name = "gioi_tinh")
+    private Boolean gioiTinh;
+
     @Column(name = "cccd", length = 20)
     private String cccd;
 

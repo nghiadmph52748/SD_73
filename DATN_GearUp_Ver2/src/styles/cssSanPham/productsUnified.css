@@ -2492,7 +2492,6 @@ body {
   flex-wrap: nowrap;
   width: 100%;
   justify-content: flex-start;
-  padding: 0 1.5rem;
 }
 
 .filter-group {

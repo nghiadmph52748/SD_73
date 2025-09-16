@@ -1,144 +1,75 @@
 <template>
   <div class="order-management">
-    <!-- Advanced Filters -->
-    <div class="filters-panel">
-      <div class="filters-header">
-        <h3>Bộ lọc & Tìm kiếm</h3>
-        <button class="btn-export" @click="resetFilters">
-          <span class="btn-icon">🔄</span>
-          Đặt lại
-        </button>
-      </div>
-
-      <div class="filters-content">
-        <!-- Search Bar -->
-        <div class="search-section">
-          <div class="search-input-group">
-            <div class="search-icon"></div>
-            <input
-              type="text"
-              placeholder="Tìm theo mã đơn hàng, tên khách hàng, SĐT..."
-              v-model="searchQuery"
-              class="search-input"
-            />
-            <button
-              v-if="searchQuery"
-              class="clear-search"
-              @click="searchQuery = ''"
-            >
-              ✕
-            </button>
-          </div>
-           
-          <div class="filter-group">
-            <label class="filter-label">Khoảng giá</label>
-            <div class="amount-range-group">
-              <input
-                type="number"
-                v-model="minAmount"
-                class="amount-input"
-                placeholder="Từ"
-              />
-              <span class="amount-separator">-</span>
-              <input
-                type="number"
-                v-model="maxAmount"
-                class="amount-input"
-                placeholder="Đến"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Filter Grid -->
-        <div class="filter-grid">
-          <!-- Date Range -->
-          <div class="filter-group">
-            <label class="filter-label">Thời gian</label>
-            <div class="date-range-group">
-              <input
-                type="date"
-                v-model="fromDate"
-                class="date-input"
-                placeholder="Từ ngày"
-              />
-              <span class="date-separator">→</span>
-              <input
-                type="date"
-                v-model="toDate"
-                class="date-input"
-                placeholder="Đến ngày"
-              />
-            </div>
-          </div>
-          <div class="filter-group">
-            <label class="filter-label">Loại đơn hàng</label>
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" value="" v-model="selectedType" /> Tất cả
-              </label>
-              <label class="radio-option">
-                 <input type="radio" :value="false" v-model="selectedType" /> Trực tuyến
-              </label>
-              <label class="radio-option">
-                <input type="radio" :value="true" v-model="selectedType" /> Tại quầy
-              </label>
-            </div>
-          </div>
-          
-        </div>
-      </div>
+     <div class="filters-panel">
+    <div class="filters-header">
+      <h3>Bộ lọc</h3>
+      <button class="btn-reset" @click="resetFilters">
+        <span class="btn-icon">❌</span>
+        Xóa toàn bộ bộ lọc
+      </button>
     </div>
 
-    <!-- Status Tabs with Improved Design -->
-    <!-- <div class="status-tabs-container">
-      <div class="status-tabs">
-        <button
-          v-for="status in statusTabs"
-          :key="status.value"
-          :class="['status-tab', { active: selectedStatus === status.value }]"
-          @click="selectedStatus = status.value"
-        >
-          <span class="tab-icon">{{ status.icon }}</span>
-          <span class="tab-text">{{ status.label }}</span>
-          <span class="tab-count">{{ getStatusCount(status.value) }}</span>
-        </button>
+    <div class="filters-content">
+      <div class="filter-row">
+        <!-- Mã đơn hàng -->
+        <div class="filter-item">
+          <label class="filter-label">Mã Đơn Hàng</label>
+          <input
+            type="text"
+            v-model="orderCode"
+            placeholder="Lọc mã đơn hàng"
+            class="filter-input"
+          />
+        </div>
+
+        <!-- Khách hàng -->
+        <div class="filter-item">
+          <label class="filter-label">Khách Hàng</label>
+          <input
+            type="text"
+            v-model="customerName"
+            placeholder="Lọc tên khách hàng"
+            class="filter-input"
+          />
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="filter-item">
+          <label class="filter-label">Trạng Thái Đơn Hàng</label>
+          <select v-model="status" class="filter-select">
+             <option value="">Chọn trạng thái</option>
+              <option value="CHO_XAC_NHAN">Chờ xử lý</option>
+              <option value="CHO_GIAO_HANG">Đang xử lý</option>
+              <option value="HOAN_THANH">Hoàn thành</option>
+              <option value="DA_HUY">Đã hủy</option>
+          </select>
+        </div>
+
+        <!-- Loại đơn -->
+        <div class="filter-item">
+          <label class="filter-label">Loại Đơn Hàng</label>
+          <select v-model="orderType" class="filter-select">
+            <option value="">Chọn loại đơn hàng</option>
+            <option value="ONLINE">Trực tuyến</option>
+            <option value="OFFLINE">Tại quầy</option>
+          </select>
+        </div>
       </div>
 
-      <div class="view-options">
-        <button
-          :class="['view-btn', { active: viewMode === 'table' }]"
-          @click="viewMode = 'table'"
-          title="Xem dạng bảng"
-        >
-          📋
-        </button>
-        <button
-          :class="['view-btn', { active: viewMode === 'grid' }]"
-          @click="viewMode = 'grid'"
-          title="Xem dạng lưới"
-        >
-          ▦
-        </button>
-      </div>
+      <!-- Ngày tạo -->
+      <!-- Ngày tạo -->
+        <div class="filter-row dates">
+          <div class="">
+            <label class="filter-label">Ngày tạo từ</label>
+            <input type="date" v-model="fromDate" class="filter-input" />
+          </div>
+          <div class="">
+            <label class="filter-label">Ngày tạo đến</label>
+            <input type="date" v-model="toDate" class="filter-input" />
+          </div>
+        </div>
     </div>
-
-      <div class="header-actions">
-      
-
-      
-        <button class="btn-action" @click="exportOrdersToExcel">
-          <i class="lucide lucide-file-spreadsheet"></i>
-          <span>Xuất Excel</span>
-        </button>
-
-        <button class="btn-action primary" @click="createOrder">
-          <i class="lucide lucide-plus-circle"></i>
-          <span>Tạo đơn hàng</span>
-        </button>
-
-      
-      </div> -->
+  </div>
 
     <!-- Orders Display -->
     <div class="orders-container">
@@ -158,10 +89,7 @@
 
      
       <div class="header-actions">
-      
-
-      
-        <button class="btn-action" @click="exportOrdersToExcel">
+        <!-- <button class="btn-action" @click="exportOrdersToExcel">
           <i class="lucide lucide-file-spreadsheet"></i>
           <span>Xuất Excel</span>
         </button>
@@ -169,9 +97,8 @@
         <button class="btn-action primary" @click="createOrder">
           <i class="lucide lucide-plus-circle"></i>
           <span>Tạo đơn hàng</span>
-        </button>
+        </button> -->
 
-      
       </div>
        <div class="view-options">
         <button
@@ -200,12 +127,12 @@
             <thead>
               <tr>
                 <th class="sortable" @click="sortBy('code')">
-                  <span>STT</span>
+                  <span>#</span>
                   <span class="sort-icon">{{ getSortIcon("code") }}</span>
                 </th>
-                <th>Mã Hóa Đơn</th>
+                <th>Mã Đơn Hàng</th>
                 <th class="sortable" @click="sortBy('customerName')">
-                  <span>Khách hàng</span>
+                  <span>Tên Khách hàng</span>
                   <span class="sort-icon">{{
                     getSortIcon("customerName")
                   }}</span>
@@ -216,13 +143,13 @@
                     getSortIcon("totalAmount")
                   }}</span>
                 </th>
-                <th>Loại</th>
-                <th>Trạng thái</th>
+                <th class="">Loại Đơn Hàng</th>
+                <th>Trạng thái Đơn Hàng</th>
                 <th class="sortable" @click="sortBy('ngayTao')">
                   <span>Ngày tạo</span>
                   <span class="sort-icon">{{ getSortIcon("ngayTao") }}</span>
                 </th>
-                <th class="text-center">Hành động</th>
+                <th class="">Hành động</th>
               </tr>
             </thead>
             <tbody>
@@ -310,14 +237,6 @@
                     class="action-button-warning"
                     @click="editOrder(order)"
                   />
-                  <ActionButton
-                   icon="print"
-                    variant="info"
-                    size="sm"
-                    tooltip="In Hóa Đơn"
-                    class="action-button-danger"
-                    @click="printOrder(order)"
-                  />
                 </ButtonGroup>
               </td>
               </tr>
@@ -392,20 +311,19 @@
                     class="action-button-warning"
                     @click="editOrder(order)"
                   />
-                  <ActionButton
+                  <!-- <ActionButton
                    icon="print"
                     variant="info"
                     size="sm"
                     tooltip="In Hóa Đơn"
                     class="action-button-danger"
                     @click="printOrder(order)"
-                  />
+                  /> -->
                 </ButtonGroup>
               </td>
             </div>
           </div>
         </div>
-      </div>
       </div>
       <!-- Edit Order Modal -->
             <div
@@ -495,20 +413,12 @@
 
         <div class="pagination-controls">
           <button
-            class="pagination-btn first"
-            @click="goToPage(1)"
-            :disabled="currentPage === 1"
-            title="Trang đầu"
-          >
-            ⏮
-          </button>
-          <button
             class="pagination-btn prev"
             @click="previousPage"
             :disabled="currentPage === 1"
             title="Trang trước"
           >
-            ◀<
+           ❮ Trước
           </button>
 
           <div class="page-numbers">
@@ -532,163 +442,82 @@
             :disabled="currentPage === totalPages"
             title="Trang sau"
           >
-            ▶>
-          </button>
-          <button
-            class="pagination-btn last"
-            :disabled="currentPage === backendTotalPages"
-            @click="goToPage(backendTotalPages)"
-
-            title="Trang cuối"
-          >
-            ⏭
+             Sau ❯
           </button>
         </div>
       </div>
-    
+    </div>
+ 
 
     <!-- Order Detail Modal -->
-    <div
-      v-if="showDetailModal"
-      class="modal-overlay"
-      @click="showDetailModal = false"
-    >
-      <div class="modal-content large" @click.stop>
-        <div class="order-detail-header">
-          <h3>Thông tin đơn hàng - {{ selectedOrder?.code }}</h3>
-          <button class="modal-close" @click="showDetailModal = false">
-            ✕
-          </button>
-        </div>
-
-        <div class="modal-body" v-if="selectedOrder">
-          <!-- Order Actions -->
-          <div class="order-actions">
-            <button class="btn-export">Chi tiết</button>
-            <button class="btn-export">In hóa đơn</button>
-          </div>
-
-          <!-- Order Info -->
-          <div class="order-detail-info">
-            <div class="info-section">
-              <h4>Thông tin đơn hàng - Đơn tại quầy</h4>
-              <div class="info-grid">
-                <div class="info-item">
-                  <label>Mã:</label>
-                  <span>{{ selectedOrder.id }}</span>
-                </div>
-                <div class="info-item">
-                  <label>Tên khách hàng:</label>
-                  <span>{{ selectedOrder.tenKhachHang || "Khách lẻ" }}</span>
-                </div>
-                <div class="info-item">
-                  <label>Trạng thái:</label>
-                  <span
-                    :class="['badge', getStatusClass(selectedOrder.trangThai)]"
-                  >
-                    {{ getStatusText(selectedOrder.trangThai) }}
-                  </span>
-                </div>
-                <div class="info-item">
-                  <label>Số người nhận:</label>
-                  <span>{{ selectedOrder.soDienThoai || "N/A" }}</span>
-                </div>
-                <div class="info-item">
-                <label>Loại:</label>
-                <span
-                  :class="[
-                    'badge',
-                    selectedOrder.loaiDon ? 'badge-success' : 'badge-info'
-                  ]"
-                >
-                  {{ selectedOrder.loaiDon ? "Tại quầy" : "Trực tuyến" }}
-                </span>
+          <div
+            v-if="showDetailModal"
+            class="modal-overlay"
+            @click="showDetailModal = false"
+          >
+            <div class="modal-content large" @click.stop>
+              <div class="order-detail-header">
+                <h3>Thông tin đơn hàng - {{ selectedOrder?.code }}</h3>
+                <div class="closexy">
+                  <button class="modal-close" @click="showDetailModal = false"> 
+                  ✕
+                </button>
               </div>
-                <div class="info-item">
-                  <label>Tên người nhận:</label>
-                  <span>{{ selectedOrder.tenNguoiNhan || "N/A" }}</span>
-                </div>
               </div>
-            </div>
 
-          <div class="payment-history">
-            <h4>Lịch sử thanh toán</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Số tiền</th>
-                  <th>Thời gian</th>
-                  <th>Loại giao dịch</th>
-                  <th>PTTT</th>
-                  <th>Trạng thái</th>
-                  <th>Ghi chú</th>
-                  <th>Nhân viên xác nhận</th>
-                </tr>
-              </thead>
-              <tbody v-if="selectedOrder?.lichSuThanhToan?.length > 0">
-                <tr
-                  v-for="(payment, index) in selectedOrder.lichSuThanhToan"
-                  :key="payment.id"
-                >
-                  <!-- Số tiền -->
-                  <td class="amount">
-                    {{ formatCurrency((payment.tienMat || 0) + (payment.tienChuyenKhoan || 0)) }}
-                  </td>
+              <div class="modal-body" v-if="selectedOrder">
+                <div class="order-detail-info">
+                  <div class="info-section">
+                    <h4>Thông tin đơn hàng - Đơn tại quầy</h4>
+                    <div class="info-grid">
+                      <div class="info-item">
+                        <label>Mã: </label>
+                        <span>{{ selectedOrder.id }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Tên khách hàng: </label>
+                        <span>{{ selectedOrder.tenKhachHang || "Khách lẻ" }}</span>
+                      </div>
+                      <div class="info-item">
+                        <label>Trạng thái: </label>
+                        <span
+                          :class="['badge', getStatusClass(selectedOrder.trangThai)]"
+                        >
+                          {{ getStatusText(selectedOrder.trangThai) }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <label>Số Điện Thoại: </label>
+                        <span>{{ selectedOrder.soDienThoai || "N/A" }}</span>
+                      </div>
+                      <div class="info-item">
+                      <label>Loại: </label>
+                      <span
+                        :class="[
+                          'badge',
+                          selectedOrder.loaiDon ? 'badge-success' : 'badge-info'
+                        ]"
+                      >
+                        {{ selectedOrder.loaiDon ? "Tại quầy" : "Trực tuyến" }}
+                      </span>
+                    </div>
+                      <div class="info-item">
+                        <label>Tên người nhận:</label>
+                        <span>{{ selectedOrder.tenNguoiNhan || "N/A" }}</span>
+                      </div>
+                    </div>
+                  </div>
 
-                  <!-- Thời gian -->
-                  <td>{{ formatDateTime(payment.ngayTao) }}</td>
-
-                  <!-- Loại giao dịch -->
-                  <td>
-                    <span class="badge badge-info">
-                      {{ payment.loaiGiaoDich || "Thanh toán" }}
-                    </span>
-                  </td>
-
-                  <!-- PTTT -->
-                  <td>
-                    <span class="badge badge-success">
-                      {{ payment.tenPhuongThucThanhToan }}
-                    </span>
-                  </td>
-
-                  <!-- Trạng thái -->
-                  <td>
-                    <span
-                      :class="[
-                        'badge',
-                        payment.trangThai === '1' ? 'badge-success' : 'badge-warning',
-                      ]"
-                    >
-                      {{ payment.trangThai === '1' ? 'Thành công' : 'Chờ xử lý' }}
-                    </span>
-                  </td>
-
-                  <!-- Ghi chú từ hóa đơn chi tiết -->
-                  <td>
-                    {{ payment.ghiChu || "-" }}
-                  </td>
-
-                  <!-- Nhân viên xác nhận -->
-                  <td>
-                    {{ payment.tenNhanVienXacNhan || "-" }}
-                  </td>
-                </tr>
-              </tbody>
-
-            </table>
-          </div>
-
-
+                
                             <div class="order-timeline">
                   <h4>Lịch sử đơn hàng</h4>
                   <div class="timeline">
                     <!-- Mốc 1: Tạo đơn -->
                     <div class="timeline-item completed">
-                      <div class="timeline-icon">✓</div>
+                      <div class="timeline-icon"></div>
                       <div class="timeline-content">
                         <div class="timeline-header">
-                          <span class="timeline-title">Tạo đơn hàng</span>
+                          <span class="timeline-title">Tạo đơn hàng: </span>
                           <span class="timeline-time">
                             {{ formatDateTime(selectedOrder?.ngayTao) }}
                           </span>
@@ -701,25 +530,23 @@
 
                     <!-- Mốc 2: Hoàn thành -->
                     <div class="timeline-item completed" v-if="selectedOrder?.ngayThanhToan">
-                      <div class="timeline-icon">✓</div>
+                      <div class="timeline-icon"></div>
                       <div class="timeline-content">
                         <div class="timeline-header">
-                          <span class="timeline-title">Hoàn thành</span>
+                          <span class="timeline-title">Hoàn thành: </span>
                           <span class="timeline-time">
                             {{ formatDateTime(selectedOrder?.ngayThanhToan) }}
                           </span>
                         </div>
-                        <div class="timeline-description">
+                        <!-- <div class="timeline-description">
                           Nhân viên - {{
                             selectedOrder?.lichSuThanhToan?.[0]?.tenNhanVienXacNhan || '---'
                           }}
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
                 </div>
-
-
             <!-- Product List -->
             <div class="product-list">
             <h4>Danh sách sản phẩm</h4>
@@ -767,21 +594,18 @@
                 </div>
               </div>
             </div>
-
-          
-
               <!-- Order Summary -->
               <div class="order-summary">
                 <div class="summary-row">
-                  <span>Phiếu giảm giá:</span>
+                  <span>Phiếu giảm giá: </span>
                   <span>{{ selectedOrder.maPhieuGiamGia || "N/A" }}</span>
                 </div>
                 <div class="summary-row">
-                  <span>Giảm giá từ cửa hàng:</span>
+                  <span>Giảm giá từ cửa hàng: </span>
                   <span>{{ selectedOrder.giaTriGiamGia  || "0%" }}%</span>
                 </div>
                 <div class="summary-row">
-                  <span>Tổng tiền hàng:</span>
+                  <span>Tổng tiền hàng: </span>
                   <span>{{ formatCurrency(selectedOrder.tongTien) }}</span>
                 </div>
                 <!-- <div class="summary-row">
@@ -799,7 +623,7 @@
                     1.000.000 VND</span>
                 </div>
                 <div class="summary-row total">
-                  <span>Tổng tiền:</span>
+                  <span>Tổng tiền: </span>
                   <span class="total-amount">{{
                     formatCurrency(selectedOrder.tongTienSauGiam)
                   }}</span>
@@ -808,6 +632,73 @@
             </div>
           </div>
         </div>
+        <div class="payment-history">
+                  <h4>Lịch sử thanh toán</h4>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Số tiền</th>
+                        <th>Thời gian</th>
+                        <th>Loại giao dịch</th>
+                        <th>PTTT</th>
+                        <th>Trạng thái</th>
+                        <th>Ghi chú</th>
+                        <th>Nhân viên xác nhận</th>
+                      </tr>
+                    </thead>
+                    <tbody v-if="selectedOrder?.lichSuThanhToan?.length > 0">
+                      <tr
+                        v-for="(payment, index) in selectedOrder.lichSuThanhToan"
+                        :key="payment.id"
+                      >
+                        <!-- Số tiền -->
+                        <td class="amount">
+                          {{ formatCurrency((payment.tienMat || 0) + (payment.tienChuyenKhoan || 0)) }}
+                        </td>
+
+                        <!-- Thời gian -->
+                        <td>{{ formatDateTime(payment.ngayTao) }}</td>
+
+                        <!-- Loại giao dịch -->
+                        <td>
+                          <span class="badge badge-info">
+                            {{ payment.loaiGiaoDich || "Thanh toán" }}
+                          </span>
+                        </td>
+
+                        <!-- PTTT -->
+                        <td>
+                          <span class="badge badge-success">
+                            {{ payment.tenPhuongThucThanhToan }}
+                          </span>
+                        </td>
+
+                        <!-- Trạng thái -->
+                        <td>
+                          <span
+                            :class="[
+                              'badge',
+                              payment.trangThai === '1' ? 'badge-success' : 'badge-warning',
+                            ]"
+                          >
+                            {{ payment.trangThai === '1' ? 'Thành công' : 'Chờ xử lý' }}
+                          </span>
+                        </td>
+
+                        <!-- Ghi chú từ hóa đơn chi tiết -->
+                        <td>
+                          {{ payment.ghiChu || "-" }}
+                        </td>
+
+                        <!-- Nhân viên xác nhận -->
+                        <td>
+                          {{ payment.tenNhanVienXacNhan || "-" }}
+                        </td>
+                      </tr>
+                    </tbody>
+
+                  </table>
+        </div>
       </div>
     </div>
   </div>
@@ -815,12 +706,12 @@
 
 <script setup>
 
-import ButtonGroup from "@/components/ui/NhomNut.vue";
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js'
 import ActionButton from "@/components/ui/NutHanhDong.vue";
-import axios from "axios";
-import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js';
+import ButtonGroup from "@/components/ui/NhomNut.vue";
+import axios from "axios"
 
 
 
@@ -844,7 +735,10 @@ const minAmount = ref('')
 const maxAmount = ref('')
 const sortField = ref('')
 const sortDirection = ref('asc') // 'asc' or 'desc'
-
+const orderCode = ref('')
+const customerName = ref('')
+const status = ref('')
+const orderType = ref('')
 const orders = ref([])
 const backendTotalOrders = ref(0)
 const backendTotalPages = ref(0)
@@ -896,15 +790,15 @@ const fetchOrders = async () => {
 
 
 const statusTabs = [
-  { value: "TAT_CA", label: "TẤT CẢ", icon: "" },
-  { value: "CHO_XAC_NHAN", label: "CHỜ XÁC NHẬN", icon: "" },
-  { value: "CHO_GIAO_HANG", label: "CHỜ GIAO HÀNG", icon: "" },
-  { value: "DANG_VAN_CHUYEN", label: "ĐANG VẬN CHUYỂN", icon: "" },
+  { value: "TAT_CA", label: "Tất Cả", icon: "" },
+  { value: "CHO_XAC_NHAN", label: "Chờ Xác Nhận", icon: "" },
+  { value: "CHO_GIAO_HANG", label: "Đang Xử Lý", icon: "" },
+  { value: "DANG_VAN_CHUYEN", label: "Đang Vận Chuyển", icon: "" },
   // { value: "DA_GIAO_HANG", label: "ĐÃ GIAO HÀNG", icon: "" },
   // { value: "CHO_THANH_TOAN", label: "CHỜ THANH TOÁN", icon: "" },
-  { value: "DA_THANH_TOAN", label: "ĐÃ THANH TOÁN", icon: "" },
-  { value: "HOAN_THANH", label: "HOÀN THÀNH", icon: "" },
-  { value: "DA_HUY", label: "ĐÃ HỦY", icon: "" },
+  // { value: "DA_THANH_TOAN", label: "ĐÃ THANH TOÁN", icon: "" },
+  { value: "HOAN_THANH", label: "Hoàn Thành", icon: "" },
+  { value: "DA_HUY", label: "Đã Hủy", icon: "" },
 ];
 
 
@@ -914,49 +808,49 @@ const statusTabs = [
 // Computed
 const filteredOrders = computed(() => {
   let filtered = orders.value;
-  console.log("Total orders:", orders.value.length);
-  console.log("Selected status:", selectedStatus.value);
-  console.log("From date:", fromDate.value);
-  console.log("To date:", toDate.value);
 
-  if (searchQuery.value) {
-  filtered = filtered.filter(
-    (order) =>
-      order.maHoaDon?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      (order.tenNguoiNhan &&
-        order.tenNguoiNhan.toLowerCase().includes(searchQuery.value.toLowerCase()))
-  )
-}
-    if (selectedType.value !== "") {
-        filtered = filtered.filter((order) => order.loaiDon === selectedType.value);
-      }
-    if (fromDate.value) {
-      filtered = filtered.filter(
-        (order) => new Date(order.ngayTao) >= new Date(fromDate.value)
-      )
-    }
-    if (toDate.value) {
-      filtered = filtered.filter(
-        (order) => new Date(order.ngayTao) <= new Date(toDate.value + "T23:59:59")
-      )
-    }
-    if (minAmount.value) {
-      filtered = filtered.filter(
-        (order) => order.tongTien >= parseInt(minAmount.value)
-      )
-    }
-    if (maxAmount.value) {
-      filtered = filtered.filter(
-        (order) => order.tongTien <= parseInt(maxAmount.value)
-      )
-    }
+  // Lọc theo mã đơn hàng (lấy từ lịch sử thanh toán)
+  if (orderCode.value) {
+    filtered = filtered.filter((order) =>
+      order.lichSuThanhToan?.[0]?.maHoaDon?.toLowerCase().includes(orderCode.value.toLowerCase())
+    );
+  }
 
-  console.log("Filtered orders count:", filtered.length);
-  console.log("Start index:", startIndex.value, "End index:", endIndex.value);
+  // Lọc theo tên khách hàng
+  if (customerName.value) {
+    filtered = filtered.filter((order) =>
+      order.tenKhachHang?.toLowerCase().includes(customerName.value.toLowerCase())
+    );
+  }
+
+  // Lọc theo trạng thái
+  if (status.value) {
+    filtered = filtered.filter((order) => order.trangThai === status.value);
+  }
+
+  // Lọc theo loại đơn hàng
+  if (orderType.value) {
+    if (orderType.value === "ONLINE") {
+      filtered = filtered.filter((order) => order.loaiDon === false);
+    } else if (orderType.value === "OFFLINE") {
+      filtered = filtered.filter((order) => order.loaiDon === true);
+    }
+  }
+
+  // Lọc ngày tạo từ
+  if (fromDate.value) {
+    filtered = filtered.filter((order) => new Date(order.ngayTao) >= new Date(fromDate.value));
+  }
+
+  // Lọc ngày tạo đến
+  if (toDate.value) {
+    filtered = filtered.filter((order) => new Date(order.ngayTao) <= new Date(toDate.value + "T23:59:59"));
+  }
 
   return filtered.slice(startIndex.value, endIndex.value);
-
 });
+
+
 //
 const totalOrders = computed(() => {
   let filtered = orders.value;
@@ -1144,7 +1038,14 @@ const resetFilters = () => {
   minAmount.value = "";
   maxAmount.value = "";
   currentPage.value = 1;
+
+  // Thêm 4 field lọc mới
+  orderCode.value = "";
+  customerName.value = "";
+  status.value = "";
+  orderType.value = "";
 };
+
 const sortBy = (field) => {
   if (sortField.value === field) {
     sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
@@ -1320,6 +1221,11 @@ const updateOrder = async () => {
 </script>
 
 <style scoped>
+.closexy{
+  position: absolute;
+  right: 10px;               /* Nút đóng nằm sát góc phải */
+  top: 0%;
+}
 .orders-header {
   display: flex;
   justify-content: space-between;
@@ -1379,17 +1285,20 @@ const updateOrder = async () => {
   cursor: pointer;
 }
 .modal-content.large {
-  max-width: 1200px;
-  width: 90%;
   background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  border-radius: 8px;
+  max-width: 1000px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  padding: 20px 25px;
+  position: relative;
+  font-family: Arial, sans-serif;
+  color: #222;
 }
 .header-actions {
-     display: flex;
+  display: flex;
   align-items: center;
   gap: 10px;
 }
@@ -1426,14 +1335,6 @@ const updateOrder = async () => {
 
 .btn-action.primary:hover {
   background: #8b95af;
-}
-
-.order-management {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  min-height: 100vh;
 }
 
 /* === STATISTICS OVERVIEW === */
@@ -1529,35 +1430,31 @@ const updateOrder = async () => {
 
 /* === ADVANCED FILTERS PANEL === */
 .filters-panel {
-  background: white;
-  border-radius: 16px;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-color);
-  overflow: hidden;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+   margin-bottom: 40px;
 }
 
 .filters-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border-color);
-  background: #e5e9f0; /* nền panel */
+  margin-bottom: 16px;
 }
 
 .filters-header h3 {
   margin: 0;
-  color: var(--text-primary);
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 18px;
 }
 
 .btn-reset {
-  background: transparent !important;
-  color: var(--text-secondary) !important;
-  border: 1px solid var(--border-color) !important;
-  padding: 0.5rem 1rem !important;
+  background: none;
+  border: none;
+  color: #2a9d8f;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .btn-reset:hover {
@@ -1566,17 +1463,72 @@ const updateOrder = async () => {
 }
 
 .filters-content {
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+.filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-item {
+  flex: 1;              /* Tự động giãn ra đều nhau */
+  min-width: 220px;     /* Độ dài tối thiểu */
+}
+
+/* Input chung */
+.filter-input,
+.filter-select {
+  min-width: 415px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.quick-buttons {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.quick-buttons button {
+  padding: 6px 12px;
+  border: 1px solid #2a9d8f;
+  background: #e6f7f5;
+  color: #2a9d8f;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.quick-buttons button:hover {
+  background: #2a9d8f;
+  color: #fff;
+}
+.type-cell {
+  text-align: center !important;
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
 
 .search-section {
   margin-bottom: 2rem;
 }
 
 .search-input-group {
-  position: relative;
-  max-width: 600px;
-  width: 600px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .search-icon {
@@ -1590,20 +1542,14 @@ const updateOrder = async () => {
 }
 
 .search-input {
-  width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
+   width: 100%;
+  padding: 10px 12px;
   border: 2px solid var(--border-color);
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
-.search-input:focus {
-  outline: none;
-  border-color: #4ade80;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
-}
+
 
 .clear-search {
   position: absolute;
@@ -1637,16 +1583,8 @@ const updateOrder = async () => {
 }
 
 
-.filter-input {
-  flex: 1 1 1;
-  min-width: 0; /* để các phần tử co giãn đều nhau */
-  min-height: 38px;
-}
-@media (max-width: 578px) {
-  .filter-input {
-    max-width: 100%;
-  }
-}
+
+
 .filter-label {
   font-size: 0.875rem;
   font-weight: 600;
@@ -1662,7 +1600,6 @@ const updateOrder = async () => {
 }
 
 .date-input {
-  flex: 1;
   padding: 0.75rem;
   border: 2px solid var(--border-color);
   border-radius: 8px;
@@ -1670,10 +1607,7 @@ const updateOrder = async () => {
   transition: border-color 0.3s ease;
 }
 
-.date-input:focus {
-  outline: none;
-  border-color: #4ade80;
-}
+
 
 .date-separator {
   color: var(--text-secondary);
@@ -1839,6 +1773,9 @@ const updateOrder = async () => {
   color: white;
 }
 
+/* detail */
+
+
 /* === ENHANCED TABLE VIEW === */
 .orders-container {
   background: white;
@@ -1851,23 +1788,35 @@ const updateOrder = async () => {
 .table-container {
   overflow-x: auto;
 }
+.orders-table td {
+  padding: 0.5rem 0.75rem;
+}
+
+.orders-table th {
+  padding: 0.5rem 0.75rem;
+}
+
+.code-cell,
+.customer-info,
+.amount-info,
+.date-info {
+  gap: 2px !important; /* giảm khoảng cách dọc giữa các dòng */
+}
 
 .orders-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
   font-size: 14px;
-  
 }
 .orders-table th {
+  border: 1px solid #dee2e6;
   text-align: left;
-  padding: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: #374151;
   border-bottom: 2px solid #e5e7eb;
 }
 .orders-table td {
-  padding: 12px;
+  border: 1px solid #dee2e6;
   border-bottom: 1px solid #e5e7eb;
   color: #111827;
   vertical-align: middle;
@@ -1880,7 +1829,7 @@ const updateOrder = async () => {
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   color: var(--text-primary);
   font-weight: 600;
-  padding: 1.25rem 1rem;
+  padding: 0.8rem 1rem;
   text-align: left;
   border-bottom: 2px solid var(--border-color);
   font-size: 0.875rem;
@@ -1917,9 +1866,22 @@ const updateOrder = async () => {
   background: var(--gray-50);
 }
 
-.order-row:last-child {
-  border-bottom: none;
+/* Loại bỏ border đáy ở dòng cuối */
+.order-row:last-child td {
+  border-bottom: none !important;
 }
+
+/* Reset padding/margin tránh dư khoảng trắng */
+.orders-table,
+.orders-table tbody,
+.orders-table tr,
+.orders-table td,
+.table-container {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+
 
 .orders-table td {
   padding: 1.25rem 1rem;
@@ -1970,12 +1932,17 @@ const updateOrder = async () => {
   font-weight: 500;
 }
 
+.amount-cell {
+  text-align: left !important;
+}
+
 .amount-info {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start !important;
   gap: 0.25rem;
 }
+
 
 .amount-value {
   font-weight: 700;
@@ -1997,6 +1964,7 @@ const updateOrder = async () => {
   background: #fef3c7;
   color: #d97706;
 }
+
 
 /* Badge Trạng thái */
 .status-badge {
@@ -2224,17 +2192,75 @@ const updateOrder = async () => {
 
 /* === ENHANCED PAGINATION === */
 .pagination-section {
-  padding: 1.5rem 2rem;
-  background: var(--gray-50);
-  border-top: 1px solid var(--border-color);
+ display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background-color: #fff;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .pagination-info {
-  display: flex;
-  justify-content: space-between;
+ display: flex;
   align-items: center;
-  margin-bottom: 1.5rem;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.per-page-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.per-page-select {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-btn {
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.page-btn.active {
+  border-color: #111827;
+  font-weight: bold;
+}
+
+.page-btn.dots {
+  cursor: default;
+  background: none;
+  border: none;
 }
 
 .showing {
@@ -2544,7 +2570,7 @@ const updateOrder = async () => {
   }
 
   .info-grid {
-      display: grid;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   }
@@ -2587,6 +2613,7 @@ const updateOrder = async () => {
 
 /* Product List */
 .product-items {
+  
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -2630,14 +2657,18 @@ const updateOrder = async () => {
   height: 100%; /* chiếm toàn bộ chiều cao modal */
 }
 .order-detail-header {
-  position: sticky;
-  top: 0;
-  background: #fff; /* để header không bị trong suốt */
-  z-index: 10;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;       /* Căn giữa theo chiều dọc */
+  justify-content: center;   /* Căn giữa theo chiều ngang */
+  position: relative;        /* Để nút đóng có thể định vị tuyệt đối */
+  padding: 10px 40px;        /* Đệm hai bên để nút đóng không chạm tiêu đề */
 }
-
+.order-detail-header h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+}
 .order-detail-body {
   flex: 1;
   overflow-y: auto; /* cuộn riêng phần nội dung */

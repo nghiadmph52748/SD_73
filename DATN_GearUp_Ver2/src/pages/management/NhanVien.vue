@@ -1,88 +1,79 @@
 <template>
-  <nav class="breadcrumb">
-    <ol>
-      <li>
-        <router-link to="/">></router-link>
-      </li>
-      <li v-if="parent">
-        <router-link :to="parent.link">{{ parent.label }}</router-link>
-      </li>
-      <li class="active">{{ current }}</li>
-    </ol>
-  </nav>
+  
+ <div class="page-container">
+  <div class="card mb-3 p-3">
+  
+  <div class="d-flex gap-2">
+    <ActionButton
+      icon="add"
+      variant="success"
+      size="md"
+      label="Thêm nhân viên"
+      :showLabel="true"
+      tooltip="Thêm nhân viên mới"
+      @click="showAddModal = true"
+    />
 
-  <div class="page-container">
-
-           <div class="card mb-3 p-3">
-            <div class="card-body">
-              <h5 class="fw-bold mb-3">Bộ lọc</h5>
-              <div class="filter-row">
-                <input
-                  type="text"
-                placeholder="Tìm theo tên hoặc SĐT..." v-model="searchQuery" class="search-input"
-                />
-                <select class="form-select" v-model="selectedRole">
-                <option value="">Chức vụ: Tất cả</option> <option v-for="value in quyenHans" :key="value.id" :value="value.tenQuyenHan" > {{ value.tenQuyenHan }} </option>
-                </select>
-                <select class="form-select" v-model="selectedStatus">
-                  <option value="">Trạng thái: Tất cả</option> <option value="active">Hoạt động</option> <option value="inactive">Ngừng hoạt động</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-
-
-
-
-            <!-- Employees Table -->
-            <!-- Action Buttons Section -->
-              <!-- Tiêu đề và đường kẻ ngang -->
-              <!-- <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                  <div style="font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 6px;">
-                   Danh Sách Nhân Viên
-                  </div>
-                  </div>
-                  <hr style="margin-top: 0; margin-bottom: 15px;" />
-
-                  <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
-                  <button class="custom-button" @click="showAddModal = true"> <i class="fas fa-plus-circle"></i> Thêm nhân viên </button>
-                  <button class="custom-button" @click="exportToExcel">
-                  <i class="fas fa-download"></i> Xuất Excel
-                  </button>
-             </div> -->
-
+    <ActionButton
+      icon="download"
+      variant="primary"
+      size="md"
+      label="Xuất"
+      :showLabel="true"
+      tooltip="Xuất Excel"
+      @click="exportToExcel"
+    />
+  </div>
+</div>
 
       <div class="card">
-                <div class="card-header"
-              style="display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 6px;">
-              Danh Sách Nhân Viên
-            </div>
-            <div style="display: flex; gap: 12px;">
-              <button class="custom-button" @click="showAddModal = true">
-                <i class="fas fa-plus-circle"></i> Thêm nhân viên
-              </button>
-              <button class="custom-button" @click="exportToExcel">
-                <i class="fas fa-download"></i> Xuất Excel
-              </button>
-            </div>
-          </div>
+    <div class="card-header">
+    <div class="filter-row">
+      <input
+      type="text"
+      placeholder="Tìm Kiếm Người Dùng..."
+      v-model="searchQuery"
+      class="form-control filter-input"
+    />
+      <select class="form-control filter-input" v-model="selectedRole">
+        <option value="">Chức vụ: Tất cả</option>
+        <option
+          v-for="value in quyenHans"
+          :key="value.id"
+          :value="value.tenQuyenHan"
+        >
+          {{ value.tenQuyenHan }}
+        </option>
+      </select>
+      <select class="form-control filter-input" v-model="selectedStatus">
+        <option value="">Trạng thái: Tất cả</option>
+        <option value="active">Hoạt động</option>
+        <option value="inactive">Ngừng hoạt động</option>
+      </select>
+      <select v-model="selectedGender" class="form-control filter-input">
+        <option value="">Giới tính: Tất cả</option>
+        <option :value="true">Nam</option>
+        <option :value="false">Nữ</option>
+      </select>
+    </div>
+  </div>
+          
+            
         <div class="card-body">
           <div class="table-responsive">
             <table class="table">
               <thead>
                 <tr>
-                  <th>STT</th>
-                  <th>Ảnh</th>
-                  <!-- <th>Mã nhân viên</th> -->
-                  <th>Tên nhân viên</th>
+                  <th>#</th>
+                  <th>Mã </th>
+                  <th>Họ Tên</th>
                   <th>Email</th>
                   <th>SĐT</th>
                   <th>Ngày sinh</th>
+                  <th>Giới Tính</th>
                   <th>CCCD</th>
                   <!-- <th>Địa chỉ</th>  -->
-                  <!-- <th>Chức vụ</th> -->
+                  <th>Chức vụ</th>
                   <th>Trạng thái</th>
                   <th>Thao tác</th>
                 </tr>
@@ -95,7 +86,11 @@
                   <td data-label="STT">
                     {{ startIndex + index + 1 }}
                   </td>
-                  <td data-label="Ảnh">
+                  <td data-label="Mã nhân viên" class="employee-code">
+                    {{ employee.maNhanVien }}
+                  </td>
+                  <td data-label="Tên nhân viên" class="employee-name">
+                  <div class="employee-info">
                     <div class="employee-avatar">
                       <img
                         v-if="employee.anhNhanVien"
@@ -104,16 +99,26 @@
                       />
                       <div v-else class="placeholder-avatar">👤</div>
                     </div>
-                  </td>
-                  <!-- <td data-label="Mã nhân viên" class="employee-code">
-                    {{ employee.maNhanVien }}
-                  </td> -->
-                  <td data-label="Tên nhân viên" class="employee-name">
-                    {{ employee.tenNhanVien }}
-                  </td>
+                    <span>{{ employee.tenNhanVien }}</span>
+                  </div>
+                </td> 
                   <td data-label="Email">{{ employee.email }}</td>
                   <td data-label="SĐT">{{ employee.soDienThoai }}</td>
                   <td data-label="Ngày sinh">{{ employee.ngaySinh }}</td>
+                  <td data-label="Giới Tính" >
+                    <span 
+                    :class="[
+                        'badge',
+                        employee.gioiTinh === true
+                          ? 'badge-danger'
+                          : 'badge-success',
+                      ]"
+                      >
+                      {{ employee.gioiTinh === true ? "Nam" : "Nữ" }}
+                    </span>
+                    
+                  </td>
+
                   <td data-label="CCCD">{{ employee.cccd }}</td>
                   
                   <!-- <td data-label="Địa chỉ">
@@ -127,14 +132,14 @@
                       employee.diaChiCuThe
                     }}
                   </td> -->
-                  <!-- <td data-label="Chức vụ">{{ employee.tenQuyenHan }}</td> -->
+                  <td data-label="Chức vụ">{{ employee.tenQuyenHan }}</td>
                   <td data-label="Trạng thái">
                     <span
                       :class="[
-                        'badge',
+                        'bade',
                         employee.trangThai === true
-                          ? 'badge-success'
-                          : 'badge-danger',
+                          ? 'bade-success'
+                          : 'bade-danger',
                       ]"
                     >
                       {{ employee.trangThai ? "Hoạt động" : "Ngừng hoạt động" }}
@@ -177,7 +182,7 @@
                 @click="previousPage"
                 :disabled="currentPage === 1"
               >
-                ❮ Trước
+                 Trước
               </button>
               <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
               <button
@@ -185,7 +190,7 @@
                 @click="nextPage"
                 :disabled="currentPage === totalPages"
               >
-                Sau ❯
+                Tiếp 
               </button>
             </div>
           </div>
@@ -247,6 +252,14 @@
                     required
                   />
                 </div>
+                <div class="form-group">
+                  <label class="form-label">*Giới tính</label>
+                  <select v-model="employeeForm.gioiTinh" class="form-control add-input" required>
+                    <option :value="true">Nam</option>
+                    <option :value="false">Nữ</option>
+                  </select>
+                </div>
+
 
                 <div class="form-group">
                   <label class="form-label">*Email</label>
@@ -484,7 +497,13 @@
                     required
                   />
                 </div>
-
+               <div class="form-group">
+                  <label class="form-label">*Giới tính</label>
+                  <select v-model="employeeForm.gioiTinh" class="form-control edit-input" required>
+                    <option :value="true">Nam</option>
+                    <option :value="false">Nữ</option>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label class="form-label">*Email</label>
                   <input
@@ -748,6 +767,7 @@
                     <label>Ngày sinh:</label>
                     <span class="info-value">{{ selectedEmployee.ngaySinh }}</span>
                   </div>
+                  
                   <div class="info-item">
                     <label>Tỉnh/Thành phố:</label>
                     <span class="info-value">{{
@@ -827,7 +847,7 @@ const selectedEmployee = ref({});
 const provinces = ref([]);
 const districts = ref([]);
 const wards = ref([]);
-
+const selectedGender = ref(""); // mặc định tất cả
 // abc
 const showConfirmAddEmployee = ref(false);
 
@@ -873,7 +893,7 @@ const handleConfirmEditEmployee = async () => {
       editMessage.value = "✅ Cập nhật nhân viên thành công!";
       showEditModal.value = false; // đóng modal sau khi xong
     } else {
-      editMessage.value = "❌ Cập nhật nhân viên thất bại!";
+      editMessage.value = "";
     }
   } catch (e) {
     editMessage.value = "⚠️ Có lỗi xảy ra khi cập nhật nhân viên!";
@@ -919,6 +939,7 @@ const employeeForm = ref({
   tenNhanVien: "",
   cccd: "",
   ngaySinh: "",
+  gioiTinh: true,
   email: "",
   soDienThoai: "",
   thanhPho: "",
@@ -968,6 +989,14 @@ const filteredEmployees = computed(() => {
         employee.soDienThoai.includes(searchQuery.value)
     );
   }
+ if (selectedGender.value !== "") {
+  filtered = filtered.filter(
+    (employee) => employee.gioiTinh === selectedGender.value
+  );
+}
+
+
+
 
   if (selectedRole.value) {
     filtered = filtered.filter(
@@ -998,6 +1027,7 @@ const totalEmployees = computed(() => {
         employee.soDienThoai.includes(searchQuery.value)
     );
   }
+  
 
   if (selectedRole.value) {
     filtered = filtered.filter(
@@ -1187,6 +1217,48 @@ defineProps({
 
 
 <style scoped>
+
+.form-control {
+  width: 100%;
+  padding: 12px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.filter-input {
+  width: auto;         /* không chiếm full */
+  min-width: 150px;    /* độ rộng tối thiểu */
+  max-width: 200px;    /* độ rộng tối đa */
+  padding: 4px 8px;    /* padding gọn hơn */
+  font-size: 14px;     /* chữ nhỏ gọn */
+}
+
+
+.filter-row {
+  display: flex;
+  gap: 16px;      
+  flex-wrap: wrap;  
+  align-items: center;
+  margin-bottom: 1px;
+}
+
+.filter-row .search-input {
+  min-width: 220px;  
+  max-width: 300px;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.filter-row .form-select {
+  min-width: 150px;  
+  max-width: 200px;
+  padding: 12px 10px;
+  font-size: 14px;
+}
+
+
+
 .confirm-dialog-overlay {
   position: fixed;
   inset: 0;
@@ -1328,10 +1400,24 @@ defineProps({
 }
 
 .custom-button {
-  background-color: #1e2d50; 
+  background-color: #2ccf83; 
   color: #ffffff;
-  border: 1px solid #1e2d50;
+  border: 1px solid #66c079;
   border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+.custom-button1 {
+  background-color: #dbdbdb; 
+  color: #000000;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
   padding: 8px 16px;
   font-weight: 500;
   font-size: 14px;
@@ -1387,33 +1473,63 @@ defineProps({
   height: 40px;
   object-fit: cover;
 }
-.badge {
-   display: inline-block;
+.bade {
+  display: inline-block;
   padding: 4px 8px;
   font-size: 12px;
-  font-weight: 600;
-  border-radius: 4px;
-  border: 1px solid #adb5bd;
+  font-weight: 700;
+  border-radius: 5px;
   color: #212529;
   background-color: #f8f9fa;
+  
+}
+.bade-success {
+  background-color: #aef5bf;
+  color: #28a745 !important;
+  border: none;
+}
+
+.bade-danger {
+  background-color: #f17171;
+  color: #9e1d1d;
+  border: none;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 5px;
+  color: #212529;
+  background-color: #f8f9fa;
+  
 }
 
 .badge-success {
-  background-color: #28a745;
-  color: #ffffff;
+  font-weight: 700;
+  padding: 4px 14px;
+}
+.badge-success {
+  background-color: #aef5bf;
+  color: #28a745 !important;
+  border: none;
 }
 
 .badge-danger {
-  background-color: #dc3545;
-  color: #fff;
+  background-color: #71b3f1;
+  color: #1d699e;
+  border: none;
 }
 .badge-active {
-  border-color: #198754;
-  color: #198754;
+   background-color: #aef5bf;
+  color: #10822e;
+  border: none;
 }
 .badge-inactive {
-  border-color: #dc3545;
-  color: #dc3545;
+  background-color: #71b3f1;
+  color: #1d699e;
+  border: none;
 }
 
 .table {
@@ -1421,14 +1537,16 @@ defineProps({
   border-collapse: collapse;
   background-color: #fff;
   font-size: 14px;
+  
 }
 
 .table th,
 .table td {
-  padding: 0.75rem;
+  padding: 12px 16px;
   text-align: left;
   border: 1px solid #dee2e6;
   vertical-align: middle;
+  
 }
 
 .table th {
@@ -1454,34 +1572,24 @@ defineProps({
 }
 /* Container ảnh luôn là hình vuông, căn giữa */
 .employee-avatar {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f0f0; /* nền nhạt để không trống */
+  background: #f0f0f0;
 }
-
-/* Ảnh thật */
 .employee-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* Avatar placeholder (👤) cũng căn giữa */
 .placeholder-avatar {
-  font-size: 20px;
-  color: #777;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+  font-size: 18px;
+  color: #888;
 }
 
 
@@ -1601,18 +1709,21 @@ defineProps({
 /* Pagination */
 .pagination-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* info bên trái, nút phân trang bên phải */
   align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-   margin: 0;
+  margin-top: 3px;  /* cách bảng phía trên */
+  padding: 8px 12px;
 }
 
 .pagination {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 8px; /* tạo khoảng cách giữa nút và số trang */
+}
+.pagination .btn {
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 14px;
 }
 
 .page-info {
@@ -1733,6 +1844,11 @@ defineProps({
   flex-direction: column;
   gap: 2rem;
 }
+td[data-label="Trạng thái"] {
+  text-align: center;
+  vertical-align: middle;
+}
+
 
 .form-section h4 {
   margin: 0 0 1rem 0;
@@ -1796,7 +1912,9 @@ defineProps({
 }
 
 .employee-info {
-  width: 100%;
+ display: flex;
+  align-items: center;
+  gap: 8px;
   
 }
 
@@ -1821,6 +1939,14 @@ defineProps({
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 }
+th:nth-child(11), /* cột Trạng Thái */
+td:nth-child(11),
+th:nth-child(12), /* cột Thao Tác */
+td:nth-child(13) {
+  text-align: center;
+  vertical-align: middle;
+}
+
 
 .info-item {
   background: #fff;
@@ -1881,4 +2007,4 @@ defineProps({
 
 
 
-</style>
+</style>  

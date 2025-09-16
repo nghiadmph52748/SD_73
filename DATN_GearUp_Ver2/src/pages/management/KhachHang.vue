@@ -1,26 +1,36 @@
 <template>
-  <nav class="breadcrumb">
-    <ol>
-      <li>
-        <router-link to="/">></router-link>
-      </li>
-      <li v-if="parent">
-        <router-link :to="parent.link">{{ parent.label }}</router-link>
-      </li>
-      <li class="active">{{ current }}</li>
-    </ol>
-  </nav>
-  <div class="customer-management">
+<div class="card mb-3 p-3">
+   <div class="d-flex gap-2">
+    <ActionButton
+      icon="add"
+      variant="success"
+      size="md"
+      label="Thêm nhân viên"
+      :showLabel="true"
+      tooltip="Thêm nhân viên mới"
+      @click="showAddModal = true"
+    />
 
-    <!-- Search and Filter Section -->
-   <div class="card mb-3 p-3">
-  <h5 class="fw-bold mb-3">Bộ lọc</h5>
-  <div class="filter-group">
-    
+    <ActionButton
+      icon="download"
+      variant="primary"
+      size="md"
+      label="Xuất"
+      :showLabel="true"
+      tooltip="Xuất Excel"
+      @click="exportToExcel"
+    />
+  </div> 
+</div>
+
+
+
+    <div class="card">
+    <div class="filter-group">
     <!-- Ô tìm kiếm -->
     <input
       type="text"
-      placeholder="Tìm theo tên hoặc SĐT..."
+      placeholder="Tìm Kiếm Người Dùng..."
       v-model="searchQuery"
       class="form-control filter-input"
     />
@@ -39,54 +49,19 @@
       <option value="inactive">Ngừng hoạt động</option>
     </select>
   </div>
-</div>
-
-
-
-    <!-- Customers Table -->
-     <!-- <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-        <div style="font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 6px;">
-          📋 Danh sách Khách Hàng
-        </div>
-      </div>
-      <hr style="margin-top: 0; margin-bottom: 15px;" />
-
-      <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
-    <button class="custom-button" @click="showAddModal = true">
-      <i class="fas fa-plus-circle"></i> Thêm nhân viên
-    </button>
-    <button class="custom-button" @click="exportToExcel">
-      <i class="fas fa-download"></i> Download template
-    </button>
-    </div> -->
-
-
-    <div class="card">
-       <div class="card-header"
-              style="display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 6px;">
-              Danh Sách Nhân Viên
-            </div>
-            <div style="display: flex; gap: 12px;">
-              <button class="custom-button" @click="showAddModal = true">
-                <i class="fas fa-plus-circle"></i> Thêm Khách Hàng
-              </button>
-              <button class="custom-button" @click="exportToExcel">
-                <i class="fas fa-download"></i> Xuất Excel
-              </button>
-            </div>
-          </div>
+          
       <div class="card-body">
         <table class="table">
           <thead>
             <tr>
-              <th>STT</th>
+              <th>#</th>
+              <th>Mã</th>
               <th>Tên khách hàng</th>
               <th>Email</th>
               <th>Số điện thoại</th>
               <th>Giới tính</th>
               <th>Ngày sinh</th>
-              <th>Địa chỉ</th>
+              <!-- <th>Địa chỉ</th> -->
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
@@ -97,12 +72,21 @@
               :key="customer.id"
             >
               <td>{{ index + 1 }}</td>
+              <td>{{ customer.maKhachHang }}</td>
               <td class="customer-name">{{ customer.tenKhachHang }}</td>
               <td>{{ customer.email }}</td>
               <td>{{ customer.soDienThoai }}</td>
-              <td>{{ customer.gioiTinh ? "Nam" : "Nữ" }}</td>
+              <td><span :class="[
+                    'badge',
+                    customer.gioiTinh === false
+                       ? 'badge-success'
+                       : 'badge-danger',
+                  ]"
+                  >
+                {{ customer.gioiTinh ? "Nam" : "Nữ" }}
+              </span></td>
               <td>{{ customer.ngaySinh }}</td>
-              <td>
+              <!-- <td>
                 {{
                   customer.listDiaChi && customer.listDiaChi.length > 0
                     ? customer.listDiaChi[0].diaChiCuThe +
@@ -114,14 +98,14 @@
                       customer.listDiaChi[0].thanhPho
                     : "Chưa cập nhật"
                 }}
-              </td>
+              </td> -->
               <td>
                 <span
                   :class="[
-                    'badge',
+                    'bade',
                     customer.deleted === false
-                      ? 'badge-success'
-                      : 'badge-danger',
+                      ? 'bade-success'
+                      : 'bade-danger',
                   ]"
                 >
                   {{
@@ -137,7 +121,7 @@
                       size="sm"
                       tooltip="Xem chi tiết"
                       class="action-button-info"
-                      @click="viewCustomer(customer)"
+                       @click="viewCustomer(customer)"
                     />
                   <ActionButton
                     icon="edit"
@@ -145,7 +129,7 @@
                     size="sm"
                     tooltip="Chỉnh sửa thông tin"
                     class="action-button-warning"
-                    @click="editCustomer(customer)"
+                   @click="editCustomer(customer)"
                   />
                   <ActionButton
                     icon="delete"
@@ -160,7 +144,7 @@
             </tr>
           </tbody>
         </table>
-        <!-- Modal xác nhận xoá -->
+     <!-- Modal xác nhận xoá -->
 <div
   v-if="showDeleteConfirmModal"
   class="confirm-dialog-overlay"
@@ -184,7 +168,6 @@
   </div>
 </div>
 
-
         <!-- Pagination -->
         <div class="pagination-wrapper">
           <div class="pagination-info">
@@ -197,7 +180,7 @@
               @click="previousPage"
               :disabled="currentPage === 1"
             >
-              ❮ Trước
+              Trước
             </button>
             <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
             <button
@@ -205,14 +188,12 @@
               @click="nextPage"
               :disabled="currentPage === totalPages"
             >
-              Sau ❯
+              Tiếp
             </button>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Customer Detail Modal -->
+      <!-- Customer Detail Modal -->
     <div
       v-if="showDetailModal"
       class="modal-overlay"
@@ -731,10 +712,11 @@
       </button>
     </div>
   </div>
-</div>
-
     </div>
+</div>
   </div>
+  
+   
 </template>
 
 <script setup>
@@ -1179,6 +1161,34 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 </script>
 
 <style scoped>
+/* Giới tính */
+.table th:nth-child(6),
+.table td:nth-child(6) {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Trạng thái */
+.table th:nth-child(8),
+.table td:nth-child(8) {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Thao tác */
+.table th:nth-child(9) {
+  text-align: center;
+  vertical-align: middle;
+}
+/* Căn giữa cả chiều ngang và dọc cho cột thao tác */
+.table td:nth-child(9) {
+  text-align: center;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .customer-management {
   max-width: 1800px;
@@ -1367,31 +1377,24 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 /* Pagination */
 .pagination-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* info bên trái, nút phân trang bên phải */
   align-items: center;
-  margin-top: 1rem;
-   margin: 0;
+  margin-top: 3px;  /* cách bảng phía trên */
+  padding: 8px 12px;
+  font-size: 14px;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* tạo khoảng cách giữa nút và số trang */
+  font-size: 14px;
+  
+}
 .pagination .btn {
-  border: none;
-  background-color: #8d98a4;
-  color: #fff;
-  font-weight: 500;
+  border-radius: 6px;
+  padding: 4px 10px;
 }
-
-
-
-.pagination .btn:hover:not(:disabled) {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.pagination .btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 
 .page-info {
   margin: 0 0.75rem;
@@ -1568,7 +1571,7 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 
 .form-control {
   width: 100%;
-  padding: 8px 12px;
+  padding: 12px 12px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
@@ -1839,34 +1842,59 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
   font-weight: 600;
   margin-right: 4px;
 }
+.bade {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 5px;
+  color: #212529;
+  background-color: #f8f9fa;
+  
+}
+.bade-success {
+  background-color: #aef5bf;
+  color: #28a745 !important;
+  border: none;
+}
 
+.bade-danger {
+  background-color: #f17171;
+  color: #9e1d1d;
+  border: none;
+}
 .badge {
   display: inline-block;
   padding: 4px 8px;
   font-size: 12px;
-  font-weight: 600;
-  border-radius: 4px;
-  border: 1px solid #adb5bd;
+  font-weight: 700;
+  border-radius: 5px;
   color: #212529;
   background-color: #f8f9fa;
+  
 }
 
+
 .badge-success {
-  background-color: #28a745;
-  color: #ffffff;
+  background-color: #aef5bf;
+  color: #28a745 !important;
+  border: none;
 }
 
 .badge-danger {
-  background-color: #dc3545;
-  color: #fff;
+  background-color: #71b3f1;
+  color: #1d699e;
+  border: none;
 }
 .badge-active {
-  border-color: #198754;
-  color: #198754;
+  background-color: #71b3f1;
+  color: #1d699e;
+  border: none;
 }
 .badge-inactive {
   border-color: #dc3545;
   color: #dc3545;
+  border: none;
 }
 .breadcrumb {
   font-size: 24px;
@@ -1916,14 +1944,10 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
   color: #333;
 }
 
+
 .badge-success {
   font-weight: 700;
-  padding: 4px 20px;
-}
-
-.badge-danger {
-  font-weight: 700;
-  padding: 4px 4px;
+  padding: 4px 14px;
 }
 .filter-group {
   display: flex;
@@ -1931,8 +1955,11 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 }
 
 .filter-input {
-  flex: 1;              /* Chia đều không gian cho các phần tử */
-  min-height: 38px;     /* Chiều cao tối thiểu */
+  width: auto;         /* không chiếm full */
+  min-width: 150px;    /* độ rộng tối thiểu */
+  max-width: 200px;    /* độ rộng tối đa */
+  padding: 4px 8px;    /* padding gọn hơn */
+  font-size: 14px;     /* chữ nhỏ gọn */
 }
 
 

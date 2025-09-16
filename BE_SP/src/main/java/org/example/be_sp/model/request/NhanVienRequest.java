@@ -22,6 +22,7 @@ public class NhanVienRequest {
     private String phuong;
     private String diaChiCuThe;
     private String cccd;
+    private Boolean gioiTinh;
     private Integer idQuyenHan;
     private Boolean trangThai;
     private Boolean deleted;

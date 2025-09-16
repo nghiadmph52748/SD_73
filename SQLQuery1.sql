@@ -1336,3 +1336,6 @@ USE [master]
 GO
 ALTER DATABASE [GearUp] SET  READ_WRITE 
 GO
+
+ALTER TABLE nhan_vien
+ADD gioi_tinh BIT NULL; 

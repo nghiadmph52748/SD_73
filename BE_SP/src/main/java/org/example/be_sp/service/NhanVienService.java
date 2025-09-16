@@ -73,7 +73,7 @@ public class NhanVienService {
         nv.setNgaySinh(request.getNgaySinh());
         nv.setTrangThai(request.getTrangThai());
         nv.setDeleted(request.getDeleted());
-
+        nv.setGioiTinh(request.getGioiTinh());
         // 👇 update ảnh nhân viên
         if (request.getAnhNhanVien() != null) {
             nv.setAnhNhanVien(request.getAnhNhanVien());
