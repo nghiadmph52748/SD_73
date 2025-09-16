@@ -546,6 +546,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup thông báo bên phải màn hình -->
+    <div class="notification-container">
+      <div 
+        v-if="showNotification" 
+        :class="['notification-popup', notificationType, showNotification ? 'show' : '']"
+      >
+        <div class="notification-header">
+          <h4 class="notification-title">{{ notificationTitle }}</h4>
+        </div>
+        <p class="notification-message">{{ notificationMessage }}</p>
+        <div class="notification-progress"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -585,6 +599,12 @@ const originalData = ref({});
 const showDeleteModal = ref(false);
 const deleteItemId = ref(null);
 const deleteItemName = ref("");
+
+// Biến cho popup thông báo
+const showNotification = ref(false);
+const notificationType = ref('success');
+const notificationTitle = ref('');
+const notificationMessage = ref('');
 
 // Biến cho form thêm mới
 const showAddForm = ref(false);
@@ -681,12 +701,12 @@ const fetchAll = async () => {
 
 const fetchCreate = async () => {
   if (!file.value) {
-    errorMessage.value = "Vui lòng chọn file ảnh";
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng chọn file ảnh');
     return;
   }
 
-  if (!newAnhSanPham.value.loaiAnh) {
-    errorMessage.value = "Vui lòng nhập loại ảnh";
+  if (!newAnhSanPham.value.loaiAnh || newAnhSanPham.value.loaiAnh.trim() === '') {
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng nhập loại ảnh');
     return;
   }
 
@@ -720,13 +740,11 @@ const fetchCreate = async () => {
     }
 
     await fetchAll();
-    successMessage.value = "Ảnh sản phẩm đã được thêm thành công!";
-    clearSuccessMessage();
-    closeAddForm(); // Đóng form sau khi thêm thành công
+    closeAddForm();
+    showNotificationPopup('success', 'Thành công', 'Ảnh sản phẩm đã được thêm thành công!');
   } catch (error) {
     console.error("Error creating:", error);
-    errorMessage.value =
-      "Lỗi khi thêm: " + (error.message || "Không thể tạo ảnh sản phẩm");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể tạo ảnh sản phẩm");
   } finally {
     uploading.value = false;
   }
@@ -822,13 +840,10 @@ const fetchUpdate = async () => {
 
     await fetchAll();
     closeEditForm();
-    editSuccessMessage.value = "Ảnh sản phẩm đã được cập nhật thành công!";
-    clearEditSuccessMessage();
+    showNotificationPopup('success', 'Thành công', 'Ảnh sản phẩm đã được cập nhật thành công!');
   } catch (error) {
     console.error("Error updating:", error);
-    editErrorMessage.value =
-      "Lỗi khi cập nhật: " +
-      (error.message || "Không thể cập nhật ảnh sản phẩm");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể cập nhật ảnh sản phẩm");
   } finally {
     uploading.value = false;
   }
@@ -855,16 +870,11 @@ const confirmDelete = async () => {
     uploading.value = true;
     await fetchUpdateStatusAnhSanPham(deleteItemId.value);
     await fetchAll();
-    successMessage.value = "Ảnh sản phẩm đã được xóa thành công!";
-    clearSuccessMessage();
     closeDeleteModal();
+    showNotificationPopup('success', 'Thành công', 'Ảnh sản phẩm đã được xóa thành công!');
   } catch (error) {
     console.error("There has been a problem with your fetch operation:", error);
-    errorMessage.value =
-      "Lỗi khi xóa: " + (error.message || "Không thể xóa ảnh sản phẩm");
-    setTimeout(() => {
-      errorMessage.value = null;
-    }, 3000);
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể xóa ảnh sản phẩm");
   } finally {
     uploading.value = false;
   }
@@ -874,6 +884,23 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false;
   deleteItemId.value = null;
   deleteItemName.value = "";
+};
+
+// Methods cho popup thông báo
+const showNotificationPopup = (type, title, message) => {
+  notificationType.value = type;
+  notificationTitle.value = title;
+  notificationMessage.value = message;
+  showNotification.value = true;
+  
+  // Tự động ẩn sau 3 giây
+  setTimeout(() => {
+    closeNotification();
+  }, 3000);
+};
+
+const closeNotification = () => {
+  showNotification.value = false;
 };
 
 const closeAddForm = () => {

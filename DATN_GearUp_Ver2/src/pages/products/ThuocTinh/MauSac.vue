@@ -390,6 +390,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup thông báo bên phải màn hình -->
+    <div class="notification-container">
+      <div 
+        v-if="showNotification" 
+        :class="['notification-popup', notificationType, showNotification ? 'show' : '']"
+      >
+        <div class="notification-header">
+          <h4 class="notification-title">{{ notificationTitle }}</h4>
+        </div>
+        <p class="notification-message">{{ notificationMessage }}</p>
+        <div class="notification-progress"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -425,6 +439,12 @@ const editSuccessMessage = ref(null);
 const showDeleteModal = ref(false);
 const deleteItemId = ref(null);
 const deleteItemName = ref("");
+
+// Biến cho popup thông báo
+const showNotification = ref(false);
+const notificationType = ref('success');
+const notificationTitle = ref('');
+const notificationMessage = ref('');
 
 // Pagination variables
 const currentPage = ref(1);
@@ -478,8 +498,8 @@ const handleFilter = () => {
 };
 
 const fetchCreate = async () => {
-  if (!newMauSac.value.tenMauSac) {
-    errorMessage.value = "Vui lòng nhập tên màu sắc";
+  if (!newMauSac.value.tenMauSac || newMauSac.value.tenMauSac.trim() === '') {
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng nhập tên màu sắc');
     return;
   }
 
@@ -487,10 +507,36 @@ const fetchCreate = async () => {
   errorMessage.value = null;
 
   try {
-    let res = await fetchCreateMauSac(newMauSac.value);
-    if (res.status === "FAILED" && res.code === "410") {
-      return (errorMessage.value = "Tên màu sắc đã tồn tại");
+    // Chuẩn bị dữ liệu gửi đi
+    const dataToSend = {
+      tenMauSac: newMauSac.value.tenMauSac.trim(),
+      trangThai: newMauSac.value.trangThai,
+      deleted: false
+    };
+    
+    let res = await fetchCreateMauSac(dataToSend);
+
+    if (res && res.status === "FAILED") {
+      if (res.code === "410") {
+        showNotificationPopup('error', 'Lỗi', 'Tên màu sắc đã tồn tại');
+      } else {
+        showNotificationPopup('error', 'Lỗi', res.message || 'Có lỗi xảy ra khi thêm màu sắc');
+      }
+      return;
     }
+
+    // Thêm màu sắc mới vào đầu danh sách
+    const newMauSacItem = {
+      id: res.data?.id || Date.now(),
+      tenMauSac: dataToSend.tenMauSac,
+      trangThai: dataToSend.trangThai,
+      deleted: false,
+      ngayTao: new Date().toISOString(),
+      ngaySua: new Date().toISOString()
+    };
+    
+    // Thêm vào đầu danh sách
+    MauSacs.value.unshift(newMauSacItem);
 
     // Reset form
     newMauSac.value = {
@@ -499,14 +545,11 @@ const fetchCreate = async () => {
       deleted: false,
     };
 
-    await fetchMauSacs();
-    successMessage.value = "Màu sắc đã được thêm thành công!";
-    clearSuccessMessage();
     closeAddForm();
+    showNotificationPopup('success', 'Thành công', 'Màu sắc đã được thêm thành công!');
   } catch (error) {
     console.error("Error creating color:", error);
-    errorMessage.value =
-      "Lỗi khi thêm: " + (error.message || "Không thể tạo màu sắc");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể tạo màu sắc");
   } finally {
     uploading.value = false;
   }
@@ -530,12 +573,10 @@ const fetchUpdate = async () => {
     await fetchUpdateMauSac(selectedMauSac.value.id, selectedMauSac.value);
     await fetchMauSacs();
     closeDetailModal();
-    editSuccessMessage.value = "Màu sắc đã được cập nhật thành công!";
-    clearEditSuccessMessage();
+    showNotificationPopup('success', 'Thành công', 'Màu sắc đã được cập nhật thành công!');
   } catch (error) {
     console.error("Error updating color:", error);
-    editErrorMessage.value =
-      "Lỗi khi cập nhật: " + (error.message || "Không thể cập nhật màu sắc");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể cập nhật màu sắc");
   } finally {
     uploading.value = false;
   }
@@ -560,16 +601,11 @@ const confirmDelete = async () => {
     uploading.value = true;
     await fetchUpdateStatusMauSac(deleteItemId.value);
     await fetchMauSacs();
-    successMessage.value = "Màu sắc đã được xóa thành công!";
-    clearSuccessMessage();
     closeDeleteModal();
+    showNotificationPopup('success', 'Thành công', 'Màu sắc đã được xóa thành công!');
   } catch (error) {
     console.error("Error deleting color:", error);
-    errorMessage.value =
-      "Lỗi khi xóa: " + (error.message || "Không thể xóa màu sắc");
-    setTimeout(() => {
-      errorMessage.value = null;
-    }, 3000);
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể xóa màu sắc");
   } finally {
     uploading.value = false;
   }
@@ -579,6 +615,23 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false;
   deleteItemId.value = null;
   deleteItemName.value = "";
+};
+
+// Methods cho popup thông báo
+const showNotificationPopup = (type, title, message) => {
+  notificationType.value = type;
+  notificationTitle.value = title;
+  notificationMessage.value = message;
+  showNotification.value = true;
+  
+  // Tự động ẩn sau 3 giây
+  setTimeout(() => {
+    closeNotification();
+  }, 3000);
+};
+
+const closeNotification = () => {
+  showNotification.value = false;
 };
 
 const closeEditForm = () => {

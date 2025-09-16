@@ -394,6 +394,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup thông báo bên phải màn hình -->
+    <div class="notification-container">
+      <div 
+        v-if="showNotification" 
+        :class="['notification-popup', notificationType, showNotification ? 'show' : '']"
+      >
+        <div class="notification-header">
+          <h4 class="notification-title">{{ notificationTitle }}</h4>
+        </div>
+        <p class="notification-message">{{ notificationMessage }}</p>
+        <div class="notification-progress"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -425,6 +439,12 @@ const editSuccessMessage = ref(null);
 const showDeleteModal = ref(false);
 const deleteItemId = ref(null);
 const deleteItemName = ref("");
+
+// Biến cho popup thông báo
+const showNotification = ref(false);
+const notificationType = ref('success');
+const notificationTitle = ref('');
+const notificationMessage = ref('');
 
 // Biến cho form thêm mới
 const showAddForm = ref(false);
@@ -477,8 +497,8 @@ const fetchAll = async () => {
 };
 
 const fetchCreate = async () => {
-  if (!newTrongLuong.value.tenTrongLuong) {
-    errorMessage.value = "Vui lòng nhập tên trọng lượng";
+  if (!newTrongLuong.value.tenTrongLuong || newTrongLuong.value.tenTrongLuong.trim() === '') {
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng nhập tên trọng lượng');
     return;
   }
 
@@ -486,10 +506,36 @@ const fetchCreate = async () => {
   errorMessage.value = null;
 
   try {
-    let res = await fetchCreateTrongLuong(newTrongLuong.value);
-    if (res.status === "FAILED" && res.code === "410") {
-      return (errorMessage.value = "Tên trọng lượng đã tồn tại");
+    // Chuẩn bị dữ liệu gửi đi
+    const dataToSend = {
+      tenTrongLuong: newTrongLuong.value.tenTrongLuong.trim(),
+      trangThai: newTrongLuong.value.trangThai,
+      deleted: false
+    };
+    
+    let res = await fetchCreateTrongLuong(dataToSend);
+
+    if (res && res.status === "FAILED") {
+      if (res.code === "410") {
+        showNotificationPopup('error', 'Lỗi', 'Tên trọng lượng đã tồn tại');
+      } else {
+        showNotificationPopup('error', 'Lỗi', res.message || 'Có lỗi xảy ra khi thêm trọng lượng');
+      }
+      return;
     }
+
+    // Thêm trọng lượng mới vào đầu danh sách
+    const newTrongLuongItem = {
+      id: res.data?.id || Date.now(),
+      tenTrongLuong: dataToSend.tenTrongLuong,
+      trangThai: dataToSend.trangThai,
+      deleted: false,
+      ngayTao: new Date().toISOString(),
+      ngaySua: new Date().toISOString()
+    };
+    
+    // Thêm vào đầu danh sách
+    TrongLuongs.value.unshift(newTrongLuongItem);
 
     // Reset form
     newTrongLuong.value = {
@@ -498,14 +544,11 @@ const fetchCreate = async () => {
       deleted: false,
     };
 
-    await fetchAll();
-    successMessage.value = "Trọng lượng đã được thêm thành công!";
-    clearSuccessMessage();
-    closeAddForm(); // Đóng form sau khi thêm thành công
+    closeAddForm();
+    showNotificationPopup('success', 'Thành công', 'Trọng lượng đã được thêm thành công!');
   } catch (error) {
     console.error("Error creating:", error);
-    errorMessage.value =
-      "Lỗi khi thêm: " + (error.message || "Không thể tạo trọng lượng");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể tạo trọng lượng");
   } finally {
     uploading.value = false;
   }
@@ -535,16 +578,11 @@ const confirmDelete = async () => {
     uploading.value = true;
     await fetchUpdateStatusTrongLuong(deleteItemId.value);
     await fetchAll();
-    successMessage.value = "Trọng lượng đã được xóa thành công!";
-    clearSuccessMessage();
     closeDeleteModal();
+    showNotificationPopup('success', 'Thành công', 'Trọng lượng đã được xóa thành công!');
   } catch (error) {
     console.error("There has been a problem with your fetch operation:", error);
-    errorMessage.value =
-      "Lỗi khi xóa: " + (error.message || "Không thể xóa trọng lượng");
-    setTimeout(() => {
-      errorMessage.value = null;
-    }, 3000);
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể xóa trọng lượng");
   } finally {
     uploading.value = false;
   }
@@ -554,6 +592,23 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false;
   deleteItemId.value = null;
   deleteItemName.value = "";
+};
+
+// Methods cho popup thông báo
+const showNotificationPopup = (type, title, message) => {
+  notificationType.value = type;
+  notificationTitle.value = title;
+  notificationMessage.value = message;
+  showNotification.value = true;
+  
+  // Tự động ẩn sau 3 giây
+  setTimeout(() => {
+    closeNotification();
+  }, 3000);
+};
+
+const closeNotification = () => {
+  showNotification.value = false;
 };
 
 const closeAddForm = () => {
@@ -595,13 +650,10 @@ const saveChanges = async () => {
 
     await fetchAll();
     closeDetailModal();
-    editSuccessMessage.value = "Trọng lượng đã được cập nhật thành công!";
-    clearEditSuccessMessage();
+    showNotificationPopup('success', 'Thành công', 'Trọng lượng đã được cập nhật thành công!');
   } catch (error) {
     console.error("Error updating:", error);
-    editErrorMessage.value =
-      "Lỗi khi cập nhật: " +
-      (error.message || "Không thể cập nhật trọng lượng");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể cập nhật trọng lượng");
   } finally {
     uploading.value = false;
   }
