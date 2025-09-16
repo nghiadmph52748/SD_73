@@ -110,8 +110,8 @@ const currentPageTitle = computed(() => {
     "/sales/returns": "Quản lý đơn trả hàng",
 
     // Marketing & Promotions
-    "/marketing/discounts": "Giảm Giá",
-    "/marketing/campaigns": "Khuyến Mãi",
+    "/marketing/discounts": "Quản lý phiếu giảm giá",
+    "/marketing/campaigns": "Quản lý đợt giảm giá",
     "/marketing/vouchers": "Quản lý phiếu người dùng",
 
     // Customer Engagement
@@ -136,7 +136,7 @@ const currentPageTitle = computed(() => {
     "/pos": "Hệ thống bán hàng (POS)",
     "/employees": "Quản lý nhân viên",
     "/customers": "Quản lý khách hàng",
-    "/discounts": "Giảm Giá",
+    "/discounts": "Quản lý phiếu giảm giá",
     "/returns": "Quản lý đơn trả hàng",
     "/reviews": "Quản lý đánh giá sản phẩm",
   };
@@ -204,8 +204,8 @@ const pageTitle = computed(() => {
     "/sales/returns": "Quản lý đơn trả hàng",
 
     // Marketing & Promotions
-    "/marketing/discounts": "Giảm Giá",
-    "/marketing/campaigns": "Khuyến Mãi",
+    "/marketing/discounts": "Quản lý phiếu giảm giá",
+    "/marketing/campaigns": "Quản lý đợt giảm giá",
     "/marketing/vouchers": "Quản lý phiếu người dùng",
 
     // Customer Engagement
@@ -291,14 +291,14 @@ const menuItems = [
 
   // Discounts Section
   {
-    name: "GIẢM GIÁ & KHUYẾN MÃI",
+    name: "GIẢM GIÁ",
     iconSvg: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12.79 21L3 11.21V2H11.21L21 11.79L12.79 21ZM4.41 4H6.58V5.17C6.58 5.72 7.03 6.17 7.58 6.17S8.58 5.72 8.58 5.17V4H10.76L19 12.24L12.79 18.45L4.55 10.21L4.41 4Z"/>
     </svg>`,
     hasSubmenu: true,
     submenu: [
-      { path: "/marketing/discounts", name: "Giảm Giá" },
-      { path: "/marketing/campaigns", name: "Khuyến Mãi" },
+      { path: "/marketing/discounts", name: "Phiếu Giảm Giá" },
+      { path: "/marketing/campaigns", name: "Đợt GIảm Giá" },
     ],
   },
 
@@ -1151,6 +1151,14 @@ const checkMobile = () => {
   min-width: 80px;
 }
 
+.sidebar-collapsed .logo-section {
+  padding: 0.625rem;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .logo-section {
   padding: 1.5rem;
   border-bottom: 1px solid #ffffff;
@@ -1531,11 +1539,11 @@ const checkMobile = () => {
 .header {
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  padding: 0.75rem 2rem;
+  padding: 0.625rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 56px;
+  min-height: 52px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
@@ -1556,7 +1564,7 @@ const checkMobile = () => {
   display: flex;
   align-items: center;
   background: #f8f9fa;
-  padding: 0.5rem 1rem;
+  padding: 0.4375rem 1rem;
   border-radius: 8px;
   border: 1px solid #e9ecef;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -1662,7 +1670,7 @@ const checkMobile = () => {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.1875rem 0.5rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
@@ -1772,12 +1780,12 @@ const checkMobile = () => {
 /* Modern Notification Button */
 .notification-button {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border: none;
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 11px;
   cursor: pointer;
   display: flex;
   align-items: center;

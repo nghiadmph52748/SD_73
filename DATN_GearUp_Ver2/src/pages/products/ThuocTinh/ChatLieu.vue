@@ -186,7 +186,7 @@
                     class="btn btn-secondary btn-sm"
                     title="Cập nhật"
                   >
-                    Cập nhật
+                    Chi tiết
                   </button>
                   <button
                     v-on:click="fetchDelete(value.id)"
@@ -393,6 +393,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup thông báo bên phải màn hình -->
+    <div class="notification-container">
+      <div 
+        v-if="showNotification" 
+        :class="['notification-popup', notificationType, showNotification ? 'show' : '']"
+      >
+        <div class="notification-header">
+          <h4 class="notification-title">{{ notificationTitle }}</h4>
+        </div>
+        <p class="notification-message">{{ notificationMessage }}</p>
+        <div class="notification-progress"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -427,6 +441,12 @@ const editSuccessMessage = ref(null);
 const showDeleteModal = ref(false);
 const deleteItemId = ref(null);
 const deleteItemName = ref("");
+
+// Biến cho popup thông báo
+const showNotification = ref(false);
+const notificationType = ref('success');
+const notificationTitle = ref('');
+const notificationMessage = ref('');
 
 // Pagination variables
 const currentPage = ref(1);
@@ -480,8 +500,8 @@ const handleFilter = () => {
 };
 
 const fetchCreate = async () => {
-  if (!newChatLieu.value.tenChatLieu) {
-    errorMessage.value = "Vui lòng nhập tên chất liệu";
+  if (!newChatLieu.value.tenChatLieu || newChatLieu.value.tenChatLieu.trim() === '') {
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng nhập tên chất liệu');
     return;
   }
 
@@ -489,11 +509,36 @@ const fetchCreate = async () => {
   errorMessage.value = null;
 
   try {
-    let res = await fetchCreateChatLieu(newChatLieu.value);
+    // Chuẩn bị dữ liệu gửi đi
+    const dataToSend = {
+      tenChatLieu: newChatLieu.value.tenChatLieu.trim(),
+      trangThai: newChatLieu.value.trangThai,
+      deleted: false
+    };
+    
+    let res = await fetchCreateChatLieu(dataToSend);
 
-    if (res.status === "FAILED" && res.code === "410") {
-      return (errorMessage.value = "Tên chất liệu đã tồn tại");
+    if (res && res.status === "FAILED") {
+      if (res.code === "410") {
+        showNotificationPopup('error', 'Lỗi', 'Tên chất liệu đã tồn tại');
+      } else {
+        showNotificationPopup('error', 'Lỗi', res.message || 'Có lỗi xảy ra khi thêm chất liệu');
+      }
+      return;
     }
+
+    // Thêm chất liệu mới vào đầu danh sách
+    const newChatLieuItem = {
+      id: res.data?.id || Date.now(),
+      tenChatLieu: dataToSend.tenChatLieu,
+      trangThai: dataToSend.trangThai,
+      deleted: false,
+      ngayTao: new Date().toISOString(),
+      ngaySua: new Date().toISOString()
+    };
+    
+    // Thêm vào đầu danh sách
+    ChatLieus.value.unshift(newChatLieuItem);
 
     // Reset form
     newChatLieu.value = {
@@ -502,14 +547,11 @@ const fetchCreate = async () => {
       deleted: false,
     };
 
-    await fetchAll();
-    successMessage.value = "Chất liệu đã được thêm thành công!";
-    clearSuccessMessage();
     closeAddForm();
+    showNotificationPopup('success', 'Thành công', 'Chất liệu đã được thêm thành công!');
   } catch (error) {
     console.error("Error creating:", error);
-    errorMessage.value =
-      "Lỗi khi thêm: " + (error.message || "Không thể tạo chất liệu");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể tạo chất liệu");
   } finally {
     uploading.value = false;
   }
@@ -537,12 +579,10 @@ const fetchUpdate = async () => {
 
     await fetchAll();
     closeDetailModal();
-    editSuccessMessage.value = "Chất liệu đã được cập nhật thành công!";
-    clearEditSuccessMessage();
+    showNotificationPopup('success', 'Thành công', 'Chất liệu đã được cập nhật thành công!');
   } catch (error) {
     console.error("Error updating:", error);
-    editErrorMessage.value =
-      "Lỗi khi cập nhật: " + (error.message || "Không thể cập nhật chất liệu");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể cập nhật chất liệu");
   } finally {
     uploading.value = false;
   }
@@ -567,16 +607,11 @@ const confirmDelete = async () => {
     uploading.value = true;
     await fetchUpdateStatusChatLieu(deleteItemId.value);
     await fetchAll();
-    successMessage.value = "Chất liệu đã được xóa thành công!";
-    clearSuccessMessage();
     closeDeleteModal();
+    showNotificationPopup('success', 'Thành công', 'Chất liệu đã được xóa thành công!');
   } catch (error) {
     console.error("There has been a problem with your fetch operation:", error);
-    errorMessage.value =
-      "Lỗi khi xóa: " + (error.message || "Không thể xóa chất liệu");
-    setTimeout(() => {
-      errorMessage.value = null;
-    }, 3000);
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể xóa chất liệu");
   } finally {
     uploading.value = false;
   }
@@ -586,6 +621,23 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false;
   deleteItemId.value = null;
   deleteItemName.value = "";
+};
+
+// Methods cho popup thông báo
+const showNotificationPopup = (type, title, message) => {
+  notificationType.value = type;
+  notificationTitle.value = title;
+  notificationMessage.value = message;
+  showNotification.value = true;
+  
+  // Tự động ẩn sau 3 giây
+  setTimeout(() => {
+    closeNotification();
+  }, 3000);
+};
+
+const closeNotification = () => {
+  showNotification.value = false;
 };
 
 const closeEditForm = () => {

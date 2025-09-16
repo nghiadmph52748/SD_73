@@ -5301,3 +5301,703 @@ h3 .icon-svg {
   min-width: 160px !important;
   text-align: center !important;
 }
+
+/* ===== CSS CHO NÚT HỦY BỎ TRONG POPUP THÊM XUẤT XỨ ===== */
+/* Nút Hủy bỏ trong popup thêm xuất xứ - nền trắng, chữ xanh lá cây */
+.xuat-xu-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.xuat-xu-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.xuat-xu-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ xuất xứ - màu xanh lá cây */
+.xuat-xu-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ xuất xứ khi hover - màu xám */
+.xuat-xu-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* ===== CSS CHO NÚT X ĐÓNG POPUP XUẤT XỨ ===== */
+/* Nút X đóng popup xuất xứ - nền trong suốt, dấu X màu đen */
+.xuat-xu-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+
+/* Icon X trong nút đóng popup xuất xứ - màu đen */
+.xuat-xu-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* Ẩn icon Plus trong tiêu đề popup thêm xuất xứ */
+.xuat-xu-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* ===== CSS CHO POPUP THÔNG BÁO BÊN PHẢI MÀN HÌNH ===== */
+/* Container cho popup thông báo */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10001;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Popup thông báo */
+.notification-popup {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid #22c55e;
+  padding: 20px;
+  margin-bottom: 16px;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animation hiển thị popup */
+.notification-popup.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Animation ẩn popup */
+.notification-popup.hide {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Header popup thông báo */
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+
+/* Tiêu đề popup thông báo */
+.notification-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  flex: 1;
+}
+
+
+/* Nút đóng popup thông báo cũ (giữ lại để tương thích) */
+.notification-close {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.notification-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Nội dung popup thông báo */
+.notification-message {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Thanh tiến trình */
+.notification-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #22c55e;
+  border-radius: 0 0 12px 12px;
+  animation: notificationProgress 3s linear forwards;
+}
+
+/* Animation thanh tiến trình */
+@keyframes notificationProgress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Các loại thông báo khác nhau */
+.notification-popup.success {
+  border-left-color: #22c55e;
+}
+
+.notification-popup.success .notification-progress {
+  background: #22c55e;
+}
+
+.notification-popup.error {
+  border-left-color: #ef4444;
+}
+
+.notification-popup.error .notification-progress {
+  background: #ef4444;
+}
+
+.notification-popup.warning {
+  border-left-color: #f59e0b;
+}
+
+.notification-popup.warning .notification-progress {
+  background: #f59e0b;
+}
+
+.notification-popup.info {
+  border-left-color: #3b82f6;
+}
+
+.notification-popup.info .notification-progress {
+  background: #3b82f6;
+}
+
+/* ===== CSS CHO CHẤT LIỆU (CHATLIEU) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm chất liệu */
+.chat-lieu-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm chất liệu - nền trắng, chữ xanh lá cây */
+.chat-lieu-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.chat-lieu-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.chat-lieu-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ chất liệu - màu xanh lá cây */
+.chat-lieu-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ chất liệu khi hover - màu xám */
+.chat-lieu-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup chất liệu - nền trong suốt, dấu X màu đen */
+.chat-lieu-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup chất liệu - màu đen */
+.chat-lieu-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ===== CSS CHO ĐẾ GIÀY (DEGIAY) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm đế giày */
+.de-giay-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm đế giày - nền trắng, chữ xanh lá cây */
+.de-giay-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.de-giay-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.de-giay-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ đế giày - màu xanh lá cây */
+.de-giay-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ đế giày khi hover - màu xám */
+.de-giay-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup đế giày - nền trong suốt, dấu X màu đen */
+.de-giay-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup đế giày - màu đen */
+.de-giay-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ===== CSS CHO TRỌNG LƯỢNG (TRONGLUONG) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm trọng lượng */
+.trong-luong-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm trọng lượng - nền trắng, chữ xanh lá cây */
+.trong-luong-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.trong-luong-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.trong-luong-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ trọng lượng - màu xanh lá cây */
+.trong-luong-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ trọng lượng khi hover - màu xám */
+.trong-luong-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup trọng lượng - nền trong suốt, dấu X màu đen */
+.trong-luong-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup trọng lượng - màu đen */
+.trong-luong-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ===== CSS CHO KÍCH THƯỚC (KICHTHUOC) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm kích thước */
+.kich-thuoc-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm kích thước - nền trắng, chữ xanh lá cây */
+.kich-thuoc-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.kich-thuoc-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.kich-thuoc-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ kích thước - màu xanh lá cây */
+.kich-thuoc-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ kích thước khi hover - màu xám */
+.kich-thuoc-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup kích thước - nền trong suốt, dấu X màu đen */
+.kich-thuoc-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup kích thước - màu đen */
+.kich-thuoc-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ===== CSS CHO NHÀ SẢN XUẤT (NHASANXUAT) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm nhà sản xuất */
+.nha-san-xuat-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm nhà sản xuất - nền trắng, chữ xanh lá cây */
+.nha-san-xuat-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.nha-san-xuat-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.nha-san-xuat-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ nhà sản xuất - màu xanh lá cây */
+.nha-san-xuat-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ nhà sản xuất khi hover - màu xám */
+.nha-san-xuat-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup nhà sản xuất - nền trong suốt, dấu X màu đen */
+.nha-san-xuat-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup nhà sản xuất - màu đen */
+.nha-san-xuat-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ===== CSS CHO ẢNH SẢN PHẨM (ANHSANPHAM) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm ảnh sản phẩm */
+.anh-san-pham-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm ảnh sản phẩm - nền trắng, chữ xanh lá cây */
+.anh-san-pham-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.anh-san-pham-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.anh-san-pham-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ ảnh sản phẩm - màu xanh lá cây */
+.anh-san-pham-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ ảnh sản phẩm khi hover - màu xám */
+.anh-san-pham-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup ảnh sản phẩm - nền trong suốt, dấu X màu đen */
+.anh-san-pham-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup ảnh sản phẩm - màu đen */
+.anh-san-pham-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ===== CSS CHO MÀU SẮC (MAUSAC) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm màu sắc */
+.mau-sac-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm màu sắc - nền trắng, chữ xanh lá cây */
+.mau-sac-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.mau-sac-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.mau-sac-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ màu sắc - màu xanh lá cây */
+.mau-sac-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ màu sắc khi hover - màu xám */
+.mau-sac-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup màu sắc - nền trong suốt, dấu X màu đen */
+.mau-sac-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup màu sắc - màu đen */
+.mau-sac-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ===== CSS CHO KÍCH THƯỚC (KICHTHUOC) ===== */
+/* Ẩn icon Plus trong tiêu đề popup thêm kích thước */
+.kich-thuoc-page .modal-header h3 .icon-svg {
+  display: none;
+}
+
+/* Nút Hủy bỏ trong popup thêm kích thước - nền trắng, chữ xanh lá cây */
+.kich-thuoc-page .modal-footer .btn-secondary {
+  background: white !important;
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  font-weight: 600;
+}
+
+.kich-thuoc-page .modal-footer .btn-secondary:hover {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.kich-thuoc-page .modal-footer .btn-secondary:active {
+  background: #e5e7eb !important;
+  color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(0);
+}
+
+/* Icon trong nút Hủy bỏ kích thước - màu xanh lá cây */
+.kich-thuoc-page .modal-footer .btn-secondary .icon-svg {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+/* Icon trong nút Hủy bỏ kích thước khi hover - màu xám */
+.kich-thuoc-page .modal-footer .btn-secondary:hover .icon-svg {
+  filter: brightness(0) saturate(100%) invert(42%) sepia(6%) saturate(1237%) hue-rotate(201deg) brightness(95%) contrast(86%);
+}
+
+/* Nút X đóng popup kích thước - nền trong suốt, dấu X màu đen */
+.kich-thuoc-page .modal-close {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+/* Icon X trong nút đóng popup kích thước - màu đen */
+.kich-thuoc-page .modal-close .icon-svg {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}

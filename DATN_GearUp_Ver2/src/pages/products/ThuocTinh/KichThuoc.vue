@@ -185,7 +185,7 @@
                     class="btn btn-secondary btn-sm"
                     title="Cập nhật"
                   >
-                    Cập nhật
+                    Chi tiết
                   </button>
                   <button
                     v-on:click="fetchDelete(value.id)"
@@ -391,6 +391,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup thông báo bên phải màn hình -->
+    <div class="notification-container">
+      <div 
+        v-if="showNotification" 
+        :class="['notification-popup', notificationType, showNotification ? 'show' : '']"
+      >
+        <div class="notification-header">
+          <h4 class="notification-title">{{ notificationTitle }}</h4>
+        </div>
+        <p class="notification-message">{{ notificationMessage }}</p>
+        <div class="notification-progress"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -425,6 +439,12 @@ const editSuccessMessage = ref(null);
 const showDeleteModal = ref(false);
 const deleteItemId = ref(null);
 const deleteItemName = ref("");
+
+// Biến cho popup thông báo
+const showNotification = ref(false);
+const notificationType = ref('success');
+const notificationTitle = ref('');
+const notificationMessage = ref('');
 
 // Pagination variables
 const currentPage = ref(1);
@@ -478,8 +498,8 @@ const handleFilter = () => {
 };
 
 const fetchCreate = async () => {
-  if (!newKichThuoc.value.tenKichThuoc) {
-    errorMessage.value = "Vui lòng nhập tên kích thước";
+  if (!newKichThuoc.value.tenKichThuoc || newKichThuoc.value.tenKichThuoc.trim() === '') {
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng nhập tên kích thước');
     return;
   }
 
@@ -487,10 +507,36 @@ const fetchCreate = async () => {
   errorMessage.value = null;
 
   try {
-    let res = await fetchCreateKichThuoc(newKichThuoc.value);
-    if (res.status === "FAILED" && res.code === "410") {
-      return (errorMessage.value = "Tên kích thước đã tồn tại");
+    // Chuẩn bị dữ liệu gửi đi
+    const dataToSend = {
+      tenKichThuoc: newKichThuoc.value.tenKichThuoc.trim(),
+      trangThai: newKichThuoc.value.trangThai,
+      deleted: false
+    };
+    
+    let res = await fetchCreateKichThuoc(dataToSend);
+
+    if (res && res.status === "FAILED") {
+      if (res.code === "410") {
+        showNotificationPopup('error', 'Lỗi', 'Tên kích thước đã tồn tại');
+      } else {
+        showNotificationPopup('error', 'Lỗi', res.message || 'Có lỗi xảy ra khi thêm kích thước');
+      }
+      return;
     }
+
+    // Thêm kích thước mới vào đầu danh sách
+    const newKichThuocItem = {
+      id: res.data?.id || Date.now(),
+      tenKichThuoc: dataToSend.tenKichThuoc,
+      trangThai: dataToSend.trangThai,
+      deleted: false,
+      ngayTao: new Date().toISOString(),
+      ngaySua: new Date().toISOString()
+    };
+    
+    // Thêm vào đầu danh sách
+    KichThuocs.value.unshift(newKichThuocItem);
 
     // Reset form
     newKichThuoc.value = {
@@ -499,14 +545,11 @@ const fetchCreate = async () => {
       deleted: false,
     };
 
-    await fetchAll();
-    successMessage.value = "Kích thước đã được thêm thành công!";
-    clearSuccessMessage();
     closeAddForm();
+    showNotificationPopup('success', 'Thành công', 'Kích thước đã được thêm thành công!');
   } catch (error) {
     console.error("Error creating:", error);
-    errorMessage.value =
-      "Lỗi khi thêm: " + (error.message || "Không thể tạo kích thước");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể tạo kích thước");
   } finally {
     uploading.value = false;
   }
@@ -534,12 +577,10 @@ const fetchUpdate = async () => {
 
     await fetchAll();
     closeDetailModal();
-    editSuccessMessage.value = "Kích thước đã được cập nhật thành công!";
-    clearEditSuccessMessage();
+    showNotificationPopup('success', 'Thành công', 'Kích thước đã được cập nhật thành công!');
   } catch (error) {
     console.error("Error updating:", error);
-    editErrorMessage.value =
-      "Lỗi khi cập nhật: " + (error.message || "Không thể cập nhật kích thước");
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể cập nhật kích thước");
   } finally {
     uploading.value = false;
   }
@@ -564,16 +605,11 @@ const confirmDelete = async () => {
     uploading.value = true;
     await fetchUpdateStatusKichThuoc(deleteItemId.value);
     await fetchAll();
-    successMessage.value = "Kích thước đã được xóa thành công!";
-    clearSuccessMessage();
     closeDeleteModal();
+    showNotificationPopup('success', 'Thành công', 'Kích thước đã được xóa thành công!');
   } catch (error) {
     console.error("There has been a problem with your fetch operation:", error);
-    errorMessage.value =
-      "Lỗi khi xóa: " + (error.message || "Không thể xóa kích thước");
-    setTimeout(() => {
-      errorMessage.value = null;
-    }, 3000);
+    showNotificationPopup('error', 'Lỗi', error.message || "Không thể xóa kích thước");
   } finally {
     uploading.value = false;
   }
@@ -583,6 +619,23 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false;
   deleteItemId.value = null;
   deleteItemName.value = "";
+};
+
+// Methods cho popup thông báo
+const showNotificationPopup = (type, title, message) => {
+  notificationType.value = type;
+  notificationTitle.value = title;
+  notificationMessage.value = message;
+  showNotification.value = true;
+  
+  // Tự động ẩn sau 3 giây
+  setTimeout(() => {
+    closeNotification();
+  }, 3000);
+};
+
+const closeNotification = () => {
+  showNotification.value = false;
 };
 
 const closeEditForm = () => {
@@ -866,9 +919,6 @@ onMounted(fetchAll);
   color: #4b5563 !important;
 }
 
-.table tbody tr:hover {
-  /* background: rgba(74, 222, 128, 0.05) !important; */
-}
 
 /* CSS cho form elements */
 .form-group {

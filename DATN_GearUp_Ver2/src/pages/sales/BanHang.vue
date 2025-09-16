@@ -244,10 +244,7 @@
               </svg>
             </div>
             <div class="customer-header-text">
-              <h3 class="customer-section-title">Khách hàng & Thanh toán</h3>
-              <p class="customer-section-subtitle">
-                Thông tin khách hàng và xử lý thanh toán
-              </p>
+              <h3 class="customer-section-title">KH & Thanh toán</h3>
             </div>
           </div>
           <button class="find-customer-btn" @click="showCustomerSearch = true">
@@ -255,7 +252,7 @@
               <circle cx="11" cy="11" r="8"></circle>
               <path d="M21 21l-4.35-4.35"></path>
             </svg>
-            <span>Tìm khách hàng</span>
+            <span>Tìm KH</span>
           </button>
         </div>
 
