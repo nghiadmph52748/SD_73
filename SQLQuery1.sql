@@ -397,6 +397,7 @@ CREATE TABLE [dbo].[mau_sac](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[ma_mau_sac]  AS ('MS'+right('00000'+CONVERT([varchar](5),[ID]),(5))) PERSISTED,
 	[ten_mau_sac] [nvarchar](255) NOT NULL,
+  [ma_mau] [nvarchar](8) NOT NULL,
 	[trang_thai] [bit] NULL,
 	[deleted] [bit] NULL,
 	[create_at] [date] NULL,
@@ -831,20 +832,6 @@ GO
 INSERT [dbo].[kich_thuoc] ([id], [ten_kich_thuoc], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (5, N'43', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
 GO
 SET IDENTITY_INSERT [dbo].[kich_thuoc] OFF
-GO
-SET IDENTITY_INSERT [dbo].[mau_sac] ON 
-GO
-INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (1, N'Đen', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
-GO
-INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (2, N'Trắng', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
-GO
-INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (3, N'Đỏ', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
-GO
-INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (4, N'Xanh dương', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
-GO
-INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (5, N'Xanh lá', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
-GO
-SET IDENTITY_INSERT [dbo].[mau_sac] OFF
 GO
 SET IDENTITY_INSERT [dbo].[nha_san_xuat] ON 
 GO
