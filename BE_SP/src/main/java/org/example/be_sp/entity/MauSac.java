@@ -1,16 +1,23 @@
 package org.example.be_sp.entity;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -30,6 +37,10 @@ public class MauSac {
     @Nationalized
     @Column(name = "ten_mau_sac")
     private String tenMauSac;
+
+    @Column(name = "ma_mau")
+    private String maMau;
+    
 
     @ColumnDefault("1")
     @Column(name = "trang_thai")

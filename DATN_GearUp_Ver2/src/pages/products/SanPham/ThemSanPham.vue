@@ -232,9 +232,13 @@
                     <span
                       v-for="(mauSac, index) in selectedMauSacs"
                       :key="index"
-                      class="selected-attribute-tag"
+                      class="selected-attribute-tag color-tag"
                     >
-                      {{ mauSac.tenMauSac }}
+                      <div class="color-preview" :style="{ backgroundColor: mauSac.maMau || '#000000' }"></div>
+                      <div class="color-info">
+                        <span class="color-name">{{ mauSac.tenMauSac }}</span>
+                        <span class="color-hex">{{ mauSac.maMau || '#000000' }}</span>
+                      </div>
                       <button
                         @click="removeMauSac(index)"
                         class="remove-attribute-btn"
@@ -335,9 +339,7 @@
                             <div
                               class="color-indicator"
                               :style="{
-                                backgroundColor: getColorFromName(
-                                  mauSac.tenMauSac
-                                ),
+                                backgroundColor: mauSac.maMau || '#000000',
                               }"
                               :title="`Màu: ${mauSac.tenMauSac}`"
                             ></div>
@@ -576,35 +578,61 @@
               <div
                 v-for="mauSac in filteredMauSacsForPopup"
                 :key="mauSac.id"
-                class="attribute-item"
+                class="attribute-item color-attribute-item"
                 :class="{ selected: isMauSacSelected(mauSac) }"
                 @click="selectMauSacFromPopup(mauSac)"
               >
+                <div class="color-preview" :style="{ backgroundColor: mauSac.maMau || '#000000' }"></div>
+                <span class="color-name">{{ mauSac.tenMauSac }}</span>
                 <span
                   v-if="isMauSacSelected(mauSac)"
                   class="attribute-checkmark"
                   ><!-- icon: checkmark --></span
                 >
-                {{ mauSac.tenMauSac }}
               </div>
             </div>
           </div>
           <div class="attribute-create-new-section">
             <h4>Tạo màu sắc mới</h4>
             <div class="attribute-create-new-form">
-              <input
-                v-model="newMauSacName"
-                type="text"
-                placeholder="Nhập tên màu sắc mới"
-                class="attribute-create-new-input"
-              />
-              <button
-                @click="createNewMauSacFromPopup"
-                class="attribute-create-new-btn"
-                type="button"
-              >
-                Tạo mới
-              </button>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Mã màu HEX:</label>
+                  <div class="color-input-group">
+                    <input
+                      v-model="newMauSacColor"
+                      type="color"
+                      class="color-picker"
+                      @input="updateNewMauSacName"
+                    />
+                    <input
+                      v-model="newMauSacColor"
+                      type="text"
+                      placeholder="#000000"
+                      class="attribute-create-new-input color-text-input"
+                      @input="updateNewMauSacColor"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Tên màu sắc:</label>
+                  <input
+                    v-model="newMauSacName"
+                    type="text"
+                    placeholder="Nhập tên màu sắc mới"
+                    class="attribute-create-new-input"
+                  />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button
+                  @click="createNewMauSacFromPopup"
+                  class="attribute-create-new-btn"
+                  type="button"
+                >
+                  Tạo mới
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -766,8 +794,10 @@
         :class="[
           `notification-${notification.type}`,
           { 'notification-closing': notification.isClosing },
+          { 'clickable': notification.productId }
         ]"
         :style="{ top: `${notification.top}px`, transition: 'top 0.3s ease' }"
+        @click="notification.productId ? goToProductDetail(notification.productId) : null"
       >
         <div class="notification-header">
           <h4>{{ notification.title }}</h4>
@@ -780,7 +810,19 @@
         </div>
         <div class="notification-body">
           <p>{{ notification.message }}</p>
+          <p v-if="notification.productId" class="click-hint">
+            👆 Click để xem chi tiết sản phẩm
+          </p>
         </div>
+      </div>
+    </div>
+
+    <!-- Loading Popup -->
+    <div v-if="isCreatingProduct" class="loading-popup-overlay">
+      <div class="loading-popup-content">
+        <div class="loading-spinner"></div>
+        <h3>Vui lòng chờ hệ thống xử lý</h3>
+        <p>Đang tạo sản phẩm và các biến thể...</p>
       </div>
     </div>
 
@@ -1023,6 +1065,7 @@ const kichThuocInput = ref("");
 
 // New attribute names
 const newMauSacName = ref("");
+const newMauSacColor = ref("#000000");
 const newKichThuocName = ref("");
 const newAnhName = ref("");
 
@@ -1378,6 +1421,7 @@ const closeMauSacPopup = () => {
   showMauSacPopup.value = false;
   mauSacSearch.value = "";
   newMauSacName.value = "";
+  newMauSacColor.value = "#000000";
 };
 
 const closeKichThuocPopup = () => {
@@ -1391,8 +1435,12 @@ const selectMauSacFromPopup = (mauSac) => {
     (item) => item.id === mauSac.id
   );
   if (existingIndex === -1) {
-    // Nếu chưa có thì thêm vào
-    selectedMauSacs.value.push(mauSac);
+    // Nếu chưa có thì thêm vào với mã HEX tự động
+    const mauSacWithHex = {
+      ...mauSac,
+      maMau: mauSac.maMau || getColorFromName(mauSac.tenMauSac)
+    };
+    selectedMauSacs.value.push(mauSacWithHex);
   } else {
     // Nếu đã có thì xóa khỏi danh sách (bỏ tích)
     selectedMauSacs.value.splice(existingIndex, 1);
@@ -1414,9 +1462,28 @@ const selectKichThuocFromPopup = (kichThuoc) => {
   // Không đóng popup để có thể chọn/bỏ chọn nhiều
 };
 
+// Hàm cập nhật tên màu khi chọn màu từ color picker
+const updateNewMauSacName = () => {
+  // Có thể thêm logic để tự động đặt tên màu dựa trên mã hex
+  // Ví dụ: #FF0000 -> "Đỏ", #000000 -> "Đen"
+};
+
+// Hàm cập nhật color picker khi nhập mã màu
+const updateNewMauSacColor = () => {
+  // Validate mã màu hex
+  if (!newMauSacColor.value.startsWith('#')) {
+    newMauSacColor.value = '#' + newMauSacColor.value;
+  }
+};
+
 const createNewMauSacFromPopup = async () => {
   if (!newMauSacName.value.trim()) {
     showAlert("Thiếu thông tin", "Vui lòng nhập tên màu sắc!", "error");
+    return;
+  }
+
+  if (!newMauSacColor.value.trim()) {
+    showAlert("Thiếu thông tin", "Vui lòng chọn hoặc nhập mã màu!", "error");
     return;
   }
 
@@ -1425,6 +1492,7 @@ const createNewMauSacFromPopup = async () => {
   const newMauSac = {
     id: null, // Chưa có ID vì chưa tạo trong DB
     tenMauSac: newMauSacName.value,
+    maMau: newMauSacColor.value,
     trangThai: true,
     deleted: false,
   };
@@ -1504,6 +1572,9 @@ const quickAddForm = ref({
 const deleteConfirmInfo = ref("");
 const deleteConfirmData = ref({ mauIndex: -1, kichIndex: -1 });
 
+// Loading state cho việc thêm sản phẩm
+const isCreatingProduct = ref(false);
+
 // Variant management functions
 
 // Quick add functions
@@ -1524,33 +1595,66 @@ const showQuickAddPopup = () => {
 const getColorFromName = (tenMau) => {
   if (!tenMau) return "#6b7280"; // Màu xám mặc định
 
-  const mauLower = tenMau.toLowerCase();
+  const mauLower = tenMau.toLowerCase().trim();
 
-  // Map màu phổ biến
+  // Map màu phổ biến - mở rộng danh sách
   const colorMap = {
-    đỏ: "#ef4444",
-    red: "#ef4444",
-    xanh: "#3b82f6",
-    blue: "#3b82f6",
-    đen: "#000000",
-    black: "#000000",
-    trắng: "#ffffff",
-    white: "#ffffff",
-    vàng: "#fbbf24",
-    yellow: "#fbbf24",
-    tím: "#a855f7",
-    purple: "#a855f7",
-    hồng: "#ec4899",
-    pink: "#ec4899",
-    cam: "#f97316",
-    orange: "#f97316",
-    xám: "#6b7280",
-    gray: "#6b7280",
-    grey: "#6b7280",
-    nâu: "#92400e",
-    brown: "#92400e",
-    be: "#f59e0b",
-    cream: "#fef3c7",
+    // Màu cơ bản
+    "đỏ": "#FF0000",
+    "red": "#FF0000",
+    "xanh": "#0000FF", 
+    "blue": "#0000FF",
+    "xanh dương": "#0000FF",
+    "đen": "#000000",
+    "black": "#000000",
+    "trắng": "#FFFFFF",
+    "white": "#FFFFFF",
+    "vàng": "#FFFF00",
+    "yellow": "#FFFF00",
+    "tím": "#800080",
+    "purple": "#800080",
+    "hồng": "#FFC0CB",
+    "pink": "#FFC0CB",
+    "cam": "#FFA500",
+    "orange": "#FFA500",
+    "xám": "#808080",
+    "gray": "#808080",
+    "grey": "#808080",
+    "nâu": "#A52A2A",
+    "brown": "#A52A2A",
+    
+    // Màu bổ sung
+    "xanh lá": "#00FF00",
+    "green": "#00FF00",
+    "xanh lá cây": "#00FF00",
+    "xanh mint": "#98FB98",
+    "mint": "#98FB98",
+    "xanh navy": "#000080",
+    "navy": "#000080",
+    "bạc": "#C0C0C0",
+    "silver": "#C0C0C0",
+    "vàng gold": "#FFD700",
+    "gold": "#FFD700",
+    "be": "#F5F5DC",
+    "cream": "#F5F5DC",
+    "kem": "#F5F5DC",
+    
+    // Màu pastel
+    "hồng pastel": "#FFB6C1",
+    "xanh pastel": "#87CEEB",
+    "vàng pastel": "#FFFFE0",
+    "tím pastel": "#DDA0DD",
+    
+    // Màu khác
+    "xanh ngọc": "#00CED1",
+    "turquoise": "#00CED1",
+    "xanh rêu": "#8FBC8F",
+    "olive": "#808000",
+    "xanh olive": "#808000",
+    "đỏ đậm": "#8B0000",
+    "maroon": "#8B0000",
+    "tím đậm": "#4B0082",
+    "indigo": "#4B0082",
   };
 
   return colorMap[mauLower] || "#6b7280"; // Trả về màu xám nếu không tìm thấy
@@ -1868,13 +1972,14 @@ const formatPrice = (price) => {
 };
 
 // Hàm hiển thị alert thông tin - hỗ trợ nhiều thông báo
-const showAlert = (title, message, type = "info") => {
+const showAlert = (title, message, type = "info", productId = null) => {
   const id = ++notificationId;
   const newNotification = {
     id,
     title,
     message,
     type,
+    productId,
     isClosing: false,
     createdAt: Date.now(),
   };
@@ -1897,6 +2002,14 @@ const closeNotificationPopup = (id) => {
     setTimeout(() => {
       notifications.value = notifications.value.filter((n) => n.id !== id);
     }, 300); // Thời gian animation slideOutRight
+  }
+};
+
+// Function chuyển đến trang chi tiết sản phẩm
+const goToProductDetail = (productId) => {
+  if (productId) {
+    // Chuyển đến trang chi tiết sản phẩm
+    window.location.href = `/products/detail/${productId}`;
   }
 };
 
@@ -2114,8 +2227,15 @@ const getMauSacId = async (mauSac) => {
 
   // Nếu chưa có ID thì tạo mới
   try {
+    // Validate mã màu hex
+    let maMau = mauSac.maMau || '#000000';
+    if (!maMau.startsWith('#')) {
+      maMau = '#' + maMau;
+    }
+    
     const newMauSac = {
       tenMauSac: mauSac.tenMauSac,
+      maMau: maMau,
       trangThai: true,
       deleted: false,
       createAt: new Date().toISOString().split("T")[0],
@@ -2127,12 +2247,18 @@ const getMauSacId = async (mauSac) => {
     await fetchCreateMauSac(newMauSac);
     await fetchMauSac(); // Refresh danh sách
 
-    return mauSacs.value.find(
+    const createdMauSac = mauSacs.value.find(
       (item) => item.tenMauSac.toLowerCase() === mauSac.tenMauSac.toLowerCase()
-    ).id;
+    );
+    
+    if (!createdMauSac) {
+      throw new Error(`Không thể tìm thấy màu sắc vừa tạo: ${mauSac.tenMauSac}`);
+    }
+    
+    return createdMauSac.id;
   } catch (error) {
     console.error("Error creating mau sac:", error);
-    return null;
+    throw new Error(`Không thể tạo màu sắc: ${mauSac.tenMauSac} - ${error.message}`);
   }
 };
 
@@ -2572,6 +2698,9 @@ const confirmCreateProduct = () => {
 // Save product function
 const saveProduct = async () => {
   try {
+    // Hiển thị popup loading
+    isCreatingProduct.value = true;
+    
     // Form validation has been moved to confirmCreateProduct function
     // This function now only handles creating NEW products (not existing ones)
 
@@ -2824,8 +2953,8 @@ const saveProduct = async () => {
       }
     }
 
-    // Hiển thị popup thông báo thành công bên phải
-    showAlert("Thành công", "Sản phẩm mới đã được tạo thành công!", "success");
+    // Hiển thị popup thông báo thành công bên phải với ID sản phẩm
+    showAlert("Thành công", "Sản phẩm mới đã được tạo thành công!", "success", sanPhamId);
 
     // Reset form after successful creation
     resetForm();
@@ -2846,6 +2975,9 @@ const saveProduct = async () => {
     }
 
     showConfirm("Lỗi", errorMessage, () => {});
+  } finally {
+    // Ẩn popup loading
+    isCreatingProduct.value = false;
   }
 };
 
@@ -3442,7 +3574,7 @@ const isValidImageUrl = (url) => {
   width: 100%; /* Chiếm toàn bộ 70% container */
   padding: 20px;
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 0px;
   border: 1px solid #e9ecef;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -3787,21 +3919,53 @@ const isValidImageUrl = (url) => {
   gap: 10px;
 }
 
+.attribute-create-new-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.form-group label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 3px;
+}
+
 .create-new-input {
   flex: 1;
-  padding: 10px;
+  padding: 4px 6px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 11px;
 }
 
 .create-new-btn {
-  padding: 10px 16px;
+  padding: 4px 8px;
   background-color: #1976d2;
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 11px;
   transition: background-color 0.2s;
 }
 
@@ -4578,20 +4742,59 @@ const isValidImageUrl = (url) => {
 
 .attribute-popup-content {
   background: white;
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
+  width: 95%;
+  max-width: 800px;
+  max-height: 90vh;
   overflow-y: auto;
-  border-radius: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  position: relative;
+  overflow: hidden;
 }
+
 
 .attribute-popup-header {
   padding: 15px 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+}
+
+.attribute-popup-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  flex: 1;
+}
+
+.attribute-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.attribute-close-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .attribute-popup-body {
   padding: 20px;
+  background: white;
 }
 
 /* CSS cho popup thông báo bên phải */
@@ -4641,6 +4844,17 @@ const isValidImageUrl = (url) => {
 
 .notification-popup-content.notification-info {
   border-left-color: #2196f3;
+}
+
+.notification-popup-content.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.notification-popup-content.clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 .notification-header {
@@ -4695,6 +4909,14 @@ const isValidImageUrl = (url) => {
   line-height: 1.4;
 }
 
+.click-hint {
+  margin-top: 8px !important;
+  font-size: 12px !important;
+  color: #007bff !important;
+  font-style: italic;
+  opacity: 0.8;
+}
+
 @keyframes slideInRight {
   0% {
     transform: translateX(100%);
@@ -4737,5 +4959,253 @@ const isValidImageUrl = (url) => {
     left: 10px;
   }
 }
+
+/* CSS cho color input group */
+.color-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.color-input-group:focus-within {
+  border-color: #1976d2;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.color-picker {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.color-picker:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 2px;
+}
+
+.color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 2px;
+}
+
+.color-text-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  color: #374151;
+  background-color: transparent;
+  outline: none;
+}
+
+.color-text-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+
+/* CSS cho color tag trong selected attributes */
+.color-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin: 4px;
+}
+
+.color-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 0%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #d1d5db;
+  flex-shrink: 0;
+}
+
+.color-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.color-name {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.color-hex {
+  font-size: 11px;
+  color: #6b7280;
+  font-family: 'Courier New', monospace;
+  background: #f3f4f6;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* CSS cho search input trong popup */
+.attribute-search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  background: white;
+}
+
+.attribute-search-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.attribute-search-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* CSS cho h4 trong popup */
+.attribute-existing-attributes h4,
+.attribute-create-new-section h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* CSS cho phần màu sắc có sẵn */
+.attribute-existing-attributes {
+  margin-bottom: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* CSS cho phần tạo màu sắc mới */
+.attribute-create-new-section {
+  margin-top: 0px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+/* CSS cho color attribute item trong popup */
+.color-attribute-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  background: white;
+}
+
+.color-attribute-item:hover {
+  background: #f8f8f8;
+  border-color: #ccc;
+}
+
+.color-attribute-item.selected {
+  background: #f0f8ff;
+  border-color: #2196f3;
+}
+
+.color-attribute-item .color-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+
+.color-attribute-item .color-name {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.color-attribute-item .attribute-checkmark {
+  color: #2196f3;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* CSS cho loading popup */
+.loading-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.loading-popup-content {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-popup-content h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.loading-popup-content p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
 </style>
 
