@@ -745,6 +745,40 @@ INSERT [dbo].[chi_tiet_san_pham] ([id], [id_san_pham], [id_mau_sac], [id_kich_th
 GO
 SET IDENTITY_INSERT [dbo].[chi_tiet_san_pham] OFF
 GO
+SET IDENTITY_INSERT [dbo].[mau_sac] ON
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (1, N'Đen', N'#000000', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (2, N'Trắng', N'#FFFFFF', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (3, N'Đỏ', N'#FF0000', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (4, N'Xanh dương', N'#0000FF', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (5, N'Xanh lá', N'#00FF00', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (6, N'Vàng', N'#FFFF00', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (7, N'Cam', N'#FFA500', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (8, N'Tím', N'#800080', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (9, N'Hồng', N'#FFC0CB', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (10, N'Nâu', N'#A52A2A', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (11, N'Xám', N'#808080', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (12, N'Bạc', N'#C0C0C0', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (13, N'Vàng gold', N'#FFD700', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (14, N'Xanh navy', N'#000080', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+INSERT [dbo].[mau_sac] ([id], [ten_mau_sac], [ma_mau], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (15, N'Xanh mint', N'#98FB98', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[mau_sac] OFF
+GO
 SET IDENTITY_INSERT [dbo].[de_giay] ON 
 GO
 INSERT [dbo].[de_giay] ([id], [ten_de_giay], [trang_thai], [deleted], [create_at], [create_by], [update_at], [update_by]) VALUES (1, N'Đế cao su', 1, 0, CAST(N'2025-09-15' AS Date), 1, NULL, NULL)
