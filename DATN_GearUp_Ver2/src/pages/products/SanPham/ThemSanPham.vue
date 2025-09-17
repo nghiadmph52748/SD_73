@@ -597,17 +597,6 @@
             <div class="attribute-create-new-form">
               <div class="form-row">
                 <div class="form-group">
-                  <label>Tên màu sắc:</label>
-                  <input
-                    v-model="newMauSacName"
-                    type="text"
-                    placeholder="Nhập tên màu sắc mới"
-                    class="attribute-create-new-input"
-                  />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
                   <label>Mã màu HEX:</label>
                   <div class="color-input-group">
                     <input
@@ -624,6 +613,17 @@
                       @input="updateNewMauSacColor"
                     />
                   </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Tên màu sắc:</label>
+                  <input
+                    v-model="newMauSacName"
+                    type="text"
+                    placeholder="Nhập tên màu sắc mới"
+                    class="attribute-create-new-input"
+                  />
                 </div>
               </div>
               <div class="form-actions">
@@ -3924,23 +3924,23 @@ const isValidImageUrl = (url) => {
 .attribute-create-new-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 6px;
 }
 
 .form-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 2px;
 }
 
 .form-group label {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 500;
   color: #374151;
 }
@@ -3948,24 +3948,24 @@ const isValidImageUrl = (url) => {
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  margin-top: 3px;
 }
 
 .create-new-input {
   flex: 1;
-  padding: 10px;
+  padding: 4px 6px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 11px;
 }
 
 .create-new-btn {
-  padding: 10px 16px;
+  padding: 4px 8px;
   background-color: #1976d2;
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 11px;
   transition: background-color 0.2s;
 }
 
@@ -4925,12 +4925,12 @@ const isValidImageUrl = (url) => {
 .color-input-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
 }
 
 .color-picker {
-  width: 50px;
-  height: 50px;
+  width: 24px;
+  height: 24px;
   border: 1px solid #d1d5db;
   border-radius: 0%;
   cursor: pointer;
