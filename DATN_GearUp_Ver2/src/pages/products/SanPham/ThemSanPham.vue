@@ -235,7 +235,10 @@
                       class="selected-attribute-tag color-tag"
                     >
                       <div class="color-preview" :style="{ backgroundColor: mauSac.maMau || '#000000' }"></div>
-                      <span class="color-name">{{ mauSac.tenMauSac }}</span>
+                      <div class="color-info">
+                        <span class="color-name">{{ mauSac.tenMauSac }}</span>
+                        <span class="color-hex">{{ mauSac.maMau || '#000000' }}</span>
+                      </div>
                       <button
                         @click="removeMauSac(index)"
                         class="remove-attribute-btn"
@@ -592,28 +595,46 @@
           <div class="attribute-create-new-section">
             <h4>Tạo màu sắc mới</h4>
             <div class="attribute-create-new-form">
-              <div class="color-input-group">
-                <input
-                  v-model="newMauSacColor"
-                  type="color"
-                  class="color-picker"
-                  @input="updateNewMauSacName"
-                />
-                <input
-                  v-model="newMauSacName"
-                  type="text"
-                  placeholder="Nhập tên màu sắc mới"
-                  class="attribute-create-new-input color-text-input"
-                  @input="updateNewMauSacColor"
-                />
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Tên màu sắc:</label>
+                  <input
+                    v-model="newMauSacName"
+                    type="text"
+                    placeholder="Nhập tên màu sắc mới"
+                    class="attribute-create-new-input"
+                  />
+                </div>
               </div>
-              <button
-                @click="createNewMauSacFromPopup"
-                class="attribute-create-new-btn"
-                type="button"
-              >
-                Tạo mới
-              </button>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Mã màu HEX:</label>
+                  <div class="color-input-group">
+                    <input
+                      v-model="newMauSacColor"
+                      type="color"
+                      class="color-picker"
+                      @input="updateNewMauSacName"
+                    />
+                    <input
+                      v-model="newMauSacColor"
+                      type="text"
+                      placeholder="#000000"
+                      class="attribute-create-new-input color-text-input"
+                      @input="updateNewMauSacColor"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button
+                  @click="createNewMauSacFromPopup"
+                  class="attribute-create-new-btn"
+                  type="button"
+                >
+                  Tạo mới
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1416,8 +1437,12 @@ const selectMauSacFromPopup = (mauSac) => {
     (item) => item.id === mauSac.id
   );
   if (existingIndex === -1) {
-    // Nếu chưa có thì thêm vào
-    selectedMauSacs.value.push(mauSac);
+    // Nếu chưa có thì thêm vào với mã HEX tự động
+    const mauSacWithHex = {
+      ...mauSac,
+      maMau: mauSac.maMau || getColorFromName(mauSac.tenMauSac)
+    };
+    selectedMauSacs.value.push(mauSacWithHex);
   } else {
     // Nếu đã có thì xóa khỏi danh sách (bỏ tích)
     selectedMauSacs.value.splice(existingIndex, 1);
@@ -1456,6 +1481,11 @@ const updateNewMauSacColor = () => {
 const createNewMauSacFromPopup = async () => {
   if (!newMauSacName.value.trim()) {
     showAlert("Thiếu thông tin", "Vui lòng nhập tên màu sắc!", "error");
+    return;
+  }
+
+  if (!newMauSacColor.value.trim()) {
+    showAlert("Thiếu thông tin", "Vui lòng chọn hoặc nhập mã màu!", "error");
     return;
   }
 
@@ -1567,33 +1597,66 @@ const showQuickAddPopup = () => {
 const getColorFromName = (tenMau) => {
   if (!tenMau) return "#6b7280"; // Màu xám mặc định
 
-  const mauLower = tenMau.toLowerCase();
+  const mauLower = tenMau.toLowerCase().trim();
 
-  // Map màu phổ biến
+  // Map màu phổ biến - mở rộng danh sách
   const colorMap = {
-    đỏ: "#ef4444",
-    red: "#ef4444",
-    xanh: "#3b82f6",
-    blue: "#3b82f6",
-    đen: "#000000",
-    black: "#000000",
-    trắng: "#ffffff",
-    white: "#ffffff",
-    vàng: "#fbbf24",
-    yellow: "#fbbf24",
-    tím: "#a855f7",
-    purple: "#a855f7",
-    hồng: "#ec4899",
-    pink: "#ec4899",
-    cam: "#f97316",
-    orange: "#f97316",
-    xám: "#6b7280",
-    gray: "#6b7280",
-    grey: "#6b7280",
-    nâu: "#92400e",
-    brown: "#92400e",
-    be: "#f59e0b",
-    cream: "#fef3c7",
+    // Màu cơ bản
+    "đỏ": "#FF0000",
+    "red": "#FF0000",
+    "xanh": "#0000FF", 
+    "blue": "#0000FF",
+    "xanh dương": "#0000FF",
+    "đen": "#000000",
+    "black": "#000000",
+    "trắng": "#FFFFFF",
+    "white": "#FFFFFF",
+    "vàng": "#FFFF00",
+    "yellow": "#FFFF00",
+    "tím": "#800080",
+    "purple": "#800080",
+    "hồng": "#FFC0CB",
+    "pink": "#FFC0CB",
+    "cam": "#FFA500",
+    "orange": "#FFA500",
+    "xám": "#808080",
+    "gray": "#808080",
+    "grey": "#808080",
+    "nâu": "#A52A2A",
+    "brown": "#A52A2A",
+    
+    // Màu bổ sung
+    "xanh lá": "#00FF00",
+    "green": "#00FF00",
+    "xanh lá cây": "#00FF00",
+    "xanh mint": "#98FB98",
+    "mint": "#98FB98",
+    "xanh navy": "#000080",
+    "navy": "#000080",
+    "bạc": "#C0C0C0",
+    "silver": "#C0C0C0",
+    "vàng gold": "#FFD700",
+    "gold": "#FFD700",
+    "be": "#F5F5DC",
+    "cream": "#F5F5DC",
+    "kem": "#F5F5DC",
+    
+    // Màu pastel
+    "hồng pastel": "#FFB6C1",
+    "xanh pastel": "#87CEEB",
+    "vàng pastel": "#FFFFE0",
+    "tím pastel": "#DDA0DD",
+    
+    // Màu khác
+    "xanh ngọc": "#00CED1",
+    "turquoise": "#00CED1",
+    "xanh rêu": "#8FBC8F",
+    "olive": "#808000",
+    "xanh olive": "#808000",
+    "đỏ đậm": "#8B0000",
+    "maroon": "#8B0000",
+    "tím đậm": "#4B0082",
+    "indigo": "#4B0082",
   };
 
   return colorMap[mauLower] || "#6b7280"; // Trả về màu xám nếu không tìm thấy
@@ -3858,6 +3921,36 @@ const isValidImageUrl = (url) => {
   gap: 10px;
 }
 
+.attribute-create-new-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
 .create-new-input {
   flex: 1;
   padding: 10px;
@@ -4890,9 +4983,25 @@ const isValidImageUrl = (url) => {
   flex-shrink: 0;
 }
 
+.color-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .color-name {
   font-size: 14px;
   color: #374151;
+  font-weight: 500;
+}
+
+.color-hex {
+  font-size: 11px;
+  color: #6b7280;
+  font-family: 'Courier New', monospace;
+  background: #f3f4f6;
+  padding: 1px 4px;
+  border-radius: 3px;
 }
 
 /* CSS cho color attribute item trong popup */
