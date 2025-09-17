@@ -1,13 +1,18 @@
 <template>
+  <!-- Toast thông báo -->
+<div v-if="toast.show" class="toast" :class="toast.type">
+  {{ toast.message }}
+</div>
+
 <div class="card mb-3 p-3">
    <div class="d-flex gap-2">
     <ActionButton
       icon="add"
       variant="success"
       size="md"
-      label="Thêm nhân viên"
+      label="Thêm Khách Hàng"
       :showLabel="true"
-      tooltip="Thêm nhân viên mới"
+      tooltip="Thêm Khách Hàng mới"
       @click="showAddModal = true"
     />
 
@@ -495,9 +500,7 @@
             </div>
           </div>
         </div>
-        <div v-if="toast.show" :class="['toast', toast.type]">
-          {{ toast.message }}
-        </div>
+        
       </div>
       </div>
     </div>
@@ -794,14 +797,15 @@ const onDistrictChange = async (index) => {
 const showConfirmModal = ref(false);
 
 const handleConfirmAdd = async () => {
-  showConfirmModal.value = false; // đóng modal xác nhận
+  showConfirmModal.value = false;
 
   try {
-    // gọi API thêm khách hàng (ở đây là hàm saveCustomer bạn đã có sẵn)
-    const result = await saveCustomer();
+    if (!validateCustomerForm()) return; // 🚨 validate trước khi gọi API
 
+    const result = await saveCustomer();
     if (result) {
       showToast("Thêm khách hàng thành công!", "success");
+      showAddModal.value = false;
     } else {
       showToast("Thêm khách hàng thất bại!", "error");
     }
@@ -809,17 +813,59 @@ const handleConfirmAdd = async () => {
     showToast("Có lỗi xảy ra khi thêm khách hàng!", "error");
   }
 };
+
 function showToast(message, type = "success") {
   toast.value = { show: true, message, type };
   setTimeout(() => {
     toast.value.show = false;
-  }, 6000); // 4 giây
+  }, 7000); // 4 giây
 }
 const toast = ref({
   show: false,
   message: "",
   type: "success" // success | error
 });
+const validateCustomerForm = () => {
+  if (!customerForm.value.tenKhachHang || customerForm.value.tenKhachHang.trim() === "") {
+    showToast("Vui lòng nhập Họ tên!", "error");
+    return false;
+  }
+
+  if (!customerForm.value.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerForm.value.email)) {
+    showToast("Vui lòng nhập Email hợp lệ!", "error");
+    return false;
+  }
+
+  if (!customerForm.value.soDienThoai || !/^[0-9]{9,11}$/.test(customerForm.value.soDienThoai)) {
+    showToast("Vui lòng nhập Số điện thoại hợp lệ (9-11 số)!", "error");
+    return false;
+  }
+
+  if (!customerForm.value.tenTaiKhoan || customerForm.value.tenTaiKhoan.trim() === "") {
+    showToast("Vui lòng nhập Tên tài khoản!", "error");
+    return false;
+  }
+
+  if (showAddModal.value && (!customerForm.value.matKhau || customerForm.value.matKhau.length < 6)) {
+    showToast("Mật khẩu phải có ít nhất 6 ký tự!", "error");
+    return false;
+  }
+
+  if (!customerForm.value.listDiaChi || customerForm.value.listDiaChi.length === 0) {
+    showToast("Vui lòng nhập ít nhất một địa chỉ!", "error");
+    return false;
+  }
+
+  for (let dc of customerForm.value.listDiaChi) {
+    if (!dc.diaChiCuThe || !dc.thanhPho || !dc.quan || !dc.phuong) {
+      showToast("Vui lòng nhập đầy đủ thông tin địa chỉ!", "error");
+      return false;
+    }
+  }
+
+  return true;
+};
+
 
 // Pagination data
 const currentPage = ref(1);
@@ -972,14 +1018,15 @@ const addCustomer = () => {
 const showEditConfirmModal = ref(false);
 
 const handleConfirmEdit = async () => {
-  showEditConfirmModal.value = false; // đóng modal xác nhận
+  showEditConfirmModal.value = false;
 
   try {
-    const result = await saveCustomer(); // gọi API cập nhật
+    if (!validateCustomerForm()) return; // 🚨 validate trước
 
+    const result = await saveCustomer();
     if (result) {
       showToast("Cập nhật khách hàng thành công!", "success");
-      showEditModal.value = false; // đóng modal edit
+      showEditModal.value = false;
     } else {
       showToast("Cập nhật khách hàng thất bại!", "error");
     }
@@ -988,19 +1035,21 @@ const handleConfirmEdit = async () => {
   }
 };
 
+
 const saveCustomer = async () => {
   try {
     // ✅ lọc bỏ địa chỉ rỗng
     customerForm.value.listDiaChi = customerForm.value.listDiaChi.filter(
       (dc) => dc.diaChiCuThe || dc.thanhPho || dc.quan || dc.phuong
     );
-    
 
     if (showAddModal.value) {
       await fetchCreateKhachHang(customerForm.value);
       currentPage.value = 1;
+      showToast("Thêm khách hàng thành công!", "success");
     } else if (showEditModal.value) {
       await fetchUpdateKhachHang(customerForm.value.id, customerForm.value);
+      showToast("Cập nhật khách hàng thành công!", "success");
     }
 
     // ✅ luôn reset để không bị cộng dồn
@@ -1008,12 +1057,15 @@ const saveCustomer = async () => {
     showAddModal.value = false;
     showEditModal.value = false;
     await fetchAll();
+
+    return true;
   } catch (err) {
     console.error("❌ saveCustomer error:", err.message);
-    alert("Có lỗi xảy ra khi lưu thông tin khách hàng");
+    showToast("Có lỗi xảy ra khi lưu thông tin khách hàng!", "error");
+    return false;
   }
-  
 };
+
 
 
 const deleteCustomer = async (id) => {
@@ -1046,14 +1098,15 @@ const handleConfirmDelete = async () => {
       (c) => c.id !== customerToDelete.value
     );
 
-    showToast("✅ Đã xoá khách hàng thành công!", "success");
+    showToast("Xóa khách hàng thành công!", "success");
   } catch (error) {
-    console.error("❌ Lỗi khi xoá khách hàng:", error.message);
-    showToast("❌ Có lỗi xảy ra khi xoá khách hàng!", "error");
+    console.error("❌ Lỗi khi xóa khách hàng:", error.message);
+    showToast("Có lỗi xảy ra khi xóa khách hàng!", "error");
   } finally {
     customerToDelete.value = null;
   }
 };
+
 
 
 // ➕ Thêm địa chỉ
@@ -1136,22 +1189,21 @@ const exportToExcel = () => {
       [headerMapping.deleted]: item.deleted ? "Ngừng hoạt động" : "Hoạt động",
     }));
 
-    // Tạo worksheet & workbook
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "KhachHang");
 
-    // Xuất file
     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
     saveAs(data, "DanhSachKhachHang.xlsx");
 
-    alert("✅ Xuất file Excel thành công!");
+    showToast("Xuất file Excel thành công!", "success");
   } catch (error) {
     console.error("Error exporting to Excel:", error);
-    alert("❌ Có lỗi xảy ra khi xuất file Excel");
+    showToast("Có lỗi xảy ra khi xuất file Excel!", "error");
   }
 };
+
 
 onMounted(async () => {
 fetchAll();
@@ -1960,6 +2012,59 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
   max-width: 200px;    /* độ rộng tối đa */
   padding: 4px 8px;    /* padding gọn hơn */
   font-size: 14px;     /* chữ nhỏ gọn */
+}
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* khoảng cách giữa các toast */
+  z-index: 9999;
+}
+
+.toast {
+  background: #fff;
+  border-left: 4px solid #e63946; /* viền trái màu đỏ */
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px 14px;
+  width: 300px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.toast-body {
+  font-size: 14px;
+  color: #555;
+}
+
+.toast button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 
