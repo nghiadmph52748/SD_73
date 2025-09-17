@@ -3,13 +3,15 @@
     <!-- Filter Title -->
     <h2 class="tieu-de-bo-loc">Bộ lọc</h2>
     
-    <!-- Filter Section -->
+    <!-- Filter Description -->
+    <div class="mo-ta-bo-loc">
+      Sử dụng các bộ lọc dưới đây để tìm kiếm đợt giảm giá
+    </div>
+    
+    <!-- Filter Section with Right-aligned Buttons -->
     <div class="bo-loc-section">
-      <!-- Header with Description and Buttons -->
-      <div class="bo-loc-header">
-        <div class="mo-ta-bo-loc">
-          Sử dụng các bộ lọc dưới đây để tìm kiếm đợt giảm giá
-        </div>
+      <!-- Right-aligned Action Buttons -->
+      <div class="bo-loc-buttons-right">
         <button class="xoa-toan-bo-bo-loc-btn" @click="clearFilters">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 18L18 6M6 6l12 12"/>
@@ -114,21 +116,21 @@
           />
         </div>
       </div>
-    </div>
-    
-    <!-- Search Section Below Filter -->
-    <div class="phan-tim-kiem-duoi">
-      <div class="hop-tim-kiem-duoi">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bieu-tuong-tim-kiem">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input
-          type="text"
-          v-model="searchQueryBottom"
-          placeholder="Tìm kiếm..."
-          class="dau-vao-tim-kiem-duoi"
-        />
+      
+      <!-- Search Section Inside Filter -->
+      <div class="phan-tim-kiem-duoi">
+        <div class="hop-tim-kiem-duoi">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bieu-tuong-tim-kiem">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            v-model="searchQueryBottom"
+            placeholder="Tìm kiếm..."
+            class="dau-vao-tim-kiem-duoi"
+          />
+        </div>
       </div>
     </div>
 
@@ -266,156 +268,154 @@
     <!-- Add/Edit Modal -->
     <div
       v-if="showAddModal || showEditModal"
-      class="modal-overlay-new"
+      class="modal-overlay"
       @click="closeModals"
     >
-      <div class="modal-content-new modal-form-minimal" @click.stop>
-        <!-- Minimal Header -->
-        <div class="form-header-minimal">
-          <div class="header-info-minimal">
-            <div class="form-icon-minimal">
-              <img :src="showAddModal ? PlusIcon : EditIcon" alt="Form" class="header-icon" />
-            </div>
-            <div class="form-title-minimal">
-              <h3>
-                {{
-                  showAddModal
-                    ? "Tạo đợt giảm giá"
-                    : "Cập nhật đợt giảm giá"
-                }}
-              </h3>
-              <div class="form-status-minimal" v-if="showEditModal">
-                <img :src="EditIcon" alt="Edit" class="status-icon-minimal" />
-                <span class="status-text-minimal">CHỈNH SỬA</span>
-              </div>
-            </div>
-          </div>
-          <button class="close-btn-minimal" @click="closeModals">
+      <div class="modal-content add-modal" @click.stop>
+        <!-- Modal Header -->
+        <div class="modal-header add-header">
+          <h3>
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Form" class="icon-svg" />
+            {{
+              showAddModal
+                ? "Tạo đợt giảm giá"
+                : "Cập nhật đợt giảm giá"
+            }}
+          </h3>
+          <button class="modal-close" @click="closeModals">
             <span>×</span>
           </button>
         </div>
 
-        <!-- Minimal Body -->
-        <div class="form-body-minimal">
-          <form @submit.prevent="saveCampaign" class="coupon-form-minimal">
-            <!-- Basic Information Section -->
-            <div class="form-section-minimal">
-              <div class="section-title-minimal">
-                <img :src="ClipboardIcon" alt="Basic Info" class="section-icon-minimal" />
-                <span>Thông tin cơ bản</span>
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form @submit.prevent="saveCampaign" class="edit-form">
+            <!-- Campaign Information -->
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="ClipboardIcon" alt="Campaign Name" class="icon-svg" />
+                Tên đợt giảm giá
               </div>
-              <div class="form-content-minimal">
-                <div class="form-rows-minimal">
-                  <div class="form-row-minimal single-column">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Tên đợt giảm giá</label>
-                      <input
-                        type="text"
-                        v-model="formData.tenDotGiamGia"
-                        class="form-input-minimal"
-                        placeholder="Nhập tên đợt giảm giá"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="form-row-minimal">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Giá trị giảm giá (%)</label>
-                      <input
-                        type="number"
-                        v-model="formData.giaTriGiamGia"
-                        class="form-input-minimal"
-                        placeholder="Nhập % giảm (1-100)"
-                        min="1"
-                        max="100"
-                        required
-                      />
-                    </div>
-                    <div class="form-group-minimal" v-if="showEditModal">
-                      <label class="form-label-minimal required">Trạng thái</label>
-                      <select
-                        v-model="formData.trangThai"
-                        class="form-select-minimal"
-                        :disabled="!isWithinCampaignPeriod"
-                        required
-                      >
-                        <option :value="true">Đang hoạt động</option>
-                        <option :value="false">Ngừng hoạt động</option>
-                      </select>
-                      <!-- Auto-update status notification -->
-                      <div v-if="statusAutoUpdated" class="form-help-minimal auto-update-notification">
-                        <img :src="SuccessIcon" alt="Auto Updated" class="help-icon-minimal" />
-                        <span>{{ statusAutoUpdateMessage }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Auto-update notification for Add Modal -->
-                  <div v-if="showAddModal && statusAutoUpdated" class="form-row-minimal single-column">
-                    <div class="form-help-minimal auto-update-notification">
-                      <img :src="SuccessIcon" alt="Auto Updated" class="help-icon-minimal" />
-                      <span>{{ statusAutoUpdateMessage }}</span>
-                    </div>
-                  </div>
+              <div class="detail-value">
+                <input
+                  type="text"
+                  v-model="formData.tenDotGiamGia"
+                  class="detail-input"
+                  placeholder="Nhập tên đợt giảm giá"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="MoneyIcon" alt="Discount Value" class="icon-svg" />
+                Giá trị giảm giá (%)
+              </div>
+              <div class="detail-value">
+                <input
+                  type="number"
+                  v-model="formData.giaTriGiamGia"
+                  class="detail-input"
+                  placeholder="Nhập % giảm (1-100)"
+                  min="1"
+                  max="100"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="DateIcon" alt="Start Date" class="icon-svg" />
+                Ngày bắt đầu
+              </div>
+              <div class="detail-value">
+                <input
+                  type="date"
+                  v-model="formData.ngayBatDau"
+                  class="detail-input"
+                  :min="minStartDate"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="DateIcon" alt="End Date" class="icon-svg" />
+                Ngày kết thúc
+              </div>
+              <div class="detail-value">
+                <input
+                  type="date"
+                  v-model="formData.ngayKetThuc"
+                  class="detail-input"
+                  :min="minEndDate"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="detail-row" v-if="showEditModal">
+              <div class="detail-label">
+                <img :src="ChecklistIcon" alt="Status" class="icon-svg" />
+                Trạng thái
+              </div>
+              <div class="detail-value">
+                <select
+                  v-model="formData.trangThai"
+                  class="detail-input"
+                  :disabled="!isWithinCampaignPeriod"
+                  required
+                >
+                  <option :value="true">Đang hoạt động</option>
+                  <option :value="false">Ngừng hoạt động</option>
+                </select>
+                <!-- Auto-update status notification -->
+                <div v-if="statusAutoUpdated" class="detail-success">
+                  <img :src="SuccessIcon" alt="Auto Updated" class="icon-svg" />
+                  <p>{{ statusAutoUpdateMessage }}</p>
+                </div>
+                <!-- Warning message when not in campaign period -->
+                <div v-if="!isWithinCampaignPeriod" class="detail-error">
+                  <img :src="WarningIcon" alt="Warning" class="icon-svg" />
+                  <p>Chỉ có thể sửa trạng thái khi ngày hiện tại nằm trong thời gian đợt giảm giá</p>
                 </div>
               </div>
             </div>
 
-            <!-- Schedule Section -->
-            <div class="form-section-minimal">
-              <div class="section-title-minimal">
-                <img :src="DateIcon" alt="Schedule" class="section-icon-minimal" />
-                <span>Lịch trình chiến dịch</span>
+            <!-- Auto-update notification for Add Modal -->
+            <div v-if="showAddModal && statusAutoUpdated" class="detail-row">
+              <div class="detail-label">
+                <img :src="SuccessIcon" alt="Status" class="icon-svg" />
+                Thông báo
               </div>
-              <div class="form-content-minimal">
-                <div class="form-rows-minimal">
-                  <div class="form-row-minimal">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Ngày bắt đầu</label>
-                      <input
-                        type="date"
-                        v-model="formData.ngayBatDau"
-                        class="form-input-minimal"
-                        :min="minStartDate"
-                        required
-                      />
-                    </div>
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Ngày kết thúc</label>
-                      <input
-                        type="date"
-                        v-model="formData.ngayKetThuc"
-                        class="form-input-minimal"
-                        :min="minEndDate"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div v-if="!isWithinCampaignPeriod && showEditModal" class="form-row-minimal single-column">
-                    <div class="form-help-minimal warning">
-                      <img :src="WarningIcon" alt="Warning" class="help-icon-minimal" />
-                      <span>Chỉ có thể sửa trạng thái khi ngày hiện tại nằm trong thời gian đợt giảm giá</span>
-                    </div>
-                  </div>
+              <div class="detail-value">
+                <div class="detail-success">
+                  <p>{{ statusAutoUpdateMessage }}</p>
                 </div>
               </div>
             </div>
           </form>
         </div>
 
-        <!-- Minimal Footer -->
-        <div class="form-footer-minimal">
+        <!-- Modal Footer -->
+        <div class="modal-footer add-footer">
           <button 
-            class="save-btn-minimal" 
+            class="btn btn-secondary" 
+            @click="closeModals"
+          >
+            <img :src="CancelIcon" alt="Cancel" class="icon-svg" />
+            Hủy
+          </button>
+          <button 
+            class="btn btn-primary" 
             @click="openConfirmSaveModal"
             :disabled="!hasFormChanges"
-            :class="{ 'btn-disabled': !hasFormChanges }"
           >
-            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
-            <span>{{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật" }}</span>
-          </button>
-          <button class="cancel-btn-minimal" @click="closeModals">
-            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
-            <span>Hủy</span>
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="icon-svg" />
+            {{ showAddModal ? "Tạo đợt giảm giá" : "Cập nhật" }}
           </button>
         </div>
       </div>
@@ -794,36 +794,52 @@
       </div>
     </div>
 
-    <!-- Simple Notification Modal -->
-    <div
-      v-if="showNotificationModal"
-      class="modal-overlay-new"
-      @click="closeNotificationModal"
-    >
-      <div class="notification-modal-minimal" @click.stop>
-        <!-- Icon -->
-        <div class="notification-icon-container" :class="notificationData.type">
-          <div class="notification-icon">
-            <img 
-              :src="notificationData.type === 'success' ? SuccessIcon : CancelIcon" 
-              alt="Notification" 
-              class="notification-icon-img"
-            />
+    <!-- Modern Slide-out Notification -->
+    <div v-if="showNotification" class="slide-notification-container">
+      <div class="slide-notification" :class="[notificationType, isNotificationSliding ? 'slide-out' : 'slide-in']" @click.stop>
+        <div class="notification-icon-wrapper">
+          <div class="notification-icon" :class="notificationType">
+            <svg v-if="notificationType === 'success'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22,4 12,14.01 9,11.01" />
+            </svg>
+            <svg v-else-if="notificationType === 'error'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+            <svg v-else-if="notificationType === 'warning'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+          </div>
+        </div>
+        
+        <div class="notification-content-wrapper">
+          <div class="notification-title" :class="notificationType">
+            <span v-if="notificationType === 'success'">Thành công!</span>
+            <span v-else-if="notificationType === 'error'">Có lỗi!</span>
+            <span v-else-if="notificationType === 'warning'">Cảnh báo!</span>
+            <span v-else>Thông báo</span>
+          </div>
+          <div class="notification-message">
+            {{ notificationMessage }}
           </div>
         </div>
 
-        <!-- Content -->
-        <div class="notification-content-minimal">
-          <h3 class="notification-title-minimal">{{ notificationData.title }}</h3>
-          <p class="notification-message-minimal">{{ notificationData.message }}</p>
-        </div>
+        <button class="slide-notification-close" @click="hideNotification">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
 
-        <!-- Action Button -->
-        <div class="notification-action-minimal">
-          <button class="notification-btn-minimal" :class="notificationData.type" @click="closeNotificationModal">
-            <span>{{ notificationData.type === 'success' ? 'Tiếp tục' : 'Thử lại' }}</span>
-          </button>
-        </div>
+        <div class="notification-progress-bar" :class="notificationType" v-if="!isNotificationSliding"></div>
       </div>
     </div>
 
@@ -1120,10 +1136,15 @@ const showAddModal = ref(false);
 const showEditModal = ref(false);
 const showDetailModal = ref(false);
 const showApplyModal = ref(false);
-const showNotificationModal = ref(false);
 const showDeleteModal = ref(false);
 const showBulkDeleteModal = ref(false);
 const showConfirmSaveModal = ref(false);
+
+// Slide notification popup
+const showNotification = ref(false);
+const notificationMessage = ref("");
+const notificationType = ref("info"); // success, error, warning, info
+const isNotificationSliding = ref(false); // For slide animation control
 const editingCampaign = ref(null);
 const selectedCampaign = ref(null);
 const applyingCampaign = ref(null);
@@ -1135,13 +1156,6 @@ const bulkDeleteData = ref(null);
 const statusAutoUpdated = ref(false);
 const statusAutoUpdateMessage = ref("");
 
-// Notification data
-const notificationData = ref({
-  type: "success",
-  title: "",
-  message: "",
-  details: null,
-});
 
 // Pagination data
 const currentPage = ref(1);
@@ -2303,51 +2317,48 @@ const openAddModal = () => {
 };
 
 // ===== NOTIFICATION METHODS =====
+// Function to hide notification with slide-out animation
+const hideNotification = () => {
+  isNotificationSliding.value = true; // Trigger slide-out animation
+  setTimeout(() => {
+    showNotification.value = false;
+    isNotificationSliding.value = false;
+  }, 450); // Wait for slide-out animation to complete
+};
+
+// Function to show notification
+const showNotificationPopup = (message, type = "info") => {
+  notificationMessage.value = message;
+  notificationType.value = type;
+  showNotification.value = true;
+  isNotificationSliding.value = false; // Reset animation state
+
+  // Auto hide after progress bar completes: 5 seconds for success/info, 8 seconds for error/warning
+  // Add extra 100ms to ensure progress bar finishes before hiding
+  const duration = (type === "error" || type === "warning") ? 8100 : 5100;
+  setTimeout(() => {
+    hideNotification();
+  }, duration);
+};
+
 /**
  * Hiển thị thông báo thành công
  * @param {string} message - Nội dung thông báo
- * @param {Object} details - Chi tiết bổ sung
+ * @param {Object} details - Chi tiết bổ sung (không sử dụng trong slide notification)
  */
 const showSuccessNotification = (message, details = null) => {
-  notificationData.value = {
-    type: "success",
-    title: "Thành công!",
-    message: message,
-    details: details,
-  };
-  showNotificationModal.value = true;
-
-  // Auto close after 5 seconds
-  setTimeout(() => {
-    showNotificationModal.value = false;
-  }, 5000);
+  console.log('Showing success notification:', message, details);
+  showNotificationPopup(message, "success");
 };
 
 /**
  * Hiển thị thông báo lỗi
  * @param {string} message - Nội dung thông báo lỗi
- * @param {Object} errorDetails - Chi tiết lỗi
+ * @param {Object} errorDetails - Chi tiết lỗi (không sử dụng trong slide notification)
  */
 const showErrorNotification = (message, errorDetails = null) => {
-  notificationData.value = {
-    type: "error",
-    title: "Có lỗi xảy ra!",
-    message: message,
-    details: errorDetails,
-  };
-  showNotificationModal.value = true;
-
-  // Auto close after 8 seconds for errors
-  setTimeout(() => {
-    showNotificationModal.value = false;
-  }, 8000);
-};
-
-/**
- * Đóng modal thông báo
- */
-const closeNotificationModal = () => {
-  showNotificationModal.value = false;
+  console.log('Showing error notification:', message, errorDetails);
+  showNotificationPopup(message, "error");
 };
 
 /**
@@ -2786,6 +2797,291 @@ const confirmBulkDelete = async () => {
 /* Import unified discount styles */
 @import '../../styles/cssGiamGia/discountsUnified.css';
 @import '../../styles/cssGiamGia/campainGiamGia.css';
+
+/* CORE MODAL STYLES - CRITICAL FIXES FOR MODAL VISIBILITY */
+.discount-campaigns .modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10000 !important;
+  animation: modalFadeIn 0.3s ease-out !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.discount-campaigns .modal-content {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  max-width: 800px !important;
+  width: 90% !important;
+  max-height: 90vh !important;
+  overflow: hidden !important;
+  position: relative !important;
+  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+.discount-campaigns .modal-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 24px 32px !important;
+  background: #ffffff !important;
+  color: #374151 !important;
+  position: relative !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.discount-campaigns .modal-header h3 {
+  margin: 0 !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  color: #374151 !important;
+}
+
+.discount-campaigns .modal-header .icon-svg {
+  width: 24px !important;
+  height: 24px !important;
+  filter: brightness(0) saturate(100%) invert(29%) sepia(8%) saturate(1068%) hue-rotate(169deg) brightness(95%) contrast(86%) !important;
+}
+
+.discount-campaigns .modal-close {
+  background: rgba(107, 114, 128, 0.1) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  color: #6b7280 !important;
+}
+
+.discount-campaigns .modal-close:hover {
+  background: rgba(107, 114, 128, 0.2) !important;
+  transform: scale(1.05) !important;
+  color: #374151 !important;
+}
+
+.discount-campaigns .modal-close span {
+  font-size: 24px !important;
+  font-weight: bold !important;
+}
+
+/* MODAL-OVERLAY-NEW STYLES FOR OTHER MODALS */
+.modal-overlay-new {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10000 !important;
+  animation: fadeIn 0.3s ease-out !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.modal-content-new {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  max-width: 800px !important;
+  width: 90% !important;
+  max-height: 90vh !important;
+  overflow: hidden !important;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: 1px solid #e5e7eb !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+.notification-modal-minimal {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  max-width: 400px !important;
+  width: 90% !important;
+  padding: 2rem !important;
+  text-align: center !important;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: 1px solid #e5e7eb !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* ANIMATION KEYFRAMES */
+@keyframes modalFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    visibility: visible;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+  }
+}
+
+.modal-body {
+  padding: 28px 32px !important;
+  max-height: calc(90vh - 200px) !important;
+  overflow-y: auto !important;
+}
+
+.edit-form {
+  display: grid !important;
+  gap: 24px !important;
+}
+
+.detail-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 20px !important;
+  padding: 20px !important;
+  margin-bottom: 16px !important;
+  background: white !important;
+  border-radius: 10px !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0 !important;
+}
+
+.detail-label {
+  min-width: 180px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  font-size: 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.detail-label .icon-svg {
+  width: 16px !important;
+  height: 16px !important;
+  opacity: 0.7 !important;
+}
+
+.detail-value {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.detail-input {
+  width: 100% !important;
+  padding: 12px 16px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  transition: all 0.2s ease !important;
+  background: #fafafa !important;
+}
+
+.detail-input:focus {
+  outline: none !important;
+  border-color: #4ade80 !important;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1) !important;
+  background: white !important;
+}
+
+.modal-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 16px !important;
+  padding: 24px 32px !important;
+  background: #f8fafc !important;
+  border-top: 1px solid #e5e7eb !important;
+}
+
+/* Form error and success styles */
+.detail-error {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #ef4444 !important;
+  font-size: 13px !important;
+  margin-top: 4px !important;
+}
+
+.detail-success {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #22c55e !important;
+  font-size: 13px !important;
+  margin-top: 4px !important;
+}
+
+.form-error {
+  border-color: #ef4444 !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .discount-campaigns {
   max-width: 1400px;
   margin: 0 auto;
@@ -2846,7 +3142,7 @@ const confirmBulkDelete = async () => {
   max-width: 100px !important;
   padding: 8px 4px !important;
   text-align: center !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
 }
 .col-batdau { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
 .col-ketthuc { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
@@ -2888,7 +3184,345 @@ const confirmBulkDelete = async () => {
   opacity: 0.5 !important;
 }
 
+/* Campaign-specific override for discount value - keep original size */
+.discount-campaigns .discount-value-detailed strong {
+  font-size: 0.9rem !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: initial !important;
+}
+
 /* page-header styles are now defined in globals.css */
+
+/* FORCED CUSTOMER SELECTION STYLES IN SCOPED - MODERN CARD DESIGN */
+.customer-selection-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  padding: 24px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1px solid #e1e5e9 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(0, 0, 0, 0.05) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.customer-selection-wrapper::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, #4ade80 0%, #22c55e 50%, #16a34a 100%) !important;
+}
+
+/* Make the detail-row containing customer selection full width */
+.detail-row.customer-selection-row {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  grid-column: 1 / -1 !important;
+  gap: 12px !important;
+}
+
+.detail-row.customer-selection-row .detail-label {
+  width: 100% !important;
+  min-width: 100% !important;
+  margin-bottom: 0 !important;
+  text-align: left !important;
+  flex: none !important;
+}
+
+.detail-row.customer-selection-row .detail-value {
+  width: 100% !important;
+  min-width: 100% !important;
+  flex: 1 !important;
+}
+
+.customer-search {
+  position: relative !important;
+  margin-bottom: 4px !important;
+}
+
+.customer-search input[type="text"] {
+  width: 100% !important;
+  padding: 16px 20px 16px 50px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  background: rgba(249, 250, 251, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+}
+
+.customer-search input[type="text"]:focus {
+  border-color: #4ade80 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.15), 0 4px 12px rgba(74, 222, 128, 0.1) !important;
+  background: white !important;
+  transform: translateY(-1px) !important;
+}
+
+.customer-search::before {
+  content: "🔍" !important;
+  position: absolute !important;
+  left: 16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-size: 16px !important;
+  z-index: 1 !important;
+  transition: all 0.3s ease !important;
+}
+
+.customer-search input[type="text"]:focus + .customer-search::before,
+.customer-search:focus-within::before {
+  transform: translateY(-50%) scale(1.1) !important;
+  filter: brightness(1.2) !important;
+}
+
+.customer-actions {
+  display: flex !important;
+  gap: 12px !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+
+.btn-sm {
+  padding: 8px 16px !important;
+  font-size: 12px !important;
+  min-width: auto !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.btn-outline {
+  background: white !important;
+  color: #22c55e !important;
+  border: 1px solid #22c55e !important;
+  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.1) !important;
+}
+
+.btn-outline:hover {
+  background: #22c55e !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(34, 197, 94, 0.2) !important;
+}
+
+.customer-list {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  padding: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: grid !important;
+  gap: 12px !important;
+}
+
+.customer-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 20px !important;
+  background: white !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+.customer-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 4px !important;
+  height: 100% !important;
+  background: #e5e7eb !important;
+  transition: all 0.3s ease !important;
+}
+
+.customer-item:hover {
+  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%) !important;
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(74, 222, 128, 0.1) !important;
+  border-color: rgba(74, 222, 128, 0.3) !important;
+}
+
+.customer-item:hover::before {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+  width: 6px !important;
+}
+
+.customer-item:last-child {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+.customer-item.selected {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%) !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.15), 0 4px 12px rgba(34, 197, 94, 0.1) !important;
+}
+
+.customer-item.selected::before {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  width: 6px !important;
+}
+
+.customer-checkbox {
+  margin: 0 !important;
+  cursor: pointer !important;
+  width: 20px !important;
+  height: 20px !important;
+  accent-color: #4ade80 !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+}
+
+.customer-checkbox:checked {
+  transform: scale(1.1) !important;
+}
+
+.customer-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+.customer-name {
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+  margin: 0 0 6px 0 !important;
+}
+
+.customer-details {
+  font-size: 12px !important;
+  color: #64748b !important;
+  line-height: 1.4 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+
+.customer-details strong {
+  color: #374151 !important;
+  font-weight: 600 !important;
+  margin-right: 4px !important;
+}
+
+.customer-summary {
+  padding: 12px 16px !important;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  border: 2px solid #22c55e !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  color: #166534 !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  box-shadow: 0 2px 4px rgba(22, 101, 52, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.customer-summary::before {
+  content: '✓' !important;
+  font-size: 16px !important;
+  color: #166534 !important;
+  font-weight: bold !important;
+}
+
+/* Custom scrollbar for customer list */
+.customer-list::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.customer-list::-webkit-scrollbar-track {
+  background: rgba(248, 250, 252, 0.5) !important;
+  border-radius: 12px !important;
+  margin: 8px !important;
+}
+
+.customer-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.customer-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%) !important;
+}
+
+/* FORCED MODAL FOOTER BUTTON STYLES IN SCOPED */
+.modal-footer .btn {
+  padding: 12px 24px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-width: 120px !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.modal-footer .btn-primary {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.25) !important;
+}
+
+.modal-footer .btn-primary:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 15px -3px rgba(34, 197, 94, 0.4) !important;
+}
+
+.modal-footer .btn-secondary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.25) !important;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 15px -3px rgba(220, 38, 38, 0.4) !important;
+}
+
+.modal-footer .btn .icon-svg {
+  width: 14px !important;
+  height: 14px !important;
+  filter: brightness(0) invert(1) !important;
+  margin-right: 4px !important;
+}
 
 /* Modern Filter Section */
 .filter-section {
@@ -8524,6 +9158,236 @@ const confirmBulkDelete = async () => {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== SLIDE-OUT NOTIFICATION STYLES ===== */
+.slide-notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.slide-notification {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  min-width: 320px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  pointer-events: all;
+  transform: translateX(420px);
+  opacity: 0;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+}
+
+/* Slide states - animations are handled by keyframes */
+
+.slide-notification.success {
+  --notification-color: #22c55e;
+  --notification-color-light: #4ade80;
+  --notification-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.slide-notification.error {
+  --notification-color: #ef4444;
+  --notification-color-light: #f87171;
+  --notification-bg: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.slide-notification.warning {
+  --notification-color: #f59e0b;
+  --notification-color-light: #fbbf24;
+  --notification-bg: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.slide-notification.info {
+  --notification-color: #3b82f6;
+  --notification-color-light: #60a5fa;
+  --notification-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.notification-icon-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--notification-bg);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.notification-icon {
+  color: var(--notification-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-content-wrapper {
+  padding: 20px 60px 20px 84px;
+  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.notification-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--notification-color);
+  letter-spacing: -0.025em;
+}
+
+.notification-message {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.slide-notification-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  backdrop-filter: blur(10px);
+}
+
+.slide-notification-close:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #374151;
+  transform: scale(1.1);
+}
+
+.notification-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--notification-color);
+  animation: progress-countdown 5s linear forwards;
+  border-radius: 0 0 16px 16px;
+}
+
+.notification-progress-bar.error,
+.notification-progress-bar.warning {
+  animation-duration: 8s;
+}
+
+@keyframes progress-countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Hover effects */
+.slide-notification:hover .notification-progress-bar {
+  animation-play-state: paused;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .slide-notification-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .slide-notification {
+    max-width: none;
+    min-width: auto;
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+
+  .slide-notification.slide-in {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .slide-notification.slide-out {
+    transform: translateY(-100px) !important;
+    opacity: 0 !important;
+  }
+
+  .notification-content-wrapper {
+    padding: 16px 50px 16px 70px;
+    min-height: 70px;
+  }
+
+  .notification-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    top: 16px;
+    left: 16px;
+  }
+
+  .notification-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .notification-title {
+    font-size: 14px;
+  }
+
+  .notification-message {
+    font-size: 13px;
+  }
+}
+
+/* Enhanced animations - Remove conflicting animation */
+.slide-notification.slide-in {
+  animation: slideInFromRight 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.slide-notification.slide-out {
+  animation: slideOutToRight 0.3s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(420px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(420px);
+    opacity: 0;
   }
 }
 </style>

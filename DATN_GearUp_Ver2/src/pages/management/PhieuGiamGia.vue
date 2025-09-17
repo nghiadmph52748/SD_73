@@ -3,13 +3,15 @@
     <!-- Filter Title -->
     <h2 class="tieu-de-bo-loc">Bộ lọc</h2>
     
-    <!-- Filter Section -->
+    <!-- Filter Description -->
+    <div class="mo-ta-bo-loc">
+      Sử dụng các bộ lọc dưới đây để tìm kiếm phiếu giảm giá
+    </div>
+    
+    <!-- Filter Section with Right-aligned Buttons -->
     <div class="bo-loc-section">
-      <!-- Header with Description and Buttons -->
-      <div class="bo-loc-header">
-        <div class="mo-ta-bo-loc">
-          Sử dụng các bộ lọc dưới đây để tìm kiếm phiếu giảm giá
-        </div>
+      <!-- Right-aligned Action Buttons -->
+      <div class="bo-loc-buttons-right">
         <button class="xoa-toan-bo-bo-loc-btn" @click="clearFilters">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 18L18 6M6 6l12 12"/>
@@ -226,21 +228,21 @@
           />
         </div>
       </div>
-    </div>
-    
-    <!-- Search Section Below Filter -->
-    <div class="phan-tim-kiem-duoi">
-      <div class="hop-tim-kiem-duoi">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bieu-tuong-tim-kiem">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input
-          type="text"
-          v-model="searchQueryBottom"
-          placeholder="Tìm kiếm..."
-          class="dau-vao-tim-kiem-duoi"
-        />
+      
+      <!-- Search Section Inside Filter -->
+      <div class="phan-tim-kiem-duoi">
+        <div class="hop-tim-kiem-duoi">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bieu-tuong-tim-kiem">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            v-model="searchQueryBottom"
+            placeholder="Tìm kiếm..."
+            class="dau-vao-tim-kiem-duoi"
+          />
+        </div>
       </div>
     </div>
 
@@ -296,8 +298,8 @@
                 </div>
               </td>
               <td class="col-giatri">
-                <div class="discount-value-detailed" style="display: flex; justify-content: center; align-items: center; height: 100%; text-align: center;">
-                  <strong style="text-align: center; margin: 0 auto; display: block; width: 100%;">{{ !coupon.loaiPhieuGiamGia ? coupon.giaTriGiamGia + "%" : formatCurrency(coupon.giaTriGiamGia) }}</strong>
+                <div class="discount-value-detailed">
+                  <strong>{{ !coupon.loaiPhieuGiamGia ? coupon.giaTriGiamGia + "%" : formatCompactCurrency(coupon.giaTriGiamGia) }}</strong>
                 </div>
               </td>
               <td class="col-batdau">
@@ -381,246 +383,259 @@
     <!-- Add/Edit Modal -->
     <div
       v-if="showAddModal || showEditModal"
-      class="modal-overlay-new"
+      class="modal-overlay"
       @click="closeModals"
     >
-      <div class="modal-content-new modal-form-minimal" @click.stop>
-        <!-- Minimal Header -->
-        <div class="form-header-minimal">
-          <div class="header-info-minimal">
-            <div class="form-icon-minimal">
-              <img :src="showAddModal ? PlusIcon : EditIcon" alt="Form" class="header-icon" />
-            </div>
-            <div class="form-title-minimal">
-              <h3>
-                {{
-                  showAddModal
-                    ? "Tạo phiếu giảm giá"
-                    : "Cập nhật phiếu giảm giá"
-                }}
-              </h3>
-              <div class="form-status-minimal" v-if="showEditModal">
-                <img :src="EditIcon" alt="Edit" class="status-icon-minimal" />
-                <span class="status-text-minimal">CHỈNH SỬA</span>
-              </div>
-            </div>
-          </div>
-          <button class="close-btn-minimal" @click="closeModals">
+      <div class="modal-content add-modal" @click.stop>
+        <!-- Modal Header -->
+        <div class="modal-header add-header">
+          <h3>
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Form" class="icon-svg" />
+            {{
+              showAddModal
+                ? "Tạo phiếu giảm giá"
+                : "Cập nhật phiếu giảm giá"
+            }}
+          </h3>
+          <button class="modal-close" @click="closeModals">
             <span>×</span>
           </button>
         </div>
 
-        <!-- Minimal Body -->
-        <div class="form-body-minimal">
-          <form @submit.prevent="saveCoupon" class="coupon-form-minimal">
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form @submit.prevent="saveCoupon" class="edit-form">
             <!-- Basic Information Section -->
-            <div class="form-section-minimal">
-              <div class="section-title-minimal">
-                <img :src="ClipboardIcon" alt="Basic Info" class="section-icon-minimal" />
-                <span>Thông tin cơ bản</span>
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="ClipboardIcon" alt="Basic Info" class="icon-svg" />
+                Tên phiếu giảm giá
               </div>
-              <div class="form-content-minimal">
-                <div class="form-rows-minimal">
-                  <div class="form-row-minimal">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Tên phiếu giảm giá</label>
-                      <input
-                        type="text"
-                        v-model="couponForm.tenPhieuGiamGia"
-                        class="form-input-minimal"
-                        placeholder="Nhập tên phiếu giảm giá"
-                        required
-                      />
-                    </div>
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Kiểu giảm giá</label>
-                      <select
-                        v-model="couponForm.loaiPhieuGiamGia"
-                        class="form-select-minimal"
-                        required
-                      >
-                        <option :value="false">Phần trăm (%)</option>
-                        <option :value="true">Số tiền cố định (VND)</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-row-minimal">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Giá trị giảm</label>
-                      <input
-                        type="number"
-                        v-model="couponForm.giaTriGiamGia"
-                        class="form-input-minimal"
-                        :class="{ 'form-error': showDiscountError }"
-                        :placeholder="
-                          !couponForm.loaiPhieuGiamGia
-                            ? 'Nhập % giảm (1-100)'
-                            : 'Nhập số tiền'
-                        "
-                        :min="!couponForm.loaiPhieuGiamGia ? 1 : 1000"
-                        :max="!couponForm.loaiPhieuGiamGia ? 100 : undefined"
-                        @input="validateDiscountValue"
-                        required
-                      />
-                      <div v-if="showDiscountError" class="error-message-minimal">
-                        Giảm giá phần trăm không được vượt quá 100%
-                      </div>
-                    </div>
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Số lượng sử dụng</label>
-                      <input
-                        type="number"
-                        v-model="couponForm.soLuongDung"
-                        class="form-input-minimal"
-                        placeholder="Nhập số lượng"
-                        min="1"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="form-row-minimal single-column">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal">Mô tả</label>
-                      <textarea
-                        v-model="couponForm.moTa"
-                        class="form-textarea-minimal"
-                        rows="3"
-                        placeholder="Nhập mô tả phiếu giảm giá"
-                      ></textarea>
-                    </div>
-                  </div>
-                </div>
+              <div class="detail-value">
+                <input
+                  type="text"
+                  v-model="couponForm.tenPhieuGiamGia"
+                  class="detail-input"
+                  placeholder="Nhập tên phiếu giảm giá"
+                  required
+                />
               </div>
             </div>
-
-            <!-- Discount Conditions Section -->
-            <div class="form-section-minimal">
-              <div class="section-title-minimal">
-                <img :src="MoneyIcon" alt="Discount Info" class="section-icon-minimal" />
-                <span>Điều kiện áp dụng</span>
+            
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="TagIcon" alt="Discount Type" class="icon-svg" />
+                Kiểu giảm giá
               </div>
-              <div class="form-content-minimal">
-                <div class="form-rows-minimal">
-                  <div class="form-row-minimal">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Ngày bắt đầu</label>
-                      <input
-                        type="date"
-                        v-model="couponForm.ngayBatDau"
-                        class="form-input-minimal"
-                        required
-                      />
-                    </div>
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Ngày kết thúc</label>
-                      <input
-                        type="date"
-                        v-model="couponForm.ngayKetThuc"
-                        class="form-input-minimal"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="form-row-minimal">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal">Hóa đơn tối thiểu</label>
-                      <input
-                        type="number"
-                        v-model="couponForm.hoaDonToiThieu"
-                        class="form-input-minimal"
-                        placeholder="Nhập giá trị đơn hàng tối thiểu"
-                        min="0"
-                      />
-                    </div>
-                    <div class="form-group-minimal" v-if="!couponForm.loaiPhieuGiamGia">
-                      <label class="form-label-minimal">Giảm tối đa</label>
-                      <input
-                        type="number"
-                        v-model="couponForm.soTienToiDa"
-                        class="form-input-minimal"
-                        placeholder="Số tiền giảm tối đa"
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Customer Selection Section -->
-            <div class="form-section-minimal">
-              <div class="section-title-minimal">
-                <img :src="UsersIcon" alt="Customer Selection" class="section-icon-minimal" />
-                <span>Đối tượng áp dụng</span>
-              </div>
-              <div class="form-content-minimal">
-                <div class="form-rows-minimal">
-                  <div class="form-row-minimal single-column">
-                    <div class="form-group-minimal">
-                      <label class="form-label-minimal required">Loại phiếu</label>
-                      <select
-                        v-model="couponForm.idKhachHang"
-                        class="form-select-minimal"
-                      >
-                        <option :value="null">
-                          Công khai (tất cả khách hàng)
-                        </option>
-                        <option value="personal">
-                          Áp dụng cho khách hàng cụ thể
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Customer Selection -->
-                <div
-                  v-if="couponForm.idKhachHang === 'personal'"
-                  class="customer-selection-minimal"
+              <div class="detail-value">
+                <select
+                  v-model="couponForm.loaiPhieuGiamGia"
+                  class="detail-input"
+                  required
                 >
-                  <div class="customer-header-minimal">Chọn khách hàng áp dụng</div>
-                  <div class="customer-content-minimal">
-                    <div class="customer-search-minimal">
+                  <option :value="false">Phần trăm (%)</option>
+                  <option :value="true">Số tiền cố định (VND)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="MoneyIcon" alt="Discount Value" class="icon-svg" />
+                Giá trị giảm
+              </div>
+              <div class="detail-value">
+                <input
+                  type="number"
+                  v-model="couponForm.giaTriGiamGia"
+                  class="detail-input"
+                  :class="{ 'form-error': showDiscountError }"
+                  :placeholder="
+                    !couponForm.loaiPhieuGiamGia
+                      ? 'Nhập % giảm (1-100)'
+                      : 'Nhập số tiền'
+                  "
+                  :min="!couponForm.loaiPhieuGiamGia ? 1 : 1000"
+                  :max="!couponForm.loaiPhieuGiamGia ? 100 : undefined"
+                  @input="validateDiscountValue"
+                  required
+                />
+                <div v-if="showDiscountError" class="detail-error">
+                  <p>Giảm giá phần trăm không được vượt quá 100%</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="HashIcon" alt="Quantity" class="icon-svg" />
+                Số lượng sử dụng
+              </div>
+              <div class="detail-value">
+                <input
+                  type="number"
+                  v-model="couponForm.soLuongDung"
+                  class="detail-input"
+                  placeholder="Nhập số lượng"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="CalendarIcon" alt="Start Date" class="icon-svg" />
+                Ngày bắt đầu
+              </div>
+              <div class="detail-value">
+                <input
+                  type="date"
+                  v-model="couponForm.ngayBatDau"
+                  class="detail-input"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="CalendarIcon" alt="End Date" class="icon-svg" />
+                Ngày kết thúc
+              </div>
+              <div class="detail-value">
+                <input
+                  type="date"
+                  v-model="couponForm.ngayKetThuc"
+                  class="detail-input"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="DollarIcon" alt="Min Order" class="icon-svg" />
+                Hóa đơn tối thiểu
+              </div>
+              <div class="detail-value">
+                <input
+                  type="text"
+                  :value="formattedHoaDonToiThieu"
+                  @input="handleNumberInput($event, 'hoaDonToiThieu')"
+                  class="detail-input"
+                  placeholder="Nhập giá trị đơn hàng tối thiểu (VNĐ)"
+                />
+              </div>
+            </div>
+
+            <div class="detail-row" v-if="!couponForm.loaiPhieuGiamGia">
+              <div class="detail-label">
+                <img :src="DollarIcon" alt="Max Discount" class="icon-svg" />
+                Giảm tối đa
+              </div>
+              <div class="detail-value">
+                <input
+                  type="text"
+                  :value="formattedSoTienToiDa"
+                  @input="handleNumberInput($event, 'soTienToiDa')"
+                  class="detail-input"
+                  placeholder="Số tiền giảm tối đa (VNĐ)"
+                />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="UsersIcon" alt="Target" class="icon-svg" />
+                Loại phiếu
+              </div>
+              <div class="detail-value">
+                <select
+                  v-model="couponForm.idKhachHang"
+                  class="detail-input"
+                >
+                  <option :value="null">
+                    Công khai (tất cả khách hàng)
+                  </option>
+                  <option value="personal">
+                    Áp dụng cho khách hàng cụ thể
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">
+                <img :src="FileTextIcon" alt="Description" class="icon-svg" />
+                Mô tả
+              </div>
+              <div class="detail-value">
+                <textarea
+                  v-model="couponForm.moTa"
+                  class="detail-input"
+                  rows="3"
+                  placeholder="Nhập mô tả phiếu giảm giá"
+                  style="resize: vertical; min-height: 80px;"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Customer Selection -->
+            <div
+              v-if="couponForm.idKhachHang === 'personal'"
+              class="detail-row customer-selection-row"
+            >
+              <div class="detail-label">
+                <img :src="UsersIcon" alt="Customers" class="icon-svg" />
+                Khách hàng
+              </div>
+              <div class="detail-value">
+                <div class="customer-selection-wrapper">
+                  <div class="customer-search">
+                    <input
+                      type="text"
+                      class="detail-input"
+                      placeholder="Tìm kiếm khách hàng..."
+                      v-model="searchCustomerQuery"
+                    />
+                  </div>
+                  <div class="customer-actions">
+                    <button type="button" class="btn btn-outline btn-sm" @click="selectAllCustomers">
+                      Chọn hết
+                    </button>
+                    <button type="button" class="btn btn-outline btn-sm" @click="clearAllCustomers">
+                      Bỏ chọn hết
+                    </button>
+                  </div>
+                  <div class="customer-list">
+                    <div
+                      v-for="customer in availableCustomers"
+                      :key="customer.id"
+                      :class="[
+                        'customer-item',
+                        { 'selected': selectedCustomers.includes(customer.id) }
+                      ]"
+                      @click="toggleCustomerSelection(customer.id)"
+                    >
                       <input
-                        type="text"
-                        placeholder="Tìm kiếm khách hàng..."
-                        v-model="searchCustomerQuery"
+                        type="checkbox"
+                        class="customer-checkbox"
+                        :checked="selectedCustomers.includes(customer.id)"
+                        @click.stop
                       />
-                    </div>
-                    <div class="customer-actions-minimal">
-                      <button type="button" class="customer-action-btn" @click="selectAllCustomers">
-                        Chọn hết
-                      </button>
-                      <button type="button" class="customer-action-btn" @click="clearAllCustomers">
-                        Bỏ chọn hết
-                      </button>
-                    </div>
-                    <div class="customer-list-minimal">
-                      <div
-                        v-for="customer in availableCustomers"
-                        :key="customer.id"
-                        class="customer-item-minimal"
-                        @click="toggleCustomerSelection(customer.id)"
-                      >
-                        <input
-                          type="checkbox"
-                          class="customer-checkbox-minimal"
-                          :checked="selectedCustomers.includes(customer.id)"
-                          @click.stop
-                        />
-                        <div class="customer-info-minimal">
-                          <div class="customer-name-minimal">{{ customer.tenKhachHang }}</div>
-                          <div class="customer-details-minimal">
-                            <strong>EMAIL:</strong> {{ customer.email }} |
-                            <strong>SĐT:</strong> {{ customer.soDienThoai }} |
-                            <strong>GIỚI TÍNH:</strong> {{ customer.gioiTinh ? 'Nam' : 'Nữ' }}
-                          </div>
+                      <div class="customer-info">
+                        <div class="customer-name">{{ customer.tenKhachHang }}</div>
+                        <div class="customer-details">
+                          <strong>EMAIL:</strong> {{ customer.email }} |
+                          <strong>SĐT:</strong> {{ customer.soDienThoai }} |
+                          <strong>GIỚI TÍNH:</strong> {{ customer.gioiTinh ? 'Nam' : 'Nữ' }}
                         </div>
                       </div>
                     </div>
-                    <div v-if="selectedCustomers.length > 0" class="customer-summary-minimal">
-                      Đã chọn {{ selectedCustomers.length }} khách hàng
-                    </div>
+                  </div>
+                  <div v-if="selectedCustomers.length > 0" class="customer-summary">
+                    Đã chọn {{ selectedCustomers.length }} khách hàng
                   </div>
                 </div>
               </div>
@@ -628,20 +643,22 @@
           </form>
         </div>
 
-        <!-- Minimal Footer -->
-        <div class="form-footer-minimal">
+        <!-- Modal Footer -->
+        <div class="modal-footer add-footer">
           <button 
-            class="save-btn-minimal" 
+            class="btn btn-secondary" 
+            @click="closeModals"
+          >
+            <img :src="CancelIcon" alt="Cancel" class="icon-svg" />
+            Hủy
+          </button>
+          <button 
+            class="btn btn-primary" 
             @click="openConfirmSaveModal"
             :disabled="!hasFormChanges"
-            :class="{ 'btn-disabled': !hasFormChanges }"
           >
-            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="btn-icon-minimal" />
-            <span>{{ showAddModal ? "Tạo phiếu giảm giá" : "Cập nhật" }}</span>
-          </button>
-          <button class="cancel-btn-minimal" @click="closeModals">
-            <img :src="CancelIcon" alt="Cancel" class="btn-icon-minimal" />
-            <span>Hủy</span>
+            <img :src="showAddModal ? PlusIcon : EditIcon" alt="Save" class="icon-svg" />
+            {{ showAddModal ? "Tạo phiếu giảm giá" : "Cập nhật" }}
           </button>
         </div>
       </div>
@@ -817,36 +834,52 @@
       </div>
     </div>
 
-    <!-- Simple Notification Modal -->
-    <div
-      v-if="showNotificationModal"
-      class="modal-overlay-new"
-      @click="closeNotificationModal"
-    >
-      <div class="notification-modal-minimal" @click.stop>
-        <!-- Icon -->
-        <div class="notification-icon-container" :class="notificationData.type">
-          <div class="notification-icon">
-            <img 
-              :src="notificationData.type === 'success' ? SuccessIcon : CancelIcon" 
-              alt="Notification" 
-              class="notification-icon-img"
-            />
+    <!-- Modern Slide-out Notification -->
+    <div v-if="showNotification" class="slide-notification-container">
+      <div class="slide-notification" :class="[notificationType, isNotificationSliding ? 'slide-out' : 'slide-in']" @click.stop>
+        <div class="notification-icon-wrapper">
+          <div class="notification-icon" :class="notificationType">
+            <svg v-if="notificationType === 'success'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22,4 12,14.01 9,11.01" />
+            </svg>
+            <svg v-else-if="notificationType === 'error'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+            <svg v-else-if="notificationType === 'warning'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+          </div>
+        </div>
+        
+        <div class="notification-content-wrapper">
+          <div class="notification-title" :class="notificationType">
+            <span v-if="notificationType === 'success'">Thành công!</span>
+            <span v-else-if="notificationType === 'error'">Có lỗi!</span>
+            <span v-else-if="notificationType === 'warning'">Cảnh báo!</span>
+            <span v-else>Thông báo</span>
+          </div>
+          <div class="notification-message">
+            {{ notificationMessage }}
           </div>
         </div>
 
-        <!-- Content -->
-        <div class="notification-content-minimal">
-          <h3 class="notification-title-minimal">{{ notificationData.title }}</h3>
-          <p class="notification-message-minimal">{{ notificationData.message }}</p>
-        </div>
+        <button class="slide-notification-close" @click="hideNotification">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
 
-        <!-- Action Button -->
-        <div class="notification-action-minimal">
-          <button class="notification-btn-minimal" :class="notificationData.type" @click="closeNotificationModal">
-            <span>{{ notificationData.type === 'success' ? 'Tiếp tục' : 'Thử lại' }}</span>
-          </button>
-        </div>
+        <div class="notification-progress-bar" :class="notificationType" v-if="!isNotificationSliding"></div>
       </div>
     </div>
 
@@ -1117,20 +1150,24 @@ import { fetchAllKhachHang } from "../../services/KhachHang/KhachHangService.js"
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel.js";
 
 // Import icons
-import CancelIcon from "@/assets/Cancel.svg";
-import ClipboardIcon from "@/assets/Clipboard.svg";
-import ClockIcon from "@/assets/Clock.svg";
-import DateIcon from "@/assets/Date.svg";
-import EditIcon from "@/assets/Edit.svg";
-import MoneyIcon from "@/assets/Money.svg";
-import PlusIcon from "@/assets/Plus.svg";
-import StatisticsIcon from "@/assets/Statistics.svg";
-import SuccessIcon from "@/assets/Success.svg";
-import TagIcon from "@/assets/TagLabel.svg";
-import TrashIcon from "@/assets/Trash.svg";
-import UsersIcon from "@/assets/Users.svg";
-import ViewIcon from "@/assets/View.svg";
-import WarningIcon from "@/assets/Warning.svg";
+import CancelIcon from "@/assets/Cancel.svg?url";
+import ClipboardIcon from "@/assets/Clipboard.svg?url";
+import ClockIcon from "@/assets/Clock.svg?url";
+import CalendarIcon from "@/assets/Date.svg?url";
+import DateIcon from "@/assets/Date.svg?url";
+import DollarIcon from "@/assets/Money.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import FileTextIcon from "@/assets/Document.svg?url";
+import HashIcon from "@/assets/Statistics.svg?url";
+import MoneyIcon from "@/assets/Money.svg?url";
+import PlusIcon from "@/assets/Plus.svg?url";
+import StatisticsIcon from "@/assets/Statistics.svg?url";
+import SuccessIcon from "@/assets/Success.svg?url";
+import TagIcon from "@/assets/TagLabel.svg?url";
+import TrashIcon from "@/assets/Trash.svg?url";
+import UsersIcon from "@/assets/Users.svg?url";
+import ViewIcon from "@/assets/View.svg?url";
+import WarningIcon from "@/assets/Warning.svg?url";
 
 // ===== REACTIVE DATA =====
 // Search and filter data
@@ -1157,10 +1194,15 @@ const quantityMax = ref(1000);
 const showAddModal = ref(false);
 const showEditModal = ref(false);
 const showDetailModal = ref(false);
-const showNotificationModal = ref(false);
 const showDeleteModal = ref(false);
 const showBulkDeleteModal = ref(false);
 const showConfirmSaveModal = ref(false);
+
+// Slide notification popup
+const showNotification = ref(false);
+const notificationMessage = ref("");
+const notificationType = ref("info"); // success, error, warning, info
+const isNotificationSliding = ref(false); // For slide animation control
 
 // Selected data
 const selectedCoupon = ref(null);
@@ -1168,13 +1210,6 @@ const editingCoupon = ref(null);
 const deleteCouponData = ref(null);
 const bulkDeleteData = ref(null);
 
-// Notification data
-const notificationData = ref({
-  type: "success",
-  title: "",
-  message: "",
-  details: null,
-});
 
 // Validation data
 const showDiscountError = ref(false);
@@ -1554,6 +1589,25 @@ const getCustomerCountForCoupon = (couponId) => {
   return getAppliedCustomers(couponId).length;
 };
 
+// Computed properties for formatted input display
+const formattedHoaDonToiThieu = computed({
+  get() {
+    return formatNumberInput(couponForm.value.hoaDonToiThieu);
+  },
+  set(value) {
+    couponForm.value.hoaDonToiThieu = parseNumberInput(value);
+  }
+});
+
+const formattedSoTienToiDa = computed({
+  get() {
+    return formatNumberInput(couponForm.value.soTienToiDa);
+  },
+  set(value) {
+    couponForm.value.soTienToiDa = parseNumberInput(value);
+  }
+});
+
 // ===== UTILITY METHODS =====
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("vi-VN", {
@@ -1563,6 +1617,49 @@ const formatCurrency = (amount) => {
   })
     .format(amount)
     .replace("₫", " đ");
+};
+
+// Format number with dots for display in input fields
+const formatNumberInput = (value) => {
+  if (!value || value === 0) return '';
+  return new Intl.NumberFormat('vi-VN').format(value);
+};
+
+// Parse formatted number input back to number
+const parseNumberInput = (value) => {
+  if (!value) return 0;
+  // Remove dots and parse to number
+  return parseInt(value.toString().replace(/\./g, '')) || 0;
+};
+
+// Handle number input formatting on input event
+const handleNumberInput = (event, fieldName) => {
+  const input = event.target;
+  const rawValue = input.value.replace(/\./g, ''); // Remove existing dots
+  const numericValue = parseInt(rawValue) || 0;
+  
+  // Update the actual model value
+  couponForm.value[fieldName] = numericValue;
+  
+  // Format and update display value
+  if (numericValue > 0) {
+    input.value = formatNumberInput(numericValue);
+  } else {
+    input.value = '';
+  }
+};
+
+// Compact currency formatting for table display
+const formatCompactCurrency = (amount) => {
+  if (!amount) return "0 đ";
+  
+  // Format with thousand separators but shorter than full formatCurrency
+  const formatted = new Intl.NumberFormat("vi-VN", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+  
+  return `${formatted} đ`;
 };
 
 const formatDate = (dateString) => {
@@ -2266,55 +2363,48 @@ const closeModals = () => {
 };
 
 // ===== NOTIFICATION METHODS =====
+// Function to hide notification with slide-out animation
+const hideNotification = () => {
+  isNotificationSliding.value = true; // Trigger slide-out animation
+  setTimeout(() => {
+    showNotification.value = false;
+    isNotificationSliding.value = false;
+  }, 450); // Wait for slide-out animation to complete
+};
+
+// Function to show notification
+const showNotificationPopup = (message, type = "info") => {
+  notificationMessage.value = message;
+  notificationType.value = type;
+  showNotification.value = true;
+  isNotificationSliding.value = false; // Reset animation state
+
+  // Auto hide after progress bar completes: 5 seconds for success/info, 8 seconds for error/warning
+  // Add extra 100ms to ensure progress bar finishes before hiding
+  const duration = (type === "error" || type === "warning") ? 8100 : 5100;
+  setTimeout(() => {
+    hideNotification();
+  }, duration);
+};
+
 /**
  * Hiển thị thông báo thành công
  * @param {string} message - Nội dung thông báo
- * @param {Object} details - Chi tiết bổ sung
+ * @param {Object} details - Chi tiết bổ sung (không sử dụng trong slide notification)
  */
 const showSuccessNotification = (message, details = null) => {
   console.log('Showing success notification:', message, details);
-  notificationData.value = {
-    type: "success",
-    title: "Thành công!",
-    message: message,
-    details: details,
-  };
-  showNotificationModal.value = true;
-  console.log('Notification modal should be visible:', showNotificationModal.value);
-
-  // Auto close after 5 seconds
-  setTimeout(() => {
-    showNotificationModal.value = false;
-  }, 5000);
+  showNotificationPopup(message, "success");
 };
 
 /**
  * Hiển thị thông báo lỗi
  * @param {string} message - Nội dung thông báo lỗi
- * @param {Object} errorDetails - Chi tiết lỗi
+ * @param {Object} errorDetails - Chi tiết lỗi (không sử dụng trong slide notification)
  */
 const showErrorNotification = (message, errorDetails = null) => {
   console.log('Showing error notification:', message, errorDetails);
-  notificationData.value = {
-    type: "error",
-    title: "Có lỗi xảy ra!",
-    message: message,
-    details: errorDetails,
-  };
-  showNotificationModal.value = true;
-  console.log('Notification modal should be visible:', showNotificationModal.value);
-
-  // Auto close after 8 seconds for errors
-  setTimeout(() => {
-    showNotificationModal.value = false;
-  }, 8000);
-};
-
-/**
- * Đóng modal thông báo
- */
-const closeNotificationModal = () => {
-  showNotificationModal.value = false;
+  showNotificationPopup(message, "error");
 };
 
 /**
@@ -2938,6 +3028,315 @@ onMounted(() => {
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
+/* ===== STANDARDIZED MODAL STYLES ===== */
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10000 !important;
+  animation: modalFadeIn 0.3s ease-out !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.modal-content {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  max-width: 800px !important;
+  width: 90% !important;
+  max-height: 90vh !important;
+  overflow: hidden !important;
+  position: relative !important;
+  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  visibility: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Modal header - fixed at top */
+.modal-header {
+  flex-shrink: 0 !important;
+  padding: 24px 32px !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  background: white !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+/* Modal body - scrollable content */
+.modal-body {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 24px 32px !important;
+  max-height: calc(90vh - 140px) !important; /* Account for header and footer */
+}
+
+/* Custom scrollbar styling */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Modal footer - fixed at bottom */
+.modal-footer {
+  flex-shrink: 0 !important;
+  padding: 20px 32px !important;
+  border-top: 1px solid #e5e7eb !important;
+  background: #f8fafc !important;
+  border-radius: 0 0 16px 16px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+}
+
+.modal-overlay-new {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10000 !important;
+  animation: fadeIn 0.3s ease-out !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.modal-content-new {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  max-width: 800px !important;
+  width: 90% !important;
+  max-height: 90vh !important;
+  overflow: hidden !important;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: 1px solid #e5e7eb !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Modal animations */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===== FORM AND ICON STYLES ===== */
+.detail-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  margin-bottom: 8px !important;
+}
+
+.detail-label .icon-svg {
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0 !important;
+  opacity: 0.7 !important;
+}
+
+.detail-value {
+  margin-bottom: 20px !important;
+}
+
+.detail-input {
+  width: 100% !important;
+  padding: 12px 16px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  transition: all 0.2s ease !important;
+}
+
+.detail-input:focus {
+  outline: none !important;
+  border-color: #4ade80 !important;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1) !important;
+}
+
+.detail-input.form-error {
+  border-color: #ef4444 !important;
+}
+
+.detail-error {
+  margin-top: 4px !important;
+  color: #ef4444 !important;
+  font-size: 12px !important;
+}
+
+.detail-row {
+  margin-bottom: 24px !important;
+}
+
+.customer-selection-row {
+  border-top: 1px solid #e5e7eb !important;
+  padding-top: 24px !important;
+  margin-top: 32px !important;
+}
+
+/* ===== CUSTOMER SELECTION STYLES ===== */
+.customer-list {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  margin-top: 12px !important;
+}
+
+.customer-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.customer-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.customer-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.customer-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.customer-item {
+  padding: 12px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+.customer-item:hover {
+  background: #f8fafc !important;
+}
+
+.customer-item.selected {
+  background: #f0fdf4 !important;
+  border-left: 3px solid #22c55e !important;
+}
+
+.customer-item:last-child {
+  border-bottom: none !important;
+}
+
+.customer-checkbox {
+  margin-top: 2px !important;
+}
+
+.customer-info {
+  flex: 1 !important;
+}
+
+.customer-name {
+  font-weight: 600 !important;
+  color: #374151 !important;
+  margin-bottom: 4px !important;
+}
+
+.customer-details {
+  font-size: 0.875rem !important;
+  color: #6b7280 !important;
+  line-height: 1.4 !important;
+}
+
+.customer-summary {
+  margin-top: 12px !important;
+  padding: 8px 12px !important;
+  background: #f0fdf4 !important;
+  border: 1px solid #bbf7d0 !important;
+  border-radius: 6px !important;
+  color: #166534 !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+}
+
+.customer-actions {
+  display: flex !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+
+.customer-actions .btn {
+  padding: 6px 12px !important;
+  font-size: 0.875rem !important;
+  border-radius: 6px !important;
+}
+
+/* ===== TABLE STYLES ===== */
 /* Override any conflicting table styles - CRITICAL */
 .coupons-table {
   width: 100% !important;
@@ -3031,6 +3430,335 @@ onMounted(() => {
   line-height: 1.1 !important;
 }
 
+/* FORCED CUSTOMER SELECTION STYLES IN SCOPED - MODERN CARD DESIGN */
+.customer-selection-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  padding: 24px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1px solid #e1e5e9 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(0, 0, 0, 0.05) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Make the detail-row containing customer selection full width */
+.detail-row.customer-selection-row {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  grid-column: 1 / -1 !important;
+  gap: 12px !important;
+}
+
+.detail-row.customer-selection-row .detail-label {
+  width: 100% !important;
+  min-width: 100% !important;
+  margin-bottom: 0 !important;
+  text-align: left !important;
+  flex: none !important;
+}
+
+.detail-row.customer-selection-row .detail-value {
+  width: 100% !important;
+  min-width: 100% !important;
+  flex: 1 !important;
+}
+
+.customer-selection-wrapper::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, #4ade80 0%, #22c55e 50%, #16a34a 100%) !important;
+}
+
+.customer-search {
+  position: relative !important;
+  margin-bottom: 4px !important;
+}
+
+.customer-search input[type="text"] {
+  width: 100% !important;
+  padding: 16px 20px 16px 50px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  background: rgba(249, 250, 251, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+}
+
+.customer-search input[type="text"]:focus {
+  border-color: #4ade80 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.15), 0 4px 12px rgba(74, 222, 128, 0.1) !important;
+  background: white !important;
+  transform: translateY(-1px) !important;
+}
+
+.customer-search::before {
+  content: "🔍" !important;
+  position: absolute !important;
+  left: 16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-size: 16px !important;
+  z-index: 1 !important;
+  transition: all 0.3s ease !important;
+}
+
+.customer-search input[type="text"]:focus + .customer-search::before,
+.customer-search:focus-within::before {
+  transform: translateY(-50%) scale(1.1) !important;
+  filter: brightness(1.2) !important;
+}
+
+.customer-actions {
+  display: flex !important;
+  gap: 12px !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+
+.btn-sm {
+  padding: 8px 16px !important;
+  font-size: 12px !important;
+  min-width: auto !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.btn-outline {
+  background: white !important;
+  color: #22c55e !important;
+  border: 1px solid #22c55e !important;
+  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.1) !important;
+}
+
+.btn-outline:hover {
+  background: #22c55e !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(34, 197, 94, 0.2) !important;
+}
+
+.customer-list {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  padding: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: grid !important;
+  gap: 12px !important;
+}
+
+.customer-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 20px !important;
+  background: white !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+.customer-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 4px !important;
+  height: 100% !important;
+  background: #e5e7eb !important;
+  transition: all 0.3s ease !important;
+}
+
+.customer-item:hover {
+  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%) !important;
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(74, 222, 128, 0.1) !important;
+  border-color: rgba(74, 222, 128, 0.3) !important;
+}
+
+.customer-item:hover::before {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+  width: 6px !important;
+}
+
+.customer-item:last-child {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+.customer-item.selected {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%) !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.15), 0 4px 12px rgba(34, 197, 94, 0.1) !important;
+}
+
+.customer-item.selected::before {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  width: 6px !important;
+}
+
+.customer-checkbox {
+  margin: 0 !important;
+  cursor: pointer !important;
+  width: 20px !important;
+  height: 20px !important;
+  accent-color: #4ade80 !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+}
+
+.customer-checkbox:checked {
+  transform: scale(1.1) !important;
+}
+
+.customer-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+.customer-name {
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+  margin: 0 0 6px 0 !important;
+}
+
+.customer-details {
+  font-size: 12px !important;
+  color: #64748b !important;
+  line-height: 1.4 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+
+.customer-details strong {
+  color: #374151 !important;
+  font-weight: 600 !important;
+  margin-right: 4px !important;
+}
+
+.customer-summary {
+  padding: 12px 16px !important;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  border: 2px solid #22c55e !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  color: #166534 !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  box-shadow: 0 2px 4px rgba(22, 101, 52, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.customer-summary::before {
+  content: '✓' !important;
+  font-size: 16px !important;
+  color: #166534 !important;
+  font-weight: bold !important;
+}
+
+/* Custom scrollbar for customer list */
+.customer-list::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.customer-list::-webkit-scrollbar-track {
+  background: rgba(248, 250, 252, 0.5) !important;
+  border-radius: 12px !important;
+  margin: 8px !important;
+}
+
+.customer-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.customer-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%) !important;
+}
+
+/* FORCED MODAL FOOTER BUTTON STYLES IN SCOPED */
+.modal-footer .btn {
+  padding: 12px 24px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-width: 120px !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.modal-footer .btn-primary {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.25) !important;
+}
+
+.modal-footer .btn-primary:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 15px -3px rgba(34, 197, 94, 0.4) !important;
+}
+
+.modal-footer .btn-secondary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.25) !important;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 15px -3px rgba(220, 38, 38, 0.4) !important;
+}
+
+.modal-footer .btn .icon-svg {
+  width: 14px !important;
+  height: 14px !important;
+  filter: brightness(0) invert(1) !important;
+  margin-right: 4px !important;
+}
+
 .type-label {
   font-size: 0.65rem !important;
   color: #0ea5e9 !important;
@@ -3046,20 +3774,28 @@ onMounted(() => {
   font-weight: 600 !important;
 }
 
-/* Discount value styling - COMPACT */
+/* Discount value styling - COMPACT - FORCED CENTERING */
 .discount-value-detailed {
-  max-width: 50px !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  min-height: 40px !important;
 }
 
 .discount-value-detailed strong {
   color: #16a34a !important;
-  font-size: 0.9rem !important;
+  font-size: 0.75rem !important;
   font-weight: 700 !important;
   display: block !important;
   width: 100% !important;
   text-align: center !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin: 0 auto !important;
 }
 
 /* Quantity info */
@@ -3201,6 +3937,236 @@ onMounted(() => {
   width: 100% !important;
   overflow-x: auto !important;
   border-radius: 8px !important;
+}
+
+/* ===== SLIDE-OUT NOTIFICATION STYLES ===== */
+.slide-notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.slide-notification {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  min-width: 320px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  pointer-events: all;
+  transform: translateX(420px);
+  opacity: 0;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+}
+
+/* Slide states - animations are handled by keyframes */
+
+.slide-notification.success {
+  --notification-color: #22c55e;
+  --notification-color-light: #4ade80;
+  --notification-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.slide-notification.error {
+  --notification-color: #ef4444;
+  --notification-color-light: #f87171;
+  --notification-bg: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.slide-notification.warning {
+  --notification-color: #f59e0b;
+  --notification-color-light: #fbbf24;
+  --notification-bg: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.slide-notification.info {
+  --notification-color: #3b82f6;
+  --notification-color-light: #60a5fa;
+  --notification-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.notification-icon-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--notification-bg);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.notification-icon {
+  color: var(--notification-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-content-wrapper {
+  padding: 20px 60px 20px 84px;
+  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.notification-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--notification-color);
+  letter-spacing: -0.025em;
+}
+
+.notification-message {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.slide-notification-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  backdrop-filter: blur(10px);
+}
+
+.slide-notification-close:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #374151;
+  transform: scale(1.1);
+}
+
+.notification-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--notification-color);
+  animation: progress-countdown 5s linear forwards;
+  border-radius: 0 0 16px 16px;
+}
+
+.notification-progress-bar.error,
+.notification-progress-bar.warning {
+  animation-duration: 8s;
+}
+
+@keyframes progress-countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Hover effects */
+.slide-notification:hover .notification-progress-bar {
+  animation-play-state: paused;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .slide-notification-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .slide-notification {
+    max-width: none;
+    min-width: auto;
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+
+  .slide-notification.slide-in {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .slide-notification.slide-out {
+    transform: translateY(-100px) !important;
+    opacity: 0 !important;
+  }
+
+  .notification-content-wrapper {
+    padding: 16px 50px 16px 70px;
+    min-height: 70px;
+  }
+
+  .notification-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    top: 16px;
+    left: 16px;
+  }
+
+  .notification-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .notification-title {
+    font-size: 14px;
+  }
+
+  .notification-message {
+    font-size: 13px;
+  }
+}
+
+/* Enhanced animations - Remove conflicting animation */
+.slide-notification.slide-in {
+  animation: slideInFromRight 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.slide-notification.slide-out {
+  animation: slideOutToRight 0.3s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(420px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(420px);
+    opacity: 0;
+  }
 }
 </style>
 
