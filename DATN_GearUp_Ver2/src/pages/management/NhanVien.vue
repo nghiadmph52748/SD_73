@@ -330,6 +330,15 @@
       </option>
     </select>
   </div>
+   <div class="form-group">
+                    <label class="form-label">*Địa chỉ cụ thể</label>
+                    <input
+                      type="text"
+                      v-model="employeeForm.diaChiCuThe"
+                      class="form-control add-input"
+                      required
+                    />
+                  </div>
 </div>
 
                 <div class="form-row">
@@ -342,15 +351,7 @@
                       required
                     />
                   </div>
-                  <div class="form-group">
-                    <label class="form-label">*Địa chỉ cụ thể</label>
-                    <input
-                      type="text"
-                      v-model="employeeForm.diaChiCuThe"
-                      class="form-control add-input"
-                      required
-                    />
-                  </div>
+                 
                 </div>
                 <div class="form-group">
                   <label class="form-label">*Tài khoản</label>
@@ -432,12 +433,7 @@
               </div>
             </div>
 
-            <!-- Toast -->
-            <div v-if="toast.show" :class="['toast', toast.type]">
-              {{ toast.message }}
-            </div>
-
-
+            
         </div>
       </div>
       
@@ -616,15 +612,7 @@
                       required
                     />
                   </div>
-                  <div class="form-group">
-                    <label class="form-label">*Địa chỉ cụ thể</label>
-                    <input
-                      type="text"
-                      v-model="employeeForm.diaChiCuThe"
-                      class="form-control edit-input"
-                      required
-                    />
-                  </div>
+                 
                 </div> 
 
                 <div class="form-group">
@@ -819,6 +807,10 @@
           </div>
         </div>
       </div>
+      <!-- Toast Notification -->
+        <div v-if="toast.show" :class="['toast', toast.type]">
+          {{ toast.message }}
+        </div>
     </div>
 
 </template>
@@ -853,9 +845,14 @@ const showConfirmAddEmployee = ref(false);
 
 const handleConfirmAddEmployee = async () => {
   showConfirmAddEmployee.value = false;
-
   try {
-    const result = await saveEmployee(); // gọi API thêm nhân viên
+    // Bước 1: validate trước
+    if (!validateForm()) {
+      return; // nếu thiếu thông tin thì dừng luôn
+    }
+
+    // Bước 2: gọi API sau khi validate thành công
+    const result = await saveEmployee(); 
 
     if (result) {
       showToast("Thêm nhân viên thành công!", "success");
@@ -867,18 +864,79 @@ const handleConfirmAddEmployee = async () => {
     showToast("Có lỗi xảy ra khi thêm nhân viên!", "error");
   }
 };
+
+
 function showToast(message, type = "success") {
   toast.value = { show: true, message, type };
   setTimeout(() => {
     toast.value.show = false;
-  }, 4000); // 4 giây
+  }, 4000); // 5 giây
 }
-
 const toast = ref({
   show: false,
   message: "",
   type: "success" // success | error
 });
+const validateForm = () => {
+  if (!employeeForm.value.anhNhanVien) {
+    showToast("Vui lòng Chọn Ảnh!", "error");
+    return false;
+  }
+  if (!employeeForm.value.cccd) {
+    showToast("Vui lòng nhập Số CCCD!", "error");
+    return false;
+  }
+  
+  if (!employeeForm.value.ngaySinh) {
+    showToast("Vui lòng nhập Ngày sinh!", "error");
+    return false;
+  }
+  if (!employeeForm.value.email) {
+    showToast("Vui lòng nhập Email!", "error");
+    return false;
+  }
+  if (!employeeForm.value.tenNhanVien) {
+    showToast("Vui lòng nhập Tên nhân viên!", "error");
+    return false;
+  }
+  if (!employeeForm.value.thanhPho) {
+    showToast("Vui lòng chọn Thành Phố!", "error");
+    return false;
+  }
+  if (!employeeForm.value.quan) {
+    showToast("Vui lòng chọn Quận!", "error");
+    return false;
+  }
+  if (!employeeForm.value.phuong) {
+    showToast("Vui lòng chọn Phường!", "error");
+    return false;
+  }
+  if (!employeeForm.value.diaChiCuThe) {
+    showToast("Vui lòng Nhập Địa Chỉ Cụ Thể!", "error");
+    return false;
+  }
+  if (!employeeForm.value.soDienThoai) {
+    showToast("Vui lòng nhập Số điện thoại!", "error");
+    return false;
+  }
+  
+  if (!employeeForm.value.tenTaiKhoan) {
+    showToast("Vui lòng Nhập Tài Khoản!", "error");
+    return false;
+  }
+  if (!employeeForm.value.matKhau) {
+    showToast("Vui lòng Nhập Mật Khẩu!", "error");
+    return false;
+  }
+  if (!employeeForm.value.idQuyenHan) {
+    showToast("Vui lòng chọn Quyền hạn!", "error");
+    return false;
+  }
+  return true;
+};
+
+
+
 //abcd
 const showConfirmEditEmployee = ref(false);
 const editMessage = ref("");
@@ -887,18 +945,25 @@ const handleConfirmEditEmployee = async () => {
   showConfirmEditEmployee.value = false;
 
   try {
-    const result = await saveEmployee(); // hàm cập nhật
+    // validate trước khi gọi API
+    if (!validateForm()) {
+      return; 
+    }
+
+    const result = await saveEmployee(); // gọi API update
 
     if (result) {
-      editMessage.value = "✅ Cập nhật nhân viên thành công!";
+      showToast("Cập nhật nhân viên thành công!", "success");
       showEditModal.value = false; // đóng modal sau khi xong
     } else {
-      editMessage.value = "";
+      showToast("Cập nhật nhân viên thất bại!", "error");
     }
   } catch (e) {
-    editMessage.value = "⚠️ Có lỗi xảy ra khi cập nhật nhân viên!";
+    console.error("Lỗi cập nhật:", e);
+    showToast("Có lỗi xảy ra khi cập nhật nhân viên!", "error");
   }
 };
+
 
 // Pagination data
 const currentPage = ref(1);
@@ -952,6 +1017,7 @@ const employeeForm = ref({
   delete: false,
   tenTaiKhoan: "",
   matKhau: "",
+  anhNhanVien: null
 });
 
 // Mock data
@@ -994,10 +1060,6 @@ const filteredEmployees = computed(() => {
     (employee) => employee.gioiTinh === selectedGender.value
   );
 }
-
-
-
-
   if (selectedRole.value) {
     filtered = filtered.filter(
       (employee) => employee.tenQuyenHan === selectedRole.value
@@ -1066,13 +1128,13 @@ const editEmployee = async (data) => {
   } else {
     avatarPreview.value = "";
   }
-
   showEditModal.value = true;
 };
 
 const handleAvatarUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
+    employeeForm.value.anhNhanVien = file;
     employeeForm.value.file = file; // lưu file vào form
     avatarPreview.value = URL.createObjectURL(file); // preview
   }
@@ -1080,51 +1142,44 @@ const handleAvatarUpload = (event) => {
 
 const saveEmployee = async () => {
   try {
-    let newImageUrl = employeeForm.value.anhNhanVien; // mặc định giữ ảnh cũ
+    let newImageUrl = employeeForm.value.anhNhanVien;
 
-    // Nếu có file mới thì upload
     if (employeeForm.value.file) {
       const formData = new FormData();
       formData.append("file", employeeForm.value.file);
-
       const res = await fetch("http://localhost:8080/api/upload/avatar", {
         method: "POST",
         body: formData,
       });
-
       if (!res.ok) throw new Error("Upload ảnh thất bại");
-
-      // Backend trả về đường dẫn, ví dụ: "/uploads/avatar123.jpg"
       const fileUrl = await res.text();
       newImageUrl = fileUrl;
-
-      // cập nhật preview bằng link server thật
       avatarPreview.value = "http://localhost:8080" + fileUrl;
     }
 
-    // Payload gửi đi
-    const payload = {
-      ...employeeForm.value,
-      anhNhanVien: newImageUrl,
-    };
-    delete payload.file; // xoá file khỏi payload vì file đã upload riêng
+    const payload = { ...employeeForm.value, anhNhanVien: newImageUrl };
+    delete payload.file;
 
     if (showAddModal.value) {
-      await fetchCreateNhanVien(payload); // thêm mới
+      await fetchCreateNhanVien(payload);
       currentPage.value = 1;
     } else if (showEditModal.value) {
-      await fetchUpdateNhanVien(employeeForm.value.id, payload); // sửa
+      await fetchUpdateNhanVien(employeeForm.value.id, payload);
     }
 
     showAddModal.value = false;
     showEditModal.value = false;
     await fetchAll();
     resetForm();
+
+    return true; // ✅ THÊM VÀO ĐÂY
   } catch (err) {
     console.error("Lỗi:", err.message);
-    alert(err.message);
+    showToast("❌ " + err.message, "error");
+    return false; // ✅ THÊM VÀO ĐÂY
   }
 };
+
 
 
 const resetForm = (resetAvatar = true) => {
@@ -1185,12 +1240,13 @@ const exportToExcel = () => {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Nhân viên");
     XLSX.writeFile(wb, "DanhSachNhanVien.xlsx");
-    alert("✅ Xuất file Excel thành công!");
+    showToast("✅ Xuất file Excel thành công!", "success");
   } catch (error) {
     console.error("Error exporting to Excel:", error);
-    alert("❌ Có lỗi xảy ra khi xuất file Excel");
+    showToast("❌ Có lỗi xảy ra khi xuất file Excel", "error");
   }
 };
+
 
 
 // Khởi tạo dữ liệu khi component được mount
@@ -2004,7 +2060,58 @@ td:nth-child(13) {
   font-size: 0.875rem;
 }
 
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* khoảng cách giữa các toast */
+  z-index: 9999;
+}
 
+.toast {
+  background: #fff;
+  border-left: 4px solid #e63946; /* viền trái màu đỏ */
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px 14px;
+  width: 300px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.toast-body {
+  font-size: 14px;
+  color: #555;
+}
+
+.toast button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
 
 </style>  
