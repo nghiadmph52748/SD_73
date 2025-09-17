@@ -103,6 +103,24 @@
               </div>
             </div>
             <div class="detail-row">
+              <div class="detail-label">Mã màu:</div>
+              <div class="detail-value color-input-group">
+                <input
+                  v-model="newMauSac.maMau"
+                  type="color"
+                  class="color-picker"
+                  @input="updateColorName"
+                />
+                <input
+                  v-model="newMauSac.maMau"
+                  type="text"
+                  placeholder="#000000"
+                  class="color-text-input"
+                  @input="updateColorPicker"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
               <div class="detail-label">Trạng thái:</div>
               <div class="detail-value">
                 <div class="radio-group">
@@ -171,6 +189,7 @@
             <tr>
               <th>STT</th>
               <th>Tên màu sắc</th>
+              <th>Mã màu</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
@@ -179,6 +198,15 @@
             <tr v-for="(value, i) in paginatedMauSacs" :key="value.id">
               <td>{{ startIndex + i + 1 }}</td>
               <td>{{ value.tenMauSac }}</td>
+              <td>
+                <div class="color-display">
+                  <div 
+                    class="color-preview" 
+                    :style="{ backgroundColor: value.maMau || '#000000' }"
+                  ></div>
+                  <span class="color-code">{{ value.maMau || '#000000' }}</span>
+                </div>
+              </td>
               <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
               <td>
                 <div class="action-buttons">
@@ -286,6 +314,24 @@
                   type="text"
                   required
                   class="detail-input"
+                />
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Mã màu:</div>
+              <div class="detail-value color-input-group">
+                <input
+                  v-model="selectedMauSac.maMau"
+                  type="color"
+                  class="color-picker"
+                  @input="updateEditColorName"
+                />
+                <input
+                  v-model="selectedMauSac.maMau"
+                  type="text"
+                  placeholder="#000000"
+                  class="color-text-input"
+                  @input="updateEditColorPicker"
                 />
               </div>
             </div>
@@ -424,6 +470,7 @@ const searchQuery = ref("");
 const statusFilter = ref("");
 const newMauSac = ref({
   tenMauSac: "",
+  maMau: "#000000",
   trangThai: true,
   deleted: false,
 });
@@ -497,9 +544,40 @@ const handleFilter = () => {
   currentPage.value = 1;
 };
 
+// Hàm cập nhật tên màu khi chọn màu từ color picker
+const updateColorName = () => {
+  // Có thể thêm logic để tự động đặt tên màu dựa trên mã hex
+};
+
+// Hàm cập nhật color picker khi nhập mã màu
+const updateColorPicker = () => {
+  // Validate mã màu hex
+  if (!newMauSac.value.maMau.startsWith('#')) {
+    newMauSac.value.maMau = '#' + newMauSac.value.maMau;
+  }
+};
+
+// Hàm cập nhật tên màu khi chọn màu từ color picker (edit mode)
+const updateEditColorName = () => {
+  // Có thể thêm logic để tự động đặt tên màu dựa trên mã hex
+};
+
+// Hàm cập nhật color picker khi nhập mã màu (edit mode)
+const updateEditColorPicker = () => {
+  // Validate mã màu hex
+  if (!selectedMauSac.value.maMau.startsWith('#')) {
+    selectedMauSac.value.maMau = '#' + selectedMauSac.value.maMau;
+  }
+};
+
 const fetchCreate = async () => {
   if (!newMauSac.value.tenMauSac || newMauSac.value.tenMauSac.trim() === '') {
     showNotificationPopup('error', 'Lỗi', 'Vui lòng nhập tên màu sắc');
+    return;
+  }
+
+  if (!newMauSac.value.maMau || newMauSac.value.maMau.trim() === '') {
+    showNotificationPopup('error', 'Lỗi', 'Vui lòng chọn mã màu');
     return;
   }
 
@@ -510,6 +588,7 @@ const fetchCreate = async () => {
     // Chuẩn bị dữ liệu gửi đi
     const dataToSend = {
       tenMauSac: newMauSac.value.tenMauSac.trim(),
+      maMau: newMauSac.value.maMau.trim(),
       trangThai: newMauSac.value.trangThai,
       deleted: false
     };
@@ -529,6 +608,7 @@ const fetchCreate = async () => {
     const newMauSacItem = {
       id: res.data?.id || Date.now(),
       tenMauSac: dataToSend.tenMauSac,
+      maMau: dataToSend.maMau,
       trangThai: dataToSend.trangThai,
       deleted: false,
       ngayTao: new Date().toISOString(),
@@ -541,6 +621,7 @@ const fetchCreate = async () => {
     // Reset form
     newMauSac.value = {
       tenMauSac: "",
+      maMau: "#000000",
       trangThai: true,
       deleted: false,
     };
@@ -656,6 +737,7 @@ const closeAddForm = () => {
   showAddForm.value = false;
   newMauSac.value = {
     tenMauSac: "",
+    maMau: "#000000",
     trangThai: true,
     deleted: false,
   };
@@ -1039,6 +1121,72 @@ onMounted(fetchMauSacs);
 
 .custom-confirm-dialog .btn:hover::before {
   left: 100%;
+}
+
+/* CSS cho color input group */
+.color-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-picker {
+  width: 50px;
+  height: 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
+}
+
+.color-text-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+}
+
+.color-text-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* CSS cho color display trong table */
+.color-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  flex-shrink: 0;
+}
+
+.color-code {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
 }
 </style>
 

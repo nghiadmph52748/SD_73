@@ -1,12 +1,13 @@
 package org.example.be_sp.model.response;
 
+import java.time.LocalDate;
+
+import org.example.be_sp.entity.MauSac;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.be_sp.entity.MauSac;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class MauSacResponse {
     Integer id;
     String maMauSac;
     String tenMauSac;
+    String maMau;
     Boolean deleted;
     Boolean trangThai;
     LocalDate createAt;
@@ -27,6 +29,7 @@ public class MauSacResponse {
         this.id = data.getId();
         this.maMauSac = data.getMaMauSac();
         this.tenMauSac = data.getTenMauSac();
+        this.maMau = data.getMaMau();
         this.deleted = data.getDeleted();
         this.trangThai = data.getTrangThai();
         this.createAt = data.getCreateAt();
