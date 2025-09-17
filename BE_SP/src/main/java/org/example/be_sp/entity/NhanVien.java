@@ -73,7 +73,10 @@ public class NhanVien {
     @Column(name = "dia_chi_cu_the")
     private String diaChiCuThe;
 
-    @Column(name = "gioi_tinh")
+    // NOTE: Database 'nhan_vien' table currently has no 'gioi_tinh' column.
+    // Mark as @Transient to avoid Hibernate selecting a non-existent column
+    // and causing SQLGrammarException (Invalid column name 'gioi_tinh').
+    @Transient
     private Boolean gioiTinh;
 
     @Column(name = "cccd", length = 20)

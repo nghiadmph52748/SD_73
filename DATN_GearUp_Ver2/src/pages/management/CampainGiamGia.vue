@@ -95,24 +95,18 @@
         <!-- Ngày bắt đầu -->
         <div class="nhom-bo-loc">
           <label class="nhan-nhom-bo-loc">Ngày bắt đầu</label>
-          <input
-            type="date"
+          <DatePickerPopup
             v-model="tuNgayFilter"
-            class="dau-vao-ngay"
-            placeholder="dd/mm/yyyy"
-            :max="denNgayFilter || undefined"
+            :max="denNgayFilter || ''"
           />
         </div>
 
         <!-- Ngày kết thúc -->
         <div class="nhom-bo-loc">
           <label class="nhan-nhom-bo-loc">Ngày kết thúc</label>
-          <input
-            type="date"
+          <DatePickerPopup
             v-model="denNgayFilter"
-            class="dau-vao-ngay"
-            placeholder="dd/mm/yyyy"
-            :min="tuNgayFilter || undefined"
+            :min="tuNgayFilter || ''"
           />
         </div>
       </div>
@@ -331,12 +325,10 @@
                 Ngày bắt đầu
               </div>
               <div class="detail-value">
-                <input
-                  type="date"
+                <DatePickerPopup
                   v-model="formData.ngayBatDau"
-                  class="detail-input"
                   :min="minStartDate"
-                  required
+                  :max="formData.ngayKetThuc || ''"
                 />
               </div>
             </div>
@@ -347,12 +339,9 @@
                 Ngày kết thúc
               </div>
               <div class="detail-value">
-                <input
-                  type="date"
+                <DatePickerPopup
                   v-model="formData.ngayKetThuc"
-                  class="detail-input"
-                  :min="minEndDate"
-                  required
+                  :min="formData.ngayBatDau || minEndDate"
                 />
               </div>
             </div>
@@ -1105,6 +1094,7 @@ import {
 } from "../../services/GiamGia/DotGiamGiaService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel";
+import DatePickerPopup from "@/components/common/DatePickerPopup.vue";
 
 // Import icons
 import CancelIcon from "@/assets/Cancel.svg";
@@ -1292,6 +1282,7 @@ const filteredCampaigns = computed(() => {
   // Date range filter
   if (tuNgayFilter.value) {
     const fromDate = new Date(tuNgayFilter.value);
+    fromDate.setHours(0, 0, 0, 0); // bao gồm trọn ngày bắt đầu
     filtered = filtered.filter((campaign) => {
       const startDate = new Date(campaign.ngayBatDau);
       return startDate >= fromDate;
@@ -1300,6 +1291,7 @@ const filteredCampaigns = computed(() => {
 
   if (denNgayFilter.value) {
     const toDate = new Date(denNgayFilter.value);
+    toDate.setHours(23, 59, 59, 999); // bao gồm trọn ngày kết thúc
     filtered = filtered.filter((campaign) => {
       const endDate = new Date(campaign.ngayKetThuc);
       return endDate <= toDate;
@@ -1395,6 +1387,7 @@ const totalCampaigns = computed(() => {
   // Date range filter
   if (tuNgayFilter.value) {
     const fromDate = new Date(tuNgayFilter.value);
+    fromDate.setHours(0, 0, 0, 0); // bao gồm trọn ngày bắt đầu
     filtered = filtered.filter((campaign) => {
       const startDate = new Date(campaign.ngayBatDau);
       return startDate >= fromDate;
@@ -1403,6 +1396,7 @@ const totalCampaigns = computed(() => {
 
   if (denNgayFilter.value) {
     const toDate = new Date(denNgayFilter.value);
+    toDate.setHours(23, 59, 59, 999); // bao gồm trọn ngày kết thúc
     filtered = filtered.filter((campaign) => {
       const endDate = new Date(campaign.ngayKetThuc);
       return endDate <= toDate;

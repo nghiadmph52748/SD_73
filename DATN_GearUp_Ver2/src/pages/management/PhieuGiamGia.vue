@@ -209,22 +209,18 @@
         <!-- Ngày bắt đầu -->
         <div class="nhom-bo-loc">
           <label class="nhan-nhom-bo-loc">Ngày bắt đầu</label>
-          <input
-            type="date"
+          <DatePickerPopup
             v-model="fromDate"
-            class="dau-vao-ngay"
-            placeholder="dd/mm/yyyy"
+            :max="toDate || ''"
           />
         </div>
 
         <!-- Ngày kết thúc -->
         <div class="nhom-bo-loc">
           <label class="nhan-nhom-bo-loc">Ngày kết thúc</label>
-          <input
-            type="date"
+          <DatePickerPopup
             v-model="toDate"
-            class="dau-vao-ngay"
-            placeholder="dd/mm/yyyy"
+            :min="fromDate || ''"
           />
         </div>
       </div>
@@ -489,11 +485,10 @@
                 Ngày bắt đầu
               </div>
               <div class="detail-value">
-                <input
-                  type="date"
+                <DatePickerPopup
                   v-model="couponForm.ngayBatDau"
-                  class="detail-input"
-                  required
+                  withTime
+                  returnType="datetime"
                 />
               </div>
             </div>
@@ -504,11 +499,10 @@
                 Ngày kết thúc
               </div>
               <div class="detail-value">
-                <input
-                  type="date"
+                <DatePickerPopup
                   v-model="couponForm.ngayKetThuc"
-                  class="detail-input"
-                  required
+                  withTime
+                  returnType="datetime"
                 />
               </div>
             </div>
@@ -608,31 +602,69 @@
                       Bỏ chọn hết
                     </button>
                   </div>
-                  <div class="customer-list">
-                    <div
+                  <div class="customer-list customer-card-grid">
+                    <label
                       v-for="customer in availableCustomers"
                       :key="customer.id"
                       :class="[
-                        'customer-item',
+                        'customer-card',
                         { 'selected': selectedCustomers.includes(customer.id) }
                       ]"
-                      @click="toggleCustomerSelection(customer.id)"
                     >
                       <input
                         type="checkbox"
-                        class="customer-checkbox"
+                        class="customer-card-checkbox"
                         :checked="selectedCustomers.includes(customer.id)"
-                        @click.stop
+                        @change="toggleCustomerSelection(customer.id)"
                       />
-                      <div class="customer-info">
-                        <div class="customer-name">{{ customer.tenKhachHang }}</div>
-                        <div class="customer-details">
-                          <strong>EMAIL:</strong> {{ customer.email }} |
-                          <strong>SĐT:</strong> {{ customer.soDienThoai }} |
-                          <strong>GIỚI TÍNH:</strong> {{ customer.gioiTinh ? 'Nam' : 'Nữ' }}
+
+                      <div class="customer-card-indicator" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="indicator-icon">
+                          <path
+                            d="M20 6L9 17l-5-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </div>
+
+                      <div class="customer-card-body">
+                        <div class="customer-avatar">
+                          {{ getCustomerInitials(customer.tenKhachHang) }}
+                        </div>
+
+                        <div class="customer-card-info">
+                          <div class="customer-name">{{ customer.tenKhachHang }}</div>
+
+                          <div class="customer-card-meta">
+                            <div
+                              class="customer-chip customer-gender-chip"
+                              :data-gender="customer.gioiTinh ? 'male' : 'female'"
+                            >
+                              <span class="customer-chip-label">Giới tính</span>
+                              <span class="customer-chip-value">
+                                {{ customer.gioiTinh ? 'Nam' : 'Nữ' }}
+                              </span>
+                            </div>
+                            <div class="customer-chip">
+                              <span class="customer-chip-label">Email</span>
+                              <span class="customer-chip-value">
+                                {{ customer.email || 'Chưa cập nhật' }}
+                              </span>
+                            </div>
+                            <div class="customer-chip">
+                              <span class="customer-chip-label">SĐT</span>
+                              <span class="customer-chip-value">
+                                {{ customer.soDienThoai || 'Chưa cập nhật' }}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </label>
                   </div>
                   <div v-if="selectedCustomers.length > 0" class="customer-summary">
                     Đã chọn {{ selectedCustomers.length }} khách hàng
@@ -1155,19 +1187,19 @@ import ClipboardIcon from "@/assets/Clipboard.svg?url";
 import ClockIcon from "@/assets/Clock.svg?url";
 import CalendarIcon from "@/assets/Date.svg?url";
 import DateIcon from "@/assets/Date.svg?url";
-import DollarIcon from "@/assets/Money.svg?url";
-import EditIcon from "@/assets/Edit.svg?url";
 import FileTextIcon from "@/assets/Document.svg?url";
-import HashIcon from "@/assets/Statistics.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import DollarIcon from "@/assets/Money.svg?url";
 import MoneyIcon from "@/assets/Money.svg?url";
 import PlusIcon from "@/assets/Plus.svg?url";
+import HashIcon from "@/assets/Statistics.svg?url";
 import StatisticsIcon from "@/assets/Statistics.svg?url";
 import SuccessIcon from "@/assets/Success.svg?url";
 import TagIcon from "@/assets/TagLabel.svg?url";
 import TrashIcon from "@/assets/Trash.svg?url";
 import UsersIcon from "@/assets/Users.svg?url";
-import ViewIcon from "@/assets/View.svg?url";
 import WarningIcon from "@/assets/Warning.svg?url";
+import DatePickerPopup from "@/components/common/DatePickerPopup.vue";
 
 // ===== REACTIVE DATA =====
 // Search and filter data
@@ -1464,7 +1496,7 @@ const allFilteredCoupons = computed(() => {
     });
   }
 
-  // Filter by date range
+  // Filter by date range (include only coupons fully inside [fromDate, toDate])
   if (fromDate.value || toDate.value) {
     filtered = filtered.filter((coupon) => {
       const couponStartDate = new Date(coupon.ngayBatDau);
@@ -1474,12 +1506,14 @@ const allFilteredCoupons = computed(() => {
       
       if (fromDate.value) {
         const filterFromDate = new Date(fromDate.value);
-        passesDateFilter = passesDateFilter && couponEndDate >= filterFromDate;
+        filterFromDate.setHours(0, 0, 0, 0); // include the entire start day
+        passesDateFilter = passesDateFilter && couponStartDate >= filterFromDate;
       }
       
       if (toDate.value) {
         const filterToDate = new Date(toDate.value);
-        passesDateFilter = passesDateFilter && couponStartDate <= filterToDate;
+        filterToDate.setHours(23, 59, 59, 999); // include the entire end day
+        passesDateFilter = passesDateFilter && couponEndDate <= filterToDate;
       }
       
       return passesDateFilter;
@@ -2448,6 +2482,16 @@ const clearAllCustomers = () => {
   selectedCustomers.value = [];
 };
 
+const getCustomerInitials = (name) => {
+  if (!name) return '?';
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join('');
+};
+
 // ===== PAGINATION METHODS =====
 /**
  * Reset về trang đầu tiên khi thay đổi filter
@@ -3209,17 +3253,48 @@ onMounted(() => {
 
 .detail-input {
   width: 100% !important;
-  padding: 12px 16px !important;
-  border: 1px solid #d1d5db !important;
-  border-radius: 8px !important;
+  padding: 14px 18px !important;
+  border: 1.5px solid #dbeafe !important;
+  border-radius: 12px !important;
   font-size: 14px !important;
-  transition: all 0.2s ease !important;
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.25) 0%, rgba(239, 246, 255, 0.65) 100%) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.detail-input::placeholder {
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+}
+
+.detail-value .date-picker {
+  width: 100% !important;
+}
+
+.detail-value .date-picker-trigger {
+  width: 100% !important;
+  padding: 14px 18px !important;
+  border-radius: 12px !important;
+  border: 1.5px solid #dbeafe !important;
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.35) 0%, rgba(239, 246, 255, 0.75) 100%) !important;
+  color: #0f172a !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.detail-value .date-picker-trigger:hover,
+.detail-value .date-picker-trigger:focus-visible {
+  border-color: #22c55e !important;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18) !important;
+}
+
+.detail-value .date-picker-panel {
+  box-shadow: 0 30px 60px -24px rgba(15, 23, 42, 0.35) !important;
 }
 
 .detail-input:focus {
   outline: none !important;
   border-color: #4ade80 !important;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1) !important;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.12) !important;
 }
 
 .detail-input.form-error {
@@ -3246,23 +3321,206 @@ onMounted(() => {
 .customer-list {
   max-height: 300px !important;
   overflow-y: auto !important;
+  padding: 16px !important;
   border: 1px solid #e2e8f0 !important;
-  border-radius: 8px !important;
+  border-radius: 16px !important;
   margin-top: 12px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  box-shadow: 0 12px 24px -14px rgba(15, 23, 42, 0.45) !important;
+}
+
+.customer-card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.customer-card {
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  padding: 16px !important;
+  border-radius: 14px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  background: #ffffff !important;
+  box-shadow: 0 6px 16px -12px rgba(15, 23, 42, 0.25) !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease !important;
+}
+
+.customer-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #86efac !important;
+  box-shadow: 0 14px 28px -18px rgba(34, 197, 94, 0.45) !important;
+}
+
+.customer-card.selected {
+  border-color: #22c55e !important;
+  background: linear-gradient(180deg, rgba(236, 253, 245, 0.95) 0%, rgba(220, 252, 231, 0.95) 100%) !important;
+  box-shadow: 0 16px 36px -20px rgba(34, 197, 94, 0.55) !important;
+}
+
+.customer-card-checkbox {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.customer-card-indicator {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background: #e2e8f0 !important;
+  color: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+  pointer-events: none !important;
+}
+
+.customer-card.selected .customer-card-indicator {
+  background: #22c55e !important;
+  color: #ffffff !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 6px 12px -6px rgba(34, 197, 94, 0.45) !important;
+}
+
+.customer-card-checkbox:focus-visible + .customer-card-indicator {
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.35) !important;
+}
+
+.indicator-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.customer-card-body {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  width: 100% !important;
+  padding-right: 38px !important;
+  box-sizing: border-box !important;
+}
+
+.customer-avatar {
+  width: 48px !important;
+  height: 48px !important;
+  flex: 0 0 48px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  font-size: 16px !important;
+  box-shadow: 0 10px 20px -14px rgba(34, 197, 94, 0.65) !important;
+}
+
+.customer-card-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.customer-name {
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+}
+
+.customer-card-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+.customer-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 0.45rem 0.85rem !important;
+  border-radius: 999px !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+  border: 1px solid #e2e8f0 !important;
+  font-size: 12px !important;
+  color: #475569 !important;
+  font-weight: 500 !important;
+}
+
+.customer-gender-chip {
+  border-color: #dbeafe !important;
+  background: rgba(219, 234, 254, 0.35) !important;
+  color: #1d4ed8 !important;
+}
+
+.customer-gender-chip[data-gender='female'] {
+  border-color: #fbcfe8 !important;
+  background: rgba(251, 207, 232, 0.35) !important;
+  color: #be185d !important;
+}
+
+.customer-chip-label {
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  color: #0f172a !important;
+}
+
+.customer-gender-chip .customer-chip-label {
+  color: inherit !important;
+}
+
+.customer-chip-value {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.customer-gender-chip .customer-chip-value {
+  color: inherit !important;
+}
+
+.customer-summary {
+  margin-top: 16px !important;
+  padding: 14px 18px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, rgba(240, 253, 244, 0.95) 0%, rgba(220, 252, 231, 0.95) 100%) !important;
+  border: 1px solid #bbf7d0 !important;
+  color: #15803d !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  box-shadow: 0 6px 16px -12px rgba(21, 128, 61, 0.35) !important;
 }
 
 .customer-list::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .customer-list::-webkit-scrollbar-track {
   background: #f1f5f9;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .customer-list::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: background 0.2s ease;
 }
 
@@ -3270,70 +3528,24 @@ onMounted(() => {
   background: #94a3b8;
 }
 
-.customer-item {
-  padding: 12px !important;
-  border-bottom: 1px solid #f1f5f9 !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  display: flex !important;
-  align-items: flex-start !important;
-  gap: 12px !important;
-}
-
-.customer-item:hover {
-  background: #f8fafc !important;
-}
-
-.customer-item.selected {
-  background: #f0fdf4 !important;
-  border-left: 3px solid #22c55e !important;
-}
-
-.customer-item:last-child {
-  border-bottom: none !important;
-}
-
-.customer-checkbox {
-  margin-top: 2px !important;
-}
-
-.customer-info {
-  flex: 1 !important;
-}
-
-.customer-name {
-  font-weight: 600 !important;
-  color: #374151 !important;
-  margin-bottom: 4px !important;
-}
-
-.customer-details {
-  font-size: 0.875rem !important;
-  color: #6b7280 !important;
-  line-height: 1.4 !important;
-}
-
-.customer-summary {
-  margin-top: 12px !important;
-  padding: 8px 12px !important;
-  background: #f0fdf4 !important;
-  border: 1px solid #bbf7d0 !important;
-  border-radius: 6px !important;
-  color: #166534 !important;
-  font-size: 0.875rem !important;
-  font-weight: 500 !important;
+@media (max-width: 768px) {
+  .customer-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+  }
 }
 
 .customer-actions {
   display: flex !important;
-  gap: 8px !important;
-  margin-bottom: 12px !important;
+  gap: 12px !important;
+  margin: 16px 0 !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
 }
 
 .customer-actions .btn {
-  padding: 6px 12px !important;
-  font-size: 0.875rem !important;
-  border-radius: 6px !important;
+  padding: 10px 20px !important;
+  font-size: 0.9rem !important;
+  border-radius: 999px !important;
 }
 
 /* ===== TABLE STYLES ===== */
@@ -3475,8 +3687,8 @@ onMounted(() => {
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  height: 4px !important;
-  background: linear-gradient(90deg, #4ade80 0%, #22c55e 50%, #16a34a 100%) !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, rgba(187, 247, 208, 0.95) 0%, rgba(134, 239, 172, 0.9) 100%) !important;
 }
 
 .customer-search {
@@ -3520,6 +3732,96 @@ onMounted(() => {
 .customer-search:focus-within::before {
   transform: translateY(-50%) scale(1.1) !important;
   filter: brightness(1.2) !important;
+}
+
+/* Override search & action styling with higher specificity */
+.customer-selection-wrapper .customer-search {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 14px 18px !important;
+  margin-bottom: 0 !important;
+  border-radius: 16px !important;
+  border: 1.5px solid #dbeafe !important;
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.45) 0%, rgba(236, 253, 245, 0.55) 100%) !important;
+  box-shadow: 0 18px 34px -24px rgba(16, 185, 129, 0.55) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.customer-selection-wrapper .customer-search:focus-within {
+  border-color: #22c55e !important;
+  box-shadow: 0 20px 40px -24px rgba(34, 197, 94, 0.55) !important;
+}
+
+.customer-selection-wrapper .customer-search::before {
+  content: "" !important;
+  width: 22px !important;
+  height: 22px !important;
+  flex: 0 0 22px !important;
+  background: #16a34a !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M10 2a8 8 0 015.657 13.657l3.242 3.243-1.414 1.414-3.243-3.242A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12z'/%3E%3C/svg%3E") center / contain no-repeat !important;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M10 2a8 8 0 015.657 13.657l3.242 3.243-1.414 1.414-3.243-3.242A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12z'/%3E%3C/svg%3E") center / contain no-repeat !important;
+  opacity: 0.75 !important;
+  transition: background 0.2s ease, opacity 0.2s ease !important;
+}
+
+.customer-selection-wrapper .customer-search:focus-within::before {
+  background: #15803d !important;
+  opacity: 1 !important;
+}
+
+.customer-selection-wrapper .customer-search input[type="text"] {
+  flex: 1 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px !important;
+  color: #0f172a !important;
+}
+
+.customer-selection-wrapper .customer-search input[type="text"]::placeholder {
+  color: #64748b !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.25px !important;
+}
+
+.customer-selection-wrapper .customer-actions {
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  margin: 8px 0 !important;
+  padding: 0 !important;
+}
+
+.customer-selection-wrapper .customer-actions .btn {
+  padding: 0.65rem 1.75rem !important;
+  min-width: 120px !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  transition: all 0.2s ease !important;
+}
+
+.customer-selection-wrapper .customer-actions .btn.btn-outline {
+  background: linear-gradient(135deg, rgba(236, 253, 245, 0.82) 0%, rgba(219, 234, 254, 0.76) 100%) !important;
+  color: #15803d !important;
+  border: 1.5px solid rgba(34, 197, 94, 0.65) !important;
+  box-shadow: 0 16px 32px -20px rgba(34, 197, 94, 0.45) !important;
+}
+
+.customer-selection-wrapper .customer-actions .btn.btn-outline:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.92) 0%, rgba(22, 163, 74, 0.92) 100%) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 20px 40px -22px rgba(22, 163, 74, 0.6) !important;
+}
+
+.customer-selection-wrapper .customer-actions .btn.btn-outline:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.25) !important;
 }
 
 .customer-actions {

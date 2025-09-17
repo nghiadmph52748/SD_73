@@ -452,6 +452,7 @@ CREATE TABLE [dbo].[nhan_vien](
 	[quan] [nvarchar](255) NULL,
 	[phuong] [varchar](255) NULL,
 	[dia_chi_cu_the] [varchar](255) NULL,
+	[gioi_tinh] [bit] NULL,
 	[cccd] [varchar](20) NULL,
 	[trang_thai] [bit] NULL,
 	[deleted] [bit] NULL,
@@ -1371,5 +1372,12 @@ GO
 ALTER DATABASE [GearUp] SET  READ_WRITE 
 GO
 
-ALTER TABLE nhan_vien
-ADD gioi_tinh BIT NULL; 
+-- Ensure we are altering the correct database
+USE [GearUp]
+GO
+IF COL_LENGTH('dbo.nhan_vien','gioi_tinh') IS NULL
+BEGIN
+    ALTER TABLE [dbo].[nhan_vien]
+    ADD [gioi_tinh] BIT NULL;
+END
+GO

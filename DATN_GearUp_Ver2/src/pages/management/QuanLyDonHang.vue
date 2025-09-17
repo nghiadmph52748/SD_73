@@ -1,75 +1,107 @@
 <template>
   <div class="order-management">
-     <div class="filters-panel">
-    <div class="filters-header">
-      <h3>Bộ lọc</h3>
-      <button class="btn-reset" @click="resetFilters">
-        <span class="btn-icon">❌</span>
-        Xóa toàn bộ bộ lọc
-      </button>
-    </div>
+    <!-- Filter Title -->
+    <h2 class="tieu-de-bo-loc">Bộ lọc</h2>
 
-    <div class="filters-content">
-      <div class="filter-row">
-        <!-- Mã đơn hàng -->
-        <div class="filter-item">
-          <label class="filter-label">Mã Đơn Hàng</label>
+    <!-- Filter Section styled like PhieuGiamGia -->
+    <div class="bo-loc-section">
+      <!-- Right-aligned Action Buttons -->
+      <div class="bo-loc-buttons-right">
+        <button class="xoa-toan-bo-bo-loc-btn" @click="resetFilters">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          Xóa toàn bộ bộ lọc
+        </button>
+        <button class="xoa-toan-bo-bo-loc-btn" @click="exportOrdersToExcel">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Xuất báo cáo
+        </button>
+      </div>
+
+      <!-- Filter Grid - Main Row -->
+      <div class="luoi-bo-loc">
+        <!-- Mã Đơn Hàng -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Mã Đơn Hàng</label>
           <input
-            type="text"
             v-model="orderCode"
-            placeholder="Lọc mã đơn hàng"
-            class="filter-input"
-          />
-        </div>
-
-        <!-- Khách hàng -->
-        <div class="filter-item">
-          <label class="filter-label">Khách Hàng</label>
-          <input
             type="text"
-            v-model="customerName"
-            placeholder="Lọc tên khách hàng"
-            class="filter-input"
+            placeholder="Lọc mã đơn hàng"
+            class="dau-vao-bo-loc"
           />
         </div>
 
-        <!-- Trạng thái -->
-        <div class="filter-item">
-          <label class="filter-label">Trạng Thái Đơn Hàng</label>
-          <select v-model="status" class="filter-select">
-             <option value="">Chọn trạng thái</option>
-              <option value="CHO_XAC_NHAN">Chờ xử lý</option>
-              <option value="CHO_GIAO_HANG">Đang xử lý</option>
-              <option value="HOAN_THANH">Hoàn thành</option>
-              <option value="DA_HUY">Đã hủy</option>
+        <!-- Khách Hàng -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Khách Hàng</label>
+          <input
+            v-model="customerName"
+            type="text"
+            placeholder="Lọc tên khách hàng"
+            class="dau-vao-bo-loc"
+          />
+        </div>
+
+        <!-- Trạng Thái -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Trạng Thái Đơn Hàng</label>
+          <select v-model="status" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn trạng thái</option>
+            <option value="CHO_XAC_NHAN">Chờ xác nhận</option>
+            <option value="CHO_GIAO_HANG">Đang xử lý</option>
+            <option value="HOAN_THANH">Hoàn thành</option>
+            <option value="DA_HUY">Đã hủy</option>
           </select>
         </div>
 
-        <!-- Loại đơn -->
-        <div class="filter-item">
-          <label class="filter-label">Loại Đơn Hàng</label>
-          <select v-model="orderType" class="filter-select">
-            <option value="">Chọn loại đơn hàng</option>
+        <!-- Loại Đơn Hàng -->
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Loại Đơn Hàng</label>
+          <select v-model="orderType" class="lua-chon-bo-loc">
+            <option value="" disabled selected>Chọn loại đơn hàng</option>
             <option value="ONLINE">Trực tuyến</option>
             <option value="OFFLINE">Tại quầy</option>
           </select>
         </div>
       </div>
 
-      <!-- Ngày tạo -->
-      <!-- Ngày tạo -->
-        <div class="filter-row dates">
-          <div class="">
-            <label class="filter-label">Ngày tạo từ</label>
-            <input type="date" v-model="fromDate" class="filter-input" />
-          </div>
-          <div class="">
-            <label class="filter-label">Ngày tạo đến</label>
-            <input type="date" v-model="toDate" class="filter-input" />
-          </div>
+      <!-- Date Filters Row -->
+      <div class="luoi-bo-loc luoi-bo-loc-dong-ba">
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Ngày tạo từ</label>
+          <DatePickerPopup
+            v-model="fromDate"
+            :max="toDate || ''"
+          />
         </div>
+        <div class="nhom-bo-loc">
+          <label class="nhan-nhom-bo-loc">Ngày tạo đến</label>
+          <DatePickerPopup
+            v-model="toDate"
+            :min="fromDate || ''"
+          />
+        </div>
+      </div>
+
+      <!-- Bottom Search Section -->
+      <div class="phan-tim-kiem-duoi">
+        <div class="hop-tim-kiem-duoi">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="bieu-tuong-tim-kiem">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            v-model="searchQueryBottom"
+            placeholder="Tìm kiếm..."
+            class="dau-vao-tim-kiem-duoi"
+          />
+        </div>
+      </div>
     </div>
-  </div>
 
     <!-- Orders Display -->
     <div class="orders-container">
@@ -81,7 +113,7 @@
           :class="['status-tab', { active: selectedStatus === status.value }]"
           @click="selectedStatus = status.value"
         >
-          <span class="tab-icon">{{ status.icon }}</span>
+          <img :src="status.iconSrc" alt="" class="tab-icon-svg" />
           <span class="tab-text">{{ status.label }}</span>
           <span class="tab-count">{{ getStatusCount(status.value) }}</span>
         </button>
@@ -123,125 +155,117 @@
       <!-- Table View -->
       <div v-if="viewMode === 'table'" class="table-view">
         <div class="table-container">
-          <table class="orders-table">
+          <div class="table-wrapper">
+            <table class="coupons-table">
             <thead>
               <tr>
-                <th class="sortable" @click="sortBy('code')">
-                  <span>#</span>
-                  <span class="sort-icon">{{ getSortIcon("code") }}</span>
+                <th class="col-checkbox">
+                  <input 
+                    type="checkbox" 
+                    class="select-all-checkbox"
+                    @change="toggleSelectAll"
+                    :checked="isAllSelected"
+                    :indeterminate="isIndeterminate"
+                  >
                 </th>
-                <th>Mã Đơn Hàng</th>
-                <th class="sortable" @click="sortBy('customerName')">
-                  <span>Tên Khách hàng</span>
-                  <span class="sort-icon">{{
-                    getSortIcon("customerName")
-                  }}</span>
-                </th>
-                <th class="sortable text-right" @click="sortBy('totalAmount')">
-                  <span>Tổng tiền</span>
-                  <span class="sort-icon">{{
-                    getSortIcon("totalAmount")
-                  }}</span>
-                </th>
-                <th class="">Loại Đơn Hàng</th>
-                <th>Trạng thái Đơn Hàng</th>
-                <th class="sortable" @click="sortBy('ngayTao')">
-                  <span>Ngày tạo</span>
-                  <span class="sort-icon">{{ getSortIcon("ngayTao") }}</span>
-                </th>
-                <th class="">Hành động</th>
+                <th class="col-stt">STT</th>
+                <th class="col-ma">MÃ ĐƠN HÀNG</th>
+                <th class="col-ten">TÊN KHÁCH HÀNG</th>
+                <th class="col-loai">LOẠI ĐƠN</th>
+                <th class="col-giatri">TỔNG TIỀN</th>
+                <th class="col-batdau">BẮT ĐẦU</th>
+                <th class="col-ketthuc">KẾT THÚC</th>
+                <th class="col-soluong">SL</th>
+                <th class="col-trangthai">TRẠNG THÁI</th>
+                <th class="col-hanhdong">HÀNH ĐỘNG</th>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="order in filteredOrders"
+                v-for="(order, index) in filteredOrders"
                 :key="order.id"
-                class="order-row"
               >
-                <td class="order-code">
-                  <div class="code-cell">
-                    <span class="code-text">{{ order.id }}</span>
+                <td class="col-checkbox">
+                  <input 
+                    type="checkbox" 
+                    class="row-checkbox"
+                    :value="order.id"
+                    v-model="selectedOrderIds"
+                    @change="updateSelectedOrders"
+                  >
+                </td>
+                <td class="col-stt">{{ startIndex + index + 1 }}</td>
+                <td class="col-ma">
+                  <div class="coupon-code">{{ order.maHoaDon || order.lichSuThanhToan?.[0]?.maHoaDon || 'N/A' }}</div>
+                </td>
+                <td class="col-ten">
+                  <div class="coupon-name">{{ order.tenKhachHang || 'Khách lẻ' }}</div>
+                </td>
+                <td class="col-loai">
+                  <div class="coupon-type">
+                    <span class="type-label">{{ order.loaiDon ? 'Tại quầy' : 'Trực tuyến' }}</span>
                   </div>
                 </td>
-                <!-- Mã Hóa Đơn -->
-                <td class="order-code">
-                  <div class="code-cell">
-                   <span class="code-text">{{ order.lichSuThanhToan?.[0]?.maHoaDon }}</span>
+                <td class="col-giatri">
+                  <div class="discount-value-detailed">
+                    <strong>{{ formatCompactCurrency(order.tongTienSauGiam || order.tongTien || 0) }}</strong>
                   </div>
                 </td>
-                <td class="customer-cell">
-                  <div class="customer-info">
-                    <div class="customer-name">
-                      {{ order.tenKhachHang || "Khách lẻ" }}
-                    </div>
+                <td class="col-batdau">
+                  <div class="date-info-compact">
+                    {{ formatTimeOnly(order.ngayTao) }} / {{ formatDateOnly(order.ngayTao) }}
                   </div>
                 </td>
-                <!-- <td class="items-cell">
-                <div class="items-info">
-                  <span v-if="order.tenSanPhams && order.tenSanPhams.length">
-                    {{ order.tenSanPhams.join(', ') }}
+                <td class="col-ketthuc">
+                  <div class="date-info-compact">
+                    {{ formatTimeOnly(order.ngayThanhToan) }} / {{ formatDateOnly(order.ngayThanhToan) }}
+                  </div>
+                </td>
+                <td class="col-soluong">
+                  <div class="quantity-info">
+                    {{ order.items?.length || order.soLuongSanPham || 0 }}
+                  </div>
+                </td>
+                <td class="col-trangthai">
+                  <span
+                    :class="[
+                      'status-badge-detailed',
+                      order.deleted ? 'status-deleted' : 
+                      (getDetailedOrderStatus(order) === 'Hoàn thành' ? 'status-active' : 
+                      (getDetailedOrderStatus(order) === 'Đang xử lý' ? 'status-upcoming' : 'status-expired')),
+                    ]"
+                  >
+                    {{ getDetailedOrderStatus(order) }}
                   </span>
-                  <span v-else>
-                    Không có sản phẩm
-                  </span>
-                </div>
-              </td> -->
-                <td class="amount-cell text-right">
-                  <div class="amount-info">
-                    <span class="amount-value">{{
-                      formatCurrency(order.tongTienSauGiam)
-                    }}</span>
-                  </div>
                 </td>
-                <td class="type-cell">
-                  <span :class="['type-badge', order.loaiDon ? 'offline' : 'online']">
-                    <span class="type-icon">
-                      {{ order.loaiDon ? "🏪" : "🌐" }}
-                    </span>
-                    <span class="type-text">
-                      {{ order.loaiDon ? "Tại quầy" : "Online" }}
-                    </span>
-                  </span>
-                </td>
-
-                <td class="status-cell">
-                  <span :class="['status-badge', getStatusClass(order.trangThai)]">
-                    {{ getStatusText(order.trangThai) }}
-                  </span>
-                </td>
-                <td class="date-cell">
-                  <div class="date-info">
-                    <span class="date-value">{{
-                      formatDate(order.ngayTao)
-                    }}</span>
-                    <span class="time-value">{{
-                      formatTime(order.ngayTao)
-                    }}</span>
-                  </div>
-                </td>
-                  <td>
-                <ButtonGroup spacing="xs">
-                  <ActionButton
-                      icon="view"
-                      variant="info"
-                      size="sm"
-                      tooltip="Xem chi tiết"
-                      class="action-button-info"
+                <td class="col-hanhdong">
+                  <div class="action-buttons-compact">
+                    <button
+                      class="action-btn-compact edit-btn"
+                      @click="editOrder(order)"
+                      title="Chỉnh sửa"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-icon-svg">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                    </button>
+                    <button
+                      class="action-btn-compact view-btn"
                       @click="viewOrder(order)"
-                    />
-                  <ActionButton
-                    icon="edit"
-                    variant="info"
-                    size="sm"
-                    tooltip="Chỉnh sửa thông tin"
-                    class="action-button-warning"
-                    @click="editOrder(order)"
-                  />
-                </ButtonGroup>
-              </td>
+                      title="Xem chi tiết"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="action-icon-svg">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
               </tr>
             </tbody>
-          </table>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -326,378 +350,366 @@
         </div>
       </div>
       <!-- Edit Order Modal -->
-            <div
-              v-if="showEditModal"
-              class="modal-overlay"
-              @click="closeEditModal"
-            >
-              <div class="modal-content medium" @click.stop>
-                <div class="modal-header">
-                  <h3>✏️ Chỉnh sửa đơn hàng</h3>
-                  <button class="modal-close" @click="closeEditModal">✕</button>
-                </div>
-
-                <div class="modal-body">
-                  <form @submit.prevent="updateOrder">
-                    <!-- Tên khách hàng -->
-                    <div class="form-group">
-                      <label for="tenKhachHang">Tên khách hàng:</label>
-                      <input
-                        id="tenKhachHang"
-                        v-model="editingOrder.tenKhachHang"
-                        type="text"
-                        class="form-control"
-                      />
-                    </div>
-
-                    <!-- Trạng thái -->
-                    <div class="form-group">
-                      <label for="trangThai">Trạng thái:</label>
-                    <select v-model="editingOrder.trangThai" class="form-control">
-                      <option :value="true">Hoàn thành</option>
-                      <option :value="false">Chờ xác nhận</option>
-                    </select>
-
-                    </div>
-
-                    <!-- Loại đơn -->
-                    <select v-model="editingOrder.loaiDon" class="form-control">
-                      <option :value="true">🌐 Online</option>
-                      <option :value="false">🏪 Tại quầy</option>
-                    </select>
-
-
-                    <!-- Tổng tiền -->
-                    <div class="form-group">
-                      <label for="tongTienSauGiam">Tổng tiền sau giảm:</label>
-                      <input
-                        id="tongTienSauGiam"
-                        v-model="editingOrder.tongTienSauGiam"
-                        type="number"
-                        class="form-control"
-                      />
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="form-actions">
-                      <button type="button" class="btn btn-secondary" @click="closeEditModal">
-                        Hủy
-                      </button>
-                      <button type="submit" class="btn btn-primary" >
-                        💾 Lưu
-                      </button>
-                    </div>
-                  </form>
-                </div>
+      <div
+        v-if="showEditModal"
+        class="modal-overlay"
+        @click="closeEditModal"
+      >
+        <div class="modal-content large order-detail-modal" @click.stop>
+          <div class="order-detail-header">
+            <div class="header-info">
+              <div class="order-title-block">
+                <h3>Chỉnh sửa đơn hàng</h3>
               </div>
             </div>
-
-
-      <!-- Enhanced Pagination -->
-      <div class="pagination-section">
-        <div class="pagination-info">
-          <span class="showing"
-            >Hiển thị {{ startIndex + 1 }} - {{ endIndex }} trong tổng số
-            {{ totalOrders }} đơn hàng</span
-          >
-          <div class="per-page-selector">
-            <label>Hiển thị:</label>
-            <select v-model="itemsPerPage" class="per-page-select">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="pagination-controls">
-          <button
-            class="pagination-btn prev"
-            @click="previousPage"
-            :disabled="currentPage === 1"
-            title="Trang trước"
-          >
-           ❮ Trước
-          </button>
-
-          <div class="page-numbers">
-            <button
-              v-for="page in getPageNumbers()"
-              :key="page"
-              :class="[
-                'page-btn',
-                { active: page === currentPage, dots: page === '...' },
-              ]"
-              @click="goToPage(page)"
-              :disabled="page === '...'"
-            >
-              {{ page }}
-            </button>
+            <button class="modal-close" @click="closeEditModal">✕</button>
           </div>
 
-          <button
-            class="pagination-btn next"
-            @click="nextPage"
-            :disabled="currentPage === totalPages"
-            title="Trang sau"
-          >
-             Sau ❯
-          </button>
-        </div>
-      </div>
-    </div>
- 
-
-    <!-- Order Detail Modal -->
-          <div
-            v-if="showDetailModal"
-            class="modal-overlay"
-            @click="showDetailModal = false"
-          >
-            <div class="modal-content large" @click.stop>
-              <div class="order-detail-header">
-                <h3>Thông tin đơn hàng - {{ selectedOrder?.code }}</h3>
-                <div class="closexy">
-                  <button class="modal-close" @click="showDetailModal = false"> 
-                  ✕
-                </button>
-              </div>
-              </div>
-
-              <div class="modal-body" v-if="selectedOrder">
-                <div class="order-detail-info">
-                  <div class="info-section">
-                    <h4>Thông tin đơn hàng - Đơn tại quầy</h4>
-                    <div class="info-grid">
-                      <div class="info-item">
-                        <label>Mã: </label>
-                        <span>{{ selectedOrder.id }}</span>
-                      </div>
-                      <div class="info-item">
-                        <label>Tên khách hàng: </label>
-                        <span>{{ selectedOrder.tenKhachHang || "Khách lẻ" }}</span>
-                      </div>
-                      <div class="info-item">
-                        <label>Trạng thái: </label>
-                        <span
-                          :class="['badge', getStatusClass(selectedOrder.trangThai)]"
-                        >
-                          {{ getStatusText(selectedOrder.trangThai) }}
-                        </span>
-                      </div>
-                      <div class="info-item">
-                        <label>Số Điện Thoại: </label>
-                        <span>{{ selectedOrder.soDienThoai || "N/A" }}</span>
-                      </div>
-                      <div class="info-item">
-                      <label>Loại: </label>
-                      <span
-                        :class="[
-                          'badge',
-                          selectedOrder.loaiDon ? 'badge-success' : 'badge-info'
-                        ]"
-                      >
-                        {{ selectedOrder.loaiDon ? "Tại quầy" : "Trực tuyến" }}
-                      </span>
-                    </div>
-                      <div class="info-item">
-                        <label>Tên người nhận:</label>
-                        <span>{{ selectedOrder.tenNguoiNhan || "N/A" }}</span>
-                      </div>
-                    </div>
-                  </div>
-
+          <div class="order-detail-body">
+            <form @submit.prevent="updateOrder" class="edit-form">
+              <div class="edit-fields-container">
                 
-                            <div class="order-timeline">
-                  <h4>Lịch sử đơn hàng</h4>
-                  <div class="timeline">
-                    <!-- Mốc 1: Tạo đơn -->
-                    <div class="timeline-item completed">
-                      <div class="timeline-icon"></div>
-                      <div class="timeline-content">
-                        <div class="timeline-header">
-                          <span class="timeline-title">Tạo đơn hàng: </span>
-                          <span class="timeline-time">
-                            {{ formatDateTime(selectedOrder?.ngayTao) }}
-                          </span>
-                        </div>
-                        <div class="timeline-description">
-                          Nhân viên - {{ selectedOrder?.tenNhanVien || '---' }}
-                        </div>
-                      </div>
+                <!-- Tên khách hàng Card -->
+                <div class="field-card">
+                  <div class="field-card-content">
+                    <div class="field-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
                     </div>
-
-                    <!-- Mốc 2: Hoàn thành -->
-                    <div class="timeline-item completed" v-if="selectedOrder?.ngayThanhToan">
-                      <div class="timeline-icon"></div>
-                      <div class="timeline-content">
-                        <div class="timeline-header">
-                          <span class="timeline-title">Hoàn thành: </span>
-                          <span class="timeline-time">
-                            {{ formatDateTime(selectedOrder?.ngayThanhToan) }}
-                          </span>
-                        </div>
-                        <!-- <div class="timeline-description">
-                          Nhân viên - {{
-                            selectedOrder?.lichSuThanhToan?.[0]?.tenNhanVienXacNhan || '---'
-                          }}
-                        </div> -->
-                      </div>
+                    <div class="field-content">
+                      <label class="field-label">Tên khách hàng</label>
+                      <input
+                        v-model="editingOrder.tenKhachHang"
+                        type="text"
+                        class="field-input"
+                        placeholder="Nhập tên khách hàng"
+                      />
                     </div>
                   </div>
                 </div>
-            <!-- Product List -->
-            <div class="product-list">
-            <h4>Danh sách sản phẩm</h4>
-            <div class="product-items">
-              <div 
-                v-for="item in products"
+
+                <!-- Trạng thái đơn hàng Card -->
+                <div class="field-card">
+                  <div class="field-card-content">
+                    <div class="field-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,11 12,14 22,4"/>
+                        <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.33 0 2.58.29 3.71.82"/>
+                      </svg>
+                    </div>
+                    <div class="field-content">
+                      <label class="field-label">Trạng thái đơn hàng</label>
+                      <select v-model="editingOrder.trangThai" class="field-select">
+                        <option :value="true">Hoàn thành</option>
+                        <option :value="false">Chờ xác nhận</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Loại đơn hàng Card -->
+                <div class="field-card">
+                  <div class="field-card-content">
+                    <div class="field-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M2 12h20"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                      </svg>
+                    </div>
+                    <div class="field-content">
+                      <label class="field-label">Loại đơn hàng</label>
+                      <select v-model="editingOrder.loaiDon" class="field-select">
+                        <option :value="false">🌐 Trực tuyến</option>
+                        <option :value="true">🏪 Tại quầy</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tổng tiền Card -->
+                <div class="field-card">
+                  <div class="field-card-content">
+                    <div class="field-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      </svg>
+                    </div>
+                    <div class="field-content">
+                      <label class="field-label">Tổng tiền sau giảm (VND)</label>
+                      <input
+                        v-model="editingOrder.tongTienSauGiam"
+                        type="number"
+                        class="field-input"
+                        placeholder="0"
+                        min="0"
+                        step="1000"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" @click="closeEditModal">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                  Hủy
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17,21 17,13 7,13 7,21"/>
+                    <polyline points="7,3 7,8 15,8"/>
+                  </svg>
+                  Lưu thay đổi
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Pagination Section (separate from table container) -->
+    <div class="pagination-container">
+      <div class="pagination-info">
+        Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của {{ totalOrders }} đơn hàng
+      </div>
+      <div class="pagination-controls">
+        <button
+          class="pagination-btn"
+          @click="previousPage"
+          :disabled="currentPage === 1"
+        >
+          ❮ Trước
+        </button>
+        <span class="page-info">{{ currentPage }} / {{ backendTotalPages }}</span>
+        <button
+          class="pagination-btn"
+          @click="nextPage"
+          :disabled="currentPage === backendTotalPages"
+        >
+          Sau ❯
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Order Detail Modal -->
+    <div
+      v-if="showDetailModal"
+      class="modal-overlay"
+      @click="showDetailModal = false"
+    >
+      <div class="modal-content large order-detail-modal" @click.stop>
+        <div class="order-detail-header">
+          <div class="header-info">
+            <div class="order-code-badge">#{{ selectedOrder?.id }}</div>
+            <div class="order-title-block">
+              <h3>{{ selectedOrder?.code || 'Chi tiết đơn hàng' }}</h3>
+              <div class="order-status-pill" :class="getStatusClass(selectedOrder?.trangThai)">
+                {{ getStatusText(selectedOrder?.trangThai) }}
+              </div>
+            </div>
+          </div>
+          <button class="modal-close" @click="showDetailModal = false">✕</button>
+        </div>
+
+        <div v-if="selectedOrder" class="order-detail-body">
+          <div class="order-overview">
+            <div class="overview-card">
+              <span class="label">Loại đơn</span>
+              <span class="value" :class="selectedOrder.loaiDon ? 'value-success' : 'value-info'">
+                {{ selectedOrder.loaiDon ? 'Tại quầy' : 'Trực tuyến' }}
+              </span>
+            </div>
+            <div class="overview-card">
+              <span class="label">Ngày tạo</span>
+              <span class="value">{{ formatDateTime(selectedOrder.ngayTao) }}</span>
+            </div>
+            <div class="overview-card">
+              <span class="label">Tổng thanh toán</span>
+              <span class="value highlight">{{ formatCurrency(selectedOrder.tongTienSauGiam) }}</span>
+            </div>
+          </div>
+
+          <div class="order-detail-grid">
+            <section class="order-card">
+              <header class="card-header">
+                <h4>Thông tin khách hàng</h4>
+              </header>
+              <div class="card-body info-grid">
+                <div class="info-item">
+                  <span class="info-label">Khách hàng</span>
+                  <span class="info-value">{{ selectedOrder.tenKhachHang || 'Khách lẻ' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Số điện thoại</span>
+                  <span class="info-value">{{ selectedOrder.soDienThoai || '---' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Người nhận</span>
+                  <span class="info-value">{{ selectedOrder.tenNguoiNhan || '---' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Nhân viên phụ trách</span>
+                  <span class="info-value">{{ selectedOrder.tenNhanVien || '---' }}</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="order-card">
+              <header class="card-header">
+                <h4>Lịch sử đơn hàng</h4>
+              </header>
+              <div class="card-body timeline" style="display: flex; flex-direction: column; gap: 16px; padding: 16px 0;">
+                <div class="timeline-item" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+                  <div class="timeline-marker completed" style="width: 16px; height: 16px; border-radius: 50%; background: #22c55e; flex-shrink: 0; margin-top: 2px;"></div>
+                  <div class="timeline-content" style="flex: 1;">
+                    <div class="timeline-title" style="font-weight: 600; font-size: 16px; color: #1f2937; margin-bottom: 4px;">Tạo đơn hàng</div>
+                    <div class="timeline-meta" style="font-size: 14px; color: #6b7280; margin-bottom: 2px;">{{ formatDateTime(selectedOrder?.ngayTao) }}</div>
+                    <div class="timeline-note" style="font-size: 14px; color: #6b7280; margin: 0;">Nhân viên: {{ selectedOrder?.tenNhanVien || '---' }}</div>
+                  </div>
+                </div>
+                <div class="timeline-item" :class="{ completed: !!selectedOrder?.ngayThanhToan }" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+                  <div class="timeline-marker" :class="{ completed: !!selectedOrder?.ngayThanhToan }" :style="{
+                    width: '16px',
+                    height: '16px', 
+                    borderRadius: '50%',
+                    background: selectedOrder?.ngayThanhToan ? '#22c55e' : '#d1d5db',
+                    flexShrink: '0',
+                    marginTop: '2px'
+                  }"></div>
+                  <div class="timeline-content" style="flex: 1;">
+                    <div class="timeline-title" style="font-weight: 600; font-size: 16px; color: #1f2937; margin-bottom: 4px;">Hoàn thành</div>
+                    <div class="timeline-meta" style="font-size: 14px; color: #6b7280; margin-bottom: 2px;">
+                      {{ selectedOrder?.ngayThanhToan ? formatDateTime(selectedOrder.ngayThanhToan) : 'Chưa xác nhận' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="order-card">
+              <header class="card-header">
+                <h4>Tổng quan đơn hàng</h4>
+              </header>
+              <div class="card-body summary">
+                <div class="summary-row">
+                  <span>Phiếu giảm giá</span>
+                  <span>{{ selectedOrder.maPhieuGiamGia || 'Không có' }}</span>
+                </div>
+                <div class="summary-row">
+                  <span>Giảm giá cửa hàng</span>
+                  <span>{{ selectedOrder.giaTriGiamGia || 0 }}%</span>
+                </div>
+                <div class="summary-row">
+                  <span>Tổng tiền hàng</span>
+                  <span>{{ formatCurrency(selectedOrder.tongTien) }}</span>
+                </div>
+                <div class="summary-row">
+                  <span>Phí vận chuyển</span>
+                  <span>{{ formatCurrency(selectedOrder.phiVanChuyen) }}</span>
+                </div>
+                <div class="summary-row note">
+                  <span>Miễn phí vận chuyển cho đơn trên 1,000,000 VND</span>
+                </div>
+                <div class="summary-row total">
+                  <span>Tổng thanh toán</span>
+                  <span class="total-amount">{{ formatCurrency(selectedOrder.tongTienSauGiam) }}</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="order-card product-section">
+            <header class="card-header">
+              <h4>Sản phẩm</h4>
+              <span class="chip">{{ selectedOrder?.items?.length || 0 }} sản phẩm</span>
+            </header>
+            <div class="card-body product-list">
+              <div
+                v-for="item in (selectedOrder?.items || [])"
                 :key="item.id"
                 class="product-item"
               >
-                <div class="product-image">
-                  <img v-if="item.anhSanPham && item.anhSanPham.length > 0"
-                      :src="item.anhSanPham[0]"
-                      :alt="item.tenNhaSanXuat" />
-                  <div v-else class="placeholder-image">👟</div>
+                <div class="product-thumb">
+                  <img v-if="item.anhSanPham && item.anhSanPham.length" :src="item.anhSanPham[0]" :alt="item.tenNhaSanXuat" />
+                  <div v-else class="placeholder">👟</div>
                 </div>
-
-                <div class="product-info">
-                  <h5>{{ item.tenNhaSanXuat }} - Size {{ item.tenKichThuoc }}</h5>
-                  <p class="product-details">
-                    Màu: {{ item.tenMauSac }} | 
-                    Xuất xứ: {{ item.tenXuatXu }}
-                  </p>
-                  <p class="product-details">
-                    Đế: {{ item.tenDeGiay }} | 
-                    Chất liệu: {{ item.tenChatLieu }}
-                  </p>
-                  <p class="product-details">
-                    Trọng lượng: {{ item.tenTrongLuong }}
-                  </p>
+                <div class="product-meta">
+                  <div class="product-name">{{ item.tenNhaSanXuat }} - Size {{ item.tenKichThuoc }}</div>
+                  <div class="product-attributes">
+                    <span>Màu {{ item.tenMauSac }}</span>
+                    <span>Xuất xứ {{ item.tenXuatXu }}</span>
+                    <span>Đế {{ item.tenDeGiay }}</span>
+                    <span>Chất liệu {{ item.tenChatLieu }}</span>
+                  </div>
                 </div>
-
-                <div class="product-quantity">SL: {{ item.soLuong }}</div>
-
-                <div class="product-price">
-                  <span v-if="item.giaTriGiamGia">
-                    <span class="old-price">{{ formatCurrency(item.giaBan) }}</span>
-                    <span class="discounted-price">
-                      {{ formatCurrency(item.giaBan * (1 - item.giaTriGiamGia / 100)) }}
-                    </span>
-                    <span class="discount-tag">-{{ item.giaTriGiamGia }}%</span>
-                  </span>
-                  <span v-else>
-                    {{ formatCurrency(item.giaBan) }}
-                  </span>
+                <div class="product-qty">x{{ item.soLuong }}</div>
+                <div class="product-pricing">
+                  <template v-if="item.giaTriGiamGia">
+                    <div class="price-old">{{ formatCurrency(item.giaBan) }}</div>
+                    <div class="price-new">{{ formatCurrency(item.giaBan * (1 - item.giaTriGiamGia / 100)) }}</div>
+                    <div class="price-tag">-{{ item.giaTriGiamGia }}%</div>
+                  </template>
+                  <template v-else>
+                    <div class="price-new">{{ formatCurrency(item.giaBan) }}</div>
+                  </template>
                 </div>
               </div>
-            </div>
-              <!-- Order Summary -->
-              <div class="order-summary">
-                <div class="summary-row">
-                  <span>Phiếu giảm giá: </span>
-                  <span>{{ selectedOrder.maPhieuGiamGia || "N/A" }}</span>
-                </div>
-                <div class="summary-row">
-                  <span>Giảm giá từ cửa hàng: </span>
-                  <span>{{ selectedOrder.giaTriGiamGia  || "0%" }}%</span>
-                </div>
-                <div class="summary-row">
-                  <span>Tổng tiền hàng: </span>
-                  <span>{{ formatCurrency(selectedOrder.tongTien) }}</span>
-                </div>
-                <!-- <div class="summary-row">
-                  <span>Giảm giá:</span>
-                  <span class="discount"
-                    >-{{ formatCurrency(selectedOrder.soTienGiam) }}</span>
-                </div> -->
-                <div class="summary-row">
-                  <span>Phí vận chuyển:</span>
-                  <span>{{ formatCurrency(selectedOrder.phiVanChuyen) }}</span>
-                </div>
-                <div class="summary-row">
-                  <span
-                    >Miễn phí vận chuyển với đơn hàng có tổng tiền trên
-                    1.000.000 VND</span>
-                </div>
-                <div class="summary-row total">
-                  <span>Tổng tiền: </span>
-                  <span class="total-amount">{{
-                    formatCurrency(selectedOrder.tongTienSauGiam)
-                  }}</span>
-                </div>
+              <div v-if="!selectedOrder?.items?.length" class="empty-state">
+                Không có sản phẩm trong đơn hàng này.
               </div>
             </div>
-          </div>
-        </div>
-        <div class="payment-history">
-                  <h4>Lịch sử thanh toán</h4>
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>Số tiền</th>
-                        <th>Thời gian</th>
-                        <th>Loại giao dịch</th>
-                        <th>PTTT</th>
-                        <th>Trạng thái</th>
-                        <th>Ghi chú</th>
-                        <th>Nhân viên xác nhận</th>
-                      </tr>
-                    </thead>
-                    <tbody v-if="selectedOrder?.lichSuThanhToan?.length > 0">
-                      <tr
-                        v-for="(payment, index) in selectedOrder.lichSuThanhToan"
-                        :key="payment.id"
-                      >
-                        <!-- Số tiền -->
-                        <td class="amount">
-                          {{ formatCurrency((payment.tienMat || 0) + (payment.tienChuyenKhoan || 0)) }}
-                        </td>
+          </section>
 
-                        <!-- Thời gian -->
-                        <td>{{ formatDateTime(payment.ngayTao) }}</td>
-
-                        <!-- Loại giao dịch -->
-                        <td>
-                          <span class="badge badge-info">
-                            {{ payment.loaiGiaoDich || "Thanh toán" }}
-                          </span>
-                        </td>
-
-                        <!-- PTTT -->
-                        <td>
-                          <span class="badge badge-success">
-                            {{ payment.tenPhuongThucThanhToan }}
-                          </span>
-                        </td>
-
-                        <!-- Trạng thái -->
-                        <td>
-                          <span
-                            :class="[
-                              'badge',
-                              payment.trangThai === '1' ? 'badge-success' : 'badge-warning',
-                            ]"
-                          >
-                            {{ payment.trangThai === '1' ? 'Thành công' : 'Chờ xử lý' }}
-                          </span>
-                        </td>
-
-                        <!-- Ghi chú từ hóa đơn chi tiết -->
-                        <td>
-                          {{ payment.ghiChu || "-" }}
-                        </td>
-
-                        <!-- Nhân viên xác nhận -->
-                        <td>
-                          {{ payment.tenNhanVienXacNhan || "-" }}
-                        </td>
-                      </tr>
-                    </tbody>
-
-                  </table>
+          <section class="order-card payment-section">
+            <header class="card-header">
+              <h4>Lịch sử thanh toán</h4>
+            </header>
+            <div class="card-body">
+              <div v-if="selectedOrder?.lichSuThanhToan?.length" class="payment-table-wrapper">
+                <table class="payment-table">
+                  <thead>
+                    <tr>
+                      <th>Số tiền</th>
+                      <th>Thời gian</th>
+                      <th>Loại giao dịch</th>
+                      <th>PTTT</th>
+                      <th>Trạng thái</th>
+                      <th>Ghi chú</th>
+                      <th>Xác nhận</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="payment in selectedOrder.lichSuThanhToan" :key="payment.id">
+                      <td class="amount">{{ formatCurrency((payment.tienMat || 0) + (payment.tienChuyenKhoan || 0)) }}</td>
+                      <td>{{ formatDateTime(payment.ngayTao) }}</td>
+                      <td><span class="badge badge-info">{{ payment.loaiGiaoDich || 'Thanh toán' }}</span></td>
+                      <td><span class="badge badge-success">{{ payment.tenPhuongThucThanhToan }}</span></td>
+                      <td>
+                        <span :class="['badge', payment.trangThai === '1' ? 'badge-success' : 'badge-warning']">
+                          {{ payment.trangThai === '1' ? 'Thành công' : 'Chờ xử lý' }}
+                        </span>
+                      </td>
+                      <td>{{ payment.ghiChu || '-' }}</td>
+                      <td>{{ payment.tenNhanVienXacNhan || '-' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div v-else class="empty-state">Chưa có lịch sử thanh toán</div>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -706,13 +718,22 @@
 
 <script setup>
 
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js'
-import ActionButton from "@/components/ui/NutHanhDong.vue";
+import DatePickerPopup from "@/components/common/DatePickerPopup.vue";
 import ButtonGroup from "@/components/ui/NhomNut.vue";
-import axios from "axios"
-
+import ActionButton from "@/components/ui/NutHanhDong.vue";
+import axios from "axios";
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { exportToExcel, formatDataForExcel } from '../../utils/xuatExcel.js';
+// Status tab icons
+import CancelStatusIcon from "@/assets/Cancel.svg?url";
+import ChecklistIcon from "@/assets/Checklist.svg?url";
+import CompletedIcon from "@/assets/Completed.svg?url";
+import EditIcon from "@/assets/Edit.svg?url";
+import OrdersIcon from "@/assets/Orders.svg?url";
+import PendingIcon from "@/assets/Pending.svg?url";
+import ShippingIcon from "@/assets/Shipping.svg?url";
+import ViewIcon from "@/assets/View.svg?url";
 
 
 const router = useRouter();
@@ -724,6 +745,7 @@ const editingOrder = ref({});
 // Data
 
 const searchQuery = ref('')
+const searchQueryBottom = ref('')
 const fromDate = ref('')
 const toDate = ref('')
 const selectedType = ref('')
@@ -747,6 +769,10 @@ const endIndex = computed(() => startIndex.value + itemsPerPage.value)
 
 const loading = ref(false)
 const error = ref(null)
+
+// Checkbox selection state
+const selectedOrderIds = ref([])
+const selectedOrders = ref([])
 
 
 
@@ -790,15 +816,12 @@ const fetchOrders = async () => {
 
 
 const statusTabs = [
-  { value: "TAT_CA", label: "Tất Cả", icon: "" },
-  { value: "CHO_XAC_NHAN", label: "Chờ Xác Nhận", icon: "" },
-  { value: "CHO_GIAO_HANG", label: "Đang Xử Lý", icon: "" },
-  { value: "DANG_VAN_CHUYEN", label: "Đang Vận Chuyển", icon: "" },
-  // { value: "DA_GIAO_HANG", label: "ĐÃ GIAO HÀNG", icon: "" },
-  // { value: "CHO_THANH_TOAN", label: "CHỜ THANH TOÁN", icon: "" },
-  // { value: "DA_THANH_TOAN", label: "ĐÃ THANH TOÁN", icon: "" },
-  { value: "HOAN_THANH", label: "Hoàn Thành", icon: "" },
-  { value: "DA_HUY", label: "Đã Hủy", icon: "" },
+  { value: "TAT_CA", label: "Tất Cả", iconSrc: OrdersIcon },
+  { value: "CHO_XAC_NHAN", label: "Chờ Xác Nhận", iconSrc: PendingIcon },
+  { value: "CHO_GIAO_HANG", label: "Đang Xử Lý", iconSrc: ChecklistIcon },
+  { value: "DANG_VAN_CHUYEN", label: "Đang Vận Chuyển", iconSrc: ShippingIcon },
+  { value: "HOAN_THANH", label: "Hoàn Thành", iconSrc: CompletedIcon },
+  { value: "DA_HUY", label: "Đã Hủy", iconSrc: CancelStatusIcon },
 ];
 
 
@@ -821,6 +844,16 @@ const filteredOrders = computed(() => {
     filtered = filtered.filter((order) =>
       order.tenKhachHang?.toLowerCase().includes(customerName.value.toLowerCase())
     );
+  }
+
+  // Tìm kiếm nhanh phía dưới
+  if (searchQueryBottom.value) {
+    const q = searchQueryBottom.value.toLowerCase();
+    filtered = filtered.filter((order) => {
+      const code = (order.lichSuThanhToan?.[0]?.maHoaDon || order.maHoaDon || '').toLowerCase();
+      const name = (order.tenKhachHang || order.tenNguoiNhan || '').toLowerCase();
+      return code.includes(q) || name.includes(q);
+    });
   }
 
   // Lọc theo trạng thái
@@ -929,6 +962,37 @@ const formatCurrency = (amount) => {
     .format(amount)
     .replace("₫", " đ");
 };
+
+// Compact currency formatter like PhieuGiamGia
+const formatCompactCurrency = (amount) => {
+  if (!amount || amount === 0) return '0đ'
+  
+  // Convert to number if string
+  const num = typeof amount === 'string' ? parseFloat(amount) : amount
+  
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(num % 1000000 === 0 ? 0 : 1) + 'tr'
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(num % 1000 === 0 ? 0 : 0) + 'k'
+  } else {
+    return num.toLocaleString('vi-VN') + 'đ'
+  }
+};
+
+// Date and time formatters like PhieuGiamGia  
+const formatTimeOnly = (dateString) => {
+  if (!dateString) return 'N/A'
+  return new Date(dateString).toLocaleTimeString('vi-VN', {
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: false
+  })
+}
+
+const formatDateOnly = (dateString) => {
+  if (!dateString) return 'N/A'
+  return new Date(dateString).toLocaleDateString('vi-VN')
+}
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("vi-VN");
 };
@@ -965,6 +1029,27 @@ const getStatusText = (status) => {
   };
   return statusTexts[status] || "Không xác định";
 };
+
+// Detailed status for orders like PhieuGiamGia
+const getDetailedOrderStatus = (order) => {
+  if (order.deleted) return 'Đã xóa'
+  
+  if (typeof order.trangThai === 'boolean') {
+    return order.trangThai ? 'Hoàn thành' : 'Chờ xác nhận'
+  }
+  
+  const now = new Date()
+  const created = order.ngayTao ? new Date(order.ngayTao) : null
+  const completed = order.ngayThanhToan ? new Date(order.ngayThanhToan) : null
+  
+  if (completed && completed <= now) {
+    return 'Hoàn thành'
+  } else if (created && created <= now && !completed) {
+    return 'Đang xử lý'
+  } else {
+    return 'Chờ xác nhận'
+  }
+}
 const previousPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
@@ -1046,6 +1131,42 @@ const resetFilters = () => {
   orderType.value = "";
 };
 
+// Checkbox functionality like PhieuGiamGia
+const isAllSelected = computed(() => {
+  const visibleOrderIds = filteredOrders.value.map(order => order.id)
+  return visibleOrderIds.length > 0 && visibleOrderIds.every(id => selectedOrderIds.value.includes(id))
+})
+
+const isIndeterminate = computed(() => {
+  const visibleOrderIds = filteredOrders.value.map(order => order.id)
+  const selectedVisibleIds = selectedOrderIds.value.filter(id => visibleOrderIds.includes(id))
+  return selectedVisibleIds.length > 0 && selectedVisibleIds.length < visibleOrderIds.length
+})
+
+const toggleSelectAll = () => {
+  const visibleOrderIds = filteredOrders.value.map(order => order.id)
+  
+  if (isAllSelected.value) {
+    // Unselect all visible orders
+    selectedOrderIds.value = selectedOrderIds.value.filter(id => !visibleOrderIds.includes(id))
+  } else {
+    // Select all visible orders
+    const newSelectedIds = [...selectedOrderIds.value]
+    visibleOrderIds.forEach(id => {
+      if (!newSelectedIds.includes(id)) {
+        newSelectedIds.push(id)
+      }
+    })
+    selectedOrderIds.value = newSelectedIds
+  }
+  updateSelectedOrders()
+}
+
+const updateSelectedOrders = () => {
+  selectedOrders.value = orders.value.filter(order => selectedOrderIds.value.includes(order.id))
+}
+
+
 const sortBy = (field) => {
   if (sortField.value === field) {
     sortDirection.value = sortDirection.value === "asc" ? "desc" : "asc";
@@ -1121,7 +1242,11 @@ onMounted(() => {
   fetchOrders();
   const today = new Date();
   toDate.value = today.toISOString().split("T")[0];
-  fromDate.value = "2025-01-01"; 
+  fromDate.value = "2025-01-01";
+  
+  // Debug icon imports
+  console.log('EditIcon:', EditIcon);
+  console.log('ViewIcon:', ViewIcon);
 });
   // Set default dates to show all data
   const today = new Date();
@@ -1677,69 +1802,66 @@ const updateOrder = async () => {
 .status-tabs-container {
   display: flex;
   align-items: center;
-  gap: 12px; /* khoảng cách giữa tab và view-options */
-  display: flex;
   justify-content: space-between;
-  align-items: center;
+  gap: 8px;
   margin-bottom: 12px;
-  background: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.35) 0%, rgba(239, 246, 255, 0.75) 100%);
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  border-radius: 14px;
 }
 
 .status-tabs {
- display: flex;
-  gap: 8px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .status-tab {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 0.875rem;
-  border: 1px solid var(--border-color);
-  background: white;
-  border-radius: 8px;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 9999px; /* pill */
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
+  transition: all 0.2s ease;
+  font-weight: 600;
   white-space: nowrap;
-  font-size: 0.8125rem;
+  font-size: 12px;
+  color: #0f172a;
 }
 
 .status-tab:hover {
-  background: var(--gray-50);
+  background: rgba(219, 234, 254, 0.6);
   border-color: #4ade80;
 }
 
 .status-tab.active {
   background: #4ade80;
   border-color: #4ade80;
-  color: white;
-  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+  color: #ffffff;
+  box-shadow: 0 6px 16px -6px rgba(34, 197, 94, 0.45);
 }
 
-.tab-icon {
-  font-size: 1rem;
-}
-
-.tab-text {
-  font-weight: 500;
-}
+.tab-icon { font-size: 14px; }
+.tab-icon-svg { width: 16px; height: 16px; }
+.tab-text { font-weight: 600; }
 
 .tab-count {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.125rem 0.375rem;
-  border-radius: 6px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  min-width: 20px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .status-tab:not(.active) .tab-count {
-  background: var(--gray-100);
-  color: var(--text-secondary);
+  background: #f1f5f9;
+  color: #64748b;
 }
 
 .view-options {
@@ -1808,6 +1930,18 @@ const updateOrder = async () => {
   border-collapse: collapse;
   font-size: 14px;
 }
+
+/* Compact table overrides */
+.orders-table--compact {
+  font-size: 13px;
+}
+.orders-table--compact th,
+.orders-table--compact td {
+  padding: 8px 10px !important;
+}
+.orders-table--compact .code-text { font-size: 0.875rem; }
+.orders-table--compact .amount-value { font-size: 0.9375rem; }
+
 .orders-table th {
   border: 1px solid #dee2e6;
   text-align: left;
@@ -2443,6 +2577,742 @@ const updateOrder = async () => {
   font-weight: 600;
 }
 
+/* Compact column widths to fit viewport without scrolling */
+
+/* Checkbox column */
+.coupons-table .col-checkbox,
+.coupons-table th.col-checkbox,
+.coupons-table td.col-checkbox { 
+  width: 3% !important; 
+  min-width: 30px !important; 
+  max-width: 35px !important; 
+  text-align: center !important; 
+  padding: 4px 2px !important;
+}
+
+/* STT column */
+.coupons-table .col-stt,
+.coupons-table th.col-stt,
+.coupons-table td.col-stt { 
+  width: 4% !important; 
+  min-width: 35px !important; 
+  max-width: 40px !important; 
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* Mã đơn hàng column */
+.coupons-table .col-ma,
+.coupons-table th.col-ma,
+.coupons-table td.col-ma { 
+  width: 8% !important; 
+  min-width: 70px !important; 
+  max-width: 80px !important; 
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* Tên khách hàng column */
+.coupons-table .col-ten,
+.coupons-table th.col-ten,
+.coupons-table td.col-ten { 
+  width: 15% !important; 
+  min-width: 120px !important; 
+  max-width: 140px !important; 
+  text-align: left !important;
+  padding: 4px 4px !important;
+}
+
+/* Loại đơn column */
+.coupons-table .col-loai,
+.coupons-table th.col-loai,
+.coupons-table td.col-loai { 
+  width: 8% !important; 
+  min-width: 70px !important; 
+  max-width: 80px !important; 
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* Tổng tiền column */
+.coupons-table .col-giatri,
+.coupons-table th.col-giatri,
+.coupons-table td.col-giatri { 
+  width: 7% !important; 
+  min-width: 60px !important; 
+  max-width: 70px !important; 
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* Bắt đầu column */
+.coupons-table .col-batdau,
+.coupons-table th.col-batdau,
+.coupons-table td.col-batdau { 
+  width: 10% !important; 
+  min-width: 80px !important; 
+  max-width: 90px !important; 
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* Kết thúc column */
+.coupons-table .col-ketthuc,
+.coupons-table th.col-ketthuc,
+.coupons-table td.col-ketthuc { 
+  width: 10% !important; 
+  min-width: 80px !important; 
+  max-width: 90px !important; 
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* SL column */
+.coupons-table .col-soluong,
+.coupons-table th.col-soluong,
+.coupons-table td.col-soluong {
+  width: 3% !important;
+  min-width: 35px !important;
+  max-width: 40px !important;
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* Trạng thái column */
+.coupons-table .col-trangthai,
+.coupons-table th.col-trangthai,
+.coupons-table td.col-trangthai {
+  width: 10% !important;
+  min-width: 85px !important;
+  max-width: 95px !important;
+  text-align: center !important;
+  padding: 4px 2px !important;
+}
+
+/* Hành động column */
+.coupons-table .col-hanhdong,
+.coupons-table th.col-hanhdong,
+.coupons-table td.col-hanhdong {
+  width: 6% !important;
+  min-width: 55px !important;
+  max-width: 65px !important;
+  text-align: center !important;
+  padding: 4px 1px !important;
+}
+
+/* Center align status and value columns */
+.coupons-table .col-trangthai,
+.coupons-table th.col-trangthai,
+.coupons-table td.col-trangthai {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.coupons-table .col-giatri,
+.coupons-table th.col-giatri,
+.coupons-table td.col-giatri {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.select-all-checkbox,
+.row-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #4ade80;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Override default table cell padding for compact rows */
+.coupons-table tbody td {
+  padding: 4px 2px !important;
+  vertical-align: middle !important;
+  font-size: 0.75rem !important;
+  line-height: 1.1 !important;
+  height: 38px !important;
+  max-height: 38px !important;
+}
+
+.coupons-table thead th {
+  padding: 6px 2px !important;
+  font-size: 0.65rem !important;
+  line-height: 1.05 !important;
+  height: 34px !important;
+}
+
+/* Reduce table minimum width to fit viewport */
+.coupons-table {
+  min-width: 900px !important;
+  width: 100% !important;
+}
+
+/* Make content elements more compact */
+.coupon-code,
+.coupon-name,
+.date-info-compact,
+.quantity-info {
+  line-height: 1.05 !important;
+  margin: 0 !important;
+  padding: 1px 2px !important;
+  font-size: 0.7rem !important;
+}
+
+.discount-value-detailed {
+  min-height: 30px !important;
+  line-height: 1.1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.discount-value-detailed strong {
+  line-height: 1.1 !important;
+}
+
+.coupon-type {
+  gap: 2px !important;
+  line-height: 1 !important;
+}
+
+.type-label,
+.type-icon {
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+
+/* Enhanced status badges with larger text and colored backgrounds */
+.status-badge-detailed {
+  padding: 6px 12px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  border-radius: 12px !important;
+  text-align: center !important;
+  min-width: 80px !important;
+  display: inline-block !important;
+  margin: 0 auto !important;
+}
+
+/* Hoàn thành - Green background */
+.status-badge-detailed.status-active {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+  border: 1px solid #bbf7d0 !important;
+}
+
+/* Đang xử lý - Blue background */
+.status-badge-detailed.status-upcoming {
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #93c5fd !important;
+}
+
+/* Chờ xác nhận - Orange background */
+.status-badge-detailed.status-expired {
+  background: #fed7aa !important;
+  color: #c2410c !important;
+  border: 1px solid #fdba74 !important;
+}
+
+/* Đã xóa - Red background */
+.status-badge-detailed.status-deleted {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fecaca !important;
+}
+
+/* Inactive/Other states - Gray background */
+.status-badge-detailed.status-inactive {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.action-buttons-compact {
+  gap: 2px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+
+.action-btn-compact {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.action-icon-compact {
+  width: 12px !important;
+  height: 12px !important;
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+/* Clean action buttons matching the reference design */
+.action-btn-compact {
+  width: 24px !important;
+  height: 24px !important;
+  border: 1px solid #e5e7eb !important;
+  background: #ffffff !important;
+  border-radius: 3px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.action-btn-compact:hover {
+  border-color: #d1d5db !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-1px) !important;
+}
+
+.action-btn-compact.edit-btn:hover {
+  border-color: #f59e0b !important;
+  background: #fffbeb !important;
+}
+
+.action-btn-compact.view-btn:hover {
+  border-color: #3b82f6 !important;
+  background: #eff6ff !important;
+}
+
+/* Force icon visibility with high specificity */
+.coupons-table .action-btn-compact img.action-icon-compact,
+.action-buttons-compact .action-btn-compact img.action-icon-compact,
+td.col-hanhdong img.action-icon-compact {
+  width: 12px !important;
+  height: 12px !important;
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Override any global SVG/img hiding rules */
+.order-management img[src],
+.order-management svg,
+.table-view img[src],
+.table-container img[src] {
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* CRITICAL TIMELINE FIXES - Direct element targeting */
+div[class="card-body timeline"] {
+  position: relative !important;
+}
+
+div[class="timeline-item"] {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin-bottom: 20px !important;
+  position: relative !important;
+}
+
+div[class="timeline-marker"] {
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  background: #e5e7eb !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px !important;
+  position: relative !important;
+  border: none !important;
+}
+
+div[class="timeline-marker completed"] {
+  background: #22c55e !important;
+}
+
+div[class="timeline-content"] {
+  flex: 1 !important;
+}
+
+div[class="timeline-title"] {
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  color: #1f2937 !important;
+  margin-bottom: 4px !important;
+}
+
+div[class="timeline-meta"] {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+  margin-bottom: 2px !important;
+}
+
+div[class="timeline-note"] {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+  margin: 0 !important;
+}
+
+/* Ultra-specific modal timeline targeting */
+.modal-overlay .modal-content.large.order-detail-modal .order-detail-body .order-detail-grid section.order-card .card-body.timeline .timeline-item .timeline-marker {
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  background: #d1d5db !important;
+  margin-top: 2px !important;
+  flex-shrink: 0 !important;
+}
+
+.modal-overlay .modal-content.large.order-detail-modal .order-detail-body .order-detail-grid section.order-card .card-body.timeline .timeline-item .timeline-marker.completed {
+  background: #22c55e !important;
+}
+
+.modal-overlay .modal-content.large.order-detail-modal .order-detail-body .order-detail-grid section.order-card .card-body.timeline .timeline-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Reset any conflicting timeline icon styles */
+.timeline-icon {
+  display: none !important;
+}
+
+/* ===== ORDER SUMMARY STYLING ===== */
+.card-body.summary {
+  padding: 20px !important;
+  background: #ffffff !important;
+}
+
+.summary-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 12px 0 !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  font-size: 14px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.summary-row:hover {
+  background: #f9fafb !important;
+  margin: 0 -20px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.summary-row:last-child {
+  border-bottom: none !important;
+}
+
+/* Summary row labels (left side) */
+.summary-row span:first-child {
+  font-weight: 500 !important;
+  color: #374151 !important;
+  flex: 1 !important;
+}
+
+/* Summary row values (right side) */
+.summary-row span:last-child {
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  text-align: right !important;
+}
+
+/* Note row styling */
+.summary-row.note {
+  border-bottom: 2px solid #e5e7eb !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+.summary-row.note span {
+  font-size: 12px !important;
+  color: #6b7280 !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+}
+
+/* Total row styling */
+.summary-row.total {
+  border-top: 2px solid #e5e7eb !important;
+  border-bottom: none !important;
+  padding-top: 16px !important;
+  margin-top: 16px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  margin: 16px -20px 0 -20px !important;
+  padding: 16px 20px !important;
+  border-radius: 8px !important;
+}
+
+.summary-row.total span:first-child {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+}
+
+.summary-row.total .total-amount {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #dc2626 !important;
+  text-shadow: 0 1px 2px rgba(220, 38, 38, 0.1) !important;
+}
+
+/* Specific value styling for different types */
+.summary-row span[class*="highlight"] {
+  color: #059669 !important;
+  font-weight: 600 !important;
+}
+
+/* Coupon code styling */
+.summary-row:first-child span:last-child {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  background: #f3f4f6 !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  color: #1f2937 !important;
+}
+
+/* Percentage styling */
+.summary-row:nth-child(2) span:last-child {
+  color: #059669 !important;
+  font-weight: 700 !important;
+}
+
+/* Money amount styling */
+.summary-row:nth-child(3) span:last-child,
+.summary-row:nth-child(4) span:last-child {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+}
+
+/* Zero amount special styling */
+.summary-row span:last-child:contains('0 đ') {
+  color: #6b7280 !important;
+}
+
+/* Summary section header enhancement */
+.order-card h4 {
+  margin: 0 !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+}
+
+/* ===== INFO GRID LAYOUT FIXES ===== */
+.card-body.info-grid {
+  padding: 20px !important;
+  margin-top: 0 !important;
+  background: #ffffff !important;
+}
+
+.info-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin: 0 !important;
+}
+
+.info-item {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  padding: 14px 16px !important;
+  background: #f9fafb !important;
+  border-radius: 8px !important;
+  border: 1px solid #f3f4f6 !important;
+  transition: all 0.2s ease !important;
+  min-height: 60px !important;
+}
+
+.info-item:hover {
+  background: #f3f4f6 !important;
+  border-color: #e5e7eb !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.info-label {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #6b7280 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin: 0 !important;
+  text-align: left !important;
+  line-height: 1.3 !important;
+}
+
+.info-value {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  line-height: 1.3 !important;
+  text-align: left !important;
+  word-wrap: break-word !important;
+  margin: 0 !important;
+}
+
+/* Card header spacing fix */
+.order-card .card-header {
+  padding: 16px 20px !important;
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.order-card .card-header h4 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+}
+
+/* Payment section specific styling */
+.payment-section .card-body {
+  padding: 20px !important;
+  background: #ffffff !important;
+}
+
+.payment-table-wrapper {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #ffffff !important;
+}
+
+.payment-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+}
+
+.payment-table thead {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.payment-table th {
+  padding: 14px 16px !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border-right: 1px solid #f1f5f9 !important;
+}
+
+.payment-table th:last-child {
+  border-right: none !important;
+}
+
+.payment-table td {
+  padding: 12px 16px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  color: #1f2937 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.payment-table td.amount {
+  font-weight: 700 !important;
+  color: #059669 !important;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+}
+
+.payment-table tbody tr:hover {
+  background: #fafbfc !important;
+}
+
+.payment-table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Ensure proper spacing between sections */
+.order-card {
+  margin-bottom: 24px !important;
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Clean SVG action icons styling */
+.action-btn-compact svg.action-icon-svg {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  max-width: 12px !important;
+  min-height: 12px !important;
+  max-height: 12px !important;
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  stroke: #6b7280 !important;
+  fill: none !important;
+  stroke-width: 1.5 !important;
+  transition: stroke 0.2s ease !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure both buttons have identical sizes */
+.action-btn-compact.edit-btn,
+.action-btn-compact.view-btn {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  max-width: 24px !important;
+  min-height: 24px !important;
+  max-height: 24px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 3px !important;
+  box-sizing: border-box !important;
+}
+
+/* Specific rules for edit button */
+.action-btn-compact.edit-btn {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.action-btn-compact.edit-btn svg.action-icon-svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* Specific rules for view button */
+.action-btn-compact.view-btn {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.action-btn-compact.view-btn svg.action-icon-svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* Action button hover effects with icon color changes */
+.action-btn-compact.edit-btn:hover svg.action-icon-svg {
+  stroke: #d97706 !important;
+}
+
+.action-btn-compact.view-btn:hover svg.action-icon-svg {
+  stroke: #2563eb !important;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .filter-grid {
@@ -2589,26 +3459,92 @@ const updateOrder = async () => {
   background: #f8f8f8;
 }
 
-/* Timeline */
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Timeline - High specificity to override conflicts */
+.order-detail-modal .card-body.timeline,
+.card-body.timeline {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  padding: 16px 0 !important;
 }
-.timeline-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+
+.order-detail-modal .timeline-item,
+.card-body.timeline .timeline-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  position: relative !important;
+  margin: 0 !important;
 }
-.timeline-icon {
-  background: #4caf50;
-  color: #fff;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+.order-detail-modal .timeline-marker,
+.card-body.timeline .timeline-marker {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: #d1d5db !important;
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 0 0 2px #d1d5db !important;
+  flex-shrink: 0 !important;
+  margin-top: 6px !important;
+  position: relative !important;
+  display: block !important;
+}
+
+.order-detail-modal .timeline-marker.completed,
+.card-body.timeline .timeline-marker.completed {
+  background: #22c55e !important;
+  box-shadow: 0 0 0 2px #22c55e !important;
+}
+
+.order-detail-modal .timeline-content,
+.card-body.timeline .timeline-content {
+  flex: 1 !important;
+  padding-left: 8px !important;
+  margin: 0 !important;
+}
+
+.order-detail-modal .timeline-title,
+.card-body.timeline .timeline-title {
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  color: #1f2937 !important;
+  margin-bottom: 6px !important;
+  line-height: 1.2 !important;
+}
+
+.order-detail-modal .timeline-meta,
+.card-body.timeline .timeline-meta {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+  margin-bottom: 4px !important;
+  line-height: 1.3 !important;
+}
+
+.order-detail-modal .timeline-note,
+.card-body.timeline .timeline-note {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+}
+
+/* Timeline connector line with high specificity */
+.order-detail-modal .timeline-item:not(:last-child) .timeline-marker::after,
+.card-body.timeline .timeline-item:not(:last-child) .timeline-marker::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 18px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 2px !important;
+  height: 24px !important;
+  background: #e5e7eb !important;
+}
+
+.order-detail-modal .timeline-item.completed:not(:last-child) .timeline-marker::after,
+.card-body.timeline .timeline-item.completed:not(:last-child) .timeline-marker::after {
+  background: #bbf7d0 !important;
 }
 
 /* Product List */
@@ -2656,18 +3592,279 @@ const updateOrder = async () => {
   flex-direction: column;
   height: 100%; /* chiếm toàn bộ chiều cao modal */
 }
+/* Simple Clean Order Detail Header */
 .order-detail-header {
-  display: flex;
-  align-items: center;       /* Căn giữa theo chiều dọc */
-  justify-content: center;   /* Căn giữa theo chiều ngang */
-  position: relative;        /* Để nút đóng có thể định vị tuyệt đối */
-  padding: 10px 40px;        /* Đệm hai bên để nút đóng không chạm tiêu đề */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 20px 24px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  position: relative !important;
 }
-.order-detail-header h3 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  color: #1f2937;
+
+.order-detail-header .header-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.order-title-block {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.order-title-block h3 {
+  margin: 0 !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  line-height: 1.5 !important;
+}
+
+/* Hide the badges and complex elements for clean look */
+.order-code-badge,
+.order-status-pill {
+  display: none !important;
+}
+
+/* Simple Close Button */
+.order-detail-header .modal-close {
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: #6b7280 !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  transition: color 0.2s ease !important;
+  border-radius: 4px !important;
+}
+
+.order-detail-header .modal-close:hover {
+  color: #374151 !important;
+  background: #f3f4f6 !important;
+}
+
+/* Edit Modal Form Styling */
+.edit-form {
+  width: 100% !important;
+}
+
+.edit-fields-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0px !important;
+  padding: 24px !important;
+  background: #f9fafb !important;
+  min-height: 400px !important;
+}
+
+/* More specific selectors for field cards */
+.order-detail-modal .edit-fields-container .field-card {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  margin-bottom: 20px !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.order-detail-modal .edit-fields-container .field-card:hover {
+  border-color: #9ca3af !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
+}
+
+.order-detail-modal .edit-fields-container .field-card .field-card-content {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+}
+
+.order-detail-modal .edit-fields-container .field-card:focus-within {
+  border-color: #4ade80 !important;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1), 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Original field-card replaced with more specific selector above */
+
+.field-card-content {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+}
+
+.field-icon {
+  flex-shrink: 0 !important;
+  width: 44px !important;
+  height: 44px !important;
+  background: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #374151 !important;
+  margin-top: 2px !important;
+}
+
+.field-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.field-content {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+.field-label {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+  padding-top: 2px !important;
+}
+
+.field-input,
+.field-select {
+  width: 100% !important;
+  padding: 14px 16px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  color: #1f2937 !important;
+  background: #ffffff !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  font-weight: 500 !important;
+}
+
+.field-input:focus,
+.field-select:focus {
+  outline: none !important;
+  border-color: #4ade80 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1) !important;
+}
+
+.field-input:hover,
+.field-select:hover {
+  border-color: #9ca3af !important;
+  background: #ffffff !important;
+}
+
+.field-input[type="number"] {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  font-weight: 600 !important;
+}
+
+.field-input::placeholder {
+  color: #9ca3af !important;
+  font-weight: 400 !important;
+}
+
+.field-select {
+  cursor: pointer !important;
+  appearance: none !important;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%236b7280" viewBox="0 0 16 16"><path d="M8 11L3 6h10l-5 5z"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 16px !important;
+  padding-right: 40px !important;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  padding: 24px !important;
+  border-top: 1px solid #f3f4f6 !important;
+  background: #f9fafb !important;
+  margin-top: 24px !important;
+}
+
+.form-actions .btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 14px 24px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border: 2px solid transparent !important;
+  min-width: 140px !important;
+  min-height: 48px !important;
+}
+
+.form-actions .btn svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.form-actions .btn-secondary {
+  background: #ffffff !important;
+  color: #6b7280 !important;
+  border-color: #d1d5db !important;
+  box-sizing: border-box !important;
+}
+
+.form-actions .btn-secondary:hover {
+  background: #f9fafb !important;
+  color: #374151 !important;
+  border-color: #9ca3af !important;
+  transform: translateY(-1px) !important;
+}
+
+.form-actions .btn-primary {
+  background: #4ade80 !important;
+  color: #ffffff !important;
+  border-color: #4ade80 !important;
+  box-sizing: border-box !important;
+}
+
+.form-actions .btn-primary:hover {
+  background: #22c55e !important;
+  border-color: #22c55e !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3) !important;
+}
+
+/* Responsive edit modal */
+@media (max-width: 768px) {
+  .edit-form .order-detail-grid {
+    display: block !important;
+  }
+  
+  .form-actions {
+    flex-direction: column !important;
+  }
+  
+  .form-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
 }
 .order-detail-body {
   flex: 1;
@@ -2752,3 +3949,8 @@ const updateOrder = async () => {
 }
 
 </style>
+
+<!-- Load page-level CSS (unscoped) -->
+<style src="../../styles/cssQuanLy/quanLyDonHang.css"></style>
+<!-- Reuse the coupons table styling exactly -->
+<style src="../../styles/cssGiamGia/phieuGiamGia.css"></style>
