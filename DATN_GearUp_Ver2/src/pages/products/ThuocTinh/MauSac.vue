@@ -1132,9 +1132,9 @@ onMounted(fetchMauSacs);
 
 .color-picker {
   width: 50px;
-  height: 40px;
+  height: 50px;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 0%;
   cursor: pointer;
   padding: 0;
   background: none;
@@ -1146,7 +1146,7 @@ onMounted(fetchMauSacs);
 
 .color-picker::-webkit-color-swatch {
   border: none;
-  border-radius: 4px;
+  border-radius: 0%;
 }
 
 .color-text-input {
@@ -1174,7 +1174,7 @@ onMounted(fetchMauSacs);
 .color-preview {
   width: 24px;
   height: 24px;
-  border-radius: 4px;
+  border-radius: 0%;
   border: 1px solid #d1d5db;
   flex-shrink: 0;
 }
