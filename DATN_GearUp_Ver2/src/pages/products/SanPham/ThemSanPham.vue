@@ -614,8 +614,6 @@
                     />
                   </div>
                 </div>
-              </div>
-              <div class="form-row">
                 <div class="form-group">
                   <label>Tên màu sắc:</label>
                   <input
@@ -3576,7 +3574,7 @@ const isValidImageUrl = (url) => {
   width: 100%; /* Chiếm toàn bộ 70% container */
   padding: 20px;
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 0px;
   border: 1px solid #e9ecef;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -3929,14 +3927,16 @@ const isValidImageUrl = (url) => {
 
 .form-row {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  gap: 12px;
+  align-items: end;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex: 1;
 }
 
 .form-group label {
@@ -4742,20 +4742,59 @@ const isValidImageUrl = (url) => {
 
 .attribute-popup-content {
   background: white;
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
+  width: 95%;
+  max-width: 800px;
+  max-height: 90vh;
   overflow-y: auto;
-  border-radius: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  position: relative;
+  overflow: hidden;
 }
+
 
 .attribute-popup-header {
   padding: 15px 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+}
+
+.attribute-popup-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  flex: 1;
+}
+
+.attribute-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.attribute-close-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .attribute-popup-body {
   padding: 20px;
+  background: white;
 }
 
 /* CSS cho popup thông báo bên phải */
@@ -4925,42 +4964,65 @@ const isValidImageUrl = (url) => {
 .color-input-group {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.color-input-group:focus-within {
+  border-color: #1976d2;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
 }
 
 .color-picker {
-  width: 24px;
-  height: 24px;
-  border: 1px solid #d1d5db;
-  border-radius: 0%;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
   cursor: pointer;
   padding: 0;
   background: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.color-picker:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .color-picker::-webkit-color-swatch-wrapper {
   padding: 0;
+  border-radius: 2px;
 }
 
 .color-picker::-webkit-color-swatch {
   border: none;
-  border-radius: 0%;
+  border-radius: 2px;
 }
 
 .color-text-input {
   flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
   font-family: 'Courier New', monospace;
+  font-weight: 500;
+  color: #374151;
+  background-color: transparent;
+  outline: none;
 }
 
-.color-text-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+.color-text-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
 }
+
 
 /* CSS cho color tag trong selected attributes */
 .color-tag {
@@ -5004,46 +5066,91 @@ const isValidImageUrl = (url) => {
   border-radius: 3px;
 }
 
+/* CSS cho search input trong popup */
+.attribute-search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  background: white;
+}
+
+.attribute-search-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.attribute-search-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* CSS cho h4 trong popup */
+.attribute-existing-attributes h4,
+.attribute-create-new-section h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* CSS cho phần màu sắc có sẵn */
+.attribute-existing-attributes {
+  margin-bottom: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* CSS cho phần tạo màu sắc mới */
+.attribute-create-new-section {
+  margin-top: 0px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
 /* CSS cho color attribute item trong popup */
 .color-attribute-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
   margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  background: white;
 }
 
 .color-attribute-item:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
+  background: #f8f8f8;
+  border-color: #ccc;
 }
 
 .color-attribute-item.selected {
-  background-color: #eff6ff;
-  border-color: #3b82f6;
+  background: #f0f8ff;
+  border-color: #2196f3;
 }
 
 .color-attribute-item .color-preview {
   width: 24px;
   height: 24px;
-  border-radius: 0%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 1px #d1d5db;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
   flex-shrink: 0;
 }
 
 .color-attribute-item .color-name {
   flex: 1;
   font-size: 14px;
-  color: #374151;
+  color: #333;
 }
 
 .color-attribute-item .attribute-checkmark {
-  color: #3b82f6;
+  color: #2196f3;
   font-weight: bold;
   font-size: 16px;
 }
