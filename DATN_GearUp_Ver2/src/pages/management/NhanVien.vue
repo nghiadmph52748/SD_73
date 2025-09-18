@@ -3,7 +3,7 @@
  <div class="page-container">
   <div class="card mb-3 p-3">
   
-<div class="d-flex gap-2 action-bar">
+  <div class="d-flex gap-2">
     <ActionButton
       icon="add"
       variant="success"
@@ -807,55 +807,28 @@
           </div>
         </div>
       </div>
-      <!-- Toast Notification -->
-<!-- Modern Slide-out Notification -->
-    <div v-if="showNotification" class="slide-notification-container">
-      <div class="slide-notification" :class="[notificationType, isNotificationSliding ? 'slide-out' : 'slide-in']" @click.stop>
-        <div class="notification-icon-wrapper">
-          <div class="notification-icon" :class="notificationType">
-            <svg v-if="notificationType === 'success'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22,4 12,14.01 9,11.01" />
-            </svg>
-            <svg v-else-if="notificationType === 'error'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-            <svg v-else-if="notificationType === 'warning'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-              <line x1="12" y1="9" x2="12" y2="13" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-            <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 16v-4M12 8h.01" />
-            </svg>
-          </div>
-        </div>
-        
-        <div class="notification-content-wrapper">
-          <div class="notification-title" :class="notificationType">
-            <span v-if="notificationType === 'success'">Thành công!</span>
-            <span v-else-if="notificationType === 'error'">Có lỗi!</span>
-            <span v-else-if="notificationType === 'warning'">Cảnh báo!</span>
-            <span v-else>Thông báo</span>
-          </div>
-          <div class="notification-message">
-            {{ notificationMessage }}
-          </div>
-        </div>
-
-        <button class="slide-notification-close" @click="hideNotification">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-
-        <div class="notification-progress-bar" :class="notificationType" v-if="!isNotificationSliding"></div>
-      </div>
+<div class="my-toast-container" v-if="toast.show">
+  <div
+    class="my-toast-popup"
+    :class="[ toast.type, { hide: toast.hiding } ]"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="my-toast-header">
+      <span>
+        {{ toast.type === 'success' ? 'Thành công' :
+           toast.type === 'error' ? 'Lỗi' :
+           toast.type === 'info' ? 'Thông tin' :
+           'Cảnh báo' }}
+      </span>
+      <button class="my-toast-close-btn" @click="hideToast" aria-label="Đóng">&times;</button>
     </div>
+    <div class="my-toast-body">
+      {{ toast.message }}
+    </div>
+  </div>
+</div>
+
     </div>
 
 </template>
@@ -911,29 +884,33 @@ const handleConfirmAddEmployee = async () => {
 };
 
 
-// Modern slide-out notification state
-const showNotification = ref(false);
-const notificationMessage = ref("");
-const notificationType = ref("info"); // success, error, warning, info
-const isNotificationSliding = ref(false);
 
-function showToast(message, type = "success") {
-  notificationMessage.value = message;
-  notificationType.value = type;
-  showNotification.value = true;
-  isNotificationSliding.value = false;
+const toast = ref({
+  show: false,
+  message: "",
+  type: "success",
+  hiding: false
+});
 
-  // auto-hide after 4s
+function showToast(message, type = "success", duration = 3000) {
+  toast.value = { show: true, message, type, hiding: false };
+
+  if (type === "success" || type === "error") {
+    setTimeout(() => {
+      hideToast();
+    }, duration);
+  }
+}
+
+function hideToast() {
+  toast.value.hiding = true;
   setTimeout(() => {
-    isNotificationSliding.value = true;
-    setTimeout(() => (showNotification.value = false), 350);
-  }, 4000);
+    toast.value.show = false; // remove DOM sau khi fadeOut
+  }, 500); // 500ms khớp với fadeOut
 }
 
-function hideNotification() {
-  isNotificationSliding.value = true;
-  setTimeout(() => (showNotification.value = false), 350);
-}
+
+
 const validateForm = () => {
   if (!employeeForm.value.anhNhanVien) {
     showToast("Vui lòng Chọn Ảnh!", "error");
@@ -2116,62 +2093,88 @@ td:nth-child(13) {
   color: #000000;
   font-size: 0.875rem;
 }
-
-.toast-container {
+.my-toast-container {
   position: fixed;
   top: 20px;
   right: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* khoảng cách giữa các toast */
+  gap: 12px;
   z-index: 9999;
 }
 
-.toast {
+.my-toast-popup {
   background: #fff;
-  border-left: 4px solid #e63946; /* viền trái màu đỏ */
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  padding: 10px 14px;
-  width: 300px;
-  animation: slideIn 0.3s ease-out;
+  border-left: 4px solid #4ade80;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  width: 340px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease;
+  animation: none;
 }
 
-.toast-header {
+.my-toast-popup:not(.hide) {
+  animation: my-toast-slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.my-toast-popup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.my-toast-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
   font-weight: 600;
+  font-size: 15px;
   color: #333;
-  margin-bottom: 4px;
 }
 
-.toast-body {
+.my-toast-body {
+  padding: 12px 16px;
   font-size: 14px;
   color: #555;
+  line-height: 1.4;
 }
 
-.toast button {
+.my-toast-close-btn {
   background: none;
   border: none;
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
-  color: #888;
+  color: #999;
+  transition: color 0.2s, transform 0.2s;
+}
+.my-toast-close-btn:hover {
+  color: #333;
+  transform: scale(1.1);
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(120%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* Trạng thái màu */
+.my-toast-popup.success { border-left-color: #4ade80; }
+.my-toast-popup.error   { border-left-color: #f44336; }
+.my-toast-popup.info    { border-left-color: #2196f3; }
+.my-toast-popup.warning { border-left-color: #ff9800; }
+
+/* Hiệu ứng vào */
+@keyframes my-toast-slideInRight {
+  0%   { transform: translateX(100%); opacity: 0; }
+  60%  { transform: translateX(-5%); opacity: 0.8; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+/* Hiệu ứng ra */
+@keyframes my-toast-fadeOut {
+  to { opacity: 0; transform: translateX(100%); }
+}
+
+.my-toast-popup.hide {
+  animation: my-toast-fadeOut 0.45s forwards;
 }
 
 
-.action-bar :deep(.action-button) { min-width: 180px; height: 42px; border-radius: 10px; }
-.action-bar :deep(.action-button .label) { font-size: 14px; font-weight: 600; }
-.action-bar { gap: 12px !important; }
-</style>
+</style>  
