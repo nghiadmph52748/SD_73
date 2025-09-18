@@ -1,8 +1,8 @@
 <template>
   <div class="pos-system">
     <!-- Simple Action Bar -->
-    <div class="simple-action-bar">
-      <button class="action-btn secondary-btn" @click="refreshData" title="Làm mới dữ liệu">
+<div class="pos-action-bar">
+      <button class="pos-action-btn pos-secondary-btn" @click="refreshData" title="Làm mới dữ liệu">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="23,4 23,10 17,10"></polyline>
           <polyline points="1,20 1,14 7,14"></polyline>
@@ -10,14 +10,14 @@
         </svg>
         <span>Làm mới</span>
       </button>
-      <button class="action-btn secondary-btn" @click="showProductSearch = true" title="Tìm kiếm sản phẩm">
+      <button class="pos-action-btn pos-secondary-btn" @click="showProductSearch = true" title="Tìm kiếm sản phẩm">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="M21 21l-4.35-4.35"></path>
         </svg>
         <span>Tìm sản phẩm</span>
       </button>
-      <button class="action-btn primary-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
+      <button class="pos-action-btn pos-primary-btn" @click="createNewOrder" title="Tạo đơn hàng mới">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 5v14M5 12h14"></path>
         </svg>
@@ -1111,12 +1111,13 @@
               <span class="discount-text">-{{ product.giaTriGiamGia }}%</span>
             </div>
 
-            <div class="product-image-section" @click="openImageModal(product.id)">
+<div class="product-image-section" @click="openImageModalFromProduct(product)">
               <div class="product-image">
-                <img v-if="product.anhSanPham && product.anhSanPham.length > 0" :src="product.anhSanPham[0].startsWith('http')
-                    ? product.anhSanPham[0]
-                    : IMAGE_BASE_URL + product.anhSanPham[0]
-                  " :alt="product.tenSanPham" @error="handleImageError" />
+                <img v-if="product.anhSanPham && product.anhSanPham.length > 0"
+                  :src="getPrimaryProductImage(product)"
+                  :alt="product.tenSanPham"
+                  @error="handleImageError"
+                />
                 <div v-else class="image-placeholder">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -1125,7 +1126,7 @@
                   </svg>
                 </div>
               </div>
-              <div class="image-overlay">
+              <div class="image-overlay" @click.stop="openImageModalFromProduct(product)">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                   <circle cx="12" cy="12" r="3"></circle>
@@ -1378,39 +1379,30 @@
       </div>
     </div>
 
-    <!-- Image Modal -->
-    <div v-if="showImageModal" class="image-modal-overlay" @click="closeImageModal">
+  </div>
+
+  <!-- Image Modal (teleported to body) -->
+  <teleport to="body">
+    <div v-if="showImageModal" class="image-modal-overlay" :class="{ closing: isImageModalClosing }" @click="closeImageModal">
+      <!-- Close button outside of the image/content -->
+      <button class="image-modal-close" :class="{ closing: isImageModalClosing }" @click.stop="closeImageModal">✕</button>
       <div class="image-modal-content" @click.stop>
-        <button class="image-modal-close" @click="closeImageModal">✕</button>
-
         <div class="image-modal-main">
-          <button v-if="currentProductImages.length > 1" class="nav-btn prev-btn" @click="prevImage">
-            ‹
-          </button>
-
+          <button v-if="currentProductImages.length > 1" class="nav-btn prev-btn" @click="prevImage">‹</button>
           <div class="image-modal-display">
-            <img :src="currentProductImages[selectedImageIndex]?.duongDanAnh" :alt="`Ảnh ${selectedImageIndex + 1}`"
-              class="modal-image" @error="handleImageError" />
+            <img :src="currentProductImages[selectedImageIndex]?.duongDanAnh" :alt="`Ảnh ${selectedImageIndex + 1}`" class="modal-image" @error="handleImageError" />
           </div>
-
-          <button v-if="currentProductImages.length > 1" class="nav-btn next-btn" @click="nextImage">
-            ›
-          </button>
+          <button v-if="currentProductImages.length > 1" class="nav-btn next-btn" @click="nextImage">›</button>
         </div>
-
         <div v-if="currentProductImages.length > 1" class="image-modal-thumbnails">
-          <div v-for="(image, index) in currentProductImages" :key="image.id"
-            :class="['thumbnail', { active: index === selectedImageIndex }]" @click="selectImage(index)">
+          <div v-for="(image, index) in currentProductImages" :key="image.id" :class="['thumbnail', { active: index === selectedImageIndex }]" @click="selectImage(index)">
             <img :src="image.duongDanAnh" :alt="`Thumbnail ${index + 1}`" @error="handleImageError" />
           </div>
         </div>
-
-        <div class="image-modal-counter">
-          {{ selectedImageIndex + 1 }} / {{ currentProductImages.length }}
-        </div>
+        <div class="image-modal-counter">{{ selectedImageIndex + 1 }} / {{ currentProductImages.length }}</div>
       </div>
     </div>
-  </div>
+  </teleport>
 
   <!-- Modern Coupon Selection Modal -->
   <div v-if="showCouponModal" class="modal-overlay" @click="closeCouponModal">
@@ -2437,6 +2429,12 @@ const showImageModal = ref(false);
 const selectedImageIndex = ref(0);
 const currentProductImages = ref([]);
 const currentProductId = ref(null);
+const isImageModalClosing = ref(false);
+
+// Debug watcher to trace modal visibility
+watch(showImageModal, (val) => {
+  console.log('[ImageModal] showImageModal:', val);
+});
 
 // Delivery services data
 const deliveryServices = ref([
@@ -5082,11 +5080,82 @@ const openImageModal = (productId) => {
   }
 };
 
+// Open image modal directly from product object in the search modal
+const openImageModalFromProduct = (product) => {
+  try {
+    console.info('[ImageModal] click on product:', product?.id, product?.tenSanPham);
+    if (!product) return;
+
+    const raw = product.anhSanPham ?? product.sanPham?.anhSanPham ?? [];
+    const arr = Array.isArray(raw) ? raw : (typeof raw === 'string' ? [raw] : [raw]);
+
+    // Normalize to string URLs
+    const urls = arr
+      .map((item) => {
+        if (typeof item === 'string') return item;
+        if (item && typeof item === 'object') {
+          return item.duongDanAnh || item.url || item.path || item.link || '';
+        }
+        return '';
+      })
+      .filter(Boolean);
+
+    console.info('[ImageModal] normalized URLs:', urls);
+
+    if (urls.length === 0) {
+      console.warn('[ImageModal] No images for product id:', product?.id);
+      return;
+    }
+
+    currentProductImages.value = urls.map((imageUrl, index) => ({
+      id: `image-${index}`,
+      duongDanAnh: String(imageUrl).startsWith('http') ? String(imageUrl) : IMAGE_BASE_URL + String(imageUrl),
+      tenSanPham: product.tenSanPham ?? (product.tenSanPham?.toString?.() ?? 'Sản phẩm'),
+    }));
+
+    currentProductId.value = product.id ?? null;
+    selectedImageIndex.value = 0;
+    showImageModal.value = true;
+    console.info('[ImageModal] showImageModal set to true with', currentProductImages.value.length, 'images');
+
+    // Verify DOM after render
+    nextTick(() => {
+      const overlay = document.querySelector('.image-modal-overlay');
+      const content = document.querySelector('.image-modal-content');
+      console.info('[ImageModal] overlay present after nextTick:', !!overlay, overlay);
+      if (overlay) {
+        const cs = window.getComputedStyle(overlay);
+        console.info('[ImageModal] overlay styles -> display:', cs.display, 'z-index:', cs.zIndex, 'position:', cs.position);
+      } else {
+        console.warn('[ImageModal] overlay NOT found in DOM. showProductSearch=', showProductSearch?.value);
+      }
+      if (!content) {
+        console.warn('[ImageModal] content NOT found in DOM');
+      }
+    });
+  } catch (e) {
+    console.error('openImageModalFromProduct error:', e);
+  }
+};
+
 const closeImageModal = () => {
-  showImageModal.value = false;
-  currentProductImages.value = [];
-  currentProductId.value = null;
-  selectedImageIndex.value = 0;
+  try {
+    if (isImageModalClosing.value) return;
+    isImageModalClosing.value = true;
+    setTimeout(() => {
+      showImageModal.value = false;
+      currentProductImages.value = [];
+      currentProductId.value = null;
+      selectedImageIndex.value = 0;
+      isImageModalClosing.value = false;
+    }, 200); // match CSS fade-out duration
+  } catch (e) {
+    showImageModal.value = false;
+    currentProductImages.value = [];
+    currentProductId.value = null;
+    selectedImageIndex.value = 0;
+    isImageModalClosing.value = false;
+  }
 };
 
 const nextImage = () => {
@@ -5108,6 +5177,26 @@ const selectImage = (index) => {
 // Handle image loading errors
 const handleImageError = (event) => {
   event.target.src = "/placeholder-image.png";
+};
+
+// Resolve the primary image URL for a product (supports string or object forms)
+const getPrimaryProductImage = (product) => {
+  try {
+    if (!product) return "/placeholder-image.png";
+    const raw = product.anhSanPham ?? product.sanPham?.anhSanPham ?? [];
+    const first = Array.isArray(raw) ? raw[0] : raw;
+    let url = "";
+    if (typeof first === "string") {
+      url = first;
+    } else if (first && typeof first === "object") {
+      url = first.duongDanAnh || first.url || first.path || first.link || "";
+    }
+    if (!url) return "/placeholder-image.png";
+    return String(url).startsWith("http") ? String(url) : IMAGE_BASE_URL + String(url);
+  } catch (e) {
+    console.error("getPrimaryProductImage error:", e);
+    return "/placeholder-image.png";
+  }
 };
 
 // Component cleanup is no longer needed
