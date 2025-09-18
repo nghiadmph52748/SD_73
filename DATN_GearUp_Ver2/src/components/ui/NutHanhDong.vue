@@ -1,10 +1,13 @@
 <template>
   <button
-    :class="[
+:class="[
       'action-btn',
       `action-btn--${variant}`,
       `action-btn--${size}`,
-      { 'action-btn--disabled': disabled },
+      { 
+        'action-btn--disabled': disabled,
+        'action-btn--with-label': showLabel,
+      },
     ]"
     :disabled="disabled"
     :title="tooltip"
@@ -172,6 +175,11 @@ const emit = defineEmits(["click"]);
   pointer-events: none;
 }
 
+/* Ensure labeled buttons have consistent width */
+.action-btn--with-label {
+  min-width: 11rem; /* ~176px: enough for short Vietnamese labels */
+}
+
 /* Sizes */
 .action-btn--xs {
   padding: 0.25rem;
@@ -186,7 +194,7 @@ const emit = defineEmits(["click"]);
 }
 
 .action-btn--md {
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.9rem; /* slightly larger horizontal padding for labeled buttons */
   min-height: 2.25rem;
 }
 
@@ -291,6 +299,7 @@ const emit = defineEmits(["click"]);
 .action-btn__label {
   font-size: inherit;
   font-weight: inherit;
+  line-height: 1; /* ensure small height doesn't crop text */
 }
 
 /* Mobile responsive */

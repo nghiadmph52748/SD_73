@@ -5,7 +5,7 @@
 </div>
 
 <div class="card mb-3 p-3">
-   <div class="d-flex gap-2">
+<div class="d-flex gap-2 action-bar">
     <ActionButton
       icon="add"
       variant="success"
@@ -2068,4 +2068,7 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
 }
 
 
+.action-bar :deep(.action-button) { min-width: 180px; height: 42px; border-radius: 10px; }
+.action-bar :deep(.action-button .label) { font-size: 14px; font-weight: 600; }
+.action-bar { gap: 12px !important; }
 </style>

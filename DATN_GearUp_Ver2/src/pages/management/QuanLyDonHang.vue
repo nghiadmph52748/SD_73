@@ -724,9 +724,9 @@ import PendingIcon from "@/assets/Pending.svg?url";
 import ShippingIcon from "@/assets/Shipping.svg?url";
 import ViewIcon from "@/assets/View.svg?url";
 // Icons used in the Edit Order modal
-import UsersIcon from "@/assets/Users.svg?url";
-import MoneyIcon from "@/assets/Money.svg?url";
 import CancelIcon from "@/assets/Cancel.svg?url";
+import MoneyIcon from "@/assets/Money.svg?url";
+import UsersIcon from "@/assets/Users.svg?url";
 
 
 const router = useRouter();
