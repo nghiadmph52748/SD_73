@@ -808,9 +808,54 @@
         </div>
       </div>
       <!-- Toast Notification -->
-        <div v-if="toast.show" :class="['toast', toast.type]">
-          {{ toast.message }}
+<!-- Modern Slide-out Notification -->
+    <div v-if="showNotification" class="slide-notification-container">
+      <div class="slide-notification" :class="[notificationType, isNotificationSliding ? 'slide-out' : 'slide-in']" @click.stop>
+        <div class="notification-icon-wrapper">
+          <div class="notification-icon" :class="notificationType">
+            <svg v-if="notificationType === 'success'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22,4 12,14.01 9,11.01" />
+            </svg>
+            <svg v-else-if="notificationType === 'error'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+            <svg v-else-if="notificationType === 'warning'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+          </div>
         </div>
+        
+        <div class="notification-content-wrapper">
+          <div class="notification-title" :class="notificationType">
+            <span v-if="notificationType === 'success'">Thành công!</span>
+            <span v-else-if="notificationType === 'error'">Có lỗi!</span>
+            <span v-else-if="notificationType === 'warning'">Cảnh báo!</span>
+            <span v-else>Thông báo</span>
+          </div>
+          <div class="notification-message">
+            {{ notificationMessage }}
+          </div>
+        </div>
+
+        <button class="slide-notification-close" @click="hideNotification">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
+        <div class="notification-progress-bar" :class="notificationType" v-if="!isNotificationSliding"></div>
+      </div>
+    </div>
     </div>
 
 </template>
@@ -866,17 +911,29 @@ const handleConfirmAddEmployee = async () => {
 };
 
 
+// Modern slide-out notification state
+const showNotification = ref(false);
+const notificationMessage = ref("");
+const notificationType = ref("info"); // success, error, warning, info
+const isNotificationSliding = ref(false);
+
 function showToast(message, type = "success") {
-  toast.value = { show: true, message, type };
+  notificationMessage.value = message;
+  notificationType.value = type;
+  showNotification.value = true;
+  isNotificationSliding.value = false;
+
+  // auto-hide after 4s
   setTimeout(() => {
-    toast.value.show = false;
-  }, 4000); // 5 giây
+    isNotificationSliding.value = true;
+    setTimeout(() => (showNotification.value = false), 350);
+  }, 4000);
 }
-const toast = ref({
-  show: false,
-  message: "",
-  type: "success" // success | error
-});
+
+function hideNotification() {
+  isNotificationSliding.value = true;
+  setTimeout(() => (showNotification.value = false), 350);
+}
 const validateForm = () => {
   if (!employeeForm.value.anhNhanVien) {
     showToast("Vui lòng Chọn Ảnh!", "error");

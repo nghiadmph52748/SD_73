@@ -743,6 +743,30 @@ a:hover {
   box-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
 }
 
+/* Slide-out Notification (shared) */
+.slide-notification-container { position: fixed; top: 16px; right: 16px; z-index: 2000; }
+.slide-notification { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 30px rgba(15,23,42,0.15); padding: 12px 14px; min-width: 280px; max-width: 420px; position: relative; }
+.slide-notification.slide-in { animation: slideInRight 300ms ease forwards; }
+.slide-notification.slide-out { animation: slideOutRight 300ms ease forwards; }
+.notification-icon-wrapper { display:flex; align-items:center; }
+.notification-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.notification-icon.success { background: #dcfce7; color:#166534; }
+.notification-icon.error { background: #fee2e2; color:#dc2626; }
+.notification-icon.warning { background: #fef3c7; color:#b45309; }
+.notification-icon.info { background: #e0f2fe; color:#0369a1; }
+.notification-content-wrapper { display:flex; flex-direction:column; gap:4px; }
+.notification-title { font-weight:700; color:#111827; }
+.notification-message { color:#4b5563; font-size:14px; }
+.slide-notification-close { margin-left:auto; background:transparent; border:none; color:#6b7280; cursor:pointer; border-radius:6px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; }
+.slide-notification-close:hover { background:#f3f4f6; color:#111827; }
+.notification-progress-bar { position:absolute; bottom:0; left:0; height:3px; width:100%; background:rgba(0,0,0,0.06); overflow:hidden; border-radius:0 0 12px 12px; }
+.notification-progress-bar.success::after { content:""; display:block; height:100%; width:100%; background:#22c55e; animation: progress 4s linear forwards; }
+.notification-progress-bar.error::after { content:""; display:block; height:100%; width:100%; background:#ef4444; animation: progress 4s linear forwards; }
+.notification-progress-bar.warning::after { content:""; display:block; height:100%; width:100%; background:#f59e0b; animation: progress 4s linear forwards; }
+.notification-progress-bar.info::after { content:""; display:block; height:100%; width:100%; background:#0ea5e9; animation: progress 4s linear forwards; }
+@keyframes slideOutRight { from { opacity:1; transform: translateX(0); } to { opacity:0; transform: translateX(16px); } }
+@keyframes progress { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
 /* Responsive */
 @media (max-width: 768px) {
   .col-md-12 { flex: 0 0 100%; max-width: 100%; }
