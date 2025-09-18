@@ -11,6 +11,7 @@ dist
 dist-ssr
 *.local
 AGENTS.md
+GEMINI.md
 
 # Editor directories and files
 .vscode/*
@@ -25,5 +26,5 @@ AGENTS.md
 .cursor/*
 BE_SP/src/main/resources/application.properties
 BE_SP/target/
-BE_SP/src/main/resources/application.properties
+
 

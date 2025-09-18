@@ -355,122 +355,104 @@
         class="modal-overlay"
         @click="closeEditModal"
       >
-        <div class="modal-content large order-detail-modal" @click.stop>
-          <div class="order-detail-header">
-            <div class="header-info">
-              <div class="order-title-block">
-                <h3>Chỉnh sửa đơn hàng</h3>
-              </div>
-            </div>
-            <button class="modal-close" @click="closeEditModal">✕</button>
+        <div class="modal-content add-modal" @click.stop>
+          <!-- Modal Header -->
+          <div class="modal-header add-header">
+            <h3>
+              <img :src="EditIcon" alt="Form" class="icon-svg" />
+              Cập nhật đơn hàng
+            </h3>
+            <button class="modal-close" @click="closeEditModal">
+              <span>×</span>
+            </button>
           </div>
 
-          <div class="order-detail-body">
+          <!-- Modal Body -->
+          <div class="modal-body">
             <form @submit.prevent="updateOrder" class="edit-form">
-              <div class="edit-fields-container">
-                
-                <!-- Tên khách hàng Card -->
-                <div class="field-card">
-                  <div class="field-card-content">
-                    <div class="field-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                      </svg>
-                    </div>
-                    <div class="field-content">
-                      <label class="field-label">Tên khách hàng</label>
-                      <input
-                        v-model="editingOrder.tenKhachHang"
-                        type="text"
-                        class="field-input"
-                        placeholder="Nhập tên khách hàng"
-                      />
-                    </div>
-                  </div>
+              <!-- Tên khách hàng -->
+              <div class="detail-row">
+                <div class="detail-label">
+                  <img :src="UsersIcon" alt="Customer" class="icon-svg" />
+                  Tên khách hàng
                 </div>
-
-                <!-- Trạng thái đơn hàng Card -->
-                <div class="field-card">
-                  <div class="field-card-content">
-                    <div class="field-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9,11 12,14 22,4"/>
-                        <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.33 0 2.58.29 3.71.82"/>
-                      </svg>
-                    </div>
-                    <div class="field-content">
-                      <label class="field-label">Trạng thái đơn hàng</label>
-                      <select v-model="editingOrder.trangThai" class="field-select">
-                        <option :value="true">Hoàn thành</option>
-                        <option :value="false">Chờ xác nhận</option>
-                      </select>
-                    </div>
-                  </div>
+                <div class="detail-value">
+                  <input
+                    type="text"
+                    v-model="editingOrder.tenKhachHang"
+                    class="detail-input"
+                    placeholder="Nhập tên khách hàng"
+                  />
                 </div>
-
-                <!-- Loại đơn hàng Card -->
-                <div class="field-card">
-                  <div class="field-card-content">
-                    <div class="field-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M2 12h20"/>
-                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                      </svg>
-                    </div>
-                    <div class="field-content">
-                      <label class="field-label">Loại đơn hàng</label>
-                      <select v-model="editingOrder.loaiDon" class="field-select">
-                        <option :value="false">🌐 Trực tuyến</option>
-                        <option :value="true">🏪 Tại quầy</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Tổng tiền Card -->
-                <div class="field-card">
-                  <div class="field-card-content">
-                    <div class="field-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="1" x2="12" y2="23"/>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                      </svg>
-                    </div>
-                    <div class="field-content">
-                      <label class="field-label">Tổng tiền sau giảm (VND)</label>
-                      <input
-                        v-model="editingOrder.tongTienSauGiam"
-                        type="number"
-                        class="field-input"
-                        placeholder="0"
-                        min="0"
-                        step="1000"
-                      />
-                    </div>
-                  </div>
-                </div>
-
               </div>
-              
-              <div class="form-actions">
-                <button type="button" class="btn btn-secondary" @click="closeEditModal">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12"/>
-                  </svg>
-                  Hủy
-                </button>
-                <button type="submit" class="btn btn-primary">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                    <polyline points="17,21 17,13 7,13 7,21"/>
-                    <polyline points="7,3 7,8 15,8"/>
-                  </svg>
-                  Lưu thay đổi
-                </button>
+
+              <!-- Trạng thái đơn hàng -->
+              <div class="detail-row">
+                <div class="detail-label">
+                  <img :src="ChecklistIcon" alt="Status" class="icon-svg" />
+                  Trạng thái đơn hàng
+                </div>
+                <div class="detail-value">
+                  <select v-model="editingOrder.trangThai" class="detail-input">
+                    <option :value="true">Hoàn thành</option>
+                    <option :value="false">Chờ xác nhận</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Loại đơn hàng -->
+              <div class="detail-row">
+                <div class="detail-label">
+                  <img :src="ShippingIcon" alt="Type" class="icon-svg" />
+                  Loại đơn hàng
+                </div>
+                <div class="detail-value">
+                  <select v-model="editingOrder.loaiDon" class="detail-input">
+                    <option :value="false">Trực tuyến</option>
+                    <option :value="true">Tại quầy</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Tổng tiền sau giảm -->
+              <div class="detail-row">
+                <div class="detail-label">
+                  <img :src="MoneyIcon" alt="Total" class="icon-svg" />
+                  Tổng tiền sau giảm
+                </div>
+                <div class="detail-value">
+                  <div class="input-with-suffix">
+                    <input
+                      type="text"
+                      :value="formattedTongTienSauGiam"
+                      class="detail-input has-suffix"
+                      placeholder="Nhập tổng tiền"
+                      @input="handleVndInput($event, 'tongTienSauGiam')"
+                      inputmode="numeric"
+                    />
+                    <span class="input-suffix">VND</span>
+                  </div>
+                </div>
               </div>
             </form>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer add-footer">
+            <button 
+              class="btn btn-secondary" 
+              @click="closeEditModal"
+            >
+              <img :src="CancelIcon" alt="Cancel" class="icon-svg" />
+              Hủy
+            </button>
+            <button 
+              class="btn btn-primary" 
+              @click="updateOrder"
+            >
+              <img :src="EditIcon" alt="Save" class="icon-svg" />
+              Cập nhật
+            </button>
           </div>
         </div>
       </div>
@@ -635,38 +617,45 @@
               <h4>Sản phẩm</h4>
               <span class="chip">{{ selectedOrder?.items?.length || 0 }} sản phẩm</span>
             </header>
-            <div class="card-body product-list">
+            <div class="card-body product-list modern-products">
               <div
                 v-for="item in (selectedOrder?.items || [])"
                 :key="item.id"
-                class="product-item"
+                class="product-card"
               >
-                <div class="product-thumb">
-                  <img v-if="item.anhSanPham && item.anhSanPham.length" :src="item.anhSanPham[0]" :alt="item.tenNhaSanXuat" />
-                  <div v-else class="placeholder">👟</div>
+                <div class="product-media">
+                  <img
+                    v-if="getProductImage(item)"
+                    :src="getProductImage(item)"
+                    :alt="item.tenNhaSanXuat || 'Sản phẩm'"
+                    @error="onProductImgError"
+                  />
+                  <div v-else class="media-placeholder">👟</div>
                 </div>
-                <div class="product-meta">
-                  <div class="product-name">{{ item.tenNhaSanXuat }} - Size {{ item.tenKichThuoc }}</div>
-                  <div class="product-attributes">
-                    <span>Màu {{ item.tenMauSac }}</span>
-                    <span>Xuất xứ {{ item.tenXuatXu }}</span>
-                    <span>Đế {{ item.tenDeGiay }}</span>
-                    <span>Chất liệu {{ item.tenChatLieu }}</span>
+                <div class="product-info">
+                  <div class="product-title-row">
+                    <div class="product-title">{{ item.tenNhaSanXuat }} - Size {{ item.tenKichThuoc }}</div>
+                    <div class="product-qty-chip">x{{ item.soLuong }}</div>
+                  </div>
+                  <div class="product-meta-row">
+                    <span class="meta-chip">Màu {{ item.tenMauSac }}</span>
+                    <span class="meta-chip">Xuất xứ {{ item.tenXuatXu }}</span>
+                    <span class="meta-chip">Đế {{ item.tenDeGiay }}</span>
+                    <span class="meta-chip">Chất liệu {{ item.tenChatLieu }}</span>
+                  </div>
+                  <div class="product-price-row">
+                    <template v-if="item.giaTriGiamGia">
+                      <span class="price-old">{{ formatCurrency(item.giaBan) }}</span>
+                      <span class="price-new">{{ formatCurrency(item.giaBan * (1 - item.giaTriGiamGia / 100)) }}</span>
+                      <span class="price-badge">-{{ item.giaTriGiamGia }}%</span>
+                    </template>
+                    <template v-else>
+                      <span class="price-new">{{ formatCurrency(item.giaBan) }}</span>
+                    </template>
                   </div>
                 </div>
-                <div class="product-qty">x{{ item.soLuong }}</div>
-                <div class="product-pricing">
-                  <template v-if="item.giaTriGiamGia">
-                    <div class="price-old">{{ formatCurrency(item.giaBan) }}</div>
-                    <div class="price-new">{{ formatCurrency(item.giaBan * (1 - item.giaTriGiamGia / 100)) }}</div>
-                    <div class="price-tag">-{{ item.giaTriGiamGia }}%</div>
-                  </template>
-                  <template v-else>
-                    <div class="price-new">{{ formatCurrency(item.giaBan) }}</div>
-                  </template>
-                </div>
               </div>
-              <div v-if="!selectedOrder?.items?.length" class="empty-state">
+              <div v-if="!selectedOrder?.items?.length" class="empty-state modern-empty">
                 Không có sản phẩm trong đơn hàng này.
               </div>
             </div>
@@ -734,6 +723,10 @@ import OrdersIcon from "@/assets/Orders.svg?url";
 import PendingIcon from "@/assets/Pending.svg?url";
 import ShippingIcon from "@/assets/Shipping.svg?url";
 import ViewIcon from "@/assets/View.svg?url";
+// Icons used in the Edit Order modal
+import UsersIcon from "@/assets/Users.svg?url";
+import MoneyIcon from "@/assets/Money.svg?url";
+import CancelIcon from "@/assets/Cancel.svg?url";
 
 
 const router = useRouter();
@@ -1190,6 +1183,29 @@ const formatTime = (dateString) => {
   });
 };
 
+// ===== Helper: format number with '.' thousand separators
+const formatNumberDots = (value) => {
+  const str = String(value ?? '').replace(/\D/g, '');
+  if (!str) return '';
+  return str.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+};
+
+// Display value for VND input (Tổng tiền sau giảm)
+const formattedTongTienSauGiam = computed(() => {
+  const v = editingOrder.value?.tongTienSauGiam;
+  if (v === undefined || v === null || v === 0) return editingOrder.value?.tongTienSauGiam === 0 ? '0' : '';
+  return formatNumberDots(v);
+});
+
+// Handle typing in VND input and keep numeric state
+const handleVndInput = (evt, field) => {
+  const raw = evt?.target?.value ?? '';
+  const digits = raw.replace(/\D/g, '');
+  editingOrder.value[field] = digits ? parseInt(digits, 10) : 0;
+  // reflect formatted text back into the input for immediate feedback
+  evt.target.value = digits ? formatNumberDots(digits) : '';
+};
+
 const printOrder = (order) => {
  console.log("🖨️ In đơn:", order);
   // Ở đây bạn có thể mở window.print() hoặc gọi API tạo PDF
@@ -1234,6 +1250,41 @@ const getPageNumbers = () => {
 const refreshData = () => {
   // Simulate data refresh
   console.log("Refreshing orders data...");
+};
+
+// Get product image from various possible shapes
+const getProductImage = (item) => {
+  if (!item) return null;
+  const a = item.anhSanPham;
+  // If already an array of urls
+  if (Array.isArray(a) && a.length) return a[0];
+  // If it's a JSON string representing an array
+  if (typeof a === 'string') {
+    try {
+      const parsed = JSON.parse(a);
+      if (Array.isArray(parsed) && parsed.length) return parsed[0];
+    } catch (_) {
+      // not JSON, assume direct url string
+      if (a.trim().length > 4) return a.trim();
+    }
+  }
+  // Try common alternative fields
+  if (item.hinhAnh && typeof item.hinhAnh === 'string') return item.hinhAnh;
+  if (item.imageUrl && typeof item.imageUrl === 'string') return item.imageUrl;
+  return null;
+};
+
+// Fallback image for broken links
+const DEFAULT_PRODUCT_IMG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#f1f5f9"/><path d="M2 16c3 0 4-2 6-2s3 2 6 2 5-1 6-1 2 1 2 2-1 2-2 2H4a2 2 0 0 1-2-2z" fill="#9ca3af"/></svg>'
+  );
+const onProductImgError = (e) => {
+  if (e && e.target) {
+    e.target.onerror = null;
+    e.target.src = DEFAULT_PRODUCT_IMG;
+  }
 };
 const exportData = () => {  
   alert("Chức năng xuất báo cáo đang được phát triển");
@@ -1346,6 +1397,158 @@ const updateOrder = async () => {
 </script>
 
 <style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-modal {
+  max-width: 800px; /* Wider for forms */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.icon-svg {
+  width: 24px;
+  height: 24px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-value {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-input,
+.detail-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.detail-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.btn-secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e7eb;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .closexy{
   position: absolute;
   right: 10px;               /* Nút đóng nằm sát góc phải */
@@ -3948,6 +4151,231 @@ div[class="timeline-note"] {
   vertical-align: middle;
 }
 
+/* ===== Edit Order Modal alignment fixes ===== */
+
+/* Modern product list */
+/* Add top spacing so it doesn't stick to the section header */
+.order-card .card-body { padding-top: 16px !important; }
+
+/* Add breathing room below the modal header for the overview cards */
+.order-detail-body .order-overview { margin-top: 12px; margin-bottom: 16px; }
+
+.modern-products {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.product-card {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.product-card:hover {
+  transform: translateY(-1px);
+  border-color: #dbeafe;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.product-media,
+.product-media img,
+.media-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.media-placeholder {
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.product-title {
+  font-weight: 600;
+  color: #0f172a;
+}
+.product-qty-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ecfeff;
+  color: #0369a1;
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.product-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.meta-chip {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  color: #475569;
+  font-size: 12px;
+}
+
+.product-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.product-price-row .price-old {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+.product-price-row .price-new {
+  color: #15803d;
+  font-weight: 700;
+}
+.product-price-row .price-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(248, 113, 113, 0.15);
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* empty */
+.modern-empty {
+  border: 1px dashed #e5e7eb;
+  background: #f8fafc;
+}
+.edit-form .detail-row {
+  display: flex;
+  align-items: center; /* Align label, icon and field vertically */
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+/* Label + icon block should match input height and center vertically */
+.edit-form .detail-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 220px;
+  min-height: 44px; /* same as input */
+  margin: 0; /* override any global margin-top */
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.edit-form .detail-label .icon-svg {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: invert(65%) sepia(78%) saturate(394%) hue-rotate(75deg) brightness(102%) contrast(89%);
+}
+
+.edit-form .detail-value {
+  flex: 1;
+}
+
+.edit-form .detail-input {
+  width: 100%;
+  min-height: 44px; /* unifies input and select heights */
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #dbeafe;
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.25) 0%, rgba(239, 246, 255, 0.65) 100%);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.edit-form .detail-input:focus {
+  outline: none;
+  border-color: #4ade80;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.12);
+  background: #ffffff;
+}
+
+/* Input suffix styles */
+.input-with-suffix {
+  position: relative;
+}
+.input-with-suffix .detail-input.has-suffix {
+  padding-right: 64px; /* leave room for suffix */
+}
+.input-with-suffix .input-suffix {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #111827;
+  font-weight: 700;
+  font-size: 14px;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Button sizes and hover states */
+.modal-footer.add-footer .btn {
+  padding: 10px 24px;
+  font-size: 15px;
+  border-radius: 10px;
+  min-width: 120px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-footer.add-footer .btn img.icon-svg {
+  width: 16px;
+  height: 16px;
+}
+
+.modal-footer.add-footer .btn.btn-primary {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  color: #fff;
+  border: 2px solid #4ade80;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.25);
+}
+.modal-footer.add-footer .btn.btn-primary:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+/* Match size and hover behavior for secondary button */
+.modal-footer.add-footer .btn.btn-secondary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #fff;
+  border: 2px solid #ef4444;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+.modal-footer.add-footer .btn.btn-secondary:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
 </style>
 
 <!-- Load page-level CSS (unscoped) -->

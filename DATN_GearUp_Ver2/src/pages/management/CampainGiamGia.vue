@@ -1080,6 +1080,7 @@
 </template>
 
 <script setup>
+import DatePickerPopup from "@/components/common/DatePickerPopup.vue";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import {
   fetchAllChiTietDotGiamGia,
@@ -1094,7 +1095,6 @@ import {
 } from "../../services/GiamGia/DotGiamGiaService";
 import { fetchAllChiTietSanPham } from "../../services/SanPham/ChiTietSanPhamService";
 import { exportToExcel, formatDataForExcel } from "../../utils/xuatExcel";
-import DatePickerPopup from "@/components/common/DatePickerPopup.vue";
 
 // Import icons
 import CancelIcon from "@/assets/Cancel.svg";
@@ -1110,7 +1110,6 @@ import StatisticsIcon from "@/assets/Statistics.svg";
 import SuccessIcon from "@/assets/Success.svg";
 import TagIcon from "@/assets/TagLabel.svg";
 import TrashIcon from "@/assets/Trash.svg";
-import ViewIcon from "@/assets/View.svg";
 import WarningIcon from "@/assets/Warning.svg";
 
 // Reactive data
