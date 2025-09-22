@@ -1,15 +1,14 @@
 package org.example.be_sp.service.upload;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-import org.example.be_sp.model.response.ResponseObject;
+import java.util.ArrayList;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 
 @Service
 public class UploadImageToCloudinary {

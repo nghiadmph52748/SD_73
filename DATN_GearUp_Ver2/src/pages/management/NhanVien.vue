@@ -1,95 +1,92 @@
 <template>
-  
- <div class="page-container">
-  <div class="card mb-3 p-3">
-  
-  <div class="d-flex gap-2">
-    <ActionButton
-      icon="add"
-      variant="success"
-      size="md"
-      label="Thêm nhân viên"
-      :showLabel="true"
-      tooltip="Thêm nhân viên mới"
-      @click="showAddModal = true"
-    />
+  <div class="page-container">
+    <div class="card mb-3 p-3">
+      <div class="d-flex gap-2">
+        <ActionButton
+          icon="add"
+          variant="success"
+          size="md"
+          label="Thêm nhân viên"
+          :showLabel="true"
+          tooltip="Thêm nhân viên mới"
+          @click="showAddModal = true"
+        />
 
-    <ActionButton
-      icon="download"
-      variant="primary"
-      size="md"
-      label="Xuất"
-      :showLabel="true"
-      tooltip="Xuất Excel"
-      @click="exportToExcel"
-    />
-  </div>
-</div>
-
-      <div class="card">
-    <div class="card-header">
-    <div class="filter-row">
-      <input
-      type="text"
-      placeholder="Tìm Kiếm Người Dùng..."
-      v-model="searchQuery"
-      class="form-control filter-input"
-    />
-      <select class="form-control filter-input" v-model="selectedRole">
-        <option value="">Chức vụ: Tất cả</option>
-        <option
-          v-for="value in quyenHans"
-          :key="value.id"
-          :value="value.tenQuyenHan"
-        >
-          {{ value.tenQuyenHan }}
-        </option>
-      </select>
-      <select class="form-control filter-input" v-model="selectedStatus">
-        <option value="">Trạng thái: Tất cả</option>
-        <option value="active">Hoạt động</option>
-        <option value="inactive">Ngừng hoạt động</option>
-      </select>
-      <select v-model="selectedGender" class="form-control filter-input">
-        <option value="">Giới tính: Tất cả</option>
-        <option :value="true">Nam</option>
-        <option :value="false">Nữ</option>
-      </select>
+        <ActionButton
+          icon="download"
+          variant="primary"
+          size="md"
+          label="Xuất"
+          :showLabel="true"
+          tooltip="Xuất Excel"
+          @click="exportToExcel"
+        />
+      </div>
     </div>
-  </div>
-          
-            
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Mã </th>
-                  <th>Họ Tên</th>
-                  <th>Email</th>
-                  <th>SĐT</th>
-                  <th>Ngày sinh</th>
-                  <th>Giới Tính</th>
-                  <th>CCCD</th>
-                  <!-- <th>Địa chỉ</th>  -->
-                  <th>Chức vụ</th>
-                  <th>Trạng thái</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(employee, index) in filteredEmployees"
-                  :key="employee.id"
-                >
-                  <td data-label="STT">
-                    {{ startIndex + index + 1 }}
-                  </td>
-                  <td data-label="Mã nhân viên" class="employee-code">
-                    {{ employee.maNhanVien }}
-                  </td>
-                  <td data-label="Tên nhân viên" class="employee-name">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="filter-row">
+          <input
+            type="text"
+            placeholder="Tìm Kiếm Người Dùng..."
+            v-model="searchQuery"
+            class="form-control filter-input"
+          />
+          <select class="form-control filter-input" v-model="selectedRole">
+            <option value="">Chức vụ: Tất cả</option>
+            <option
+              v-for="value in quyenHans"
+              :key="value.id"
+              :value="value.tenQuyenHan"
+            >
+              {{ value.tenQuyenHan }}
+            </option>
+          </select>
+          <select class="form-control filter-input" v-model="selectedStatus">
+            <option value="">Trạng thái: Tất cả</option>
+            <option value="active">Hoạt động</option>
+            <option value="inactive">Ngừng hoạt động</option>
+          </select>
+          <select v-model="selectedGender" class="form-control filter-input">
+            <option value="">Giới tính: Tất cả</option>
+            <option :value="true">Nam</option>
+            <option :value="false">Nữ</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Mã</th>
+                <th>Họ Tên</th>
+                <th>Email</th>
+                <th>SĐT</th>
+                <th>Ngày sinh</th>
+                <th>Giới Tính</th>
+                <th>CCCD</th>
+                <!-- <th>Địa chỉ</th>  -->
+                <th>Chức vụ</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(employee, index) in filteredEmployees"
+                :key="employee.id"
+              >
+                <td data-label="STT">
+                  {{ startIndex + index + 1 }}
+                </td>
+                <td data-label="Mã nhân viên" class="employee-code">
+                  {{ employee.maNhanVien }}
+                </td>
+                <td data-label="Tên nhân viên" class="employee-name">
                   <div class="employee-info">
                     <div class="employee-avatar">
                       <img
@@ -101,27 +98,26 @@
                     </div>
                     <span>{{ employee.tenNhanVien }}</span>
                   </div>
-                </td> 
-                  <td data-label="Email">{{ employee.email }}</td>
-                  <td data-label="SĐT">{{ employee.soDienThoai }}</td>
-                  <td data-label="Ngày sinh">{{ employee.ngaySinh }}</td>
-                  <td data-label="Giới Tính" >
-                    <span 
+                </td>
+                <td data-label="Email">{{ employee.email }}</td>
+                <td data-label="SĐT">{{ employee.soDienThoai }}</td>
+                <td data-label="Ngày sinh">{{ employee.ngaySinh }}</td>
+                <td data-label="Giới Tính">
+                  <span
                     :class="[
-                        'badge',
-                        employee.gioiTinh === true
-                          ? 'badge-danger'
-                          : 'badge-success',
-                      ]"
-                      >
-                      {{ employee.gioiTinh === true ? "Nam" : "Nữ" }}
-                    </span>
-                    
-                  </td>
+                      'badge',
+                      employee.gioiTinh === true
+                        ? 'badge-danger'
+                        : 'badge-success',
+                    ]"
+                  >
+                    {{ employee.gioiTinh === true ? "Nam" : "Nữ" }}
+                  </span>
+                </td>
 
-                  <td data-label="CCCD">{{ employee.cccd }}</td>
-                  
-                  <!-- <td data-label="Địa chỉ">
+                <td data-label="CCCD">{{ employee.cccd }}</td>
+
+                <!-- <td data-label="Địa chỉ">
                     {{
                       employee.thanhPho +
                       ", " +
@@ -132,20 +128,20 @@
                       employee.diaChiCuThe
                     }}
                   </td> -->
-                  <td data-label="Chức vụ">{{ employee.tenQuyenHan }}</td>
-                  <td data-label="Trạng thái">
-                    <span
-                      :class="[
-                        'bade',
-                        employee.trangThai === true
-                          ? 'bade-success'
-                          : 'bade-danger',
-                      ]"
-                    >
-                      {{ employee.trangThai ? "Hoạt động" : "Ngừng hoạt động" }}
-                    </span>
-                  </td>
-                  <td data-label="Thao tác">
+                <td data-label="Chức vụ">{{ employee.tenQuyenHan }}</td>
+                <td data-label="Trạng thái">
+                  <span
+                    :class="[
+                      'bade',
+                      employee.trangThai === true
+                        ? 'bade-success'
+                        : 'bade-danger',
+                    ]"
+                  >
+                    {{ employee.trangThai ? "Hoạt động" : "Ngừng hoạt động" }}
+                  </span>
+                </td>
+                <td data-label="Thao tác">
                   <ButtonGroup spacing="xs" class="action-buttons">
                     <ActionButton
                       icon="view"
@@ -165,683 +161,727 @@
                     />
                   </ButtonGroup>
                 </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <!-- Pagination -->
-          <div class="pagination-wrapper">
-            <div class="pagination-info">
-              Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của
-              {{ totalEmployees }} nhân viên
-            </div>
-            <div class="pagination">
-              <button
-                class="btn btn-outline btn-sm"
-                @click="previousPage"
-                :disabled="currentPage === 1"
-              >
-                 Trước
-              </button>
-              <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
-              <button
-                class="btn btn-outline btn-sm"
-                @click="nextPage"
-                :disabled="currentPage === totalPages"
-              >
-                Tiếp 
-              </button>
-            </div>
+        <!-- Pagination -->
+        <div class="pagination-wrapper">
+          <div class="pagination-info">
+            Hiển thị {{ startIndex + 1 }} - {{ endIndex }} của
+            {{ totalEmployees }} nhân viên
+          </div>
+          <div class="pagination">
+            <button
+              class="btn btn-outline btn-sm"
+              @click="previousPage"
+              :disabled="currentPage === 1"
+            >
+              Trước
+            </button>
+            <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
+            <button
+              class="btn btn-outline btn-sm"
+              @click="nextPage"
+              :disabled="currentPage === totalPages"
+            >
+              Tiếp
+            </button>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Thêm Nhân Viên -->
-      <div
-        v-if="showAddModal"
-        class="modal-overlay"
-        @click="showAddModal = false"
-      >
-        <div class="modal-content add-modal" @click.stop>
-          <div class="modal-header add-header">
-            <h3>Thông tin nhân viên</h3>
-            <button class="modal-close" @click="showAddModal = false">✕</button>
-          </div>
+    <!-- Thêm Nhân Viên -->
+    <div
+      v-if="showAddModal"
+      class="modal-overlay"
+      @click="showAddModal = false"
+    >
+      <div class="modal-content add-modal" @click.stop>
+        <div class="modal-header add-header">
+          <h3>Thông tin nhân viên</h3>
+          <button class="modal-close" @click="showAddModal = false">✕</button>
+        </div>
 
-          <div class="modal-body add-body">
-            <div class="form-sections">
-              <div class="form-section">
-                <h4 class="">Thông tin chi tiết</h4>
-                <div class="avatar-upload">
-                  <div class="avatar-preview">
-                    <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar" />
-                    <div v-else class="placeholder-avatar large">
-                      📷
-                      <span>Chọn ảnh</span>
-                    </div>
+        <div class="modal-body add-body">
+          <div class="form-sections">
+            <div class="form-section">
+              <h4 class="">Thông tin chi tiết</h4>
+              <div class="avatar-upload">
+                <div class="avatar-preview">
+                  <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar" />
+                  <div v-else class="placeholder-avatar large">
+                    📷
+                    <span>Chọn ảnh</span>
                   </div>
+                </div>
+                <input
+                  type="file"
+                  @change="handleAvatarUpload"
+                  accept="image/*"
+                  class="file-input"
+                />
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">*Số CCCD</label>
                   <input
-                    type="file"
-                    @change="handleAvatarUpload"
-                    accept="image/*"
-                    class="file-input"
+                    type="text"
+                    v-model="employeeForm.cccd"
+                    class="form-control add-input"
+                    required
                   />
                 </div>
               </div>
 
-              <div class="form-section">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Số CCCD</label>
-                    <input
-                      type="text"
-                      v-model="employeeForm.cccd"
-                      class="form-control add-input"
-                      required
-                    />
-                  </div>
-                </div>
+              <div class="form-group">
+                <label class="form-label">*Ngày sinh</label>
+                <input
+                  type="date"
+                  v-model="employeeForm.ngaySinh"
+                  class="form-control add-input"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Giới tính</label>
+                <select
+                  v-model="employeeForm.gioiTinh"
+                  class="form-control add-input"
+                  required
+                >
+                  <option :value="true">Nam</option>
+                  <option :value="false">Nữ</option>
+                </select>
+              </div>
 
+              <div class="form-group">
+                <label class="form-label">*Email</label>
+                <input
+                  type="email"
+                  v-model="employeeForm.email"
+                  class="form-control add-input"
+                  required
+                />
+              </div>
+
+              <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">*Ngày sinh</label>
+                  <label class="form-label">*Họ Và Tên</label>
                   <input
-                    type="date"
-                    v-model="employeeForm.ngaySinh"
+                    type="text"
+                    v-model="employeeForm.tenNhanVien"
                     class="form-control add-input"
                     required
                   />
                 </div>
+              </div>
+
+              <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">*Giới tính</label>
-                  <select v-model="employeeForm.gioiTinh" class="form-control add-input" required>
-                    <option :value="true">Nam</option>
-                    <option :value="false">Nữ</option>
+                  <label class="form-label">*Tỉnh/thành phố</label>
+                  <select
+                    v-model="employeeForm.thanhPho"
+                    class="form-control add-input"
+                    @change="onProvinceChange"
+                    required
+                  >
+                    <option value="">Chọn tỉnh/thành phố</option>
+                    <option
+                      v-for="t in provinces"
+                      :key="t.code"
+                      :value="t.name"
+                    >
+                      {{ t.name }}
+                    </option>
                   </select>
                 </div>
 
-
                 <div class="form-group">
-                  <label class="form-label">*Email</label>
-                  <input
-                    type="email"
-                    v-model="employeeForm.email"
-                    class="form-control add-input"
-                    required
-                  />
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Họ Và Tên</label>
-                    <input
-                      type="text"
-                      v-model="employeeForm.tenNhanVien"
-                      class="form-control add-input"
-                      required
-                    />
-                  </div>
-                  
-                </div>
-
-  <div class="form-row">
-  <div class="form-group">
-    <label class="form-label">*Tỉnh/thành phố</label>
-    <select
-      v-model="employeeForm.thanhPho"
-      class="form-control add-input"
-      @change="onProvinceChange"
-      required
-    >
-      <option value="">Chọn tỉnh/thành phố</option>
-      <option v-for="t in provinces" :key="t.code" :value="t.name">
-        {{ t.name }}
-      </option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label class="form-label">*Quận/huyện</label>
-    <select
-      v-model="employeeForm.quan"
-      class="form-control add-input"
-      @change="onDistrictChange"
-      required
-    >
-      <option value="">Chọn quận/huyện</option>
-      <option v-for="q in districts" :key="q.code" :value="q.name">
-        {{ q.name }}
-      </option>
-    </select>
-  </div>
-</div>
-
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label">*Xã/phường/thị trấn</label>
-    <select
-      v-model="employeeForm.phuong"
-      class="form-control add-input"
-      required
-    >
-      <option value="">Chọn xã/phường/thị trấn</option>
-      <option v-for="p in wards" :key="p.code" :value="p.name">
-        {{ p.name }}
-      </option>
-    </select>
-  </div>
-   <div class="form-group">
-                    <label class="form-label">*Địa chỉ cụ thể</label>
-                    <input
-                      type="text"
-                      v-model="employeeForm.diaChiCuThe"
-                      class="form-control add-input"
-                      required
-                    />
-                  </div>
-</div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Số Điện Thoại</label>
-                    <input
-                      type="tel"
-                      v-model="employeeForm.soDienThoai"
-                      class="form-control add-input"
-                      required
-                    />
-                  </div>
-                 
-                </div>
-                <div class="form-group">
-                  <label class="form-label">*Tài khoản</label>
-                  <input
-                    type="text"
-                    v-model="employeeForm.tenTaiKhoan"
-                    class="form-control bright-input"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">*Mật khẩu</label>
-                  <input
-                    type="password"
-                    v-model="employeeForm.matKhau"
-                    class="form-control bright-input"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">*Quyền hạn</label>
+                  <label class="form-label">*Quận/huyện</label>
                   <select
-                    v-model="employeeForm.idQuyenHan"
+                    v-model="employeeForm.quan"
                     class="form-control add-input"
+                    @change="onDistrictChange"
                     required
                   >
-                    <option value="">Chọn quyền hạn</option>
+                    <option value="">Chọn quận/huyện</option>
                     <option
-                      v-for="value in quyenHans"
-                      :key="value.id"
-                      :value="value.id"
+                      v-for="q in districts"
+                      :key="q.code"
+                      :value="q.name"
                     >
-                      {{ value.tenQuyenHan }}
+                      {{ q.name }}
                     </option>
                   </select>
                 </div>
               </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">*Xã/phường/thị trấn</label>
+                  <select
+                    v-model="employeeForm.phuong"
+                    class="form-control add-input"
+                    required
+                  >
+                    <option value="">Chọn xã/phường/thị trấn</option>
+                    <option v-for="p in wards" :key="p.code" :value="p.name">
+                      {{ p.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">*Địa chỉ cụ thể</label>
+                  <input
+                    type="text"
+                    v-model="employeeForm.diaChiCuThe"
+                    class="form-control add-input"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">*Số Điện Thoại</label>
+                  <input
+                    type="tel"
+                    v-model="employeeForm.soDienThoai"
+                    class="form-control add-input"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Tài khoản</label>
+                <input
+                  type="text"
+                  v-model="employeeForm.tenTaiKhoan"
+                  class="form-control bright-input"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Mật khẩu</label>
+                <input
+                  type="password"
+                  v-model="employeeForm.matKhau"
+                  class="form-control bright-input"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Quyền hạn</label>
+                <select
+                  v-model="employeeForm.idQuyenHan"
+                  class="form-control add-input"
+                  required
+                >
+                  <option value="">Chọn quyền hạn</option>
+                  <option
+                    v-for="value in quyenHans"
+                    :key="value.id"
+                    :value="value.id"
+                  >
+                    {{ value.tenQuyenHan }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div class="modal-footer add-footer">
+        <div class="modal-footer add-footer">
+          <button
+            type="button"
+            class="btn-cancel"
+            @click="showAddModal = false"
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            class="btn-submit"
+            @click="showConfirmAddEmployee = true"
+          >
+            Thêm Nhân Viên
+          </button>
+        </div>
+
+        <!-- Modal xác nhận thêm nhân viên -->
+        <div
+          v-if="showConfirmAddEmployee"
+          class="confirm-dialog-overlay"
+          @click="showConfirmAddEmployee = false"
+        >
+          <div class="confirm-dialog-box" @click.stop>
+            <div class="confirm-dialog-header">
+              <h3>Xác nhận</h3>
+            </div>
+            <div class="confirm-dialog-body">
+              <p>Bạn có muốn thêm nhân viên này không?</p>
+            </div>
+            <div class="confirm-dialog-footer">
               <button
-                type="button"
-                class="btn-cancel"
-                @click="showAddModal = false"
+                class="confirm-btn"
+                @click="showConfirmAddEmployee = false"
               >
                 Hủy
               </button>
               <button
-                type="submit"
-                class="btn-submit"
-                @click="showConfirmAddEmployee = true"
+                class="confirm-btn confirm-btn-ok"
+                @click="handleConfirmAddEmployee"
               >
-                Thêm Nhân Viên
+                Xác nhận
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <!-- Modal xác nhận thêm nhân viên -->
-            <div
-              v-if="showConfirmAddEmployee"
-              class="confirm-dialog-overlay"
-              @click="showConfirmAddEmployee = false"
-            >
-              <div class="confirm-dialog-box" @click.stop>
-                <div class="confirm-dialog-header">
-                  <h3>Xác nhận</h3>
+    <!-- update nhân viên -->
+    <div
+      v-if="showEditModal"
+      class="modal-overlay"
+      @click="showEditModal = false"
+    >
+      <div class="modal-content edit-modal" @click.stop>
+        <div class="modal-header edit-header">
+          <h3>Cập nhật thông tin nhân viên</h3>
+          <button class="modal-close" @click="showEditModal = false">✕</button>
+        </div>
+
+        <div class="modal-body edit-body">
+          <div class="form-sections">
+            <div class="form-section">
+              <h4 class="section-title">Thông tin chi tiết</h4>
+              <div class="avatar-upload">
+                <div class="avatar-preview">
+                  <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar" />
+                  <div v-else class="placeholder-avatar large">
+                    📷
+                    <span>Chọn ảnh</span>
+                  </div>
                 </div>
-                <div class="confirm-dialog-body">
-                  <p>Bạn có muốn thêm nhân viên này không?</p>
-                </div>
-                <div class="confirm-dialog-footer">
-                  <button class="confirm-btn" @click="showConfirmAddEmployee = false">
-                    Hủy
-                  </button>
-                  <button class="confirm-btn confirm-btn-ok" @click="handleConfirmAddEmployee">
-                    Xác nhận
-                  </button>
-                </div>
+                <input
+                  type="file"
+                  @change="handleAvatarUpload"
+                  accept="image/*"
+                  class="file-input"
+                />
               </div>
             </div>
 
-            
-        </div>
-      </div>
-      
-
-      <!-- update nhân viên -->
-      <div
-        v-if="showEditModal"
-        class="modal-overlay"
-        @click="showEditModal = false"
-      >
-        <div class="modal-content edit-modal" @click.stop>
-          <div class="modal-header edit-header">
-            <h3>Cập nhật thông tin nhân viên</h3>
-            <button class="modal-close" @click="showEditModal = false">✕</button>
-          </div>
-
-          <div class="modal-body edit-body">
-            <div class="form-sections">
-              <div class="form-section">
-                <h4 class="section-title">Thông tin chi tiết</h4>
-                <div class="avatar-upload">
-                  <div class="avatar-preview">
-                    <img v-if="avatarPreview" :src="avatarPreview" alt="Avatar" />
-                    <div v-else class="placeholder-avatar large">
-                      📷
-                      <span>Chọn ảnh</span>
-                    </div>
-                  </div>
-                  <input
-                    type="file"
-                    @change="handleAvatarUpload"
-                    accept="image/*"
-                    class="file-input"
-                  />
-                </div>
-              </div>
-
-              <div class="form-section">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Số CCCD</label>
-                    <input
-                      type="text"
-                      v-model="employeeForm.cccd"
-                      class="form-control edit-input"
-                      required
-                    />
-                  </div>
-                </div>
-
+            <div class="form-section">
+              <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">*Ngày sinh</label>
-                  <input
-                    type="date"
-                    v-model="employeeForm.ngaySinh"
-                    class="form-control edit-input"
-                    required
-                  />
-                </div>
-               <div class="form-group">
-                  <label class="form-label">*Giới tính</label>
-                  <select v-model="employeeForm.gioiTinh" class="form-control edit-input" required>
-                    <option :value="true">Nam</option>
-                    <option :value="false">Nữ</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">*Email</label>
-                  <input
-                    type="email"
-                    v-model="employeeForm.email"
-                    class="form-control edit-input"
-                    required
-                  />
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Họ Và Tên</label>
-                    <input
-                      type="text"
-                      v-model="employeeForm.tenNhanVien"
-                      class="form-control edit-input"
-                      required
-                    />
-                  </div>
-                  
-                
-                </div>
-
-       <div class="form-row">
-  <!-- Tỉnh/Thành phố -->
-  <div class="form-group">
-    <label class="form-label">*Tỉnh/Thành phố</label>
-    <select
-      v-model="employeeForm.thanhPho"
-      class="form-control edit-input"
-      @change="onProvinceChange"
-      required
-    >
-      <option value="">-- Chọn tỉnh/thành phố --</option>
-      <option
-        v-for="tp in provinces"
-        :key="tp.code"
-        :value="tp.name"
-      >
-        {{ tp.name }}
-      </option>
-    </select>
-  </div>
-
-  <!-- Quận/Huyện -->
-  <div class="form-group">
-    <label class="form-label">*Quận/Huyện</label>
-    <select
-      v-model="employeeForm.quan"
-      class="form-control edit-input"
-      @change="onDistrictChange"
-      required
-    >
-      <option value="">-- Chọn quận/huyện --</option>
-      <option
-        v-for="q in districts"
-        :key="q.code"
-        :value="q.name"
-      >
-        {{ q.name }}
-      </option>
-    </select>
-  </div>
-</div>
-
-<div class="form-row">
-  <!-- Xã/Phường -->
-  <div class="form-group">
-    <label class="form-label">*Xã/Phường/Thị trấn</label>
-    <select
-      v-model="employeeForm.phuong"
-      class="form-control edit-input"
-      placeholder="Nhập số nhà, ngõ, đường..."
-      required
-    >
-      <option value="">-- Chọn xã/phường --</option>
-      <option
-        v-for="p in wards"
-        :key="p.code"
-        :value="p.name"
-      >
-        {{ p.name }}
-      </option>
-    </select>
-  </div>
-
-  <!-- Địa chỉ cụ thể -->
-  <div class="form-group">
-    <label class="form-label">*Địa chỉ cụ thể</label>
-    <input
-      type="text"
-      v-model="employeeForm.diaChiCuThe"
-      class="form-control edit-input"
-      placeholder="Nhập số nhà, ngõ, đường..."
-      required
-    />
-  </div>
-</div>
-
-
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">*Số Điện Thoại</label>
-                    <input
-                      type="tel"
-                      v-model="employeeForm.soDienThoai"
-                      class="form-control edit-input"
-                      required
-                    />
-                  </div>
-                 
-                </div> 
-
-                <div class="form-group">
-                  <label class="form-label">*Tài khoản</label>
+                  <label class="form-label">*Số CCCD</label>
                   <input
                     type="text"
-                    v-model="employeeForm.tenTaiKhoan"
-                    class="form-control"
-                    required
-                  />
-                </div> 
-                <div class="form-group">
-                  <label class="form-label">*Mật khẩu</label>
-                  <input
-                    type="password"
-                    v-model="employeeForm.matKhau"
-                    class="form-control"
-                    required
-                  />
-                </div> 
-                <div class="form-group">
-                  <label class="form-label">*Quyền hạn</label>
-                  <select
-                    v-model="employeeForm.idQuyenHan"
+                    v-model="employeeForm.cccd"
                     class="form-control edit-input"
                     required
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">*Ngày sinh</label>
+                <input
+                  type="date"
+                  v-model="employeeForm.ngaySinh"
+                  class="form-control edit-input"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Giới tính</label>
+                <select
+                  v-model="employeeForm.gioiTinh"
+                  class="form-control edit-input"
+                  required
+                >
+                  <option :value="true">Nam</option>
+                  <option :value="false">Nữ</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Email</label>
+                <input
+                  type="email"
+                  v-model="employeeForm.email"
+                  class="form-control edit-input"
+                  required
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">*Họ Và Tên</label>
+                  <input
+                    type="text"
+                    v-model="employeeForm.tenNhanVien"
+                    class="form-control edit-input"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <!-- Tỉnh/Thành phố -->
+                <div class="form-group">
+                  <label class="form-label">*Tỉnh/Thành phố</label>
+                  <select
+                    v-model="employeeForm.thanhPho"
+                    class="form-control edit-input"
+                    @change="onProvinceChange"
+                    required
                   >
-                    <option value="">Chọn quyền hạn</option>
+                    <option value="">-- Chọn tỉnh/thành phố --</option>
                     <option
-                      v-for="value in quyenHans"
-                      :key="value.id"
-                      :value="value.id"
+                      v-for="tp in provinces"
+                      :key="tp.code"
+                      :value="tp.name"
                     >
-                      {{ value.tenQuyenHan }}
+                      {{ tp.name }}
                     </option>
                   </select>
-                </div> 
+                </div>
 
+                <!-- Quận/Huyện -->
                 <div class="form-group">
-                  <label class="form-label">*Trạng thái</label>
-                  <select v-model="employeeForm.trangThai" class="form-control edit-input">
-                    <option :value="true">Hoạt động</option>
-                    <option :value="false">Ngừng hoạt động</option>
+                  <label class="form-label">*Quận/Huyện</label>
+                  <select
+                    v-model="employeeForm.quan"
+                    class="form-control edit-input"
+                    @change="onDistrictChange"
+                    required
+                  >
+                    <option value="">-- Chọn quận/huyện --</option>
+                    <option
+                      v-for="q in districts"
+                      :key="q.code"
+                      :value="q.name"
+                    >
+                      {{ q.name }}
+                    </option>
                   </select>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div class="modal-footer edit-footer">
-            <button
-              type="button"
-              class="btn-cancel"
-              @click="showEditModal = false"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              class="btn-submit"
-              @click="showConfirmEditEmployee = true"
-            >
-              Cập nhật nhân viên
-            </button>
-          </div>
+              <div class="form-row">
+                <!-- Xã/Phường -->
+                <div class="form-group">
+                  <label class="form-label">*Xã/Phường/Thị trấn</label>
+                  <select
+                    v-model="employeeForm.phuong"
+                    class="form-control edit-input"
+                    placeholder="Nhập số nhà, ngõ, đường..."
+                    required
+                  >
+                    <option value="">-- Chọn xã/phường --</option>
+                    <option v-for="p in wards" :key="p.code" :value="p.name">
+                      {{ p.name }}
+                    </option>
+                  </select>
+                </div>
 
-          <!-- Modal xác nhận cập nhật -->
-          <div
-            v-if="showConfirmEditEmployee"
-            class="confirm-dialog-overlay"
-            @click="showConfirmEditEmployee = false"
-          >
-            <div class="confirm-dialog-box" @click.stop>
-              <div class="confirm-dialog-header">
-                <h3>Xác nhận</h3>
-              </div>
-              <div class="confirm-dialog-body">
-                <p>Bạn có muốn cập nhật thông tin nhân viên này không?</p>
-              </div>
-              <div class="confirm-dialog-footer">
-                <button class="confirm-btn" @click="showConfirmEditEmployee = false">
-                  Hủy
-                </button>
-                <button class="confirm-btn confirm-btn-ok" @click="handleConfirmEditEmployee">
-                  Xác nhận
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Inline message -->
-          <p v-if="editMessage" class="inline-message">{{ editMessage }}</p>
-
-        </div>
-      </div>
-
-      <!-- Employee Detail Modal -->
-      <div
-        v-if="showDetailModal"
-        class="modal-overlay"
-        @click="showDetailModal = false"
-      >
-        <div class="modal-content detail-modal" @click.stop>
-          <div class="modal-header ">
-            <h3>Chi tiết nhân viên</h3>
-            <button class="modal-close" @click="showDetailModal = false">
-              ✕
-            </button>
-          </div>
-
-          <div class="modal-body detail-body" v-if="selectedEmployee">
-            <div class="employee-detail">
-              <div class="employee-avatar-section">
-                <div class="employee-avatar large">
-                  <img
-                    v-if="selectedEmployee.anhNhanVien"
-                    :src="'http://localhost:8080' + selectedEmployee.anhNhanVien"
-                    alt="Ảnh nhân viên"
+                <!-- Địa chỉ cụ thể -->
+                <div class="form-group">
+                  <label class="form-label">*Địa chỉ cụ thể</label>
+                  <input
+                    type="text"
+                    v-model="employeeForm.diaChiCuThe"
+                    class="form-control edit-input"
+                    placeholder="Nhập số nhà, ngõ, đường..."
+                    required
                   />
-                  <div v-else class="placeholder-avatar large">👤</div>
                 </div>
-                <h4 class="employee-name-title">{{ selectedEmployee.tenNhanVien }}</h4>
               </div>
 
-              <div class="employee-info">
-                <div class="info-grid">
-                  <div class="info-item">
-                    <label>Mã nhân viên:</label>
-                    <span class="info-value">{{ selectedEmployee.maNhanVien }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Email:</label>
-                    <span class="info-value">{{ selectedEmployee.email }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Số điện thoại:</label>
-                    <span class="info-value">{{ selectedEmployee.soDienThoai }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Ngày sinh:</label>
-                    <span class="info-value">{{ selectedEmployee.ngaySinh }}</span>
-                  </div>
-                  
-                  <div class="info-item">
-                    <label>Tỉnh/Thành phố:</label>
-                    <span class="info-value">{{
-                      selectedEmployee.thanhPho || "Chưa cập nhật"
-                    }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Quận/Huyện:</label>
-                    <span class="info-value">{{ selectedEmployee.quan || "Chưa cập nhật" }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Phường/Xã:</label>
-                    <span class="info-value">{{ selectedEmployee.phuong || "Chưa cập nhật" }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Địa chỉ cụ thể:</label>
-                    <span class="info-value">{{
-                      selectedEmployee.diaChiCuThe || "Chưa cập nhật"
-                    }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>CCCD:</label>
-                    <span class="info-value">{{ selectedEmployee.cccd }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Tài khoản:</label>
-                    <span>{{ selectedEmployee.tenTaiKhoan }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Mật khẩu:</label>
-                    <span>{{ selectedEmployee.matKhau }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Chức vụ:</label>
-                    <span class="info-value">{{ selectedEmployee.tenQuyenHan }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Trạng thái:</label>
-                    <span class="info-value status-badge" :class="{
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">*Số Điện Thoại</label>
+                  <input
+                    type="tel"
+                    v-model="employeeForm.soDienThoai"
+                    class="form-control edit-input"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">*Tài khoản</label>
+                <input
+                  type="text"
+                  v-model="employeeForm.tenTaiKhoan"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Mật khẩu</label>
+                <input
+                  type="password"
+                  v-model="employeeForm.matKhau"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">*Quyền hạn</label>
+                <select
+                  v-model="employeeForm.idQuyenHan"
+                  class="form-control edit-input"
+                  required
+                >
+                  <option value="">Chọn quyền hạn</option>
+                  <option
+                    v-for="value in quyenHans"
+                    :key="value.id"
+                    :value="value.id"
+                  >
+                    {{ value.tenQuyenHan }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">*Trạng thái</label>
+                <select
+                  v-model="employeeForm.trangThai"
+                  class="form-control edit-input"
+                >
+                  <option :value="true">Hoạt động</option>
+                  <option :value="false">Ngừng hoạt động</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer edit-footer">
+          <button
+            type="button"
+            class="btn-cancel"
+            @click="showEditModal = false"
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            class="btn-submit"
+            @click="showConfirmEditEmployee = true"
+          >
+            Cập nhật nhân viên
+          </button>
+        </div>
+
+        <!-- Modal xác nhận cập nhật -->
+        <div
+          v-if="showConfirmEditEmployee"
+          class="confirm-dialog-overlay"
+          @click="showConfirmEditEmployee = false"
+        >
+          <div class="confirm-dialog-box" @click.stop>
+            <div class="confirm-dialog-header">
+              <h3>Xác nhận</h3>
+            </div>
+            <div class="confirm-dialog-body">
+              <p>Bạn có muốn cập nhật thông tin nhân viên này không?</p>
+            </div>
+            <div class="confirm-dialog-footer">
+              <button
+                class="confirm-btn"
+                @click="showConfirmEditEmployee = false"
+              >
+                Hủy
+              </button>
+              <button
+                class="confirm-btn confirm-btn-ok"
+                @click="handleConfirmEditEmployee"
+              >
+                Xác nhận
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inline message -->
+        <p v-if="editMessage" class="inline-message">{{ editMessage }}</p>
+      </div>
+    </div>
+
+    <!-- Employee Detail Modal -->
+    <div
+      v-if="showDetailModal"
+      class="modal-overlay"
+      @click="showDetailModal = false"
+    >
+      <div class="modal-content detail-modal" @click.stop>
+        <div class="modal-header">
+          <h3>Chi tiết nhân viên</h3>
+          <button class="modal-close" @click="showDetailModal = false">
+            ✕
+          </button>
+        </div>
+
+        <div class="modal-body detail-body" v-if="selectedEmployee">
+          <div class="employee-detail">
+            <div class="employee-avatar-section">
+              <div class="employee-avatar large">
+                <img
+                  v-if="selectedEmployee.anhNhanVien"
+                  :src="'http://localhost:8080' + selectedEmployee.anhNhanVien"
+                  alt="Ảnh nhân viên"
+                />
+                <div v-else class="placeholder-avatar large">👤</div>
+              </div>
+              <h4 class="employee-name-title">
+                {{ selectedEmployee.tenNhanVien }}
+              </h4>
+            </div>
+
+            <div class="employee-info">
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Mã nhân viên:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.maNhanVien
+                  }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Email:</label>
+                  <span class="info-value">{{ selectedEmployee.email }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Số điện thoại:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.soDienThoai
+                  }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Ngày sinh:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.ngaySinh
+                  }}</span>
+                </div>
+
+                <div class="info-item">
+                  <label>Tỉnh/Thành phố:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.thanhPho || "Chưa cập nhật"
+                  }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Quận/Huyện:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.quan || "Chưa cập nhật"
+                  }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Phường/Xã:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.phuong || "Chưa cập nhật"
+                  }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Địa chỉ cụ thể:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.diaChiCuThe || "Chưa cập nhật"
+                  }}</span>
+                </div>
+                <div class="info-item">
+                  <label>CCCD:</label>
+                  <span class="info-value">{{ selectedEmployee.cccd }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Tài khoản:</label>
+                  <span>{{ selectedEmployee.tenTaiKhoan }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Mật khẩu:</label>
+                  <span>{{ selectedEmployee.matKhau }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Chức vụ:</label>
+                  <span class="info-value">{{
+                    selectedEmployee.tenQuyenHan
+                  }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Trạng thái:</label>
+                  <span
+                    class="info-value status-badge"
+                    :class="{
                       'status-active': selectedEmployee.trangThai,
-                      'status-inactive': !selectedEmployee.trangThai
-                    }">{{
-                      selectedEmployee.trangThai ? "Hoạt động" : "Ngừng hoạt động"
-                    }}</span>
-                  </div>
+                      'status-inactive': !selectedEmployee.trangThai,
+                    }"
+                    >{{
+                      selectedEmployee.trangThai
+                        ? "Hoạt động"
+                        : "Ngừng hoạt động"
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-<div class="my-toast-container" v-if="toast.show">
-  <div
-    class="my-toast-popup"
-    :class="[ toast.type, { hide: toast.hiding } ]"
-    role="status"
-    aria-live="polite"
-  >
-    <div class="my-toast-header">
-      <span>
-        {{ toast.type === 'success' ? 'Thành công' :
-           toast.type === 'error' ? 'Lỗi' :
-           toast.type === 'info' ? 'Thông tin' :
-           'Cảnh báo' }}
-      </span>
-      <button class="my-toast-close-btn" @click="hideToast" aria-label="Đóng">&times;</button>
     </div>
-    <div class="my-toast-body">
-      {{ toast.message }}
+    <div class="my-toast-container" v-if="toast.show">
+      <div
+        class="my-toast-popup"
+        :class="[toast.type, { hide: toast.hiding }]"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="my-toast-header">
+          <span>
+            {{
+              toast.type === "success"
+                ? "Thành công"
+                : toast.type === "error"
+                ? "Lỗi"
+                : toast.type === "info"
+                ? "Thông tin"
+                : "Cảnh báo"
+            }}
+          </span>
+          <button
+            class="my-toast-close-btn"
+            @click="hideToast"
+            aria-label="Đóng"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="my-toast-body">
+          {{ toast.message }}
+        </div>
+      </div>
     </div>
   </div>
-</div>
-
-    </div>
-
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import ActionButton from "@/components/ui/NutHanhDong.vue";
 import ButtonGroup from "@/components/ui/NhomNut.vue";
+import ActionButton from "@/components/ui/NutHanhDong.vue";
+import { computed, onMounted, ref } from "vue";
 import * as XLSX from "xlsx";
 import {
   fetchAllNhanVien,
-  fetchUpdateNhanVien,
   fetchCreateNhanVien,
+  fetchUpdateNhanVien,
 } from "../../services/NhanVien/NhanVienService";
 import { fetchAllQuyenHan } from "../../services/NhanVien/QuyenHanService";
 
@@ -870,7 +910,7 @@ const handleConfirmAddEmployee = async () => {
     }
 
     // Bước 2: gọi API sau khi validate thành công
-    const result = await saveEmployee(); 
+    const result = await saveEmployee();
 
     if (result) {
       showToast("Thêm nhân viên thành công!", "success");
@@ -883,13 +923,11 @@ const handleConfirmAddEmployee = async () => {
   }
 };
 
-
-
 const toast = ref({
   show: false,
   message: "",
   type: "success",
-  hiding: false
+  hiding: false,
 });
 
 function showToast(message, type = "success", duration = 3000) {
@@ -909,8 +947,6 @@ function hideToast() {
   }, 500); // 500ms khớp với fadeOut
 }
 
-
-
 const validateForm = () => {
   if (!employeeForm.value.anhNhanVien) {
     showToast("Vui lòng Chọn Ảnh!", "error");
@@ -920,7 +956,7 @@ const validateForm = () => {
     showToast("Vui lòng nhập Số CCCD!", "error");
     return false;
   }
-  
+
   if (!employeeForm.value.ngaySinh) {
     showToast("Vui lòng nhập Ngày sinh!", "error");
     return false;
@@ -953,7 +989,7 @@ const validateForm = () => {
     showToast("Vui lòng nhập Số điện thoại!", "error");
     return false;
   }
-  
+
   if (!employeeForm.value.tenTaiKhoan) {
     showToast("Vui lòng Nhập Tài Khoản!", "error");
     return false;
@@ -969,8 +1005,6 @@ const validateForm = () => {
   return true;
 };
 
-
-
 //abcd
 const showConfirmEditEmployee = ref(false);
 const editMessage = ref("");
@@ -981,7 +1015,7 @@ const handleConfirmEditEmployee = async () => {
   try {
     // validate trước khi gọi API
     if (!validateForm()) {
-      return; 
+      return;
     }
 
     const result = await saveEmployee(); // gọi API update
@@ -998,7 +1032,6 @@ const handleConfirmEditEmployee = async () => {
   }
 };
 
-
 // Pagination data
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
@@ -1013,7 +1046,9 @@ const onProvinceChange = async () => {
     (p) => p.name === employeeForm.value.thanhPho
   );
   if (province) {
-    const res = await fetch(`https://provinces.open-api.vn/api/p/${province.code}?depth=2`);
+    const res = await fetch(
+      `https://provinces.open-api.vn/api/p/${province.code}?depth=2`
+    );
     const data = await res.json();
     districts.value = data.districts;
   }
@@ -1028,7 +1063,9 @@ const onDistrictChange = async () => {
     (d) => d.name === employeeForm.value.quan
   );
   if (district) {
-    const res = await fetch(`https://provinces.open-api.vn/api/d/${district.code}?depth=2`);
+    const res = await fetch(
+      `https://provinces.open-api.vn/api/d/${district.code}?depth=2`
+    );
     const data = await res.json();
     wards.value = data.wards;
   }
@@ -1051,7 +1088,7 @@ const employeeForm = ref({
   delete: false,
   tenTaiKhoan: "",
   matKhau: "",
-  anhNhanVien: null
+  anhNhanVien: null,
 });
 
 // Mock data
@@ -1089,11 +1126,11 @@ const filteredEmployees = computed(() => {
         employee.soDienThoai.includes(searchQuery.value)
     );
   }
- if (selectedGender.value !== "") {
-  filtered = filtered.filter(
-    (employee) => employee.gioiTinh === selectedGender.value
-  );
-}
+  if (selectedGender.value !== "") {
+    filtered = filtered.filter(
+      (employee) => employee.gioiTinh === selectedGender.value
+    );
+  }
   if (selectedRole.value) {
     filtered = filtered.filter(
       (employee) => employee.tenQuyenHan === selectedRole.value
@@ -1123,7 +1160,6 @@ const totalEmployees = computed(() => {
         employee.soDienThoai.includes(searchQuery.value)
     );
   }
-  
 
   if (selectedRole.value) {
     filtered = filtered.filter(
@@ -1214,8 +1250,6 @@ const saveEmployee = async () => {
   }
 };
 
-
-
 const resetForm = (resetAvatar = true) => {
   employeeForm.value = {
     tenNhanVien: "",
@@ -1236,7 +1270,6 @@ const resetForm = (resetAvatar = true) => {
     avatarPreview.value = "";
   }
 };
-
 
 const openAddModal = () => {
   resetForm();
@@ -1281,13 +1314,11 @@ const exportToExcel = () => {
   }
 };
 
-
-
 // Khởi tạo dữ liệu khi component được mount
 onMounted(async () => {
   fetchAll();
   fetchQuyenHan();
-    // Load danh sách tỉnh/thành phố
+  // Load danh sách tỉnh/thành phố
   const res = await fetch("https://provinces.open-api.vn/api/p/");
   provinces.value = await res.json();
 });
@@ -1300,14 +1331,10 @@ defineProps({
     type: String,
     required: true, // "Thêm nhân viên"
   },
-  
 });
-
 </script>
 
-
 <style scoped>
-
 .form-control {
   width: 100%;
   padding: 12px 12px;
@@ -1317,37 +1344,34 @@ defineProps({
 }
 
 .filter-input {
-  width: auto;         /* không chiếm full */
-  min-width: 150px;    /* độ rộng tối thiểu */
-  max-width: 200px;    /* độ rộng tối đa */
-  padding: 4px 8px;    /* padding gọn hơn */
-  font-size: 14px;     /* chữ nhỏ gọn */
+  width: auto; /* không chiếm full */
+  min-width: 150px; /* độ rộng tối thiểu */
+  max-width: 200px; /* độ rộng tối đa */
+  padding: 4px 8px; /* padding gọn hơn */
+  font-size: 14px; /* chữ nhỏ gọn */
 }
-
 
 .filter-row {
   display: flex;
-  gap: 16px;      
-  flex-wrap: wrap;  
+  gap: 16px;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 1px;
 }
 
 .filter-row .search-input {
-  min-width: 220px;  
+  min-width: 220px;
   max-width: 300px;
   padding: 6px 10px;
   font-size: 14px;
 }
 
 .filter-row .form-select {
-  min-width: 150px;  
+  min-width: 150px;
   max-width: 200px;
   padding: 12px 10px;
   font-size: 14px;
 }
-
-
 
 .confirm-dialog-overlay {
   position: fixed;
@@ -1410,8 +1434,14 @@ defineProps({
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .toast {
   position: fixed;
@@ -1422,7 +1452,7 @@ defineProps({
   border-radius: 8px;
   color: #fff;
   font-weight: 500;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   animation: fadeInOut 4s forwards;
 }
@@ -1439,15 +1469,26 @@ defineProps({
 
 /* hiệu ứng hiện lên rồi biến mất */
 @keyframes fadeInOut {
-  0%   { opacity: 0; transform: translateY(-20px); }
-  10%  { opacity: 1; transform: translateY(0); }
-  90%  { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-20px); }
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 .page-container {
   max-width: 1800px; /* hoặc 1000px nếu bạn muốn hẹp hơn */
   margin: 0 auto;
-  
 }
 .breadcrumb {
   font-size: 24px;
@@ -1490,7 +1531,7 @@ defineProps({
 }
 
 .custom-button {
-  background-color: #2ccf83; 
+  background-color: #2ccf83;
   color: #ffffff;
   border: 1px solid #66c079;
   border-radius: 6px;
@@ -1504,7 +1545,7 @@ defineProps({
   transition: all 0.2s ease-in-out;
 }
 .custom-button1 {
-  background-color: #dbdbdb; 
+  background-color: #dbdbdb;
   color: #000000;
   border: 1px solid #dbdbdb;
   border-radius: 3px;
@@ -1532,16 +1573,16 @@ defineProps({
   margin: 0 auto;
 }
 .bright-input {
-  background-color: #ffffff;      /* nền trắng */
-  border: 2px solid #dce1e6;      /* viền xanh sáng */
-  color: #000000;                 /* chữ đen */
+  background-color: #ffffff; /* nền trắng */
+  border: 2px solid #dce1e6; /* viền xanh sáng */
+  color: #000000; /* chữ đen */
   font-weight: 500;
   transition: 0.3s ease;
 }
 
 .bright-input:focus {
   outline: none;
-  border-color: #eef1f3;         /* viền khi focus */
+  border-color: #eef1f3; /* viền khi focus */
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 /* page-header styles are now defined in globals.css */
@@ -1555,7 +1596,6 @@ defineProps({
   box-shadow: var(--shadow);
   padding: 16px;
 }
-
 
 .avatar {
   border-radius: 50%;
@@ -1571,7 +1611,6 @@ defineProps({
   border-radius: 5px;
   color: #212529;
   background-color: #f8f9fa;
-  
 }
 .bade-success {
   background-color: #aef5bf;
@@ -1593,7 +1632,6 @@ defineProps({
   border-radius: 5px;
   color: #212529;
   background-color: #f8f9fa;
-  
 }
 
 .badge-success {
@@ -1612,7 +1650,7 @@ defineProps({
   border: none;
 }
 .badge-active {
-   background-color: #aef5bf;
+  background-color: #aef5bf;
   color: #10822e;
   border: none;
 }
@@ -1627,7 +1665,6 @@ defineProps({
   border-collapse: collapse;
   background-color: #fff;
   font-size: 14px;
-  
 }
 
 .table th,
@@ -1636,7 +1673,6 @@ defineProps({
   text-align: left;
   border: 1px solid #dee2e6;
   vertical-align: middle;
-  
 }
 
 .table th {
@@ -1682,7 +1718,6 @@ defineProps({
   color: #888;
 }
 
-
 /* Cột email căn trái cho dễ đọc */
 .table th:nth-child(4),
 .table td:nth-child(4) {
@@ -1696,8 +1731,6 @@ defineProps({
   padding-left: 8px;
 }
 
-
-
 .table th:nth-child(8),
 .table td:nth-child(8) {
   text-align: center;
@@ -1710,9 +1743,8 @@ defineProps({
   padding-left: 8px;
 }
 
-
 .employee-avatar {
- width: 40px;
+  width: 40px;
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
@@ -1753,7 +1785,6 @@ defineProps({
   margin-top: 0.25rem;
 }
 
-
 .employee-name {
   font-weight: 500;
   text-align: left;
@@ -1766,7 +1797,6 @@ defineProps({
   transition: all 0.3s ease;
 }
 
-
 /* Nút Chỉnh sửa */
 .action-button-warning {
   color: #0a0909;
@@ -1776,15 +1806,13 @@ defineProps({
   transition: all 0.3s ease;
 }
 
-
-
 /* Compact action buttons */
 /* Giả sử phần chứa 2 nút có class .action-buttons hoặc tương tự */
 .action-buttons {
-    display: flex;
+  display: flex;
   justify-content: center; /* Căn giữa theo chiều ngang */
-  align-items: center;     /* Căn giữa theo chiều dọc nếu cần */
-  gap: 0.25rem;            /* Khoảng cách giữa 2 nút */
+  align-items: center; /* Căn giữa theo chiều dọc nếu cần */
+  gap: 0.25rem; /* Khoảng cách giữa 2 nút */
 }
 
 .btn-icon {
@@ -1801,7 +1829,7 @@ defineProps({
   display: flex;
   justify-content: space-between; /* info bên trái, nút phân trang bên phải */
   align-items: center;
-  margin-top: 3px;  /* cách bảng phía trên */
+  margin-top: 3px; /* cách bảng phía trên */
   padding: 8px 12px;
 }
 
@@ -1821,13 +1849,9 @@ defineProps({
   color: var(--secondary-color);
 }
 .btn-cancel {
-
   padding: 0.6rem 1.2rem;
   font-weight: 500;
-
 }
-
-
 
 .btn-submit {
   background: linear-gradient(135deg, #979797 0%, #979797 100%);
@@ -1840,7 +1864,6 @@ defineProps({
   cursor: pointer;
 }
 
-
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -1850,7 +1873,7 @@ defineProps({
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   overflow-x: hidden; /* Ẩn scroll ngang toàn bộ */
-  overflow-y: auto;   /* Cho phép scroll dọc nếu modal cao quá */
+  overflow-y: auto; /* Cho phép scroll dọc nếu modal cao quá */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1858,9 +1881,8 @@ defineProps({
   box-sizing: border-box;
 }
 
-
 .modal-content {
- background-color: #fff;
+  background-color: #fff;
   border-radius: 8px;
   max-width: 700px; /* Giới hạn chiều ngang modal */
   width: 100%;
@@ -1877,7 +1899,6 @@ defineProps({
   word-break: break-word; /* Ngắt dòng nếu quá dài */
   overflow-wrap: break-word;
 }
-
 
 .modal-header {
   display: flex;
@@ -1913,11 +1934,10 @@ defineProps({
   color: white;
 }
 
-
 .modal-body {
   padding: 1.5rem;
-  max-height: 60vh;    /* Giới hạn chiều cao để bật scroll */
-  overflow-y: auto;    /* Bật scroll dọc khi nội dung vượt quá */
+  max-height: 60vh; /* Giới hạn chiều cao để bật scroll */
+  overflow-y: auto; /* Bật scroll dọc khi nội dung vượt quá */
   box-sizing: border-box;
 }
 
@@ -1938,7 +1958,6 @@ td[data-label="Trạng thái"] {
   text-align: center;
   vertical-align: middle;
 }
-
 
 .form-section h4 {
   margin: 0 0 1rem 0;
@@ -1979,7 +1998,6 @@ td[data-label="Trạng thái"] {
   margin-bottom: 1rem;
 }
 
-
 /* Employee Detail */
 .employee-detail {
   display: flex;
@@ -1989,29 +2007,28 @@ td[data-label="Trạng thái"] {
 }
 
 .employee-avatar-section {
-   display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .employee-name-title {
-   margin-top: 1rem;
+  margin-top: 1rem;
   font-size: 1.75rem;
   font-weight: bold;
   text-align: center;
 }
 
 .employee-info {
- display: flex;
+  display: flex;
   align-items: center;
   gap: 8px;
-  
 }
 
 /* Detail Modal Specific Styles */
 .detail-modal {
-   max-width: 55vw; 
-  width: 55vw ;
+  max-width: 55vw;
+  width: 55vw;
 }
 
 .detail-header {
@@ -2020,7 +2037,7 @@ td[data-label="Trạng thái"] {
 
 .detail-body {
   padding: 2rem;
-  max-height: 80vh;   /* tránh tràn màn hình */
+  max-height: 80vh; /* tránh tràn màn hình */
   overflow-y: auto;
 }
 
@@ -2037,17 +2054,16 @@ td:nth-child(13) {
   vertical-align: middle;
 }
 
-
 .info-item {
   background: #fff;
   padding: 1rem;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .info-item label {
-   font-weight: 600;
+  font-weight: 600;
   color: #6b7280;
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
@@ -2067,8 +2083,8 @@ td:nth-child(13) {
 }
 
 .status-active {
-    background: #258848;
-    color: white;
+  background: #258848;
+  color: white;
 }
 
 .status-inactive {
@@ -2079,7 +2095,7 @@ td:nth-child(13) {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  border: 1px solid ;
+  border: 1px solid;
 }
 
 .form-group {
@@ -2107,7 +2123,7 @@ td:nth-child(13) {
   background: #fff;
   border-left: 4px solid #4ade80;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   width: 340px;
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease;
@@ -2120,7 +2136,7 @@ td:nth-child(13) {
 
 .my-toast-popup:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .my-toast-header {
@@ -2155,26 +2171,44 @@ td:nth-child(13) {
 }
 
 /* Trạng thái màu */
-.my-toast-popup.success { border-left-color: #4ade80; }
-.my-toast-popup.error   { border-left-color: #f44336; }
-.my-toast-popup.info    { border-left-color: #2196f3; }
-.my-toast-popup.warning { border-left-color: #ff9800; }
+.my-toast-popup.success {
+  border-left-color: #4ade80;
+}
+.my-toast-popup.error {
+  border-left-color: #f44336;
+}
+.my-toast-popup.info {
+  border-left-color: #2196f3;
+}
+.my-toast-popup.warning {
+  border-left-color: #ff9800;
+}
 
 /* Hiệu ứng vào */
 @keyframes my-toast-slideInRight {
-  0%   { transform: translateX(100%); opacity: 0; }
-  60%  { transform: translateX(-5%); opacity: 0.8; }
-  100% { transform: translateX(0); opacity: 1; }
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-5%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* Hiệu ứng ra */
 @keyframes my-toast-fadeOut {
-  to { opacity: 0; transform: translateX(100%); }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
 .my-toast-popup.hide {
   animation: my-toast-fadeOut 0.45s forwards;
 }
-
-
-</style>  
+</style>
