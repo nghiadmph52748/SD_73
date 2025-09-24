@@ -544,7 +544,7 @@
                     @change="onProvinceChange"
                     required
                   >
-                    <option value="">-- Chọn tỉnh/thành phố --</option>
+                    <option value="" disabled>-- Chọn tỉnh/thành phố --</option>
                     <option
                       v-for="tp in provinces"
                       :key="tp.code"
@@ -564,7 +564,7 @@
                     @change="onDistrictChange"
                     required
                   >
-                    <option value="">-- Chọn quận/huyện --</option>
+                    <option value="" disabled>-- Chọn quận/huyện --</option>
                     <option
                       v-for="q in districts"
                       :key="q.code"
@@ -583,10 +583,9 @@
                   <select
                     v-model="employeeForm.phuong"
                     class="form-control edit-input"
-                    placeholder="Nhập số nhà, ngõ, đường..."
                     required
                   >
-                    <option value="">-- Chọn xã/phường --</option>
+                    <option value="" disabled>-- Chọn xã/phường --</option>
                     <option v-for="p in wards" :key="p.code" :value="p.name">
                       {{ p.name }}
                     </option>
@@ -809,7 +808,12 @@
                 </div>
                 <div class="info-item">
                   <label>Mật khẩu:</label>
-                  <span>{{ selectedEmployee.matKhau }}</span>
+                  <input
+                  type="password"
+                  v-model="selectedEmployee.matKhau "
+                  class="m-control"
+                  required
+                />
                 </div>
                 <div class="info-item">
                   <label>Chức vụ:</label>
@@ -1341,6 +1345,10 @@ defineProps({
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
+}
+.m-control{
+  font-size: 14px;
+  border: none;
 }
 
 .filter-input {
@@ -2211,4 +2219,5 @@ td:nth-child(13) {
 .my-toast-popup.hide {
   animation: my-toast-fadeOut 0.45s forwards;
 }
+
 </style>

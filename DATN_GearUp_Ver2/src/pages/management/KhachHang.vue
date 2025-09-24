@@ -256,7 +256,12 @@
                 </div>
                 <div class="info-box">
                   <label>Mật khẩu:</label>
-                  <span>{{ selectedCustomer.matKhau }}</span>
+                  <input
+                  type="password"
+                  v-model="selectedCustomer.matKhau"
+                  class="m-control"
+                  required
+                />
                 </div>
                 <div class="info-item address-list-item">
                   <label>Địa chỉ:</label>
@@ -2127,5 +2132,8 @@ const res = await fetch("https://provinces.open-api.vn/api/p/");
   animation: my-toast-fadeOut 0.45s forwards;
 }
 
-
+.m-control{
+  font-size: 14px;
+  border: none;
+}
 </style>
