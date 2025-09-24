@@ -49,6 +49,8 @@ import InventoryImportManagement from './pages/management/QuanLyNhapKho.vue'
 import ActivityLogsManagement from './pages/management/QuanLyNhatKyHoatDong.vue'
 import PriceHistoryManagement from './pages/management/QuanLyLichSuGia.vue'
 
+import VnpayResult from './pages/payment/VnpayResult.vue'
+
 // 
 import XuatXu from './pages/products/ThuocTinh/XuatXu.vue'
 import NhaSanXuat from './pages/products/ThuocTinh/NhaSanXuat.vue'
@@ -107,6 +109,9 @@ const routes = [
   // Analytics & System
   { path: '/analytics/price-history', component: PriceHistoryManagement },
   { path: '/system/activity-logs', component: ActivityLogsManagement },
+
+  // Payment results (frontend landing from backend ReturnURL)
+  { path: '/payment/vnpay/result', component: VnpayResult },
 
   // Legacy routes (for compatibility)
   { path: '/orders', redirect: '/sales/orders' },

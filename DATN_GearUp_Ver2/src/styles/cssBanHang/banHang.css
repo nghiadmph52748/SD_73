@@ -1677,12 +1677,16 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  isolation: isolate; /* prevent child effects bleeding to corners */
+  background-clip: padding-box;
+  clip-path: inset(0 round 16px); /* hard-clip all children to rounded corners */
 }
 
 .product-card:hover {
   transform: translateY(-4px);
   border-color: #e2e8f0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  /* Slightly stronger neutral shadow for hover; avoid colored glow */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
 }
 
 .product-discount-badge {
@@ -1696,7 +1700,11 @@
   font-size: 0.75rem;
   font-weight: 700;
   z-index: 3;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  /* Prevent any visual bleed or interaction issues */
+  box-shadow: none;
+  pointer-events: none;
+  mix-blend-mode: normal;
+  contain: paint;
 }
 
 .product-image-section {
@@ -1705,6 +1713,8 @@
   overflow: hidden;
   cursor: pointer;
   background: #f8fafc;
+  /* Prevent inner shadows from bleeding through rounded corners */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .product-image {
@@ -4016,7 +4026,7 @@
 
 .discount-text {
   font-size: 0.9375rem;
-  color: #475569;
+  color: #ffffff;
   font-weight: 600;
   line-height: 1.4;
 }

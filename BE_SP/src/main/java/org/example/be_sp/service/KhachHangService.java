@@ -72,8 +72,31 @@ public class KhachHangService {
 
     public void quickAdd(KhachHangRequest request){
         KhachHang khachHang = MapperUtils.map(request, KhachHang.class);
+
+        // Ensure unique/non-null values for fields under UNIQUE constraints (SQL Server allows only one NULL)
+        // Username (tenTaiKhoan)
+        String username = request.getTenTaiKhoan();
+        if (username == null || username.trim().isEmpty()) {
+            username = generateGuestUsername(request.getSoDienThoai());
+        }
+        // If somehow username already exists, make it unique
+        while (khachHangRepository.existsByTenTaiKhoan(username)) {
+            username = generateGuestUsername(request.getSoDienThoai());
+        }
+        khachHang.setTenTaiKhoan(username);
+
+        // Email: if null/blank, create a unique placeholder to avoid UNIQUE NULL violation on SQL Server
+        String email = request.getEmail();
+        if (email == null || email.trim().isEmpty()) {
+            email = generateGuestEmail();
+        }
+        khachHang.setEmail(email);
+
+        // Phone
         khachHang.setSoDienThoai(request.getSoDienThoai());
-        khachHang.setEmail(request.getEmail());
+
+        // Password can be empty for quick add; keep as-is
+
         KhachHang saved = khachHangRepository.save(khachHang);
         List<DiaChi> listDiaChi = request.getListDiaChi();
         if (listDiaChi != null) {
@@ -90,6 +113,15 @@ public class KhachHangService {
                 repository.save(diaChi);
             }
         }
+    }
+
+    private String generateGuestUsername(String phone) {
+        String base = (phone != null && !phone.isBlank()) ? phone.replaceAll("\\D", "") : String.valueOf(System.currentTimeMillis());
+        return "guest_" + base.substring(Math.max(0, base.length() - 6)) + ((int)(Math.random()*90)+10);
+    }
+
+    private String generateGuestEmail() {
+        return "guest+" + System.currentTimeMillis() + (int)(Math.random()*1000) + "@example.local";
     }
 
     public void update(Integer id, KhachHangRequest request) {

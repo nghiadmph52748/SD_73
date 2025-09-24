@@ -645,6 +645,63 @@
                 </div>
               </div>
 
+              <!-- VNPAY (Sandbox) Redesigned -->
+              <div class="vnpay-card">
+                <div class="vnpay-card-header">
+                  <div class="vnpay-brand">
+                    <svg class="vnpay-logo" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+                      <path d="M4 7h16M4 12h16M4 17h16" />
+                    </svg>
+                    <div class="vnpay-titles">
+                      <h5>VNPAY (Sandbox)</h5>
+                      <span>Thanh toán trực tuyến an toàn</span>
+                    </div>
+                  </div>
+                  <span class="vnpay-badge">SANDBOX</span>
+                </div>
+
+                <div class="vnpay-summary">
+                  <div class="vnpay-summary-item">
+                    <span class="label">Số tiền cần thanh toán</span>
+                    <div class="value">{{ formatCurrency(getPayableAmount()) }}</div>
+                  </div>
+                  <div class="vnpay-summary-item">
+                    <span class="label">Đơn hàng</span>
+                    <div class="value">{{ currentOrder?.tenDonHang || ('HD' + (currentOrder?.id || '')) }}</div>
+                  </div>
+                </div>
+
+                <div class="vnpay-methods">
+                  <div class="method-label">Chọn phương thức tại VNPAY:</div>
+                  <div class="method-pills">
+                    <button type="button" class="pill" :class="{active: selectedVnpBankCode === 'VNPAYQR'}" @click="selectedVnpBankCode = 'VNPAYQR'">VNPAY-QR</button>
+                    <button type="button" class="pill" :class="{active: selectedVnpBankCode === 'VNBANK'}" @click="selectedVnpBankCode = 'VNBANK'">Thẻ nội địa</button>
+                    <button type="button" class="pill" :class="{active: selectedVnpBankCode === 'INTCARD'}" @click="selectedVnpBankCode = 'INTCARD'">Thẻ quốc tế</button>
+                    <button type="button" class="pill" :class="{active: selectedVnpBankCode === ''}" @click="selectedVnpBankCode = ''">Để VNPAY gợi ý</button>
+                  </div>
+                </div>
+
+                <div class="vnpay-actions">
+                  <button class="vnpay-btn" :disabled="getPayableAmount() <= 0 || !currentOrder || !currentOrder.danhSachSanPham?.length" @click="openVnpayDemo" title="Thanh toán qua VNPAY (Sandbox)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    <span>Thanh toán qua VNPAY</span>
+                  </button>
+                  <div class="vnpay-safe">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2">
+                      <path d="M9 12l2 2 4-4" />
+                      <circle cx="12" cy="12" r="10" />
+                    </svg>
+                    <span>Bảo mật bởi VNPAY • Không lưu thông tin thẻ</span>
+                  </div>
+                </div>
+
+                <div class="vnpay-footnote">
+                  <small>Thẻ test: NCB • OTP: 123456 (Theo tài liệu VNPAY Sandbox)</small>
+                </div>
+              </div>
+
               <div class="qr-code-section">
                 <div class="qr-header">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2888,6 +2945,54 @@ const formatCurrency = (amount) => {
   })
     .format(amount)
     .replace("₫", " VND");
+};
+
+// Compute the payable amount for redirection to VNPAY demo
+const getPayableAmount = () => {
+  const order = currentOrder.value;
+  if (!order) return 0;
+  const subtotalAfterProductDiscount = Number(order.tongTien) || 0;
+  const voucherDiscount = Number(order.discount) || 0;
+  const shippingFee = Number(order.phiVanChuyen) || 0;
+  const withShipping = Number(order.tongTienSauGiam) || (subtotalAfterProductDiscount - voucherDiscount + shippingFee);
+  return Math.max(0, Math.round(withShipping));
+};
+
+// State: selected VNPAY channel (optional)
+const selectedVnpBankCode = ref('');
+
+// Open VNPAY Sandbox payment page via backend payUrl
+const openVnpayDemo = async () => {
+  const amount = getPayableAmount();
+  if (amount <= 0) {
+    showNotificationPopup('Số tiền thanh toán không hợp lệ', 'warning');
+    return;
+  }
+  const order = currentOrder.value;
+  const payload = {
+    amount,
+    orderId: `${order?.id ?? 'HD'}-${Date.now()}`,
+    orderInfo: `Thanh toan don hang ${order?.tenDonHang || 'HD' + (order?.id || '')}`,
+    locale: 'vn'
+  };
+  if (selectedVnpBankCode.value) {
+    payload.bankCode = selectedVnpBankCode.value;
+  }
+  try {
+    const res = await fetch('http://localhost:8080/api/payment/vnpay/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('create payment failed');
+    const data = await res.json();
+    const payUrl = data?.data?.payUrl || data?.payUrl;
+    if (!payUrl) throw new Error('missing payUrl');
+    window.location.href = payUrl;
+  } catch (e) {
+    console.error('VNPAY create error:', e);
+    showNotificationPopup('Không mở được trang thanh toán VNPAY', 'error');
+  }
 };
 
 const selectDeliveryService = (service) => {
@@ -5205,6 +5310,42 @@ const getPrimaryProductImage = (product) => {
 <style scoped>
 /* Import redesigned CSS file cho Bán Hàng */
 @import "../../styles/cssBanHang/banHang.css";
+
+/* VNPAY section styles (scoped) */
+.vnpay-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 6, 23, 0.05);
+  margin-bottom: 16px;
+}
+.vnpay-card-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.vnpay-brand { display: flex; align-items: center; gap: 10px; }
+.vnpay-logo { stroke: #4ade80; }
+.vnpay-titles h5 { margin: 0; font-size: 15px; font-weight: 700; }
+.vnpay-titles span { font-size: 12px; color: #64748b; }
+.vnpay-badge { background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+
+.vnpay-summary { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin: 10px 0; }
+.vnpay-summary .label { font-size: 12px; color: #64748b; }
+.vnpay-summary .value { font-size: 16px; font-weight: 700; color: #0f172a; }
+
+.vnpay-methods { margin-top: 6px; }
+.vnpay-methods .method-label { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+.method-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { border: 1px solid #e2e8f0; background: #f8fafc; color: #0f172a; padding: 6px 10px; border-radius: 999px; font-size: 12px; cursor: pointer; transition: all .2s ease; }
+.pill:hover { border-color: #4ade80; color: #065f46; }
+.pill.active { background: #ecfdf5; border-color: #4ade80; color: #065f46; box-shadow: 0 0 0 3px rgba(74,222,128,0.2) inset; }
+
+.vnpay-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.vnpay-btn { background: #4ade80; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(74,222,128,0.35); }
+.vnpay-btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+.vnpay-safe { display: inline-flex; align-items: center; gap: 6px; color: #64748b; font-size: 12px; }
+
+.vnpay-footnote { margin-top: 8px; color: #64748b; font-size: 12px; }
 
 /* SVG Icon Styles */
 .icon-xs {
