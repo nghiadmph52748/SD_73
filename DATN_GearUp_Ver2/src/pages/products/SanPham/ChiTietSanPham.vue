@@ -158,7 +158,7 @@
         </div>
       </div>
       <div class="card-body">
-        <table class="table">
+        <TableContainer>
           <thead>
             <tr>
               <th class="stt-col">
@@ -184,7 +184,7 @@
               <th class="giam-gia-col">Giảm giá</th>
               <th class="gia-sau-giam-col">Giá sau giảm</th>
               <th class="status-col">Trạng thái</th>
-              <th class="action-col">Thao tác</th>
+              <th class="action-col sticky-right">Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -351,7 +351,7 @@
                   {{ detail.trangThai ? "Hoạt động" : "Tạm ngưng bán" }}
                 </span>
               </td>
-              <td class="action-col">
+              <td class="action-col sticky-right">
                 <div class="action-buttons">
                   <div class="action-buttons">
                     <button
@@ -376,7 +376,7 @@
               <td colspan="15" class="no-data">Không có dữ liệu</td>
             </tr>
           </tbody>
-        </table>
+        </TableContainer>
 
         <!-- Pagination -->
         <div v-if="totalPages > 1" class="pagination-wrapper">
@@ -977,6 +977,7 @@ import { fetchAllMauSac } from "../../../services/ThuocTinh/MauSacService";
 import { fetchAllNhaSanXuat } from "../../../services/ThuocTinh/NhaSanXuatService";
 import { fetchAllTrongLuong } from "../../../services/ThuocTinh/TrongLuongService";
 import { fetchAllXuatXu } from "../../../services/ThuocTinh/XuatXuService";
+import TableContainer from "@/components/common/TableContainer.vue";
 // Hàm tìm ID từ tên thuộc tính
 const findIdByName = async (type, name) => {
   try {
@@ -3861,6 +3862,144 @@ const toggleSelectAll = () => {
 @import "../../../styles/cssSanPham/quanLySanPham.css";
 @import "../../../styles/cssSanPham/productManagement.css";
 @import "../../../styles/cssSanPham/popupAttributes.css";
+
+/* Compact the columns and cells for the product detail table only */
+:deep(.chi-tiet-san-pham-page .coupons-table thead th) {
+  font-size: 0.7rem;
+  padding: 6px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table td) {
+  font-size: 0.78rem;
+  padding: 6px 6px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* Column width tweaks */
+:deep(.chi-tiet-san-pham-page .coupons-table th.stt-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.stt-col) {
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  text-align: center;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.ma-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.ma-col) {
+  width: 100px;
+  min-width: 100px;
+  max-width: 110px;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.image-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.image-col) {
+  width: 72px;
+  min-width: 72px;
+  max-width: 72px;
+  text-align: center;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.nha-san-xuat-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.nha-san-xuat-col) {
+  width: 110px;
+  min-width: 110px;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.xuat-xu-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.xuat-xu-col) {
+  width: 90px;
+  min-width: 90px;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.color-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.color-col),
+:deep(.chi-tiet-san-pham-page .coupons-table th.size-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.size-col),
+:deep(.chi-tiet-san-pham-page .coupons-table th.sole-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.sole-col),
+:deep(.chi-tiet-san-pham-page .coupons-table th.material-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.material-col),
+:deep(.chi-tiet-san-pham-page .coupons-table th.weight-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.weight-col) {
+  width: 90px;
+  min-width: 90px;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.quantity-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.quantity-col) {
+  width: 80px;
+  min-width: 80px;
+  text-align: center;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.price-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.price-col) {
+  width: 120px;
+  min-width: 120px;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.giam-gia-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.giam-gia-col) {
+  width: 80px;
+  min-width: 80px;
+  text-align: center;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.gia-sau-giam-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.gia-sau-giam-col) {
+  width: 140px;
+  min-width: 140px;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.status-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.status-col) {
+  width: 130px;
+  min-width: 130px;
+  text-align: center;
+}
+
+:deep(.chi-tiet-san-pham-page .coupons-table th.action-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.action-col) {
+  width: 180px;
+  min-width: 180px;
+  text-align: center;
+}
+
+/* Ensure status badge itself does not expand the column */
+:deep(.chi-tiet-san-pham-page .status-badge) {
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Keep action column visible and compact */
+:deep(.chi-tiet-san-pham-page .coupons-table th.action-col),
+:deep(.chi-tiet-san-pham-page .coupons-table td.action-col) {
+  min-width: 110px;
+  width: auto;
+  text-align: center;
+}
+
+/* Make action buttons compact so they fit the smaller column */
+:deep(.chi-tiet-san-pham-page .action-buttons) {
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+:deep(.chi-tiet-san-pham-page .action-buttons .btn) {
+  padding: 4px 8px;
+  height: 28px;
+  min-width: auto;
+  font-size: 12px;
+}
 
 /* CSS cho chức năng chọn ảnh edit */
 .image-selector-section {

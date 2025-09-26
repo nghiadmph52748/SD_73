@@ -1153,7 +1153,45 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 8px;
+}
+
+/* Minimal square icon buttons matching PhieuGiamGia style */
+.icon-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e5e7eb; /* light gray */
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.icon-action-btn:hover:not(:disabled) {
+  border-color: #4ade80; /* follow icon/UI color rule */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+.icon-action-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.icon-action-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icon size inside the button */
+.icon-action-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  pointer-events: none;
 }
 
 /* Button xem chi tiết trong table */

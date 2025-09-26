@@ -1082,6 +1082,7 @@
 <script setup>
 import DatePickerPopup from "@/components/common/DatePickerPopup.vue";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { useRouter } from 'vue-router';
 import {
   fetchAllChiTietDotGiamGia,
   fetchCreateChiTietDotGiamGia,
@@ -1111,6 +1112,8 @@ import SuccessIcon from "@/assets/Success.svg";
 import TagIcon from "@/assets/TagLabel.svg";
 import TrashIcon from "@/assets/Trash.svg";
 import WarningIcon from "@/assets/Warning.svg";
+
+const router = useRouter();
 
 // Reactive data
 const searchQuery = ref("");
@@ -1771,31 +1774,8 @@ const viewCampaign = (campaign) => {
 };
 
 const editCampaign = (campaign) => {
-  // Validate and auto-update campaign status before editing
-  const validatedCampaign = validateCampaignStatus({ ...campaign });
-
-  editingCampaign.value = validatedCampaign;
-  formData.value = {
-    tenDotGiamGia: validatedCampaign.tenDotGiamGia,
-    giaTriGiamGia: validatedCampaign.giaTriGiamGia,
-    ngayBatDau: validatedCampaign.ngayBatDau,
-    ngayKetThuc: validatedCampaign.ngayKetThuc,
-    trangThai: validatedCampaign.trangThai,
-    deleted: false, // Always keep deleted as false during editing
-  };
-  
-  // Store original form data for change detection - use shallow copy like PhieuGiamGia
-  originalFormData.value = { ...formData.value };
-  
-  // Đóng popup chi tiết nếu đang mở
-  if (showDetailModal.value) {
-    showDetailModal.value = false;
-  }
-  
-  // Mở popup chỉnh sửa
-  showEditModal.value = true;
+  router.push(`/marketing/campaigns/${campaign.id}/edit`);
 };
-
 const deleteCampaign = (id) => {
   openDeleteModal(id);
 };
@@ -2305,8 +2285,7 @@ const nextPage = () => {
 };
 
 const openAddModal = () => {
-  resetForm();
-  showAddModal.value = true;
+  router.push('/marketing/campaigns/new');
 };
 
 // ===== NOTIFICATION METHODS =====
@@ -2790,6 +2769,7 @@ const confirmBulkDelete = async () => {
 /* Import unified discount styles */
 @import '../../styles/cssGiamGia/discountsUnified.css';
 @import '../../styles/cssGiamGia/campainGiamGia.css';
+
 
 /* CORE MODAL STYLES - CRITICAL FIXES FOR MODAL VISIBILITY */
 .discount-campaigns .modal-overlay {

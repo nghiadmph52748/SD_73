@@ -29,7 +29,9 @@ import ReturnsManagement from './pages/management/QuanLyTraHang.vue'
 
 // Discount Management (ERD: ma_giam_gia, phieu_giam_gia)
 import DiscountCoupons from './pages/management/PhieuGiamGia.vue'
+import DiscountCouponForm from './pages/management/PhieuGiamGiaForm.vue'
 import DiscountCampaigns from './pages/management/CampainGiamGia.vue'
+import CampainGiamGiaForm from './pages/management/CampainGiamGiaForm.vue'
 import UserVouchersManagement from './pages/management/QuanLyPhieuNguoiDung.vue'
 
 // Customer Engagement (ERD: gio_hang, yeu_thich, danh_gia, binh_luan)
@@ -90,7 +92,11 @@ const routes = [
 
   // Marketing & Promotions
   { path: '/marketing/discounts', component: DiscountCoupons },
+  { path: '/marketing/discounts/new', component: DiscountCouponForm },
+  { path: '/marketing/discounts/:id/edit', component: DiscountCouponForm },
   { path: '/marketing/campaigns', component: DiscountCampaigns },
+  { path: '/marketing/campaigns/new', component: CampainGiamGiaForm },
+  { path: '/marketing/campaigns/:id/edit', component: CampainGiamGiaForm },
   { path: '/marketing/vouchers', component: UserVouchersManagement },
 
   // Customer Engagement

@@ -243,113 +243,109 @@
     </div>
 
     <!-- Table Section -->
-    <div class="table-container">
-      <div class="table-wrapper">
-        <table class="coupons-table">
-          <thead>
-            <tr>
-              <th class="col-checkbox">
-                <input 
-                  type="checkbox" 
-                  class="select-all-checkbox"
-                  @change="toggleSelectAll"
-                  :checked="isAllSelected"
-                  :indeterminate="isIndeterminate"
-                >
-              </th>
-              <th class="col-stt">STT</th>
-              <th class="col-ma">Mã phiếu</th>
-              <th class="col-ten">Tên phiếu giảm giá</th>
-              <th class="col-loai">Loại giảm</th>
-              <th class="col-giatri">Giá trị giảm</th>
-              <th class="col-batdau">Bắt đầu</th>
-              <th class="col-ketthuc">Kết thúc</th>
-              <th class="col-soluong">Số lượng</th>
-              <th class="col-trangthai">Trạng thái</th>
-              <th class="col-hanhdong">Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(coupon, index) in filteredCoupons" :key="coupon.id">
-              <td class="col-checkbox">
-                <input 
-                  type="checkbox" 
-                  class="row-checkbox"
-                  :value="coupon.id"
-                  v-model="selectedCouponIds"
-                  @change="updateSelectedCoupons"
-                >
-              </td>
-              <td class="col-stt">{{ index + 1 }}</td>
-              <td class="col-ma">
-                <div class="coupon-code">{{ coupon.maPhieuGiamGia }}</div>
-              </td>
-              <td class="col-ten">
-                <div class="coupon-name">{{ coupon.tenPhieuGiamGia }}</div>
-              </td>
-              <td class="col-loai">
-                <div class="coupon-type">
-                  <span class="type-label">{{ !coupon.loaiPhieuGiamGia ? "Giảm theo phần trăm" : "Giảm số tiền" }}</span>
-                  <span class="type-icon">{{ !coupon.loaiPhieuGiamGia ? "%" : "VNĐ" }}</span>
-                </div>
-              </td>
-              <td class="col-giatri">
-                <div class="discount-value-detailed">
-                  <strong>{{ !coupon.loaiPhieuGiamGia ? coupon.giaTriGiamGia + "%" : formatCompactCurrency(coupon.giaTriGiamGia) }}</strong>
-                </div>
-              </td>
-              <td class="col-batdau">
-                <div class="date-info-compact">
-                  {{ formatTimeOnly(coupon.ngayBatDau) }} / {{ formatDateOnly(coupon.ngayBatDau) }}
-                </div>
-              </td>
-              <td class="col-ketthuc">
-                <div class="date-info-compact">
-                  {{ formatTimeOnly(coupon.ngayKetThuc) }} / {{ formatDateOnly(coupon.ngayKetThuc) }}
-                </div>
-              </td>
-              <td class="col-soluong">
-                <div class="quantity-info">
-                  {{ coupon.soLuongDung || 0 }}
-                </div>
-              </td>
-              <td class="col-trangthai">
-                <span
-                  :class="[
-                    'status-badge-detailed',
-                    coupon.deleted ? 'status-deleted' : 
-                    (getDetailedStatus(coupon) === 'Đang diễn ra' ? 'status-active' : 
-                    (getDetailedStatus(coupon) === 'Sắp diễn ra' ? 'status-upcoming' : 'status-expired')),
-                  ]"
-                >
-                  {{ getDetailedStatus(coupon) }}
-                </span>
-              </td>
-              <td class="col-hanhdong">
-                <div class="action-buttons-compact">
-                  <button
-                    class="action-btn-compact edit-btn"
-                    @click="editCoupon(coupon)"
-                    title="Chỉnh sửa"
-                  >
-                    <img :src="EditIcon" alt="Edit" class="action-icon-compact" />
-                  </button>
-                  <button
-                    class="action-btn-compact delete-btn"
-                    @click="fetchUpdateStatusPGG(coupon.id)"
-                    title="Xóa"
-                    :disabled="coupon.deleted"
-                    :style="{ opacity: coupon.deleted ? 0.3 : 1 }"
-                  >
-                    <img :src="TrashIcon" alt="Delete" class="action-icon-compact" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <TableContainer>
+      <thead>
+        <tr>
+          <th class="col-checkbox">
+            <input 
+              type="checkbox" 
+              class="select-all-checkbox"
+              @change="toggleSelectAll"
+              :checked="isAllSelected"
+              :indeterminate="isIndeterminate"
+            >
+          </th>
+          <th class="col-stt">STT</th>
+          <th class="col-ma">Mã phiếu</th>
+          <th class="col-ten">Tên phiếu giảm giá</th>
+          <th class="col-loai">Loại giảm</th>
+          <th class="col-giatri">Giá trị giảm</th>
+          <th class="col-batdau">Bắt đầu</th>
+          <th class="col-ketthuc">Kết thúc</th>
+          <th class="col-soluong">Số lượng</th>
+          <th class="col-trangthai">Trạng thái</th>
+          <th class="col-hanhdong">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(coupon, index) in filteredCoupons" :key="coupon.id">
+          <td class="col-checkbox">
+            <input 
+              type="checkbox" 
+              class="row-checkbox"
+              :value="coupon.id"
+              v-model="selectedCouponIds"
+              @change="updateSelectedCoupons"
+            >
+          </td>
+          <td class="col-stt">{{ index + 1 }}</td>
+          <td class="col-ma">
+            <div class="coupon-code">{{ coupon.maPhieuGiamGia }}</div>
+          </td>
+          <td class="col-ten">
+            <div class="coupon-name">{{ coupon.tenPhieuGiamGia }}</div>
+          </td>
+          <td class="col-loai">
+            <div class="coupon-type">
+              <span class="type-label">{{ !coupon.loaiPhieuGiamGia ? "Giảm theo phần trăm" : "Giảm số tiền" }}</span>
+              <span class="type-icon">{{ !coupon.loaiPhieuGiamGia ? "%" : "VNĐ" }}</span>
+            </div>
+          </td>
+          <td class="col-giatri">
+            <div class="discount-value-detailed">
+              <strong>{{ !coupon.loaiPhieuGiamGia ? coupon.giaTriGiamGia + "%" : formatCompactCurrency(coupon.giaTriGiamGia) }}</strong>
+            </div>
+          </td>
+          <td class="col-batdau">
+            <div class="date-info-compact">
+              {{ formatTimeOnly(coupon.ngayBatDau) }} / {{ formatDateOnly(coupon.ngayBatDau) }}
+            </div>
+          </td>
+          <td class="col-ketthuc">
+            <div class="date-info-compact">
+              {{ formatTimeOnly(coupon.ngayKetThuc) }} / {{ formatDateOnly(coupon.ngayKetThuc) }}
+            </div>
+          </td>
+          <td class="col-soluong">
+            <div class="quantity-info">
+              {{ coupon.soLuongDung || 0 }}
+            </div>
+          </td>
+          <td class="col-trangthai">
+            <span
+              :class="[
+                'status-badge-detailed',
+                coupon.deleted ? 'status-deleted' : 
+                (getDetailedStatus(coupon) === 'Đang diễn ra' ? 'status-active' : 
+                (getDetailedStatus(coupon) === 'Sắp diễn ra' ? 'status-upcoming' : 'status-expired')),
+              ]"
+            >
+              {{ getDetailedStatus(coupon) }}
+            </span>
+          </td>
+          <td class="col-hanhdong">
+            <div class="action-buttons-compact">
+              <button
+                class="action-btn-compact edit-btn"
+                @click="editCoupon(coupon)"
+                title="Chỉnh sửa"
+              >
+                <img :src="EditIcon" alt="Edit" class="action-icon-compact" />
+              </button>
+              <button
+                class="action-btn-compact delete-btn"
+                @click="fetchUpdateStatusPGG(coupon.id)"
+                title="Xóa"
+                :disabled="coupon.deleted"
+                :style="{ opacity: coupon.deleted ? 0.3 : 1 }"
+              >
+                <img :src="TrashIcon" alt="Delete" class="action-icon-compact" />
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </TableContainer>
 
     <!-- Pagination Section -->
     <div class="pagination-container">
@@ -1200,9 +1196,12 @@ import TrashIcon from "@/assets/Trash.svg?url";
 import UsersIcon from "@/assets/Users.svg?url";
 import WarningIcon from "@/assets/Warning.svg?url";
 import DatePickerPopup from "@/components/common/DatePickerPopup.vue";
+import TableContainer from "@/components/common/TableContainer.vue";
+import { useRouter } from "vue-router";
 
 // ===== REACTIVE DATA =====
 // Search and filter data
+const router = useRouter();
 const searchQuery = ref("");
 const searchQueryBottom = ref("");
 const fromDate = ref("");
@@ -1922,86 +1921,7 @@ const toggleCouponStatus = async (coupon) => {
  * @param {Object} coupon - Phiếu giảm giá cần chỉnh sửa
  */
 const editCoupon = (coupon) => {
-  // Ensure customers data is loaded
-  if (customers.value.length === 0) {
-    console.warn("Customers data not loaded yet, loading...");
-    fetchCustomers().then(() => {
-      editCoupon(coupon); // Retry after loading
-    });
-    return;
-  }
-
-  editingCoupon.value = coupon;
-
-  // Tái sử dụng hàm resetForm và cập nhật với dữ liệu mới
-  resetForm();
-  // Reset selectedCustomers first
-  selectedCustomers.value = [];
-
-  // Determine if this is a personal coupon (has specific customers)
-  let isPersonalCoupon = false;
-  let customerIds = [];
-
-  if (coupon.idKhachHang && coupon.idKhachHang.length > 0) {
-    // Primary: Has specific customers in idKhachHang array
-    isPersonalCoupon = true;
-    customerIds = [...coupon.idKhachHang];
-  } else {
-    // Check legacy personal coupons table
-    const appliedCustomers = personalCoupons.value
-      .filter((pc) => pc.idPhieuGiamGia === coupon.id && !pc.deleted)
-      .map((pc) => pc.idKhachHang);
-    
-    if (appliedCustomers.length > 0) {
-      isPersonalCoupon = true;
-      customerIds = appliedCustomers;
-    }
-  }
-
-  // Set form values
-  couponForm.value = {
-    ...couponForm.value, // Giữ lại cấu trúc form
-    maPhieuGiamGia: coupon.maPhieuGiamGia || "",
-    tenPhieuGiamGia: coupon.tenPhieuGiamGia || "",
-    moTa: coupon.moTa || "",
-    loaiPhieuGiamGia: coupon.loaiPhieuGiamGia || false,
-    giaTriGiamGia: coupon.giaTriGiamGia || 0,
-    hoaDonToiThieu: coupon.hoaDonToiThieu || 0,
-    soTienToiDa: coupon.soTienToiDa || 0,
-    soLuongDung: coupon.soLuongDung || 1,
-    ngayBatDau: coupon.ngayBatDau ? coupon.ngayBatDau.split("T")[0] : "",
-    ngayKetThuc: coupon.ngayKetThuc ? coupon.ngayKetThuc.split("T")[0] : "",
-    trangThai: coupon.trangThai !== undefined ? coupon.trangThai : true,
-    deleted: false, // Always set to false for edits - we don't want to soft delete when editing
-    idKhachHang: isPersonalCoupon ? "personal" : null, // Set dropdown value correctly
-  };
-
-  // Set selected customers if personal coupon
-  if (isPersonalCoupon) {
-    selectedCustomers.value = customerIds;
-  }
-
-  // Store original form data for change detection
-  originalCouponForm.value = { ...couponForm.value };
-  originalSelectedCustomers.value = [...selectedCustomers.value];
-
-  searchCustomerQuery.value = "";
-
-  // Debug logging
-  console.log("Edit Coupon Debug:", {
-    originalCoupon: coupon,
-    couponIdKhachHang: coupon.idKhachHang,
-    formType: couponForm.value.idKhachHang,
-    isPersonalCoupon: isPersonalCoupon,
-    customerIds: customerIds,
-    selectedCustomers: selectedCustomers.value,
-    customersData: customers.value.filter((c) =>
-      selectedCustomers.value.includes(c.id)
-    ),
-  });
-
-
-  showEditModal.value = true;
+  router.push(`/marketing/discounts/${coupon.id}/edit`);
 };
 
 /**
@@ -2445,11 +2365,7 @@ const showErrorNotification = (message, errorDetails = null) => {
  * Mở modal tạo mới phiếu giảm giá
  */
 const openAddModal = () => {
-  resetForm();
-  selectedCustomers.value = [];
-  originalSelectedCustomers.value = [];
-  searchCustomerQuery.value = "";
-  showAddModal.value = true;
+  router.push('/marketing/discounts/new');
 };
 
 // ===== CUSTOMER SELECTION METHODS =====
@@ -3067,9 +2983,28 @@ onMounted(() => {
 
 <style scoped>
 .discount-coupons-container {
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: none;
+  width: 100%;
+  /* Neutralize .page-content horizontal padding locally */
+  margin-left: -1rem;
+  margin-right: -1rem;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+/* Remove extra side gaps from local header/description blocks */
+.discount-coupons-container .tieu-de-bo-loc,
+.discount-coupons-container .mo-ta-bo-loc,
+.discount-coupons-container .bo-loc-section {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Headings were adding side padding; reset it on this page */
+.discount-coupons-container .tieu-de-bo-loc,
+.discount-coupons-container .mo-ta-bo-loc {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 /* ===== STANDARDIZED MODAL STYLES ===== */
@@ -3534,7 +3469,8 @@ onMounted(() => {
   }
 }
 
-.customer-actions {
+.customer-actions,
+.customers-action {
   display: flex !important;
   gap: 12px !important;
   margin: 16px 0 !important;
@@ -3548,69 +3484,6 @@ onMounted(() => {
   border-radius: 999px !important;
 }
 
-/* ===== TABLE STYLES ===== */
-/* Override any conflicting table styles - CRITICAL */
-.coupons-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-  min-width: 900px !important;
-  font-size: 0.875rem !important;
-  border-collapse: collapse !important;
-  border-spacing: 0 !important;
-  background: white !important;
-  border-radius: 8px !important;
-  overflow: hidden !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-}
-
-.coupons-table th,
-.coupons-table td {
-  padding: 8px 3px !important;
-  font-size: 0.8rem !important;
-  white-space: normal !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
-  line-height: 1.3 !important;
-  vertical-align: top !important;
-}
-
-/* Table header styling */
-.coupons-table thead th {
-  background: #f8fafc !important;
-  border-bottom: 2px solid #e2e8f0 !important;
-  padding: 8px 3px !important;
-  font-weight: 600 !important;
-  font-size: 0.7rem !important;
-  color: #64748b !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 10 !important;
-}
-
-/* Table body styling */
-.coupons-table tbody tr {
-  border-bottom: 1px solid #f1f5f9 !important;
-  transition: background-color 0.2s ease !important;
-}
-
-.coupons-table tbody tr:hover {
-  background: #f8fafc !important;
-}
-
-/* Force specific column widths - Total: 100% */
-.col-checkbox { width: 3% !important; min-width: 35px !important; max-width: 50px !important; text-align: center !important; }
-.col-stt { width: 4% !important; min-width: 40px !important; max-width: 60px !important; text-align: center !important; }
-.col-ma { width: 9% !important; min-width: 90px !important; max-width: 120px !important; text-align: center !important; }
-.col-ten { width: 22% !important; min-width: 180px !important; max-width: 250px !important; text-align: left !important; }
-.col-loai { width: 11% !important; min-width: 110px !important; max-width: 140px !important; text-align: center !important; }
-.col-giatri { width: 8% !important; min-width: 70px !important; max-width: 90px !important; text-align: center !important; padding: 8px 8px !important; }
-.col-batdau { width: 11% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
-.col-ketthuc { width: 11% !important; min-width: 100px !important; max-width: 130px !important; text-align: center !important; }
-.col-soluong { width: 7% !important; min-width: 60px !important; max-width: 80px !important; text-align: center !important; }
-.col-trangthai { width: 9% !important; min-width: 85px !important; max-width: 110px !important; text-align: center !important; }
-.col-hanhdong { width: 8% !important; min-width: 80px !important; max-width: 100px !important; text-align: center !important; }
 
 /* Coupon code styling */
 .coupon-code {
@@ -3788,7 +3661,8 @@ onMounted(() => {
   letter-spacing: 0.25px !important;
 }
 
-.customer-selection-wrapper .customer-actions {
+.customer-selection-wrapper .customer-actions,
+.customer-selection-wrapper .customers-action {
   justify-content: center !important;
   flex-wrap: wrap !important;
   gap: 12px !important;
@@ -3824,7 +3698,8 @@ onMounted(() => {
   box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.25) !important;
 }
 
-.customer-actions {
+.customer-actions,
+.customers-action {
   display: flex !important;
   gap: 12px !important;
   justify-content: flex-start !important;
@@ -4227,19 +4102,6 @@ onMounted(() => {
   background: #fef2f2 !important;
 }
 
-/* Table container optimized for full viewport */
-.table-container {
-  width: 100% !important;
-  margin: 0 2rem !important;
-  border-radius: 8px !important;
-  overflow: visible !important;
-}
-
-.table-wrapper {
-  width: 100% !important;
-  overflow-x: auto !important;
-  border-radius: 8px !important;
-}
 
 /* ===== SLIDE-OUT NOTIFICATION STYLES ===== */
 .slide-notification-container {

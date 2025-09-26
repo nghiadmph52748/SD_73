@@ -137,7 +137,7 @@
         </div>
         <div class="modal-footer add-footer">
           <button type="button" @click="closeAddForm" class="btn btn-secondary">
-            <img
+<img
               src="../../../assets/Cancel.svg"
               alt="Cancel"
               class="icon-svg"
@@ -164,42 +164,44 @@
         </div>
       </div>
       <div class="card-body">
-        <table class="table table-bordered">
+        <TableContainer>
           <thead>
             <tr>
-              <th>STT</th>
-              <th>Tên đế giày</th>
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
+              <th class="col-xs ta-center">STT</th>
+              <th class="col-lg ta-left">Tên đế giày</th>
+              <th class="col-md ta-center">Trạng thái</th>
+              <th class="col-lg ta-center sticky-right nowrap">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(value, i) in paginatedDeGiays" :key="value.id">
-              <td>{{ startIndex + i + 1 }}</td>
-              <td>{{ value.tenDeGiay }}</td>
-              <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
-              <td>
+              <td class="ta-center">{{ startIndex + i + 1 }}</td>
+              <td class="ta-left truncate">{{ value.tenDeGiay }}</td>
+              <td class="ta-center">{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
+              <td class="ta-center sticky-right nowrap">
                 <div class="action-buttons">
                   <button
                     v-on:click="fetchDetail(value)"
-                    class="btn btn-secondary btn-sm"
+class="icon-action-btn"
                     title="Cập nhật"
+                    aria-label="Chi tiết"
                   >
-                   Chi tiết
+<img src="../../../assets/Edit.svg" alt="Edit" class="icon-action-svg" />
                   </button>
                   <button
                     v-on:click="fetchDelete(value.id)"
-                    class="btn btn-danger btn-sm"
+class="icon-action-btn"
                     :disabled="uploading"
                     title="Xóa"
+                    aria-label="Xóa"
                   >
-                    Xoá
+<img src="../../../assets/Trash.svg" alt="Delete" class="icon-action-svg" />
                   </button>
                 </div>
               </td>
             </tr>
           </tbody>
-        </table>
+        </TableContainer>
 
         <!-- Pagination -->
         <div v-if="totalPages > 1" class="pagination-wrapper">
@@ -407,6 +409,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import TableContainer from "../../../components/common/TableContainer.vue";
 import {
   fetchAllDeGiay,
   fetchCreateDeGiay,

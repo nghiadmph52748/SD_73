@@ -595,7 +595,8 @@ body {
 }
 
 
-.customer-actions {
+.customer-actions,
+.customers-action {
   display: flex;
   gap: 12px;
   justify-content: center;

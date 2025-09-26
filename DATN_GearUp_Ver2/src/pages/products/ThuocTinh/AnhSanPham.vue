@@ -240,7 +240,7 @@
             @click="closeEditForm"
             class="btn btn-secondary"
           >
-            <img
+<img
               src="../../../assets/Cancel.svg"
               alt="Close"
               class="icon-svg"
@@ -262,14 +262,14 @@
         </div>
       </div>
       <div class="card-body">
-        <table class="table table-bordered">
+        <TableContainer>
           <thead>
             <tr>
-              <th>STT</th>
-              <th>Ảnh</th>
-              <th>Loại ảnh</th>
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
+              <th class="col-xs ta-center">STT</th>
+              <th class="col-md ta-center">Ảnh</th>
+              <th class="col-lg ta-left">Loại ảnh</th>
+              <th class="col-md ta-center">Trạng thái</th>
+              <th class="col-lg ta-center sticky-right nowrap">Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -277,6 +277,7 @@
             <tr v-if="paginatedAnhSanPhams.length === 0">
               <td
                 colspan="5"
+                class="ta-center"
                 style="text-align: center; padding: 40px; color: #666"
               >
                 <i
@@ -290,8 +291,8 @@
               </td>
             </tr>
             <tr v-for="(value, i) in paginatedAnhSanPhams" :key="value.id">
-              <td>{{ startIndex + i + 1 }}</td>
-              <td>
+              <td class="ta-center">{{ startIndex + i + 1 }}</td>
+              <td class="ta-center">
                 <img
                   :src="getImageUrl(value.duongDanAnh)"
                   alt="Ảnh sản phẩm"
@@ -299,30 +300,32 @@
                   @error="handleImageError"
                 />
               </td>
-              <td>{{ value.loaiAnh }}</td>
-              <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
-              <td>
+              <td class="ta-left truncate">{{ value.loaiAnh }}</td>
+              <td class="ta-center">{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
+              <td class="ta-center sticky-right nowrap">
                 <div class="table-actions">
                   <button
                     v-on:click="fetchDetail(value)"
-                    class="btn btn-secondary btn-sm"
+class="icon-action-btn"
                     title="Cập nhật"
+                    aria-label="Chi tiết"
                   >
-                    Chi tiết
+<img src="../../../assets/Edit.svg" alt="Edit" class="icon-action-svg" />
                   </button>
                   <button
                     v-on:click="fetchDelete(value.id)"
-                    class="btn btn-danger btn-sm"
+class="icon-action-btn"
                     :disabled="uploading"
                     title="Xóa"
+                    aria-label="Xóa"
                   >
-                    Xóa
+<img src="../../../assets/Trash.svg" alt="Delete" class="icon-action-svg" />
                   </button>
                 </div>
               </td>
             </tr>
           </tbody>
-        </table>
+        </TableContainer>
 
         <!-- Pagination -->
         <div v-if="totalPages > 1" class="pagination-wrapper">
@@ -565,6 +568,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import TableContainer from "../../../components/common/TableContainer.vue";
 import {
   fetchAllAnhSanPham,
   fetchCreateAnhSanPhamFromCloud,

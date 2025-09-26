@@ -165,42 +165,44 @@
         </div>
       </div>
       <div class="card-body">
-        <table class="table table-bordered">
+        <TableContainer>
           <thead>
             <tr>
-              <th>STT</th>
-              <th>Tên chất liệu</th>
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
+              <th class="col-xs ta-center">STT</th>
+              <th class="col-md ta-left">Tên chất liệu</th>
+              <th class="col-sm ta-center">Trạng thái</th>
+              <th class="col-md ta-center sticky-right">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(value, i) in paginatedChatLieus" :key="value.id">
-              <td>{{ startIndex + i + 1 }}</td>
-              <td>{{ value.tenChatLieu }}</td>
-              <td>{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
-              <td>
+              <td class="col-xs ta-center">{{ startIndex + i + 1 }}</td>
+              <td class="col-md ta-left">{{ value.tenChatLieu }}</td>
+              <td class="col-sm ta-center">{{ value.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
+              <td class="col-md ta-center sticky-right">
                 <div class="action-buttons">
                   <button
                     v-on:click="fetchDetail(value)"
-                    class="btn btn-secondary btn-sm"
+                    class="icon-action-btn"
                     title="Cập nhật"
+                    aria-label="Chi tiết"
                   >
-                    Chi tiết
+                    <img src="../../../assets/Edit.svg" alt="Edit" class="icon-action-svg" />
                   </button>
                   <button
                     v-on:click="fetchDelete(value.id)"
-                    class="btn btn-danger btn-sm"
+                    class="icon-action-btn"
                     :disabled="uploading"
                     title="Xóa"
+                    aria-label="Xóa"
                   >
-                    Xoá
+                    <img src="../../../assets/Trash.svg" alt="Delete" class="icon-action-svg" />
                   </button>
                 </div>
               </td>
             </tr>
           </tbody>
-        </table>
+        </TableContainer>
 
         <!-- Pagination -->
         <div v-if="totalPages > 1" class="pagination-wrapper">
@@ -411,6 +413,7 @@
 </template>
 
 <script setup>
+import TableContainer from "@/components/common/TableContainer.vue";
 import { computed, onMounted, ref } from "vue";
 import {
   fetchAllChatLieu,

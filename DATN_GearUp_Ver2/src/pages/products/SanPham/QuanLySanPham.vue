@@ -91,10 +91,10 @@
         </div>
       </div>
       <div class="card-body">
-        <table class="table">
+        <TableContainer>
           <thead>
             <tr>
-              <th>
+              <th class="col-checkbox">
                 <input
                   type="checkbox"
                   :checked="isAllSelected"
@@ -103,13 +103,13 @@
                   title="Chọn tất cả sản phẩm"
                 />
               </th>
-              <th>STT</th>
-              <th>Mã sản phẩm</th>
-              <th>Tên sản phẩm</th>
-              <th>Số lượng biến thể</th>
-              <th>Khoảng giá</th>
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
+              <th class="col-stt">STT</th>
+              <th class="col-ma">Mã sản phẩm</th>
+              <th class="col-ten">Tên sản phẩm</th>
+              <th class="col-soluong">Số lượng biến thể</th>
+              <th class="col-giatri">Khoảng giá</th>
+              <th class="col-trangthai">Trạng thái</th>
+              <th class="col-hanhdong">Thao tác</th>
             </tr>
           </thead>
           <tbody v-if="paginatedProducts.length > 0">
@@ -118,7 +118,7 @@
               :key="i"
               :class="{ 'editing-row': editingProducts.has(product.id) }"
             >
-              <td>
+              <td class="col-checkbox">
                 <input
                   type="checkbox"
                   :checked="selectedProducts.includes(product.id)"
@@ -126,9 +126,9 @@
                   @click.stop
                 />
               </td>
-              <td>{{ startIndex + i + 1 }}</td>
-              <td>{{ product.maSanPham }}</td>
-              <td>
+              <td class="col-stt">{{ startIndex + i + 1 }}</td>
+              <td class="col-ma">{{ product.maSanPham }}</td>
+              <td class="col-ten">
                 <div
                   v-if="editingProducts.has(product.id)"
                   class="inline-edit"
@@ -150,17 +150,17 @@
                   {{ product.tenSanPham }}
                 </div>
               </td>
-              <td style="text-align: center !important">
+              <td class="col-soluong" style="text-align: center !important">
                 {{ product.soLuongBienThe }}
               </td>
-              <td>
+              <td class="col-giatri">
                 {{
                   product.giaNhoNhat !== null && product.giaLonNhat !== null
                     ? product.giaNhoNhat + " - " + product.giaLonNhat
                     : "N/A"
                 }}
               </td>
-              <td>
+              <td class="col-trangthai">
                 <div v-if="editingProducts.has(product.id)" class="inline-edit">
                   <select
                     v-model="editingProducts.get(product.id).trangThai"
@@ -176,7 +176,7 @@
                   {{ product.trangThai ? "Đang bán" : "Tạm ngừng bán" }}
                 </div>
               </td>
-              <td>
+              <td class="col-hanhdong">
                 <div class="action-buttons">
                   <router-link :to="`/products/details/${product.id}`">
                     <button class="btn btn-secondary">Chi tiết</button>
@@ -190,7 +190,7 @@
               <td colspan="8" class="text-center">Không có dữ liệu</td>
             </tr>
           </tbody>
-        </table>
+        </TableContainer>
 
         <!-- Pagination -->
         <div v-if="totalPages > 1" class="pagination-wrapper">
@@ -330,6 +330,7 @@ import "../../../styles/cssSanPham/productManagement.css";
 import "../../../styles/cssSanPham/productsUnified.css";
 import "../../../styles/cssSanPham/quanLySanPham.css";
 import { exportToExcel } from "../../../utils/xuatExcel";
+import TableContainer from "@/components/common/TableContainer.vue";
 
 const searchQuery = ref("");
 const selectedTrangThai = ref("");
@@ -730,3 +731,10 @@ onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
 });
 </script>
+
+<style scoped>
+/* Disable row hover background for products table only */
+:deep(.them-san-pham-page .coupons-table tbody tr:hover) {
+  background: transparent !important;
+}
+</style>

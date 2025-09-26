@@ -1563,18 +1563,18 @@ const checkMobile = () => {
 .breadcrumb-container {
   display: flex;
   align-items: center;
-  background: #f8f9fa;
+  background: transparent;
   padding: 0.4375rem 1rem;
   border-radius: 8px;
-  border: 1px solid #e9ecef;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: none;
+  box-shadow: none;
   transition: all 0.2s ease;
 }
 
 .breadcrumb-container:hover {
-  background: #ffffff;
-  border-color: #4ade80;
-  box-shadow: 0 2px 4px 0 rgba(74, 222, 128, 0.1);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .breadcrumb-item {

@@ -1,5 +1,11 @@
 /* Global Button Styles - Unified Design System */
 
+/* Utility: allow specific pages to remove side padding from the main content area */
+.page-content.no-side-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 /* btn-export - Primary action button matching Dashboard design */
 .btn-export {
   display: flex;
